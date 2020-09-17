@@ -1,3 +1,2 @@
-# Athwas App
+# Grocery-Andrid
 
-Athwas App
