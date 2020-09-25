@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="sortOption"
+            type="com.app.ia.model.CommonSortBean" />
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/_8sdp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@{sortOption.sortOption}"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12sdp"
+            android:layout_gravity="center" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check"
+            android:layout_gravity="center"
+            android:visibility="@{sortOption.selected ? View.VISIBLE : View.GONE}"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

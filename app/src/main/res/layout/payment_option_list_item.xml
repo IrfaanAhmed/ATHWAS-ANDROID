@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="paymentOption"
+            type="com.app.ia.model.PaymentOptionBean" />
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/_5sdp"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_8sdp"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:background="@{paymentOption.selected ? @drawable/discount_gradient : @drawable/edittext_bg}">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            defaultImage="@{paymentOption.icon}" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{paymentOption.paymentOption}"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/_10sdp"
+            android:fontFamily="@font/linotte_bold"
+            android:layout_gravity="center" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

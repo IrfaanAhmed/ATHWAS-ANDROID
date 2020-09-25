@@ -1,0 +1,3 @@
+include ':roundkornerlayout'
+include ':app'
+rootProject.name = "IA"
