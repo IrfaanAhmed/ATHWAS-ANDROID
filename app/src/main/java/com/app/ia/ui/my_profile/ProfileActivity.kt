@@ -39,7 +39,6 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
         mViewModel?.setActivityNavigator(this)
         mViewModel?.setVariable(mActivityBinding!!)
 
-        //makeStatusBarTransparent()
         setOnApplyWindowInset1(toolbar, content_container)
 
         toolbar.ivEditProfileIcon.visible()
