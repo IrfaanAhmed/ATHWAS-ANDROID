@@ -1,44 +1,50 @@
 package com.app.ia.ui.signup
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Typeface
+import android.provider.Settings
 import android.text.method.LinkMovementMethod
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.liveData
 import com.app.ia.R
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivitySignUpBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.ContentType
+import com.app.ia.enums.Status
 import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.spanly.Spanly
 import com.app.ia.spanly.clickable
 import com.app.ia.spanly.color
 import com.app.ia.spanly.font
 import com.app.ia.ui.home.HomeActivity
+import com.app.ia.ui.otp.OTPActivity
 import com.app.ia.ui.webview.WebViewActivity
-import com.app.ia.utils.AppConstants
-import com.app.ia.utils.getColorCompat
-import com.app.ia.utils.isValidEmail
-import com.app.ia.utils.startActivity
+import com.app.ia.utils.*
+import kotlinx.coroutines.Dispatchers
 
 class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
 
     lateinit var mActivity: Activity
     lateinit var mBinding: ActivitySignUpBinding
+    lateinit var androidId: String
 
+    @SuppressLint("HardwareIds")
     fun setVariable(mBinding: ActivitySignUpBinding) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
         title.set(mActivity.getString(R.string.sign_up))
         alreadyHaveAccountText()
+        androidId = Settings.Secure.getString(mActivity.contentResolver, Settings.Secure.ANDROID_ID)
     }
 
     fun skipForNow() {
         mActivity.startActivity<HomeActivity>()
     }
 
-    /*private fun userRegister(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
+    private fun userRegister(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
         emit(Resource.loading(data = null))
         try {
             emit(Resource.success(data = baseRepository.userRegister(requestParams)))
@@ -55,11 +61,11 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                         resource.data?.let { users ->
                             if (users.status == "success") {
                                 mActivity.toast(users.message)
-                                *//*mActivity.startActivity<OTPActivity> {
-                                    putExtra("countryCode", mBinding.ccp.selectedCountryCodeWithPlus)
+                                mActivity.startActivity<OTPActivity> {
+                                    putExtra("countryCode", "+91")
                                     putExtra("mobileNumber", mBinding.editTextMobile.text.toString())
-                                    putExtra("otp", users.data?.otpNumber)
-                                }*//*
+                                    putExtra("otp", users.data!!.otpNumber)
+                                }
 
                             } else {
                                 IADialog(mActivity, users.message, true)
@@ -77,7 +83,7 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                 }
             }
         })
-    }*/
+    }
 
     fun onUserSignUp() {
 
@@ -105,13 +111,15 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         } else {
 
             val requestParams = HashMap<String, String>()
-            requestParams["name"] = name
+            requestParams["username"] = name
+            requestParams["country_code"] = "+91"
             requestParams["phone"] = phone
             requestParams["email"] = email
             requestParams["password"] = password
             requestParams["device_token"] = AppPreferencesHelper.getInstance().deviceToken
-            requestParams["device_type"] = "android"
-            //setupObservers(requestParams)
+            requestParams["device_type"] = "1"
+            requestParams["device_id"] = androidId
+            setupObservers(requestParams)
         }
     }
 

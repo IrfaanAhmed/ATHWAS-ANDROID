@@ -1,7 +1,10 @@
 package com.app.ia.ui.login
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Typeface
+import android.provider.Settings
 import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.util.Patterns
@@ -22,11 +25,9 @@ import com.app.ia.spanly.color
 import com.app.ia.spanly.font
 import com.app.ia.ui.forgot_password.ForgotPasswordActivity
 import com.app.ia.ui.home.HomeActivity
+import com.app.ia.ui.otp.OTPActivity
 import com.app.ia.ui.signup.SignUpActivity
-import com.app.ia.utils.AppRequestCode
-import com.app.ia.utils.Resource
-import com.app.ia.utils.getColorCompat
-import com.app.ia.utils.startActivity
+import com.app.ia.utils.*
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.CredentialsOptions
 import com.google.android.gms.auth.api.credentials.HintRequest
@@ -39,7 +40,9 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
 
     private lateinit var mActivity: Activity
     private lateinit var mBinding: ActivityLoginBinding
+    lateinit var androidId: String
 
+    @SuppressLint("HardwareIds")
     fun setVariable(mBinding: ActivityLoginBinding) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
@@ -48,6 +51,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
         requestHint()
         doNotHaveAccountText()
         storeDeviceToken()
+        androidId = Settings.Secure.getString(mActivity.contentResolver, Settings.Secure.ANDROID_ID)
     }
 
     private fun storeDeviceToken() {
@@ -62,11 +66,9 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
 
         (baseRepository.callback).hideKeyboard()
         val mobileNumber = mBinding.edtTextMobileNumber.text.toString()
-        //val ccp = mBinding.ccp
         val password = mBinding.edtTextPassword.text.toString()
 
         if (isValidPhoneNumber(mobileNumber)) {
-            //if (validateNumber(ccp.selectedCountryCode, mobileNumber)) {
             when {
                 mobileNumber.length < 6 -> {
                     IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
@@ -78,12 +80,14 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
 
                 else -> {
                     val requestParams = HashMap<String, String>()
-                    //requestParams["country_code"] = ccp.selectedCountryCodeWithPlus
+                    requestParams["country_code"] = "+91"
                     requestParams["phone"] = mobileNumber
                     requestParams["password"] = password
                     requestParams["device_token"] = AppPreferencesHelper.getInstance().deviceToken
                     requestParams["device_type"] = "android"
-                    //setupObservers(requestParams)
+                    requestParams["device_id"] = androidId
+                    requestParams["login_through"] = "password"
+                    setupObservers(requestParams)
                 }
             }
         } else {
@@ -101,9 +105,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
 
     private fun requestHint() {
         val hintRequest = HintRequest.Builder().setPhoneNumberIdentifierSupported(true).build()
-
         val options = CredentialsOptions.Builder().forceEnableSaveDialog().build()
-
         val pendingIntent = Credentials.getClient(getActivityNavigator()!!, options).getHintPickerIntent(hintRequest)
         getActivityNavigator()!!.startIntentSenderForResult(pendingIntent.intentSender, AppRequestCode.PHONE_REQUEST, null, 0, 0, 0)
     }
@@ -157,7 +159,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
                         resource.data?.let { users ->
                             if (users.status == "success") {
 
-                                /*if (users.data?.isUserVerified == 0) {
+                                if (users.data?.isUserVerified == 0) {
                                     mActivity.toast(users.message)
                                     mActivity.startActivity<OTPActivity> {
                                         putExtra("countryCode", users.data?.countryCode)
@@ -169,7 +171,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
                                     mActivity.startActivityWithFinish<HomeActivity> {
                                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     }
-                                }*/
+                                }
                             } else {
                                 IADialog(mActivity, users.message, true)
                             }

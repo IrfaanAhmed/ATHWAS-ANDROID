@@ -27,20 +27,17 @@ class SplashViewModel(baseRepository: BaseRepository) : BaseViewModel() {
     fun callNextActivity() {
         Coroutines.io {
             delay(500)
-            if (AppPreferencesHelper.getInstance().isFirstRun) {
-                AppPreferencesHelper.getInstance().isFirstRun = false
-                mActivity.startActivity<LoginActivity>()
-            } else if (TextUtils.isEmpty(AppPreferencesHelper.getInstance().authToken)) {
-                mActivity.startActivity<HomeActivity>()
-            } else {
-                /*if (AppPreferencesHelper.getInstance().enableSecurityPin == 1) {
-                    mActivity.startActivity<EnterPasscodeActivity> {
-                        putExtra(AppConstants.EXTRA_IS_FROM_SPLASH, true)
-                    }
-                } else {
+            when {
+                AppPreferencesHelper.getInstance().isFirstRun -> {
+                    AppPreferencesHelper.getInstance().isFirstRun = false
+                    mActivity.startActivity<LoginActivity>()
+                }
+                TextUtils.isEmpty(AppPreferencesHelper.getInstance().authToken) -> {
+                    mActivity.startActivity<LoginActivity>()
+                }
+                else -> {
                     mActivity.startActivity<HomeActivity>()
-                }*/
-
+                }
             }
             mActivity.finish()
         }

@@ -1,5 +1,7 @@
 package com.app.ia.local
 
+import com.app.ia.model.LoginResponse
+
 /**
  * Created by umeshk on 07/07/19.
  */
@@ -10,7 +12,7 @@ interface PreferencesHelper {
 
     var language: String
 
-    //var userData: LoginResponse
+    var userData: LoginResponse
 
     var notificationCount: Int
 
@@ -33,8 +35,6 @@ interface PreferencesHelper {
     var userID: String
 
     var availableWalletBalance: String
-
-    var availableRewardPoints: String
 
     var firstName: String
 

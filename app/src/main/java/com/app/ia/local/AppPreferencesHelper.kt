@@ -3,6 +3,7 @@ package com.app.ia.local
 import android.content.Context
 import android.content.SharedPreferences
 import com.app.ia.IAApplication
+import com.app.ia.model.LoginResponse
 import com.app.ia.utils.AppConstants
 
 /**
@@ -65,10 +66,6 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
         get() = sharedPreferences.getString(PREF_KEY_WALLET_BALANCE, "0")!!
         set(availableWalletBalance) = sharedPreferences.edit().putString(PREF_KEY_WALLET_BALANCE, availableWalletBalance).apply()
 
-    override var availableRewardPoints: String
-        get() = sharedPreferences.getString(PREF_KEY_REWARD_POINTS, "0")!!
-        set(value) = sharedPreferences.edit().putString(PREF_KEY_REWARD_POINTS, value).apply()
-
     override var phone: String
         get() = sharedPreferences.getString(PREF_KEY_USER_MOBILE, AppConstants.EMPTY_STRING)!!
         set(value) = sharedPreferences.edit().putString(PREF_KEY_USER_MOBILE, value).apply()
@@ -111,8 +108,8 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
             sharedPreferences.edit().putString(PREF_KEY_CURRENT_LNG, value.toString()).apply()
         }
 
-    /*override var userData: LoginResponse
-        get() = LoginResponse(securityPin, "", authToken, 0, 0, 0, allowNotification, enableSecurityPin, "", "", "", LoginResponse.Geolocation(), availableRewardPoints, availableWalletBalance, 0, "", "", "", 0, "", "", 0, 0, userID, firstName, lastName, "", countryCode, phone, email, "", "", "", "", 0, userImage, "", qrCodeImage, userID)
+    override var userData: LoginResponse
+        get() = getLoginData()
         set(value) {
             authToken = value.authToken
             phone = value.phone
@@ -122,23 +119,41 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
             lastName = value.lastName
             email = value.email
             userRole = value.userRole
-            userID = value.id
+            userID = value.Id
             securityPin = value.securityPin
             allowNotification = value.allowNotifications
             enableSecurityPin = value.enableSecurityPin
             availableWalletBalance = value.availableWalletBalance
-            availableRewardPoints = value.availableRewardPoints
             countryCode = value.countryCode
-        }*/
+        }
 
     fun clearAllPreferences() {
         sharedPreferences.edit().clear().apply()
     }
 
+    private fun getLoginData(): LoginResponse {
+        val loginResponse = LoginResponse()
+        loginResponse.authToken = authToken
+        loginResponse.phone = phone
+        loginResponse.userImage = userImage
+        loginResponse.qrCodeImage = qrCodeImage
+        loginResponse.firstName = firstName
+        loginResponse.lastName = lastName
+        loginResponse.email = email
+        loginResponse.userRole = userRole
+        loginResponse.Id = userID
+        loginResponse.securityPin = securityPin
+        loginResponse.allowNotifications = allowNotification
+        loginResponse.enableSecurityPin = enableSecurityPin
+        loginResponse.availableWalletBalance = availableWalletBalance
+        loginResponse.countryCode = countryCode
+        return loginResponse
+    }
+
     companion object {
 
         //user credential
-        private const val PREF_NAME = "com.app.tivo.preference"
+        private const val PREF_NAME = "com.app.ia.preference"
         private const val PREF_KEY_AUTH_TOKEN = "AUTH_TOKEN"
         private const val PREF_KEY_DEVICE_TOKEN = "DEVICE_TOKEN"
         private const val PREF_KEY_LANGUAGE = "LANGUAGE"
@@ -154,7 +169,6 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
         private const val PREF_KEY_ALLOW_NOTIFICATION = "ALLOW_NOTIFICATION"
         private const val PREF_KEY_ENABLE_SECURITY_PIN = "ENABLE_SECURITY_PIN"
         private const val PREF_KEY_WALLET_BALANCE = "WALLET_BALANCE"
-        private const val PREF_KEY_REWARD_POINTS = "REWARD_POINTS"
         private const val PREF_KEY_USER_ROLE = "USER_ROLE"
         private const val PREF_KEY_CART_ITEM_COUNT = "CART_ITEM_COUNT"
 

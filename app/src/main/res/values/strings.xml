@@ -188,4 +188,9 @@
     <string name="rewards_points">Rewards Points</string>
     <string name="setting">Settings</string>
     <string name="edit">Edit</string>
+    <string name="total_rewards">Total Rewards</string>
+    <string name="reward_points">Reward Points</string>
+    <string name="cart">Cart</string>
+    <string name="checkout">Checkout</string>
+    <string name="search_product">Search Product</string>
 </resources>

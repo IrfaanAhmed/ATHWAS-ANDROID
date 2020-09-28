@@ -53,10 +53,11 @@ object RetrofitFactory {
     private val authInterceptor = Interceptor { chain ->
 
         val cryptLib = CryptLib()
-        val cipherText = cryptLib.encryptPlainTextWithRandomIV(Date().time.toString(), "945]Y3x[aRJS}DxE")
+        val cipherText = cryptLib.encryptPlainTextWithRandomIV(Date().time.toString(), "keMStjdies")
 
         val newRequest = chain.request()
             .newBuilder()
+            .addHeader("Content-Type", "multipart/form-data")
             .addHeader("X-Access-Token", cipherText.trim())
             .addHeader("Authorization", "Bearer ${AppPreferencesHelper.getInstance().authToken}")
             .addHeader("login_user_id", AppPreferencesHelper.getInstance().userID)
