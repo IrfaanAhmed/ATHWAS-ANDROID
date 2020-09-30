@@ -58,6 +58,7 @@ class OffersFragment : BaseFragment<FragmentOffersBinding, OffersViewModel>() {
         categoryList.add("Samsung")
         categoryList.add("Nokia")
         categoryList.add("Vivo")
+        categoryList.add("Vivo")
         adapter.submitList(categoryList)
 
     }

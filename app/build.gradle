@@ -85,6 +85,8 @@ dependencies {
 
     implementation 'com.github.santalu:auto-viewpager:1.0.8'
 
+    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC2'
+
     //Circle Image View
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 

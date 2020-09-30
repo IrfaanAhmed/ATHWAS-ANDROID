@@ -8,8 +8,10 @@ object Api {
 
     private const val COMMON_PATH = "/user_service/customer/"
 
-    const val LOGIN_URL = COMMON_PATH + "login"
+    const val LOGIN_URL = COMMON_PATH + "user_login"
     const val REGISTER_URL = COMMON_PATH + "registration"
+    const val VERIFY_OTP = COMMON_PATH + "verify_otp"
+    const val RESEND_OTP = COMMON_PATH + "resend_otp"
 
     private fun getBaseUrl(environmentType: Int): String {
 

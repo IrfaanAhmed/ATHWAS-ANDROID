@@ -24,7 +24,7 @@
     <string name="remember_me">Remember me</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="forgot_password_title">Forgot Password</string>
-    <string name="don_t_have_an_account_yet">Don\'t have an account?</string>
+    <string name="don_t_have_an_account_yet">Don\'t have an account yet?</string>
     <string name="label_check_term_policy">By Signing up you agree to our</string>
     <string name="get_started">Get Started</string>
     <string name="login_so_you_full_access">Login so you full access! or just</string>
@@ -117,9 +117,10 @@
     <string name="add_to_cart">Add to cart</string>
     <string name="sort_by">Sort By</string>
     <string name="filter">Filter</string>
+    <string name="filters">Filters</string>
     <string name="price">Price</string>
-    <string name="min_price">Min Price</string>
-    <string name="max_price">Max Price</string>
+    <string name="min_price">Min. Price</string>
+    <string name="max_price">Max. Price</string>
     <string name="customer_rating">Customer Rating</string>
     <string name="categroy">Category</string>
     <string name="sub_category">Sub Category</string>

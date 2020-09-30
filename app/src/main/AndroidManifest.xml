@@ -88,6 +88,27 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".ui.my_cart.MyCartActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.notification.NotificationActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.rewards.RewardsActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".ui.product_list.ProductListActivity"
             android:configChanges="layoutDirection|locale"
             android:screenOrientation="portrait"

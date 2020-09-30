@@ -28,8 +28,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
 
     fun onProductFilterClick() {
         val bottomSheetFragment = ProductFilterDialogFragment()
-        bottomSheetFragment.setOnItemClickListener(object :
-            ProductFilterDialogFragment.OnProductFilterClickListener {
+        bottomSheetFragment.setOnItemClickListener(object : ProductFilterDialogFragment.OnProductFilterClickListener {
             override fun onSubmitClick(filterValue: String) {
 
                 /*mWalletViewModel?.filterBy?.value = filterValue
@@ -49,10 +48,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
 
     fun onProductSortByClick() {
         val bottomSheetFragment = CommonSortDialogFragment(getProductSortList())
-        bottomSheetFragment.show(
-            (mActivity as ProductListActivity).supportFragmentManager,
-            bottomSheetFragment.tag
-        )
+        bottomSheetFragment.show((mActivity as ProductListActivity).supportFragmentManager, bottomSheetFragment.tag)
         /*bottomSheetFragment.setOnItemClickListener(object: ProductFilterDialogFragment.OnProductFilterClickListener{
             override fun onSubmitClick(filterValue: String) {
 
@@ -68,13 +64,12 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
 
     }
 
-    private fun getProductSortList(): ArrayList<CommonSortBean>{
-        var list = ArrayList<CommonSortBean>()
+    private fun getProductSortList(): ArrayList<CommonSortBean> {
+        val list = ArrayList<CommonSortBean>()
         list.add(CommonSortBean(mActivity.getString(R.string.popularity), false))
         list.add(CommonSortBean(mActivity.getString(R.string.price_low_to_high), true))
         list.add(CommonSortBean(mActivity.getString(R.string.price_high_to_low), false))
         list.add(CommonSortBean(mActivity.getString(R.string.newest_first), false))
-
         return list
     }
 }

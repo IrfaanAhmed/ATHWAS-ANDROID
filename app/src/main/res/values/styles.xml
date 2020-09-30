@@ -7,10 +7,6 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="fontFamily">@font/linotte_regular</item>
         <item name="android:windowContentTransitions" tools:targetApi="21">true</item>
-        <item name="radioButtonStyle">@style/MyRadioButtonStyle</item>
-        <item name="android:radioButtonStyle">@style/MyRadioButtonStyle</item>
-        <item name="checkboxStyle">@style/MyCheckBoxStyle</item>
-        <item name="android:checkboxStyle">@style/MyCheckBoxStyle</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
@@ -84,14 +80,14 @@
         <item name="fontFamily">@font/linotte_semi_bold</item>
     </style>
 
-    <style name="MyCheckBoxStyle" parent="Base.Widget.AppCompat.CompoundButton.CheckBox">
+    <!--<style name="MyCheckBoxStyle" parent="Base.Widget.AppCompat.CompoundButton.CheckBox">
         <item name="buttonTint">@drawable/checkbox_selector</item>
         <item name="android:textColor">@drawable/checkbox_text_selector</item>
-    </style>
+    </style>-->
 
-    <style name="MyRadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
+    <!--<style name="MyRadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
         <item name="buttonTint">@drawable/my_compound_button_color_selector</item>
-    </style>
+    </style>-->
 
     <style name="PendingEnableButton" parent="Theme.MaterialComponents">
         <item name="backgroundTint">@color/white</item>
@@ -151,5 +147,11 @@
     </style>
 
     <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
+
+    <style name="spinner_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/_35sdp</item>
+        <item name="android:background">@drawable/gradient_spinner</item>
+    </style>
 
 </resources>

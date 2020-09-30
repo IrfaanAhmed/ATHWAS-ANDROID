@@ -18,19 +18,18 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageViewBack"
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="@dimen/_50sdp"
-            android:layout_marginStart="@dimen/_3sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_marginStart="@dimen/_16sdp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
             android:onClick="@{()-> viewModel.onBackPressed()}"
-            android:padding="@dimen/_12sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_arrow_back_ios"
-            app:tint="@color/green" />
+            app:tint="@color/colorPrimaryDark" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
@@ -39,7 +38,7 @@
             android:textAllCaps="false"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/_15sdp"
-            app:fontFamily="@font/linotte_bold"
+            app:fontFamily="@font/linotte_semi_bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

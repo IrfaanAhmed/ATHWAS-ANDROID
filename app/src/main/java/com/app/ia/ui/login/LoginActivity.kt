@@ -2,22 +2,25 @@ package com.app.ia.ui.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import com.app.ia.R
-import com.app.ia.base.BaseActivity
-import com.app.ia.databinding.ActivityLoginBinding
-import com.app.ia.utils.makeStatusBarTransparent
-import com.app.ia.utils.setOnApplyWindowInset
 import com.app.ia.BR
+import com.app.ia.R
 import com.app.ia.ViewModelFactory
 import com.app.ia.apiclient.RetrofitFactory
+import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
+import com.app.ia.databinding.ActivityLoginBinding
 import com.app.ia.utils.AppLogger
 import com.app.ia.utils.AppRequestCode
+import com.app.ia.utils.makeStatusBarTransparent
+import com.app.ia.utils.setOnApplyWindowInset
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import kotlinx.android.synthetic.main.activity_login.*
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
@@ -46,6 +49,18 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
         makeStatusBarTransparent()
         setOnApplyWindowInset(toolbar, content_container)
+
+        KeyboardVisibilityEvent.setEventListener(this, this, object : KeyboardVisibilityEventListener {
+            override fun onVisibilityChanged(isOpen: Boolean) {
+                if (isOpen) {
+                    txtSkipForNow.visibility = View.GONE
+                    txtViewSignUp.visibility = View.GONE
+                } else {
+                    txtSkipForNow.visibility = View.VISIBLE
+                    txtViewSignUp.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 
     private fun setViewModel() {

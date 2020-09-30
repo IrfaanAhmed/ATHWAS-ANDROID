@@ -17,12 +17,17 @@ import com.app.ia.databinding.ActivityOtpBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
 import com.app.ia.local.AppPreferencesHelper
+import com.app.ia.model.LoginResponse
 import com.app.ia.spanly.Spanly
 import com.app.ia.spanly.clickable
 import com.app.ia.spanly.color
 import com.app.ia.spanly.font
+import com.app.ia.ui.login.LoginActivity
 import com.app.ia.utils.Resource
 import com.app.ia.utils.getColorCompat
+import com.app.ia.utils.startActivityWithFinish
+import com.app.ia.utils.toast
+import com.app.wallet.tivo.model.ResendOTPResponse
 import com.app.wallet.tivo.receiver.SMSReceiver
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.tasks.Task
@@ -72,8 +77,8 @@ class OTPViewModel(private val baseRepository: BaseRepository) : BaseViewModel()
             requestParams["otp_number"] = mBinding.pinView.text.toString()
             requestParams["otp_for"] = "register"
             requestParams["device_token"] = AppPreferencesHelper.getInstance().deviceToken
-            requestParams["device_type"] = "android"
-            //setupObservers(requestParams, true)
+            requestParams["device_type"] = "1" // 1 for android / 2 for ios
+            setupObservers(requestParams, true)
         } else {
             IADialog(mActivity, "Please enter valid OTP.", true)
         }
@@ -134,12 +139,12 @@ class OTPViewModel(private val baseRepository: BaseRepository) : BaseViewModel()
         val fontSemiBold: Typeface = ResourcesCompat.getFont(mActivity, R.font.linotte_semi_bold)!!
         val spanly = Spanly()
 
-        spanly.append(mActivity.getString(R.string.didn_t_receive_the_otp)).space().append(mActivity.getString(R.string.resend_otp), color(mActivity.getColorCompat(R.color.green)), font(fontSemiBold), clickable({
+        spanly.append(mActivity.getString(R.string.didn_t_receive_the_otp)).space().append(mActivity.getString(R.string.resend_otp), color(mActivity.getColorCompat(R.color.colorPrimary)), font(fontSemiBold), clickable({
             val requestParams = HashMap<String, String>()
             requestParams["country_code"] = countryCode.value!!
             requestParams["phone"] = mobileNumber.value!!
             requestParams["otp_for"] = "register"
-            //setupObservers(requestParams, false)
+            setupObservers(requestParams, false)
         }))
 
         mBinding.txtViewResendOTP.text = spanly
@@ -169,7 +174,7 @@ class OTPViewModel(private val baseRepository: BaseRepository) : BaseViewModel()
 
     }
 
-    /*private fun apiCalling(requestParams: HashMap<String, String>, verifyOTP: Boolean) = liveData(Dispatchers.Main) {
+    private fun apiCalling(requestParams: HashMap<String, String>, verifyOTP: Boolean) = liveData(Dispatchers.Main) {
         emit(Resource.loading(data = null))
         try {
             if (verifyOTP) {
@@ -191,19 +196,19 @@ class OTPViewModel(private val baseRepository: BaseRepository) : BaseViewModel()
 
                         resource.data?.let { users ->
                             if (users.status == "success") {
-                                *//*if (users.data is LoginResponse) {
+                                if (users.data is LoginResponse) {
                                     mActivity.toast(users.message)
-                                    *//**//*val response = users.data as LoginResponse
-                                    AppPreferencesHelper.getInstance().userData = response*//**//*
+                                    val response = users.data as LoginResponse
+                                    AppPreferencesHelper.getInstance().userData = response
                                     mActivity.startActivityWithFinish<LoginActivity> {
                                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     }
                                 } else {
                                     val response = users.data as ResendOTPResponse
-                                    TivoDialog(mActivity, "OTP is : " + response.otpNumber, true)
+                                    IADialog(mActivity, "OTP is : " + response.otpNumber, true)
                                     otp.value = response.otpNumber
                                     startTimer()
-                                }*//*
+                                }
                             } else {
                                 IADialog(mActivity, users.message, true)
                             }
@@ -216,10 +221,10 @@ class OTPViewModel(private val baseRepository: BaseRepository) : BaseViewModel()
                     }
 
                     Status.LOADING -> {
-
+                        baseRepository.callback.showProgress()
                     }
                 }
             }
         })
-    }*/
+    }
 }

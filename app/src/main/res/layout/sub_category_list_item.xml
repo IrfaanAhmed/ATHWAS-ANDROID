@@ -16,7 +16,8 @@
         android:id="@+id/materialCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="@dimen/_10sdp">
+        app:cardElevation="@dimen/_3sdp"
+        app:cardCornerRadius="@dimen/_5sdp">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -35,6 +36,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:gravity="center"
+                app:fontFamily="@font/linotte_semi_bold"
                 android:text="@{category.name}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_10sdp" />

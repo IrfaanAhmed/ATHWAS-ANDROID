@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.app.ia.R
 import com.app.ia.dialog.bottom_sheet_dialog.adapter.CommonSortAdapter
 import com.app.ia.model.CommonSortBean
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.dialog_common_sort.*
 
 
-class CommonSortDialogFragment(val sortOptionList: ArrayList<CommonSortBean>) : BottomSheetDialogFragment(){
+class CommonSortDialogFragment(val sortOptionList: ArrayList<CommonSortBean>) : BottomSheetDialogFragment() {
 
     private var onClickListener: OnSortOptionClickListener? = null
 
@@ -50,20 +50,14 @@ class CommonSortDialogFragment(val sortOptionList: ArrayList<CommonSortBean>) : 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recViewSort.addItemDecoration(
-            DividerItemDecoration(
-                requireActivity(),
-                LinearLayout.VERTICAL
-            )
-        )
-        var commonSortAdapter = CommonSortAdapter()
+        recViewSort.addItemDecoration(DividerItemDecoration(requireActivity(), LinearLayout.VERTICAL))
+        val commonSortAdapter = CommonSortAdapter()
         recViewSort.adapter = commonSortAdapter
         commonSortAdapter.submitList(sortOptionList)
-        commonSortAdapter.setOnItemSelectListener(object: CommonSortAdapter.OnItemSelectListener{
+        commonSortAdapter.setOnItemSelectListener(object : CommonSortAdapter.OnItemSelectListener {
             override fun onItemSelect(position: Int) {
                 dismiss()
             }
-
         })
     }
 

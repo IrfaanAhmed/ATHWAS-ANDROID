@@ -1,4 +1,4 @@
-package com.app.wallet.tivo.ui.notification.adapter
+package com.app.ia.ui.notification.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.databinding.NotificationListItemBinding
 import com.app.ia.model.NotificationResponse
-import com.app.ia.ui.notification.NotificationViewModel
 
 class NotificationAdapter : ListAdapter<NotificationResponse.Docs, NotificationAdapter.NotificationViewHolder>(NotificationDiffCallback()) {
 

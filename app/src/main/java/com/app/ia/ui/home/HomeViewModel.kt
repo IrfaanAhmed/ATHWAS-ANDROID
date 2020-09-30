@@ -2,8 +2,6 @@ package com.app.ia.ui.home
 
 import android.app.Activity
 import android.widget.LinearLayout
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.OnLifecycleEvent
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.app.ia.R
 import com.app.ia.base.BaseRepository
@@ -11,8 +9,10 @@ import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityHomeBinding
 import com.app.ia.ui.business_category.CategoryFragment
 import com.app.ia.ui.home.adapter.NavigationListAdapter
+import com.app.ia.ui.my_cart.MyCartActivity
 import com.app.ia.ui.my_order.MyOrdersFragment
 import com.app.ia.ui.my_profile.ProfileActivity
+import com.app.ia.ui.notification.NotificationActivity
 import com.app.ia.ui.offers.OffersFragment
 import com.app.ia.ui.wallet.WalletFragment
 import com.app.ia.utils.EqualSpacingItemDecoration
@@ -51,6 +51,14 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
         mBinding.drawerLayout.openDrawer(mBinding.navView)
     }
 
+    fun onCartClick() {
+        mActivity.startActivity<MyCartActivity>()
+    }
+
+    fun onNotificationClick() {
+        mActivity.startActivity<NotificationActivity>()
+    }
+
     override fun onSideMenuClick(position: Int) {
 
         if (mBinding.drawerLayout.isOpen) {
@@ -76,7 +84,7 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
             5 -> {
                 (mActivity as HomeActivity).replaceFragment(WalletFragment.newInstance())
             }
-            6 -> {
+            /*6 -> {
                 (mActivity as HomeActivity).replaceFragment(OffersFragment.newInstance())
             }
             7 -> {
@@ -87,7 +95,7 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
             }
             9 -> {
                 (mActivity as HomeActivity).replaceFragment(OffersFragment.newInstance())
-            }
+            }*/
         }
     }
 

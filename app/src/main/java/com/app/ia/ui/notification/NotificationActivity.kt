@@ -9,11 +9,9 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityNotificationBinding
-import com.app.ia.utils.EqualSpacingItemDecoration
-import com.app.ia.utils.RecyclerViewPaginator
-import com.app.ia.utils.setOnApplyWindowInset1
-import com.app.ia.utils.visible
-import com.app.wallet.tivo.ui.notification.adapter.NotificationAdapter
+import com.app.ia.model.NotificationResponse
+import com.app.ia.ui.notification.adapter.NotificationAdapter
+import com.app.ia.utils.*
 import kotlinx.android.synthetic.main.activity_notification.*
 import kotlinx.android.synthetic.main.common_header.view.*
 
@@ -52,9 +50,23 @@ class NotificationActivity : BaseActivity<ActivityNotificationBinding, Notificat
         mViewModel?.setVariable(mActivityBinding!!)
 
         setOnApplyWindowInset1(toolbar, content_container)
-        toolbar.ivEditProfileIcon.visible()
+        toolbar.ivEditProfileIcon.gone()
 
         notificationRecyclerView.addItemDecoration(EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.VERTICAL))
+
+        val notificationList = ArrayList<NotificationResponse.Docs>()
+
+        for(i in 0 until  10) {
+            val notification = NotificationResponse.Docs()
+            notification.title = "Notification Title"
+            notification.message = "Notification Message.This is dummy project."
+            notificationList.add(notification)
+        }
+//        notification.getCreatedAt() = "Notification Title"
+        mNotificationAdapter = NotificationAdapter()
+        notificationRecyclerView.adapter = mNotificationAdapter
+        mNotificationAdapter.submitList(notificationList)
+
 
         mSwipeRefresh.setOnRefreshListener {
             resetNotification()

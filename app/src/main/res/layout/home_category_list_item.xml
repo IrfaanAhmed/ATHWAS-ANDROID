@@ -20,13 +20,13 @@
 
         <FrameLayout
             android:id="@+id/circleBg"
-            android:layout_width="@dimen/_65sdp"
-            android:layout_height="@dimen/_65sdp">
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 defaultImage="@{category.icon}"
-                android:layout_width="@dimen/_45sdp"
-                android:layout_height="@dimen/_45sdp"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
                 android:layout_gravity="center" />
         </FrameLayout>
 

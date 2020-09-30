@@ -8,51 +8,50 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/consHeader"
-            android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/top_rounded_corner_primary">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/top_rounded_corner_primary">
+            android:padding="@dimen/_10sdp"
+            android:text="@string/reset"
+            android:textColor="@color/theme_color"
+            android:textSize="@dimen/_12sdp"
+            app:fontFamily="@font/linotte_semi_bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/linotte_semi_bold"
-                android:text="@string/reset"
-                android:textColor="@color/colorLogout"
-                android:textSize="@dimen/_12sdp"
-                android:padding="@dimen/_10sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/filters"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14sdp"
+            app:fontFamily="@font/linotte_semi_bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/linotte_bold"
-                android:text="@string/filter"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp"
-                android:padding="@dimen/_10sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/cancel"
+            android:textColor="@color/theme_color"
+            android:textSize="@dimen/_13sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvCancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/linotte_semi_bold"
-                android:text="@string/cancel"
-                android:textColor="@color/colorLogout"
-                android:padding="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
         android:id="@+id/relMain"
@@ -73,71 +72,51 @@
                 android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/linotte_semi_bold"
                 android:text="@string/price"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_11sdp"
+                android:textSize="@dimen/_13sdp"
+                app:fontFamily="@font/linotte_semi_bold"
                 app:layout_constraintBottom_toTopOf="@+id/llPriceValue"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/llPriceValue"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvPrice">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtTextMinPrice"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_15sdp"
-                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/_12sdp"
                     android:layout_weight=".5"
                     android:background="@drawable/edittext_bg"
-                    android:orientation="horizontal">
+                    android:hint="@string/min_price"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:padding="@dimen/_10sdp"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/_10sdp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtTextMinPrice"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:hint="@string/min_price"
-                        android:inputType="number"
-                        android:maxLines="1"
-                        android:padding="@dimen/_10sdp"
-                        android:textAlignment="center"
-                        android:textSize="@dimen/_10sdp" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtTextMaxPrice"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_height="match_parent"
                     android:layout_weight=".5"
                     android:background="@drawable/edittext_bg"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtTextMaxPrice"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:hint="@string/max_price"
-                        android:inputType="number"
-                        android:maxLines="1"
-                        android:padding="@dimen/_10sdp"
-                        android:textAlignment="center"
-                        android:textSize="@dimen/_10sdp" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
+                    android:hint="@string/max_price"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:padding="@dimen/_10sdp"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/_10sdp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -145,16 +124,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/consPrice"
-            android:layout_marginTop="@dimen/_8sdp">
+            android:layout_marginTop="@dimen/_10sdp">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvCustomerRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/linotte_semi_bold"
                 android:text="@string/customer_rating"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_11sdp"
+                android:textSize="@dimen/_13sdp"
+                app:fontFamily="@font/linotte_semi_bold"
                 app:layout_constraintBottom_toTopOf="@+id/llCustomerRating"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -168,163 +147,121 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvCustomerRating">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvRateFirst"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/edittext_bg"
-                        android:drawableStart="@drawable/ic_star"
-                        android:drawablePadding="@dimen/_3sdp"
-                        android:drawableTint="@color/light_grey"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/_5sdp"
-                        android:paddingTop="@dimen/_2sdp"
-                        android:paddingEnd="@dimen/_5sdp"
-                        android:paddingBottom="@dimen/_2sdp"
-                        android:text="1.0"
-                        android:textColor="@color/light_grey"
-                        android:textSize="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_12sdp"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvRateFirst"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_bg"
+                    android:drawableStart="@drawable/ic_star"
+                    android:drawablePadding="@dimen/_8sdp"
+                    android:gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="1.0"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/_8sdp"
+                    app:drawableTint="@color/light_grey" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvRateSecond"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/edittext_bg"
-                        android:drawableStart="@drawable/ic_star"
-                        android:drawablePadding="@dimen/_3sdp"
-                        android:drawableTint="@color/light_grey"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/_5sdp"
-                        android:paddingTop="@dimen/_2sdp"
-                        android:paddingEnd="@dimen/_5sdp"
-                        android:paddingBottom="@dimen/_2sdp"
-                        android:text="2.0"
-                        android:textColor="@color/light_grey"
-                        android:textSize="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_12sdp" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvRateSecond"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_bg"
+                    android:drawableStart="@drawable/ic_star"
+                    android:drawablePadding="@dimen/_3sdp"
+                    android:gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="2.0"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/_8sdp"
+                    app:drawableTint="@color/light_grey" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvRateThird"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/edittext_bg"
-                        android:drawableStart="@drawable/ic_star"
-                        android:drawablePadding="@dimen/_3sdp"
-                        android:drawableTint="@color/light_grey"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/_5sdp"
-                        android:paddingTop="@dimen/_2sdp"
-                        android:paddingEnd="@dimen/_5sdp"
-                        android:paddingBottom="@dimen/_2sdp"
-                        android:text="3.0"
-                        android:layout_marginEnd="@dimen/_12sdp"
-                        android:textColor="@color/light_grey"
-                        android:textSize="@dimen/_8sdp" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvRateThird"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_bg"
+                    android:drawableStart="@drawable/ic_star"
+                    android:drawablePadding="@dimen/_3sdp"
+                    android:gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="3.0"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/_8sdp"
+                    app:drawableTint="@color/light_grey" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvRateFourth"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/edittext_bg"
-                        android:drawableStart="@drawable/ic_star"
-                        android:drawablePadding="@dimen/_3sdp"
-                        android:drawableTint="@color/light_grey"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/_5sdp"
-                        android:paddingTop="@dimen/_2sdp"
-                        android:paddingEnd="@dimen/_5sdp"
-                        android:paddingBottom="@dimen/_2sdp"
-                        android:text="4.0"
-                        android:layout_marginEnd="@dimen/_12sdp"
-                        android:textColor="@color/light_grey"
-                        android:textSize="@dimen/_8sdp" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvRateFourth"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_bg"
+                    android:drawableStart="@drawable/ic_star"
+                    android:drawablePadding="@dimen/_3sdp"
+                    android:gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="4.0"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/_8sdp"
+                    app:drawableTint="@color/light_grey" />
 
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvRateFifth"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/edittext_bg"
-                        android:drawableStart="@drawable/ic_star"
-                        android:drawablePadding="@dimen/_3sdp"
-                        android:drawableTint="@color/light_grey"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/_5sdp"
-                        android:paddingTop="@dimen/_2sdp"
-                        android:paddingEnd="@dimen/_5sdp"
-                        android:paddingBottom="@dimen/_2sdp"
-                        android:text="5.0"
-                        android:layout_marginEnd="@dimen/_12sdp"
-                        android:textColor="@color/light_grey"
-                        android:textSize="@dimen/_8sdp" />
-
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvRateFifth"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_bg"
+                    android:drawableStart="@drawable/ic_star"
+                    android:drawablePadding="@dimen/_3sdp"
+                    android:gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="5.0"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/_8sdp"
+                    app:drawableTint="@color/light_grey" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinnerCategory"
+            style="@style/spinner_style"
             android:layout_below="@+id/consRating"
-            android:layout_marginTop="@dimen/_18sdp"
-            android:background="@drawable/edittext_bg"
-            android:drawableEnd="@drawable/ic_top_drop_arrow"
-            android:drawableTint="@color/light_grey"
-            android:editable="false"
-            android:ems="10"
-            android:focusable="false"
-            android:hint="@string/categroy"
-            android:inputType="text"
-            android:padding="@dimen/_10sdp"
-            android:textSize="@dimen/_10sdp" />
+            android:layout_marginTop="@dimen/_18sdp" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextSubCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/editTextCategory"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:background="@drawable/edittext_bg"
-            android:drawableEnd="@drawable/ic_top_drop_arrow"
-            android:drawableTint="@color/light_grey"
-            android:editable="false"
-            android:ems="10"
-            android:focusable="false"
-            android:hint="@string/sub_category"
-            android:inputType="text"
-            android:padding="@dimen/_10sdp"
-            android:textSize="@dimen/_10sdp" />
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinnerSubCategory"
+            style="@style/spinner_style"
+            android:layout_below="@+id/spinnerCategory"
+            android:layout_marginTop="@dimen/_18sdp" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextBrand"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/editTextSubCategory"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:background="@drawable/edittext_bg"
-            android:drawableEnd="@drawable/ic_top_drop_arrow"
-            android:drawableTint="@color/light_grey"
-            android:editable="false"
-            android:ems="10"
-            android:focusable="false"
-            android:hint="@string/brand"
-            android:inputType="text"
-            android:padding="@dimen/_10sdp"
-            android:textSize="@dimen/_10sdp" />
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinnerBrand"
+            style="@style/spinner_style"
+            android:layout_below="@+id/spinnerSubCategory"
+            android:layout_marginTop="@dimen/_18sdp" />
+
+
     </RelativeLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonAddToCart"
-        style="@style/LogoutButton"
+        style="@style/AddToCartButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_32sdp"
-        android:text="@string/apply_filter"
-        android:layout_below="@+id/relMain"/>
+        android:layout_below="@+id/relMain"
+        android:text="@string/apply_filter" />
 </RelativeLayout>

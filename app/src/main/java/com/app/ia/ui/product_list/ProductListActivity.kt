@@ -2,7 +2,6 @@ package com.app.ia.ui.product_list
 
 import android.os.Bundle
 import android.widget.LinearLayout
-import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.app.ia.BR
@@ -12,6 +11,7 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityProductListBinding
+import com.app.ia.ui.my_cart.MyCartActivity
 import com.app.ia.ui.product_list.adapter.ProductListAdapter
 import com.app.ia.utils.*
 import kotlinx.android.synthetic.main.activity_product_list.*
@@ -50,6 +50,10 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
         toolbar.imageViewIcon.visible()
         toolbar.ivSearchIcon.visible()
         toolbar.ivEditProfileIcon.gone()
+
+        toolbar.imageViewIcon.setOnClickListener {
+            startActivity<MyCartActivity>()
+        }
 
         recViewProduct.addItemDecoration(EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.VERTICAL))
         recViewProduct.addItemDecoration(DividerItemDecoration(this@ProductListActivity, LinearLayout.VERTICAL))

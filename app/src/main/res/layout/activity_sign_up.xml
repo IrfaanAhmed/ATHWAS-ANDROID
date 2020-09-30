@@ -59,7 +59,8 @@
                 android:layout_margin="@dimen/_16sdp"
                 android:background="@color/white"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="@dimen/_16sdp">
+                app:cardCornerRadius="@dimen/_16sdp"
+                app:cardElevation="@dimen/_4sdp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -74,7 +75,7 @@
                         android:layout_marginTop="@dimen/_16sdp"
                         android:text="@string/hello"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_15sdp"
+                        android:textSize="@dimen/_16sdp"
                         app:fontFamily="@font/linotte_semi_bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +88,7 @@
                         android:layout_marginTop="@dimen/_4sdp"
                         android:text="@string/create_an_account_to_continue"
                         android:textColor="@color/grey"
-                        android:textSize="@dimen/_12sdp"
+                        android:textSize="@dimen/_13sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textViewGoodDay" />
@@ -131,7 +132,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:background="@drawable/edittext_bg"
-                        android:hint="@string/email_address_optional"
+                        android:hint="@string/email_address"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:padding="@dimen/_10sdp"
@@ -158,7 +159,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/edtTextEmail" />
 
-
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/termOfUse"
                         android:layout_width="match_parent"
@@ -171,17 +171,18 @@
 
                         <androidx.appcompat.widget.AppCompatCheckBox
                             android:id="@+id/checkBox"
-                            style="@style/MyCheckBoxStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/label_check_term_policy"
                             android:textSize="@dimen/_9sdp"
+                            android:paddingStart="@dimen/_5sdp"
+                            android:paddingEnd="@dimen/_3sdp"
+                            android:button="@drawable/my_compound_button_color_selector"
                             app:fontFamily="@font/linotte_light" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_2sdp"
                             android:text="@string/terms_of_use"
                             android:textColor="@color/dark_green"
                             android:textSize="@dimen/_11sdp"
@@ -232,8 +233,8 @@
             android:onClick="@{()-> viewModel.skipForNow()}"
             android:text="@string/skip_for_now"
             android:textColor="@color/theme_color"
-            android:textSize="@dimen/_12sdp"
-            app:fontFamily="@font/linotte_semi_bold"
+            android:textSize="@dimen/_13sdp"
+            app:fontFamily="@font/linotte_regular"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

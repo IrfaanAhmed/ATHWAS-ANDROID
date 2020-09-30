@@ -1,5 +1,6 @@
 package com.app.ia.ui.product_list.adapter
 
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -43,7 +44,7 @@ class ProductListAdapter : ListAdapter<String, ProductListAdapter.ProductViewHol
             mBinding.apply {
                 product = productItem
                 executePendingBindings()
-
+                cutTextView.paintFlags = cutTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 itemView.setOnClickListener {
                     itemView.context.startActivity<ProductDetailActivity>()
                 }

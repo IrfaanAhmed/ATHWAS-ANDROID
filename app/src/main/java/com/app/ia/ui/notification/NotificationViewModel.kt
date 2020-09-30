@@ -3,6 +3,7 @@ package com.app.ia.ui.notification
 import android.app.Activity
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.app.ia.R
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityNotificationBinding
@@ -19,6 +20,7 @@ class NotificationViewModel(private val baseRepository: BaseRepository) : BaseVi
     fun setVariable(mBinding: ActivityNotificationBinding) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
+        this.title.set(mActivity.getString(R.string.notifications))
     }
 
     /*private fun getNotifications(notification_id: String?, requestParams: HashMap<String, String>?, notificationType: Int) = liveData(Dispatchers.Main) {

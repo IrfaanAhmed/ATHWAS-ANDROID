@@ -69,7 +69,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_26sdp"
                         android:text="@string/verification_code"
-                        android:textColor="@color/colorLogout"
+                        android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_16sdp"
                         app:fontFamily="@font/linotte_semi_bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -130,7 +130,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/pinView" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/buttonLogin"
                         style="@style/LogoutButton"
                         android:layout_width="0dp"

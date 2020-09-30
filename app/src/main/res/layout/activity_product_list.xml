@@ -6,7 +6,7 @@
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
@@ -18,27 +18,14 @@
         android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusableInTouchMode="true"
-        android:focusable="true">
-
-        <FrameLayout
-            android:id="@+id/topBackground"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:minHeight="@dimen/_100sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </FrameLayout>
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
+            android:background="@color/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:paddingStart="@dimen/_5sdp"
             android:paddingEnd="@dimen/_5sdp"
@@ -60,71 +47,64 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            android:background="@color/white">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/mSwipeRefresh"
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recViewProduct"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@+id/llFilterView">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recViewProduct"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:listitem="@layout/product_list_item"
-                    tools:itemCount="3"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:visibility="@{viewModel.isItemAvailable ? View.VISIBLE : View.GONE}" />
-
-
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                android:layout_above="@+id/llFilterView"
+                android:visibility="@{viewModel.isItemAvailable ? View.VISIBLE : View.GONE}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/product_list_item" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/linotte_semi_bold"
                 android:text="@string/no_item_available"
                 android:textSize="@dimen/_10sdp"
-                android:fontFamily="@font/linotte_semi_bold"
-                android:layout_centerInParent="true"
-                android:visibility="@{viewModel.isItemAvailable ? View.GONE : View.VISIBLE}"/>
+                android:visibility="@{viewModel.isItemAvailable ? View.GONE : View.VISIBLE}" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/llFilterView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_38sdp"
-                android:orientation="horizontal"
-                android:onClick="@{() -> viewModel.onProductSortByClick()}"
+                android:layout_alignParentBottom="true"
                 android:background="@color/colorLogout"
-                android:layout_alignParentBottom="true">
+                android:onClick="@{() -> viewModel.onProductSortByClick()}"
+                android:orientation="horizontal">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:layout_weight=".5"
-                    android:gravity="center"
-                    android:layout_gravity="center">
+                    android:gravity="center">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivSortIcon"
                         android:layout_width="@dimen/_12sdp"
                         android:layout_height="@dimen/_12sdp"
+                        android:layout_gravity="center"
                         android:src="@drawable/ic_sort"
-                        android:tint="@color/white"
-                        android:layout_gravity="center"/>
+                        android:tint="@color/white" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:text="@string/sort"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_12sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_5sdp"/>
+                        android:textSize="@dimen/_12sdp" />
 
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -137,8 +117,8 @@
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight=".5"
                     android:layout_gravity="center"
+                    android:layout_weight=".5"
                     android:gravity="center"
                     android:onClick="@{() -> viewModel.onProductFilterClick()}">
 
@@ -146,19 +126,19 @@
                         android:id="@+id/ivFilterIcon"
                         android:layout_width="@dimen/_12sdp"
                         android:layout_height="@dimen/_12sdp"
+                        android:layout_gravity="center"
                         android:src="@drawable/ic_filter"
-                        android:tint="@color/white"
-                        android:layout_gravity="center" />
+                        android:tint="@color/white" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/filter"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_12sdp"
                         android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:fontFamily="@font/linotte_semi_bold"
-                        android:layout_marginStart="@dimen/_5sdp"/>
+                        android:text="@string/filters"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 

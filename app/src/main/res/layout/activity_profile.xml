@@ -139,6 +139,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:background="@drawable/edittext_bg"
+                    android:onClick="@{()-> viewModel.onWishListClick()}"
                     android:orientation="horizontal"
                     android:padding="@dimen/_8sdp">
 
@@ -248,4 +249,5 @@
         </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

@@ -7,6 +7,8 @@ import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityProfileBinding
 import com.app.ia.ui.delivery_address.DeliveryAddressActivity
 import com.app.ia.ui.edit_profile.EditProfileActivity
+import com.app.ia.ui.product_list.ProductListActivity
+import com.app.ia.ui.rewards.RewardsActivity
 import com.app.ia.utils.startActivity
 import kotlinx.android.synthetic.main.common_header.view.*
 
@@ -23,15 +25,19 @@ class ProfileViewModel(private val baseRepository: BaseRepository) : BaseViewMod
         mBinding.toolbar.ivEditProfileIcon.setOnClickListener { onEditProfileClick() }
     }
 
-    fun onRewardPointClick(){
-        //mActivity.startActivity<WalletActivity>()
+    fun onRewardPointClick() {
+        mActivity.startActivity<RewardsActivity>()
     }
 
-    fun onDeliveryAddressClick(){
+    fun onWishListClick() {
+        mActivity.startActivity<ProductListActivity>()
+    }
+
+    fun onDeliveryAddressClick() {
         mActivity.startActivity<DeliveryAddressActivity>()
     }
 
-    fun onEditProfileClick(){
+    fun onEditProfileClick() {
         mActivity.startActivity<EditProfileActivity>()
     }
 

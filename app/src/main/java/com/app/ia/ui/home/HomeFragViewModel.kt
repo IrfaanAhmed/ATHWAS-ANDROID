@@ -6,6 +6,8 @@ import androidx.lifecycle.OnLifecycleEvent
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.FragmentHomeBinding
+import com.app.ia.ui.product_list.ProductListActivity
+import com.app.ia.utils.startActivity
 
 class HomeFragViewModel(baseRepository: BaseRepository) : BaseViewModel() {
 
@@ -20,5 +22,9 @@ class HomeFragViewModel(baseRepository: BaseRepository) : BaseViewModel() {
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun setHeader() {
         isHomeScreen.set(true)
+    }
+
+    fun onViewAllClick() {
+        mActivity.startActivity<ProductListActivity>()
     }
 }

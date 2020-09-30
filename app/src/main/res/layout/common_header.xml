@@ -17,25 +17,25 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageViewBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_12sdp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
             android:onClick="@{()-> viewModel.onBackPressed()}"
-            android:padding="@dimen/_8sdp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            app:srcCompat="@drawable/ic_back"
+            app:srcCompat="@drawable/ic_arrow_back_ios"
             app:tint="@color/white" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/llTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:gravity="center"
-            android:orientation="vertical"
-            android:layout_centerInParent="true">
+            android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/appCompatTextView"
@@ -43,20 +43,20 @@
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.title}"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_13sdp"
-                app:fontFamily="@font/linotte_semi_bold"/>
+                android:textSize="@dimen/_14sdp"
+                app:fontFamily="@font/linotte_bold" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvSendTo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/toolbar"
                 android:layout_centerHorizontal="true"
+                android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_8sdp"
-                android:textAllCaps="true"
                 android:visibility="gone"
-                android:fontFamily="@font/linotte_semi_bold"
-                android:layout_below="@+id/toolbar"/>
+                app:fontFamily="@font/linotte_semi_bold" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
 
@@ -64,48 +64,48 @@
             android:id="@+id/llSideOption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true">
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivSearchIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="@dimen/_9sdp"
                 android:visibility="invisible"
                 app:srcCompat="@drawable/ic_search"
                 app:tint="@color/white" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageViewIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_margin="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="@dimen/_9sdp"
                 android:visibility="invisible"
                 app:srcCompat="@drawable/ic_cart"
                 app:tint="@color/white" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivEditProfileIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="@dimen/_9sdp"
                 android:visibility="invisible"
                 app:srcCompat="@drawable/ic_edit"
                 app:tint="@color/white" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-
 
 
     </RelativeLayout>

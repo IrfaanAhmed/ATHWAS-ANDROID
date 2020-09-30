@@ -70,7 +70,7 @@ data class NotificationResponse(
 
         @Expose
         @SerializedName("createdAt")
-        private val createdAt: String = "2020-08-10T12:35:05.485Z",
+        private var createdAt: String = "2020-08-10T12:35:05.485Z",
 
         @Expose
         @SerializedName("updatedAt")
@@ -82,11 +82,11 @@ data class NotificationResponse(
 
         @Expose
         @SerializedName("title")
-        val title: String = "Title",
+        var title: String = "Title",
 
         @Expose
         @SerializedName("message")
-        val message: String = "message") {
+        var message: String = "message") {
 
         fun getCreatedAt(): String {
             val serverDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
@@ -100,7 +100,11 @@ data class NotificationResponse(
                 dateFormatter.timeZone = timeZone
                 dateFormatter.format(value)
             } catch (e: Exception) {
-                createdAt
+                if(createdAt.isEmpty()) {
+                    "01 May 2020, 10:00 AM"
+                } else {
+                    createdAt
+                }
             }
             return outputDate
         }

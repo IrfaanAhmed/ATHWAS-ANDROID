@@ -1,6 +1,7 @@
 package com.app.ia.ui.signup
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.app.ia.R
 import com.app.ia.ViewModelFactory
@@ -12,6 +13,8 @@ import com.app.ia.utils.makeStatusBarTransparent
 import com.app.ia.utils.setOnApplyWindowInset
 import com.app.ia.BR
 import kotlinx.android.synthetic.main.activity_sign_up.*
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
 class SignUpActivity : BaseActivity<ActivitySignUpBinding, SignUpViewModel>() {
 
@@ -40,6 +43,19 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding, SignUpViewModel>() {
 
         makeStatusBarTransparent()
         setOnApplyWindowInset(toolbar, content_container)
+
+        KeyboardVisibilityEvent.setEventListener(this, this, object : KeyboardVisibilityEventListener {
+            override fun onVisibilityChanged(isOpen: Boolean) {
+                if (isOpen) {
+                    txtSkipForNow.visibility = View.GONE
+                    txtViewAlreadyLogin.visibility = View.GONE
+                } else {
+                    txtSkipForNow.visibility = View.VISIBLE
+                    txtViewAlreadyLogin.visibility = View.VISIBLE
+                }
+            }
+
+        })
     }
 
     private fun setViewModel() {

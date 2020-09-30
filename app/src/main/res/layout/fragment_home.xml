@@ -13,7 +13,6 @@
 
     </data>
 
-
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,26 +22,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:padding="@dimen/_16sdp">
+            android:paddingStart="@dimen/_12sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_12sdp"
+            android:paddingBottom="@dimen/_8sdp">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_35sdp"
+                android:layout_height="@dimen/_33sdp"
                 android:background="@drawable/edittext_bg"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_35sdp"
+                    android:layout_height="@dimen/_33sdp"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:clickable="true"
                     android:drawableStart="@drawable/ic_search"
                     android:drawablePadding="@dimen/_8sdp"
+                    android:editable="false"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:hint="@string/what_are_you_looking_for"
                     android:paddingStart="@dimen/_8sdp"
                     android:paddingEnd="@dimen/_8sdp"
-                    android:textSize="@dimen/_11sdp" />
+                    android:textSize="@dimen/_12sdp" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
@@ -83,6 +88,7 @@
                         android:layout_gravity="center|bottom"
                         android:layout_marginBottom="8dp"
                         android:padding="10dp"
+                        app:fillColor="@color/colorPrimaryDark"
                         app:pageColor="@color/light_grey"
                         app:strokeColor="@color/transparent"
                         app:strokeWidth="0dp" />
@@ -101,7 +107,7 @@
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_1sdp"
                     android:background="@color/theme_color"
                     android:gravity="center_vertical"
                     android:paddingStart="@dimen/_10sdp"
@@ -114,21 +120,23 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ellipsize="end"
-                        android:fontFamily="@font/linotte_bold"
                         android:maxLines="1"
                         android:text="@string/popular_products"
                         android:textAlignment="viewStart"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_14sdp" />
+                        android:textSize="@dimen/_13sdp"
+                        app:fontFamily="@font/linotte_semi_bold" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_26sdp"
-                        android:background="@drawable/edittext_bg"
+                        android:layout_height="@dimen/_24sdp"
+                        android:background="@drawable/white_rounded_corner"
+                        android:onClick="@{()-> viewModel.onViewAllClick()}"
                         android:text="@string/view_all"
                         android:textAllCaps="false"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_10sdp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -157,21 +165,23 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ellipsize="end"
-                        android:fontFamily="@font/linotte_bold"
                         android:maxLines="1"
                         android:text="@string/discounted_products"
                         android:textAlignment="viewStart"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_14sdp" />
+                        android:textSize="@dimen/_13sdp"
+                        app:fontFamily="@font/linotte_semi_bold" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_26sdp"
-                        android:background="@drawable/edittext_bg"
+                        android:layout_height="@dimen/_24sdp"
+                        android:background="@drawable/white_rounded_corner"
+                        android:onClick="@{()-> viewModel.onViewAllClick()}"
                         android:text="@string/view_all"
                         android:textAllCaps="false"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_10sdp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 

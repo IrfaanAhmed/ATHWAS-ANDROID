@@ -6,7 +6,7 @@
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
@@ -18,8 +18,8 @@
         android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusableInTouchMode="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <FrameLayout
             android:id="@+id/topBackground"
@@ -53,340 +53,341 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
             android:layout_above="@+id/buttonAddToCart"
+            android:layout_below="@+id/toolbar"
             android:background="@color/white">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/bannerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_220sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fitsSystemWindows="true">
+
+                    <com.santalu.autoviewpager.AutoViewPager
+                        android:id="@+id/viewPagerBanner"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_195sdp"
+                        app:avp_autoScroll="true"
+                        app:avp_duration="3000"
+                        app:avp_indeterminate="true" />
+
+                    <com.app.ia.helper.CirclePageIndicator
+                        android:id="@+id/viewPagerIndicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|bottom"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:padding="@dimen/_8sdp"
+                        app:fillColor="@color/colorPrimary"
+                        app:pageColor="@color/light_grey"
+                        app:strokeColor="@color/transparent"
+                        app:strokeWidth="0dp" />
+
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/cbFavorite"
+                        android:layout_width="@dimen/_24sdp"
+                        android:layout_height="@dimen/_24sdp"
+                        android:layout_gravity="end|top"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:button="@drawable/selector_favorite_checkbox"
+                        android:checked="true" />
+
+                </FrameLayout>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="@dimen/_8sdp">
 
-                            <FrameLayout
-                                android:id="@+id/bannerLayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_220sdp"
-                                android:fitsSystemWindows="true"
-                                android:layout_marginTop="@dimen/_8sdp">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                                <com.santalu.autoviewpager.AutoViewPager
-                                    android:id="@+id/viewPagerBanner"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="@dimen/_195sdp"
-                                    app:avp_autoScroll="true"
-                                    app:avp_duration="3000"
-                                    app:avp_indeterminate="true" />
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/primary_color_fill_gradient"
+                            android:paddingStart="@dimen/_8sdp"
+                            android:paddingTop="@dimen/_2sdp"
+                            android:paddingEnd="@dimen/_8sdp"
+                            android:paddingBottom="@dimen/_2sdp"
+                            android:text="Upto 30% Off"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8sdp" />
 
-                                <com.app.ia.helper.CirclePageIndicator
-                                    android:id="@+id/viewPagerIndicator"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center|bottom"
-                                    android:layout_marginBottom="@dimen/_5sdp"
-                                    android:padding="@dimen/_8sdp"
-                                    app:pageColor="@color/light_grey"
-                                    app:fillColor="@color/colorPrimary"
-                                    app:strokeColor="@color/transparent"
-                                    app:strokeWidth="0dp" />
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:orientation="horizontal">
 
-                                <androidx.appcompat.widget.AppCompatCheckBox
-                                    android:id="@+id/cbFavorite"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="end|top"
-                                    android:layout_marginTop="@dimen/_8sdp"
-                                    android:layout_marginEnd="@dimen/_8sdp"
-                                    android:checked="true"
-                                    android:button="@drawable/selector_favorite_checkbox" />
+                            <!--RatingBar-->
+                            <androidx.appcompat.widget.AppCompatRatingBar
+                                android:id="@+id/ratingTherapist"
+                                style="?android:attr/ratingBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:isIndicator="false"
+                                android:rating="4.0"
+                                android:scaleX="0.9"
+                                android:scaleY="0.9" />
 
-                            </FrameLayout>
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="4.0"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_9sdp" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <androidx.appcompat.widget.LinearLayoutCompat
+                    </RelativeLayout>
+
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:fontFamily="@font/linotte_semi_bold"
+                        android:text="Vedaka Raw Penuts, Pink 1KG"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvCategory"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/linotte_regular"
+                            android:text="Pantry - "
+                            android:textColor="@color/light_grey"
+                            android:textSize="@dimen/_10sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Household"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_10sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/tvCategory" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:fontFamily="@font/linotte_bold"
+                            android:text="₹350"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="@dimen/_13sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvBrand"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/linotte_regular"
+                            android:text="Brand - "
+                            android:textColor="@color/light_grey"
+                            android:textSize="@dimen/_10sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Surf Excel"
+                            android:textColor="@color/sky_blue"
+                            android:textSize="@dimen/_10sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/tvBrand" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:fontFamily="@font/linotte_light"
+                            android:text="₹450"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_10sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginBottom="@dimen/_8sdp"
+                        android:background="@color/light_grey" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:fontFamily="@font/linotte_bold"
+                        android:text="@string/pack_size"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:background="@drawable/pack_size_bg"
+                        android:onClick="@{() -> viewModel.onCustomisationClick()}"
                         android:padding="@dimen/_8sdp">
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingStart="@dimen/_8sdp"
-                                android:paddingEnd="@dimen/_8sdp"
-                                android:layout_alignParentStart="true"
-                                android:layout_centerVertical="true"
-                                android:background="@drawable/primary_color_fill_gradient"
-                                android:text="Upto 30% Off"
-                                android:textSize="@dimen/_8sdp"
-                                android:textColor="@color/white"
-                                android:paddingTop="@dimen/_2sdp"
-                                android:paddingBottom="@dimen/_2sdp"/>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true">
-
-                                <!--RatingBar-->
-                                <androidx.appcompat.widget.AppCompatRatingBar
-                                    android:id="@+id/ratingTherapist"
-                                    style="?android:attr/ratingBarStyleSmall"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:isIndicator="false"
-                                    android:layout_gravity="center"
-                                    android:scaleX="0.9"
-                                    android:scaleY="0.9"
-                                    android:rating="4.0"/>
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="4.0"
-                                    android:layout_gravity="center"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/_9sdp"/>
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                        </RelativeLayout>
-
                         <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="match_parent"
+                            android:id="@+id/tvSize"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Vedaka Raw Penuts, Pink 1KG"
-                            android:fontFamily="@font/linotte_semi_bold"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_12sdp"
-                            android:layout_marginTop="@dimen/_5sdp"/>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/tvCategory"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:text="Pantry - "
-                                android:fontFamily="@font/linotte_regular"
-                                android:textColor="@color/light_grey"
-                                android:textSize="@dimen/_10sdp"/>
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/tvCategory"
-                                android:text="Household"
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_10sdp"/>
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:text="₹350"
-                                android:fontFamily="@font/linotte_bold"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="@dimen/_11sdp"/>
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/tvBrand"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:text="Brand - "
-                                android:fontFamily="@font/linotte_regular"
-                                android:textColor="@color/light_grey"
-                                android:textSize="@dimen/_10sdp"/>
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/tvBrand"
-                                android:text="Surf Excel"
-                                android:textColor="@color/sky_blue"
-                                android:textSize="@dimen/_10sdp"/>
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:text="₹450"
-                                android:fontFamily="@font/linotte_bold"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_11sdp"/>
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1px"
-                            android:background="@color/light_grey"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_marginBottom="@dimen/_8sdp"/>
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/pack_size"
                             android:fontFamily="@font/linotte_bold"
+                            android:text="@string/size"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_13sdp"/>
+                            android:textSize="@dimen/_10sdp"
+                            app:layout_constraintBottom_toTopOf="@+id/tvSizeValue"
+                            app:layout_constraintStart_toStartOf="parent" />
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvSizeValue"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/_8sdp"
-                            android:onClick="@{() -> viewModel.onCustomisationClick()}"
-                            android:layout_marginTop="@dimen/_3sdp"
-                            android:background="@drawable/pack_size_bg">
+                            android:fontFamily="@font/linotte_bold"
+                            android:text="10 kg"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_10sdp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvSize" />
 
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/tvSize"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/size"
-                                android:fontFamily="@font/linotte_bold"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintBottom_toTopOf="@+id/tvSizeValue"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_10sdp"/>
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="@dimen/_24sdp"
+                            android:layout_height="@dimen/_24sdp"
+                            android:padding="@dimen/_5sdp"
+                            android:rotation="180"
+                            android:src="@drawable/ic_back"
+                            android:tint="@color/colorPrimary"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/tvSizeValue"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="10 kg"
-                                android:fontFamily="@font/linotte_bold"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tvSize"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_10sdp"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="@dimen/_24sdp"
-                                android:layout_height="@dimen/_24sdp"
-                                android:src="@drawable/ic_back"
-                                android:rotation="180"
-                                android:padding="@dimen/_5sdp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:tint="@color/colorPrimary"/>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp">
 
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_5sdp">
+                            android:fontFamily="@font/linotte_bold"
+                            android:text="@string/see_all_offers"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_11sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/see_all_offers"
-                                android:fontFamily="@font/linotte_bold"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_11sdp"/>
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="@dimen/_24sdp"
+                            android:layout_height="@dimen/_24sdp"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:padding="@dimen/_5sdp"
+                            android:rotation="180"
+                            android:src="@drawable/ic_back"
+                            android:tint="@color/colorPrimary"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="@dimen/_24sdp"
-                                android:layout_height="@dimen/_24sdp"
-                                android:src="@drawable/ic_back"
-                                android:rotation="180"
-                                android:padding="@dimen/_5sdp"
-                                android:layout_marginEnd="@dimen/_8sdp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:tint="@color/colorPrimary"/>
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/tvAboutProductTitle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/about_product"
-                                android:fontFamily="@font/linotte_bold"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintBottom_toTopOf="@+id/tvAboutProductValue"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_11sdp"/>
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/tvAboutProductValue"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages."
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tvAboutProductTitle"
-                                android:textColor="@color/light_grey"
-                                android:textSize="@dimen/_10sdp"/>
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvAboutProductTitle"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_marginBottom="@dimen/_8sdp">
+                            android:fontFamily="@font/linotte_bold"
+                            android:text="@string/about_product"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_11sdp"
+                            app:layout_constraintBottom_toTopOf="@+id/tvAboutProductValue"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvAboutProductValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages."
+                            android:textColor="@color/light_grey"
+                            android:textSize="@dimen/_10sdp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvAboutProductTitle" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginBottom="@dimen/_8sdp">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/tvSimilarProduct"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/similar_product"
                             android:fontFamily="@font/linotte_bold"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintBottom_toTopOf="@+id/recViewSimilarProduct"
+                            android:text="@string/similar_product"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_11sdp"/>
+                            android:textSize="@dimen/_11sdp"
+                            app:layout_constraintBottom_toTopOf="@+id/recViewSimilarProduct"
+                            app:layout_constraintStart_toStartOf="parent" />
 
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/recViewSimilarProduct"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tvSimilarProduct"/>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recViewSimilarProduct"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvSimilarProduct" />
 
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.core.widget.NestedScrollView>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonAddToCart"
-            style="@style/LogoutButton"
+            style="@style/AddToCartButton"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_32sdp"
-            android:text="@string/add_to_cart"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            android:text="@string/add_to_cart" />
 
     </RelativeLayout>
 

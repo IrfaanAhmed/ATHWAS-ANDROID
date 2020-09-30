@@ -65,6 +65,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
         categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile_cat))
         categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile_cat))
         categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile_cat))
+        categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile_cat))
+        categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile_cat))
+        categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile_cat))
 
 
         val homeCategoryAdapter = HomeCategoryAdapter()

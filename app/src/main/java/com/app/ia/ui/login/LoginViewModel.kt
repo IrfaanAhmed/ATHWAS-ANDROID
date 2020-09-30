@@ -84,7 +84,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
                     requestParams["phone"] = mobileNumber
                     requestParams["password"] = password
                     requestParams["device_token"] = AppPreferencesHelper.getInstance().deviceToken
-                    requestParams["device_type"] = "android"
+                    requestParams["device_type"] = "1"
                     requestParams["device_id"] = androidId
                     requestParams["login_through"] = "password"
                     setupObservers(requestParams)
@@ -96,7 +96,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
     }
 
     fun onForgotPasswordClick() {
-        mActivity.startActivity<ForgotPasswordActivity>()
+        //mActivity.startActivity<ForgotPasswordActivity>()
     }
 
     fun skipForNow() {
@@ -182,7 +182,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
                         Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
                     }
                     Status.LOADING -> {
-
+                        baseRepository.callback.showProgress()
                     }
                 }
             }

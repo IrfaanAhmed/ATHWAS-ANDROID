@@ -42,11 +42,11 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imageViewMenu"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:onClick="@{()-> viewModel.onHumBurgerMenuClick()}"
-                    android:padding="@dimen/_8sdp"
                     app:srcCompat="@drawable/ic_side_menu"
                     app:tint="@color/white" />
 
@@ -69,13 +69,13 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/imgViewLocation"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginEnd="@dimen/_5sdp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
                         android:focusable="true"
-                        android:padding="@dimen/_6sdp"
                         app:srcCompat="@drawable/ic_top_location" />
 
                     <androidx.appcompat.widget.LinearLayoutCompat
@@ -114,8 +114,8 @@
                                 android:textSize="@dimen/_9sdp" />
 
                             <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="35sp"
-                                android:layout_height="12dp"
+                                android:layout_width="33sp"
+                                android:layout_height="10dp"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
                                 android:focusable="true"
@@ -128,24 +128,26 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/imgViewNotification"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="@dimen/_16sdp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
                         android:focusable="true"
-                        android:padding="@dimen/_6sdp"
+                        android:onClick="@{()-> viewModel.onNotificationClick()}"
                         app:srcCompat="@drawable/ic_notification" />
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/imgViewCart"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="@dimen/_8sdp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
                         android:focusable="true"
-                        android:padding="@dimen/_6sdp"
+                        android:onClick="@{()-> viewModel.onCartClick()}"
                         app:srcCompat="@drawable/ic_cart" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>

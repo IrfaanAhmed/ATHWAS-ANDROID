@@ -54,22 +54,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/mSwipeRefresh"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recViewProductCategory"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recViewProductCategory"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="@{viewModel.isItemAvailable ? View.VISIBLE : View.GONE}"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="3"
-                    tools:itemCount="3"
-                    tools:listitem="@layout/product_category_list_item" />
-
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                android:layout_height="match_parent"
+                android:visibility="@{viewModel.isItemAvailable ? View.VISIBLE : View.GONE}"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="3"
+                tools:itemCount="3"
+                tools:listitem="@layout/product_category_list_item" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
@@ -80,9 +73,7 @@
                 android:textSize="@dimen/_10sdp"
                 android:visibility="@{viewModel.isItemAvailable ? View.GONE : View.VISIBLE}" />
 
-
         </RelativeLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

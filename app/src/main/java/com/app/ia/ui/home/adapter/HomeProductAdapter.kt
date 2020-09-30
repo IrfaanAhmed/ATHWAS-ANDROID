@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.databinding.HomeProductListItemBinding
+import com.app.ia.ui.product_detail.ProductDetailActivity
+import com.app.ia.utils.startActivity
 
 class HomeProductAdapter(private val isDiscountedProduct: Boolean) : ListAdapter<String, HomeProductAdapter.HomeProductViewHolder>(DiffCallback()) {
 
@@ -40,6 +42,10 @@ class HomeProductAdapter(private val isDiscountedProduct: Boolean) : ListAdapter
 
                 if (isDiscountedProduct) {
                     txtDiscountPrice.paintFlags = txtDiscountPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                }
+
+                itemView.setOnClickListener {
+                    itemView.context.startActivity<ProductDetailActivity>()
                 }
                 executePendingBindings()
             }

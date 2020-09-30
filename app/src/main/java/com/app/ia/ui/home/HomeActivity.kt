@@ -70,9 +70,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         val fragmentManager: FragmentManager = supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, fragment, fragment.toString())
-        if (fragment !is HomeFragment) {
+        /*if (fragment !is HomeFragment) {
             fragmentTransaction.addToBackStack(fragment.toString())
-        }
+        }*/
         fragmentTransaction.commit()
     }
 

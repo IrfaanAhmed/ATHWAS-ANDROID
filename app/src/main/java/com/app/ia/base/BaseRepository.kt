@@ -5,6 +5,7 @@ import com.app.ia.apiclient.ApiService
 import com.app.ia.callback.GeneralCallback
 import com.app.ia.model.BaseResponse
 import com.app.ia.model.LoginResponse
+import com.app.ia.model.NoDataResponse
 import com.app.ia.model.RegisterResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -19,5 +20,13 @@ open class BaseRepository(private val myApi: ApiService, generalCallback: Genera
 
     suspend fun userRegister(request: Map<String, String>): BaseResponse<RegisterResponse> {
         return apiRequest { myApi.userRegister(request) }
+    }
+
+    suspend fun verifyOTP(request: Map<String, String>): BaseResponse<LoginResponse> {
+        return apiRequest { myApi.verifyOTP(request) }
+    }
+
+    suspend fun resendOTP(request: Map<String, String>): BaseResponse<NoDataResponse> {
+        return apiRequest { myApi.resendOTP(request) }
     }
 }

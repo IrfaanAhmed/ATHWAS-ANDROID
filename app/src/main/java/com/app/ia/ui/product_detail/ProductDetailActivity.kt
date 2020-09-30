@@ -11,13 +11,17 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityProductDetailBinding
+import com.app.ia.ui.my_cart.MyCartActivity
 import com.app.ia.ui.product_detail.adapter.ProductImageAdapter
 import com.app.ia.ui.product_detail.adapter.SimilarProductListAdapter
 import com.app.ia.utils.gone
 import com.app.ia.utils.setOnApplyWindowInset1
+import com.app.ia.utils.startActivity
 import com.app.ia.utils.visible
 import kotlinx.android.synthetic.main.activity_product_detail.*
+import kotlinx.android.synthetic.main.activity_product_detail.content_container
 import kotlinx.android.synthetic.main.activity_product_detail.toolbar
+import kotlinx.android.synthetic.main.activity_product_list.*
 import kotlinx.android.synthetic.main.common_header.view.*
 
 class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding, ProductDetailViewModel>() {
@@ -53,6 +57,11 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding, Product
         toolbar.imageViewIcon.visible()
         toolbar.ivSearchIcon.visible()
         toolbar.ivEditProfileIcon.gone()
+
+        toolbar.imageViewIcon.setOnClickListener {
+            startActivity<MyCartActivity>()
+        }
+
 
         val imageList = ArrayList<String>()
         imageList.add("https://images-na.ssl-images-amazon.com/images/I/61rDJVoKpeL._SL1000_.jpg")

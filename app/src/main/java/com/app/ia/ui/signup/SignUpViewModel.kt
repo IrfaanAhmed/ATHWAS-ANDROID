@@ -78,7 +78,7 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                     }
 
                     Status.LOADING -> {
-
+                        baseRepository.callback.showProgress()
                     }
                 }
             }
