@@ -4,6 +4,7 @@ import com.app.ia.model.BaseResponse
 import com.app.ia.model.LoginResponse
 import com.app.ia.model.NoDataResponse
 import com.app.ia.model.RegisterResponse
+import com.app.wallet.tivo.model.ResendOTPResponse
 import retrofit2.Response
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
@@ -25,6 +26,9 @@ interface ApiService {
 
     @POST(Api.RESEND_OTP)
     @FormUrlEncoded
-    suspend fun resendOTP(@FieldMap params: Map<String, String>): Response<BaseResponse<NoDataResponse>>
+    suspend fun resendOTP(@FieldMap params: Map<String, String>): Response<BaseResponse<ResendOTPResponse>>
 
+    @POST(Api.UPDATE_FORGOT_PASSWORD_URL)
+    @FormUrlEncoded
+    suspend fun updateForgotPassword(@FieldMap params: Map<String, String>): Response<BaseResponse<NoDataResponse>>
 }

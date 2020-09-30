@@ -60,6 +60,13 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".ui.reset_password.ResetPasswordActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomTheme"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".ui.otp.OTPActivity"
             android:configChanges="layoutDirection|locale"
             android:screenOrientation="portrait"

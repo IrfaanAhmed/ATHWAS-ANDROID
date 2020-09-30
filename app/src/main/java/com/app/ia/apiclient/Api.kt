@@ -13,6 +13,8 @@ object Api {
     const val VERIFY_OTP = COMMON_PATH + "verify_otp"
     const val RESEND_OTP = COMMON_PATH + "resend_otp"
 
+    const val UPDATE_FORGOT_PASSWORD_URL = COMMON_PATH + "update_forgot_password"
+
     private fun getBaseUrl(environmentType: Int): String {
 
         return when (environmentType) {

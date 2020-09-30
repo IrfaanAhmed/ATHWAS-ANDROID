@@ -6,7 +6,7 @@
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
@@ -63,7 +63,7 @@
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/top_bar"/>
+                android:layout_below="@+id/top_bar" />
 
         </RelativeLayout>
 
@@ -74,7 +74,9 @@
             android:layout_gravity="start"
             android:background="@android:color/transparent">
 
-            <include layout="@layout/nav_side_menu"/>
+            <include
+                layout="@layout/nav_side_menu"
+                app:viewModel="@{viewModel}" />
 
         </com.google.android.material.navigation.NavigationView>
 

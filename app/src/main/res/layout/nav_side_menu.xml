@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.app.ia.R" />
+
         <import type="android.view.View" />
 
         <variable
@@ -18,11 +20,12 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivProfile"
+            defaultImage="@{R.drawable.login_logo}"
+            imageUrl="@{viewModel.userData.userImageUrl}"
             android:layout_width="@dimen/_75sdp"
             android:layout_height="@dimen/_75sdp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/_35sdp"
-            android:src="@drawable/login_logo" />
+            android:layout_marginTop="@dimen/_35sdp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvUserName"
@@ -31,7 +34,7 @@
             android:layout_below="@+id/ivProfile"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_8sdp"
-            android:text="Umesh Kumar"
+            android:text="@{viewModel.userData.firstName}"
             android:textColor="@color/black"
             android:textSize="@dimen/_13sdp"
             app:fontFamily="@font/linotte_semi_bold" />

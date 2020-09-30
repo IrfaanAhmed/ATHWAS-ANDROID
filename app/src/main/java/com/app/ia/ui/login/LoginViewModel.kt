@@ -96,7 +96,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
     }
 
     fun onForgotPasswordClick() {
-        //mActivity.startActivity<ForgotPasswordActivity>()
+        mActivity.startActivity<ForgotPasswordActivity>()
     }
 
     fun skipForNow() {

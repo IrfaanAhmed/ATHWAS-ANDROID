@@ -2,11 +2,14 @@ package com.app.ia.ui.home
 
 import android.app.Activity
 import android.widget.LinearLayout
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.app.ia.R
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityHomeBinding
+import com.app.ia.local.AppPreferencesHelper
+import com.app.ia.model.LoginResponse
 import com.app.ia.ui.business_category.CategoryFragment
 import com.app.ia.ui.home.adapter.NavigationListAdapter
 import com.app.ia.ui.my_cart.MyCartActivity
@@ -23,10 +26,13 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
 
     lateinit var mActivity: Activity
     lateinit var mBinding: ActivityHomeBinding
+    val userData = MutableLiveData<LoginResponse>()
 
     fun setVariable(mBinding: ActivityHomeBinding) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
+
+        userData.value = AppPreferencesHelper.getInstance().userData
 
         (mActivity as HomeActivity).recViewNavigation.addItemDecoration(EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.VERTICAL))
         (mActivity as HomeActivity).recViewNavigation.addItemDecoration(DividerItemDecoration(mActivity, LinearLayout.VERTICAL))
