@@ -76,7 +76,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignEnd="@+id/ivWallet"
-                                android:text="₹350"
+                                android:text="@{`₹` + viewModel.walletBalance}"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_15sdp" />
 
@@ -99,23 +99,24 @@
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+           <!-- <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/mSwipeRefresh"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/cardAddWalletView">
+                android:layout_below="@+id/cardAddWalletView">-->
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recViewWallet"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_below="@+id/cardAddWalletView"
                     android:visibility="@{viewModel.isItemAvailable ? View.VISIBLE : View.GONE}"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:itemCount="3"
                     tools:listitem="@layout/wallet_list_item" />
 
 
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+           <!-- </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"

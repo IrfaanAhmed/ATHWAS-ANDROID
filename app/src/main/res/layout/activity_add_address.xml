@@ -213,14 +213,14 @@
 
             </com.google.android.material.chip.ChipGroup>
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAddAddress"
+                style="@style/AddToCartButton"
                 android:onClick="@{()-> viewModel.addAddress()}"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35sdp"
                 android:layout_alignParentBottom="true"
                 android:alpha="@{(viewModel.selectedChipValue != -1) ? 1f : 0.3f}"
-                android:background="@drawable/add_to_cart_bg"
                 android:clickable="@{(viewModel.selectedChipValue != -1)}"
                 android:fontFamily="@font/linotte_bold"
                 android:text="@string/add"

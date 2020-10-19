@@ -6,20 +6,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.databinding.HomeCategoryListItemBinding
-import com.app.ia.model.BusinessCategoryBean
+import com.app.ia.model.BusinessCategoryResponse
 import com.app.ia.ui.product_category.ProductCategoryActivity
 import com.app.ia.utils.AppConstants
 import com.app.ia.utils.startActivity
 
-class HomeCategoryAdapter : ListAdapter<BusinessCategoryBean, HomeCategoryAdapter.HomeCategoryViewHolder>(DiffCallback()) {
+class HomeCategoryAdapter : ListAdapter<BusinessCategoryResponse.Docs, HomeCategoryAdapter.HomeCategoryViewHolder>(DiffCallback()) {
 
-    class DiffCallback : DiffUtil.ItemCallback<BusinessCategoryBean>() {
+    class DiffCallback : DiffUtil.ItemCallback<BusinessCategoryResponse.Docs>() {
 
-        override fun areItemsTheSame(oldItem: BusinessCategoryBean, newItem: BusinessCategoryBean): Boolean {
+        override fun areItemsTheSame(oldItem: BusinessCategoryResponse.Docs, newItem: BusinessCategoryResponse.Docs): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: BusinessCategoryBean, newItem: BusinessCategoryBean): Boolean {
+        override fun areContentsTheSame(oldItem: BusinessCategoryResponse.Docs, newItem: BusinessCategoryResponse.Docs): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
         }
     }
@@ -36,13 +36,14 @@ class HomeCategoryAdapter : ListAdapter<BusinessCategoryBean, HomeCategoryAdapte
 
     class HomeCategoryViewHolder(private val mBinding: HomeCategoryListItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun onBind(favourite: BusinessCategoryBean) {
+        fun onBind(businessCategory: BusinessCategoryResponse.Docs) {
             mBinding.apply {
-                category = favourite
+                category = businessCategory
                 executePendingBindings()
                 itemView.setOnClickListener {
                     itemView.context.startActivity<ProductCategoryActivity> {
-                        putExtra(AppConstants.EXTRA_PRODUCT_CATEGORY, "Mobile")
+                        putExtra(AppConstants.EXTRA_BUSINESS_CATEGORY_NAME, businessCategory.name)
+                        putExtra(AppConstants.EXTRA_BUSINESS_CATEGORY_ID, businessCategory._Id)
                     }
                 }
             }

@@ -1,21 +1,22 @@
 package com.app.ia.ui.wallet
 
 import android.app.Activity
-import android.content.Intent
+import android.widget.Toast
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.app.ia.R
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
-import com.app.ia.databinding.*
+import com.app.ia.databinding.FragmentWalletBinding
+import com.app.ia.dialog.IADialog
 import com.app.ia.dialog.bottom_sheet_dialog.AddMoneyDialogFragment
-import com.app.ia.dialog.bottom_sheet_dialog.CommonSortDialogFragment
-import com.app.ia.dialog.bottom_sheet_dialog.ProductFilterDialogFragment
-import com.app.ia.model.CommonSortBean
+import com.app.ia.enums.Status
 import com.app.ia.model.PaymentOptionBean
+import com.app.ia.model.WalletHistoryResponse
 import com.app.ia.ui.home.HomeActivity
-import com.app.ia.ui.product_list.ProductListActivity
-import com.app.ia.utils.AppConstants.EXTRA_PRODUCT_CATEGORY
+import com.app.ia.utils.Resource
+import kotlinx.coroutines.Dispatchers
 
 class WalletViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), LifecycleObserver {
 
@@ -23,28 +24,24 @@ class WalletViewModel(private val baseRepository: BaseRepository) : BaseViewMode
     lateinit var mBinding: FragmentWalletBinding
 
     val isItemAvailable = MutableLiveData(true)
+    var walletBalance = MutableLiveData("0")
+    val walletListResponse = MutableLiveData<MutableList<WalletHistoryResponse.Docs>>()
 
     fun setVariable(mBinding: FragmentWalletBinding) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
+        transactionHistoryObserver()
     }
 
     fun onAddMoneyClick() {
         val bottomSheetFragment = AddMoneyDialogFragment(getPaymentOptionList())
+        bottomSheetFragment.setOnItemClickListener(object : AddMoneyDialogFragment.OnAddMoneyClickListener {
+            override fun onAddMoneyClick(data: String) {
+                walletBalance.value = data
+                transactionHistoryObserver()
+            }
+        })
         bottomSheetFragment.show((mActivity as HomeActivity).supportFragmentManager, bottomSheetFragment.tag)
-        /*bottomSheetFragment.setOnItemClickListener(object: ProductFilterDialogFragment.OnProductFilterClickListener{
-            override fun onSubmitClick(filterValue: String) {
-
-                *//*mWalletViewModel?.filterBy?.value = filterValue
-                    mWalletViewModel?.walletResponseData?.removeObservers(this@WalletActivity)
-                    mWalletViewModel?.walletResponseData = MutableLiveData()
-                    walletAdapter = null
-                    callObserver()
-                    mWalletViewModel?.setupObservers()*//*
-                }
-
-            })*/
-
     }
 
     private fun getPaymentOptionList(): ArrayList<PaymentOptionBean> {
@@ -55,4 +52,47 @@ class WalletViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         return list
     }
 
+    private fun transactionHistoryObserver() {
+        val requestParams = HashMap<String, String>()
+        requestParams["page_no"] = "1"
+        transactionHistoryObserver(requestParams)
+    }
+
+    private fun transactionHistory(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = baseRepository.getTransactionHistory(requestParams)))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
+    }
+
+    private fun transactionHistoryObserver(requestParams: HashMap<String, String>) {
+
+        transactionHistory(requestParams).observe(mBinding.lifecycleOwner!!, {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { users ->
+                            if (users.status == "success") {
+                                walletListResponse.value = users.data?.docs!!
+                                walletBalance.value = users.data?.userWallet!!.toString()
+                            } else {
+                                IADialog(mActivity, users.message, true)
+                            }
+                        }
+                    }
+
+                    Status.ERROR -> {
+                        baseRepository.callback.hideProgress()
+                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                    }
+
+                    Status.LOADING -> {
+                        baseRepository.callback.showProgress()
+                    }
+                }
+            }
+        })
+    }
 }

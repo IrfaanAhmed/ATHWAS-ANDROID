@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/design_bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,6 +16,7 @@
         android:background="@drawable/top_rounded_corner_primary">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnResetFilter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"
@@ -134,105 +136,21 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_13sdp"
                 app:fontFamily="@font/linotte_semi_bold"
-                app:layout_constraintBottom_toTopOf="@+id/llCustomerRating"
+                app:layout_constraintBottom_toTopOf="@+id/recyclerViewRating"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/llCustomerRating"
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewRating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:gravity="center"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvCustomerRating">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvRateFirst"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edittext_bg"
-                    android:drawableStart="@drawable/ic_star"
-                    android:drawablePadding="@dimen/_8sdp"
-                    android:gravity="center"
-                    android:padding="@dimen/_5sdp"
-                    android:text="1.0"
-                    android:textColor="@color/light_grey"
-                    android:textSize="@dimen/_8sdp"
-                    app:drawableTint="@color/light_grey" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvRateSecond"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edittext_bg"
-                    android:drawableStart="@drawable/ic_star"
-                    android:drawablePadding="@dimen/_3sdp"
-                    android:gravity="center"
-                    android:padding="@dimen/_5sdp"
-                    android:text="2.0"
-                    android:textColor="@color/light_grey"
-                    android:textSize="@dimen/_8sdp"
-                    app:drawableTint="@color/light_grey" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvRateThird"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edittext_bg"
-                    android:drawableStart="@drawable/ic_star"
-                    android:drawablePadding="@dimen/_3sdp"
-                    android:gravity="center"
-                    android:padding="@dimen/_5sdp"
-                    android:text="3.0"
-                    android:textColor="@color/light_grey"
-                    android:textSize="@dimen/_8sdp"
-                    app:drawableTint="@color/light_grey" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvRateFourth"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edittext_bg"
-                    android:drawableStart="@drawable/ic_star"
-                    android:drawablePadding="@dimen/_3sdp"
-                    android:gravity="center"
-                    android:padding="@dimen/_5sdp"
-                    android:text="4.0"
-                    android:textColor="@color/light_grey"
-                    android:textSize="@dimen/_8sdp"
-                    app:drawableTint="@color/light_grey" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvRateFifth"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edittext_bg"
-                    android:drawableStart="@drawable/ic_star"
-                    android:drawablePadding="@dimen/_3sdp"
-                    android:gravity="center"
-                    android:padding="@dimen/_5sdp"
-                    android:text="5.0"
-                    android:textColor="@color/light_grey"
-                    android:textSize="@dimen/_8sdp"
-                    app:drawableTint="@color/light_grey" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                app:layout_constraintTop_toBottomOf="@+id/tvCustomerRating"
+                tools:itemCount="5"
+                tools:listitem="@layout/rating_list_item" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -258,7 +176,7 @@
     </RelativeLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonAddToCart"
+        android:id="@+id/btnApplyFilter"
         style="@style/AddToCartButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_32sdp"

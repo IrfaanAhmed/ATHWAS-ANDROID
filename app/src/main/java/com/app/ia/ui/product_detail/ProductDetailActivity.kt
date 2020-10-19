@@ -59,7 +59,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding, Product
         toolbar.ivEditProfileIcon.gone()
 
         toolbar.imageViewIcon.setOnClickListener {
-            startActivity<MyCartActivity>()
+            //startActivity<MyCartActivity>()
         }
 
 

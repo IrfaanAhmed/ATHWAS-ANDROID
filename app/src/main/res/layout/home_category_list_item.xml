@@ -8,7 +8,7 @@
 
         <variable
             name="category"
-            type="com.app.ia.model.BusinessCategoryBean" />
+            type="com.app.ia.model.BusinessCategoryResponse.Docs" />
 
     </data>
 
@@ -24,9 +24,10 @@
             android:layout_height="@dimen/_60sdp">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                defaultImage="@{category.icon}"
+                defaultImage="@{R.mipmap.ic_launcher_round}"
                 android:layout_width="@dimen/_50sdp"
                 android:layout_height="@dimen/_50sdp"
+                imageUrl="@{category.categoryImageUrl}"
                 android:layout_gravity="center" />
         </FrameLayout>
 
@@ -36,8 +37,8 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:ellipsize="end"
             android:gravity="center"
-            android:maxWidth="@dimen/_100sdp"
-            android:maxLines="1"
+            android:maxWidth="@dimen/_80sdp"
+            android:maxLines="2"
             android:text="@{category.name}"
             android:textAlignment="center"
             android:textAllCaps="false"

@@ -29,7 +29,7 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
 
     lateinit var mActivity: Activity
     lateinit var mBinding: ActivitySignUpBinding
-    lateinit var androidId: String
+    private lateinit var androidId: String
 
     @SuppressLint("HardwareIds")
     fun setVariable(mBinding: ActivitySignUpBinding) {

@@ -5,39 +5,21 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.app.ia.databinding.OrderListItemBinding
-import com.app.ia.databinding.ProductCategoryListItemBinding
-import com.app.ia.databinding.ProductListItemBinding
 import com.app.ia.databinding.WalletListItemBinding
-import com.app.ia.ui.product_category.ProductCategoryActivity
-import com.app.ia.ui.product_detail.ProductDetailActivity
-import com.app.ia.ui.sub_category.SubCategoryActivity
-import com.app.ia.utils.AppConstants
-import com.app.ia.utils.startActivity
+import com.app.ia.model.WalletHistoryResponse
 
-class WalletListAdapter :
-    ListAdapter<String, WalletListAdapter.WalletViewHolder>(
-        OffersListDiffCallback()
-    ) {
+class WalletListAdapter : ListAdapter<WalletHistoryResponse.Docs, WalletListAdapter.WalletViewHolder>(OffersListDiffCallback()) {
 
-    class OffersListDiffCallback : DiffUtil.ItemCallback<String>() {
+    class OffersListDiffCallback : DiffUtil.ItemCallback<WalletHistoryResponse.Docs>() {
 
-        override fun areItemsTheSame(
-            oldItem: String,
-            newItem: String
-        ): Boolean {
+        override fun areItemsTheSame(oldItem: WalletHistoryResponse.Docs, newItem: WalletHistoryResponse.Docs): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(
-            oldItem: String,
-            newItem: String
-        ): Boolean {
-            return oldItem == newItem
+        override fun areContentsTheSame(oldItem: WalletHistoryResponse.Docs, newItem: WalletHistoryResponse.Docs): Boolean {
+            return oldItem.Id == newItem.Id
         }
     }
-
-
 
     override fun onBindViewHolder(holder: WalletViewHolder, position: Int) {
         holder.apply {
@@ -46,19 +28,13 @@ class WalletListAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletViewHolder {
-        return WalletViewHolder(
-            WalletListItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+        return WalletViewHolder(WalletListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     inner class WalletViewHolder(private val mBinding: WalletListItemBinding) :
         RecyclerView.ViewHolder(mBinding.root) {
 
-        fun onBind(walletItem: String) {
+        fun onBind(walletItem: WalletHistoryResponse.Docs) {
             mBinding.apply {
                 wallet = walletItem
                 executePendingBindings()

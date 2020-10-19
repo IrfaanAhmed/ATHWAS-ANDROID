@@ -7,13 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.databinding.CartListItemBinding
-import com.app.ia.databinding.ProductCategoryListItemBinding
-import com.app.ia.databinding.ProductListItemBinding
-import com.app.ia.ui.product_category.ProductCategoryActivity
-import com.app.ia.ui.product_detail.ProductDetailActivity
-import com.app.ia.ui.sub_category.SubCategoryActivity
-import com.app.ia.utils.AppConstants
-import com.app.ia.utils.startActivity
 import kotlinx.android.synthetic.main.cart_list_item.view.*
 
 class CartListAdapter : ListAdapter<String, CartListAdapter.CartViewHolder>(OffersListDiffCallback()) {

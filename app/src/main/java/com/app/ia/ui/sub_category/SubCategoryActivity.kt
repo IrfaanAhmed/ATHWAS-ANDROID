@@ -1,6 +1,7 @@
 package com.app.ia.ui.sub_category
 
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.app.ia.BR
 import com.app.ia.R
@@ -50,11 +51,10 @@ class SubCategoryActivity : BaseActivity<ActivitySubCategoryBinding, SubCategory
         recViewSubCategory.addItemDecoration(EqualSpacingItemDecoration(30, EqualSpacingItemDecoration.GRID))
         subCategoryAdapter = SubCategoryListAdapter()
         recViewSubCategory.adapter = subCategoryAdapter
-        val categoryList = ArrayList<BusinessCategoryBean>()
-        categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile))
-        categoryList.add(BusinessCategoryBean("Mobile Back Cover", R.drawable.back_cover))
-        categoryList.add(BusinessCategoryBean("Chargers", R.drawable.chrger))
-        subCategoryAdapter!!.submitList(categoryList)
+
+        mViewModel?.productSubCategory?.observe(this, Observer {
+            subCategoryAdapter!!.submitList(it)
+        })
     }
 
     private fun setViewModel() {

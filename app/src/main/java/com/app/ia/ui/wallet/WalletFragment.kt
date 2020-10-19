@@ -2,6 +2,7 @@ package com.app.ia.ui.wallet
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.app.ia.BR
 import com.app.ia.R
@@ -56,17 +57,9 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>() {
 
         walletAdapter = WalletListAdapter()
         recViewWallet.adapter = walletAdapter
-        val categoryList = ArrayList<String>()
-        categoryList.add("Oppo")
-        categoryList.add("Samsung")
-        categoryList.add("Nokia")
-        categoryList.add("Vivo")
-        categoryList.add("One Plus")
-        categoryList.add("iPhone")
-        categoryList.add("Motorola")
-        categoryList.add("RealMe")
-        categoryList.add("MI")
-        walletAdapter!!.submitList(categoryList)
+        mWalletViewModel?.walletListResponse?.observe(viewLifecycleOwner, {
+            walletAdapter!!.submitList(it)
+        })
     }
 
     private fun setViewModel() {

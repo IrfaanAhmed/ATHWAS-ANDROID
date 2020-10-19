@@ -11,8 +11,10 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityProductListBinding
-import com.app.ia.ui.my_cart.MyCartActivity
+import com.app.ia.model.ProductListingResponse
+import com.app.ia.ui.product_detail.ProductDetailActivity
 import com.app.ia.ui.product_list.adapter.ProductListAdapter
+import com.app.ia.ui.search.SearchActivity
 import com.app.ia.utils.*
 import kotlinx.android.synthetic.main.activity_product_list.*
 import kotlinx.android.synthetic.main.common_header.view.*
@@ -22,8 +24,8 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
 
     private var mBinding: ActivityProductListBinding? = null
     private var mViewModel: ProductListViewModel? = null
-
-    var productAdapter: ProductListAdapter? = null
+    private lateinit var recyclerViewPaging: RecyclerViewPaginator
+    private var productAdapter: ProductListAdapter? = null
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
@@ -43,7 +45,7 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
         mBinding = getViewDataBinding()
         mBinding?.lifecycleOwner = this
         mViewModel?.setActivityNavigator(this)
-        mViewModel?.setVariable(mBinding!!)
+        mViewModel?.setVariable(mBinding!!, intent)
 
         setOnApplyWindowInset1(toolbar, content_container)
 
@@ -52,20 +54,54 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
         toolbar.ivEditProfileIcon.gone()
 
         toolbar.imageViewIcon.setOnClickListener {
-            startActivity<MyCartActivity>()
+            //startActivity<MyCartActivity>()
+        }
+
+        toolbar.ivSearchIcon.setOnClickListener {
+            startActivity<SearchActivity> {
+            }
         }
 
         recViewProduct.addItemDecoration(EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.VERTICAL))
         recViewProduct.addItemDecoration(DividerItemDecoration(this@ProductListActivity, LinearLayout.VERTICAL))
         productAdapter = ProductListAdapter()
+        productAdapter?.setOnItemClickListener(object : ProductListAdapter.OnItemClickListener{
+            override fun onItemClick(productItem: ProductListingResponse.Docs) {
+                startActivity<ProductDetailActivity>()
+            }
+
+            override fun onFavoriteClick(productItem: ProductListingResponse.Docs, position: Int) {
+                mViewModel?.favPosition?.value = position
+                mViewModel?.addFavorite(productItem.Id)
+            }
+        })
+
         recViewProduct.adapter = productAdapter
-        val categoryList = ArrayList<String>()
-        categoryList.add("Oppo")
-        categoryList.add("Samsung")
-        categoryList.add("Nokia")
-        categoryList.add("Vivo")
-        categoryList.add("One Plus")
-        productAdapter!!.submitList(categoryList)
+
+        recyclerViewPaging = object : RecyclerViewPaginator(recViewProduct) {
+            override val isLastPage: Boolean
+                get() = mViewModel!!.isLastPage.value!!
+
+            override fun loadMore(start: Int, count: Int) {
+                mViewModel?.currentPage?.value = start
+                mViewModel?.setUpObserver()
+            }
+        }
+
+        recViewProduct.addOnScrollListener(recyclerViewPaging)
+
+        mViewModel?.productList?.observe(this, {
+
+            if (it.size <= 0) {
+                productAdapter?.notifyDataSetChanged()
+            } else {
+                if (productAdapter?.currentList?.size!! == 0) {
+                    productAdapter?.submitList(it)
+                } else {
+                    productAdapter?.notifyDataSetChanged()
+                }
+            }
+        })
     }
 
     private fun setViewModel() {

@@ -1,14 +1,20 @@
 package com.app.ia.ui.add_new_address
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.app.ia.R
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityAddAddressBinding
+import com.app.ia.dialog.IADialog
+import com.app.ia.enums.Status
 import com.app.ia.local.AppPreferencesHelper
+import com.app.ia.utils.Resource
+import kotlinx.coroutines.Dispatchers
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -54,18 +60,24 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
         baseRepository.callback.hideKeyboard()
 
         isAddressAdded = true
-        val requestJsonObject = JSONObject()
-        requestJsonObject.put("formatted_address", currentAddress.get())
-        requestJsonObject.put("lat", (getActivityNavigator() as AddAddressActivity).latitude)
-        requestJsonObject.put("long", (getActivityNavigator() as AddAddressActivity).longitude)
+        val requestJsonObject = HashMap<String, String>()
+        requestJsonObject["full_address"] = currentAddress.get()!!
+        requestJsonObject["latitude"] = (mActivity as AddAddressActivity).latitude.toString()
+        requestJsonObject["longitude"] =  (mActivity as AddAddressActivity).longitude.toString()
         when {
-            selectedChipValue.get() == 1 -> requestJsonObject.put("address_type", "Home")
-            selectedChipValue.get() == 2 -> requestJsonObject.put("address_type", "Work")
-            selectedChipValue.get() == 3 -> requestJsonObject.put("address_type", "Other")
+            selectedChipValue.get() == 1 -> requestJsonObject["address_type"] =  "Home"
+            selectedChipValue.get() == 2 -> requestJsonObject["address_type"] = "Work"
+            selectedChipValue.get() == 3 -> requestJsonObject["address_type"] = "Other"
         }
-        requestJsonObject.put("building_no", enteredAddress.get())
-        requestJsonObject.put("language", AppPreferencesHelper.getInstance().language)
-        //baseRepository.callPostAPi(Api.ADD_ADDRESS, requestJsonObject, true)
+        requestJsonObject["mobile"] = AppPreferencesHelper.getInstance().phone
+        requestJsonObject["name"] = AppPreferencesHelper.getInstance().firstName
+        requestJsonObject["flat"] = ""
+        requestJsonObject["location_name"] = ""
+        requestJsonObject["building"] = ""
+        requestJsonObject["floor"] = ""
+        requestJsonObject["landmark"] = ""
+        requestJsonObject["way"] = ""
+        addAddressObserver(requestJsonObject)
     }
 
     fun getAddressFromLatLng(latitude: Double, longitude: Double) {
@@ -80,6 +92,43 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
         progressVisible.set(true)
         val urlAddress = "https://maps.googleapis.com/maps/api/place/autocomplete/json"
        // baseRepository.googleAddressAPI(urlAddress, input, false)
+    }
+
+    private fun addAddress(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = baseRepository.addAddress(requestParams)))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
+    }
+
+    private fun addAddressObserver(requestParams: HashMap<String, String>) {
+
+        addAddress(requestParams).observe(mBinding.lifecycleOwner!!, {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { users ->
+                            if (users.status == "success") {
+
+                            } else {
+                                IADialog(mActivity, users.message, true)
+                            }
+                        }
+                    }
+
+                    Status.ERROR -> {
+                        baseRepository.callback.hideProgress()
+                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                    }
+
+                    Status.LOADING -> {
+                        baseRepository.callback.showProgress()
+                    }
+                }
+            }
+        })
     }
 
     /*override fun onSuccess(response: BaseResponse<*>, tag: String) {

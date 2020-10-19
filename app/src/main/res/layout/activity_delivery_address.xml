@@ -18,6 +18,7 @@
         android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:focusable="true"
         android:focusableInTouchMode="true">
 
@@ -44,29 +45,21 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <RelativeLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/grey"
+            android:background="@color/white"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recViewAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="3"
-                tools:listitem="@layout/address_list_item" />
-
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/recViewAddress"
-                android:background="@color/white"
+                android:gravity="end"
                 android:orientation="horizontal"
                 android:padding="@dimen/_10sdp">
 
@@ -75,12 +68,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:drawablePadding="@dimen/_2sdp"
-                    android:drawableTint="@color/colorLogout"
                     android:fontFamily="@font/linotte_bold"
                     android:onClick="@{() -> viewModel.onAddAddressClick()}"
                     android:text="@string/add_new_address"
                     android:textColor="@color/colorLogout"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/_12sdp"
+                    app:drawableTint="@color/colorLogout" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
@@ -91,8 +84,21 @@
                     android:tint="@color/colorLogout" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_grey" />
 
-        </RelativeLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recViewAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/address_list_item" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

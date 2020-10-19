@@ -5,14 +5,14 @@ import com.google.gson.annotations.SerializedName
 
 class FilterDataResponse() {
 
-    constructor(id: Int, name: String) : this() {
+    constructor(id: String, name: String) : this() {
         this.id = id
         this.name = name
     }
 
     @SerializedName("id")
     @Expose
-    var id: Int? = null
+    var id: String? = null
 
     @SerializedName("name")
     @Expose

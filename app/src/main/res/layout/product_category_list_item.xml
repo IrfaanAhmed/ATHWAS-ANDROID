@@ -6,9 +6,11 @@
 
         <import type="android.view.View" />
 
+        <import type="com.app.ia.R" />
+
         <variable
             name="category"
-            type="com.app.ia.model.BusinessCategoryBean" />
+            type="com.app.ia.model.ProductCategoryResponse.Docs" />
 
     </data>
 
@@ -26,10 +28,11 @@
             android:padding="@dimen/_8sdp">
 
             <com.app.ia.helper.SquareImageView
-                defaultImage="@{category.icon}"
+                defaultImage="@{R.mipmap.ic_launcher}"
+                imageUrl="@{category.imagePathUrl}"
                 android:layout_width="@dimen/_80sdp"
                 android:layout_height="@dimen/_70sdp"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
@@ -37,11 +40,12 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:gravity="center"
-                app:fontFamily="@font/linotte_semi_bold"
                 android:text="@{category.name}"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_11sdp" />
+                android:textSize="@dimen/_11sdp"
+                app:fontFamily="@font/linotte_semi_bold" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
+
     </com.google.android.material.card.MaterialCardView>
 </layout>

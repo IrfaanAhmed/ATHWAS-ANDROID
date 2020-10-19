@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">IA</string>
+    <string name="app_name">ATHWAS</string>
 
-    <string name="google_map_key" translatable="false">AIzaSyB-ktYukocl2TJhI7zJAKqcwdQPnJQ9abs</string>
+    <string name="google_map_key" translatable="false">AIzaSyAtpVo2jh44ixSzbuqoVSSJWv_7SFYh40c</string>
     <string name="google_map_direction_key" translatable="false">AIzaSyC4MhJYysKpRFHe9Re--y5S0_PCtxGir9Q</string>
 
     <string name="settings">Go to setting</string>
@@ -129,7 +129,7 @@
     <string name="out_of_stock">Out of stock</string>
     <string name="sort">Sort</string>
     <string name="choose_address">Choose Address</string>
-
+    <string name="my_address">My Addresses</string>
     <string name="my_orders">My Orders</string>
     <string name="current_orders">Current Orders</string>
     <string name="past_orders">Past Orders</string>

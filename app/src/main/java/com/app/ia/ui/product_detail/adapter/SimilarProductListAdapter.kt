@@ -5,12 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.app.ia.databinding.ProductCategoryListItemBinding
 import com.app.ia.databinding.SimilarProductListItemBinding
-import com.app.ia.ui.product_category.ProductCategoryActivity
-import com.app.ia.ui.sub_category.SubCategoryActivity
-import com.app.ia.utils.AppConstants
-import com.app.ia.utils.startActivity
 
 class SimilarProductListAdapter :
     ListAdapter<String, SimilarProductListAdapter.SimilarProductViewHolder>(
@@ -35,7 +30,6 @@ class SimilarProductListAdapter :
     }
 
 
-
     override fun onBindViewHolder(holder: SimilarProductViewHolder, position: Int) {
         holder.apply {
             onBind(getItem(position))
@@ -44,7 +38,7 @@ class SimilarProductListAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimilarProductViewHolder {
         return SimilarProductViewHolder(
-             SimilarProductListItemBinding.inflate(
+            SimilarProductListItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -60,11 +54,11 @@ class SimilarProductListAdapter :
                 //category = categoryItem
                 executePendingBindings()
 
-               /* itemView.setOnClickListener {
-                    itemView.context.startActivity<SubCategoryActivity> {
-                        putExtra(AppConstants.EXTRA_PRODUCT_CATEGORY, categoryItem)
-                    }
-                }*/
+                /* itemView.setOnClickListener {
+                     itemView.context.startActivity<SubCategoryActivity> {
+                         putExtra(AppConstants.EXTRA_PRODUCT_CATEGORY, categoryItem)
+                     }
+                 }*/
             }
         }
     }

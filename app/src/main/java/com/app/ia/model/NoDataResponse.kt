@@ -12,5 +12,9 @@ data class NoDataResponse(
     val userId: String,
 
     @Expose
+    @SerializedName("wallet")
+    val wallet: String,
+
+    @Expose
     @SerializedName("user_role")
     val userRole: String)

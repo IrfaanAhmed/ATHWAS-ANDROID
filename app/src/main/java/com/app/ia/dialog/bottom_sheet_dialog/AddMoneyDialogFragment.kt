@@ -3,26 +3,37 @@ package com.app.ia.dialog.bottom_sheet_dialog
 import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.R
-import com.app.ia.dialog.bottom_sheet_dialog.adapter.CommonSortAdapter
+import com.app.ia.apiclient.RetrofitFactory
+import com.app.ia.dialog.bottom_sheet_dialog.adapter.CarAdapter
 import com.app.ia.dialog.bottom_sheet_dialog.adapter.PaymentOptionAdapter
-import com.app.ia.model.CommonSortBean
+import com.app.ia.dialog.bottom_sheet_dialog.adapter.TopUpValueAdapter
+import com.app.ia.model.FilterDataResponse
 import com.app.ia.model.PaymentOptionBean
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.app.ia.ui.home.HomeActivity
+import com.app.ia.utils.EqualSpacingItemDecoration
+import com.app.ia.utils.toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.dialog_add_money.*
+import kotlinx.android.synthetic.main.dialog_add_money.tvCancel
+import kotlinx.android.synthetic.main.dialog_product_filter.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
-
-class AddMoneyDialogFragment(val paymentOptionList: ArrayList<PaymentOptionBean>) : BottomSheetDialogFragment(){
+class AddMoneyDialogFragment(val paymentOptionList: ArrayList<PaymentOptionBean>) : BottomSheetDialogFragment() {
 
     private var onClickListener: OnAddMoneyClickListener? = null
 
@@ -55,25 +66,98 @@ class AddMoneyDialogFragment(val paymentOptionList: ArrayList<PaymentOptionBean>
         super.onViewCreated(view, savedInstanceState)
 
         tvCancel.setOnClickListener { dismiss() }
-        buttonAddMoney.setOnClickListener { dismiss() }
+        buttonAddMoney.setOnClickListener {
+            addToMoney(edtTextAmount.text.toString())
+        }
 
-        recPaymentMethod.layoutManager  = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-        var paymentOptionAdapter = PaymentOptionAdapter()
+        recPaymentMethod.layoutManager = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
+        val paymentOptionAdapter = PaymentOptionAdapter()
         recPaymentMethod.adapter = paymentOptionAdapter
         paymentOptionAdapter.submitList(paymentOptionList)
-        paymentOptionAdapter.setOnItemSelectListener(object: PaymentOptionAdapter.OnItemSelectListener{
+        paymentOptionAdapter.setOnItemSelectListener(object : PaymentOptionAdapter.OnItemSelectListener {
             override fun onItemSelect(position: Int) {
-                for(index in paymentOptionList.indices){
+                for (index in paymentOptionList.indices) {
                     paymentOptionList[index].isSelected = index == position
                 }
                 paymentOptionAdapter.notifyDataSetChanged()
             }
 
         })
+
+        // For Top Up Value RecyclerView
+        val topUpValueList = java.util.ArrayList<String>()
+        topUpValueList.add("20")
+        topUpValueList.add("50")
+        topUpValueList.add("100")
+        topUpValueList.add("300")
+        topUpValueList.add("500")
+        topUpValueList.add("700")
+        topUpValueList.add("1000")
+
+        val mEqualSpacingItemDecoration = EqualSpacingItemDecoration(30, EqualSpacingItemDecoration.HORIZONTAL)
+        recyclerViewValue.addItemDecoration(mEqualSpacingItemDecoration)
+
+        val mTopUpValueAdapter = TopUpValueAdapter(this)
+        recyclerViewValue.adapter = mTopUpValueAdapter
+        mTopUpValueAdapter.submitList(topUpValueList)
+
+        edtTextAmount.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0?.isNotEmpty()!! && mTopUpValueAdapter.selectedPosition != -1) {
+                    mTopUpValueAdapter.selectedPosition = -1
+                    mTopUpValueAdapter.notifyDataSetChanged()
+                }
+            }
+        })
+    }
+
+    fun clearAmountValue() {
+        if (requireActivity() is HomeActivity) {
+            (requireActivity() as HomeActivity).hideKeyboard(edtTextAmount)
+        }
+        edtTextAmount.setText("")
     }
 
     interface OnAddMoneyClickListener {
         fun onAddMoneyClick(data: String)
+    }
+
+    private fun addToMoney(amount : String) {
+        val requestParams = HashMap<String, String>()
+        requestParams["amount"] = amount
+        requestParams["reason"] = ""
+
+        val service = RetrofitFactory.getInstance()
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = service.addToWallet(requestParams)
+            withContext(Dispatchers.Main) {
+                try {
+                    if (response.isSuccessful) {
+                        //Do something with response e.g show to the UI.
+                        dismiss()
+                        val walletResponse = response.body()!!
+                        requireActivity().toast(walletResponse.message)
+                        if(onClickListener != null) {
+                            onClickListener?.onAddMoneyClick(walletResponse.data?.wallet!!)
+                        }
+                    } else {
+                        requireActivity().toast("Error: ${response.code()}")
+                    }
+                } catch (e: HttpException) {
+                    requireActivity().toast("Exception ${e.message}")
+                } catch (e: Throwable) {
+                    requireActivity().toast("Oops: Something else went wrong")
+                }
+            }
+        }
     }
 
 }

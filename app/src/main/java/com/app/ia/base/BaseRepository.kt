@@ -3,13 +3,8 @@ package com.app.ia.base
 import com.app.ia.apiclient.ApiRequest
 import com.app.ia.apiclient.ApiService
 import com.app.ia.callback.GeneralCallback
-import com.app.ia.model.BaseResponse
-import com.app.ia.model.LoginResponse
-import com.app.ia.model.NoDataResponse
-import com.app.ia.model.RegisterResponse
+import com.app.ia.model.*
 import com.app.wallet.tivo.model.ResendOTPResponse
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 
 open class BaseRepository(private val myApi: ApiService, generalCallback: GeneralCallback) : ApiRequest(generalCallback) {
 
@@ -33,5 +28,37 @@ open class BaseRepository(private val myApi: ApiService, generalCallback: Genera
 
     suspend fun updateForgotPassword(request: Map<String, String>): BaseResponse<NoDataResponse> {
         return apiRequest { myApi.updateForgotPassword(request) }
+    }
+
+    suspend fun getBusinessCategory(): BaseResponse<BusinessCategoryResponse> {
+        return apiRequest { myApi.getBusinessCategory() }
+    }
+
+    suspend fun getProductCategory(request: Map<String, String>): BaseResponse<ProductCategoryResponse> {
+        return apiRequest { myApi.getProductCategory(request) }
+    }
+
+    suspend fun getProductSubCategory(request: Map<String, String>): BaseResponse<ProductSubCategoryResponse> {
+        return apiRequest { myApi.getProductSubCategory(request) }
+    }
+
+    suspend fun getProductListing(request: Map<String, String>): BaseResponse<ProductListingResponse> {
+        return apiRequest { myApi.getProductListing(request) }
+    }
+
+    suspend fun addFavorite(request: Map<String, String>): BaseResponse<NoDataResponse> {
+        return apiRequest { myApi.addFavorite(request) }
+    }
+
+    suspend fun getTransactionHistory(request: Map<String, String>): BaseResponse<WalletHistoryResponse> {
+        return apiRequest { myApi.getTransactionHistory(request) }
+    }
+
+    suspend fun addToWallet(request: Map<String, String>): BaseResponse<NoDataResponse> {
+        return apiRequest { myApi.addToWallet(request) }
+    }
+
+    suspend fun addAddress(request: Map<String, String>): BaseResponse<NoDataResponse> {
+        return apiRequest { myApi.addAddress(request) }
     }
 }

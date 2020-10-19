@@ -2,6 +2,7 @@ package com.app.ia.ui.business_category
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.app.ia.BR
 import com.app.ia.R
@@ -51,17 +52,14 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding, CategoryViewModel
         mFragmentCategoryBinding?.lifecycleOwner = this
         mCategoryViewModel?.setVariable(mFragmentCategoryBinding!!)
 
-        val categoryList = ArrayList<BusinessCategoryBean>()
-        categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile_cat                                                                 ))
-        categoryList.add(BusinessCategoryBean("Electronics", R.drawable.electronics))
-        categoryList.add(BusinessCategoryBean("Pantry", R.drawable.pantry))
-        categoryList.add(BusinessCategoryBean("Appliances", R.drawable.applience))
-
         val categoryAdapter = CategoryAdapter()
-        val itemDecoration1 = EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.GRID)
+        val itemDecoration = EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.GRID)
         recViewCategory.adapter = categoryAdapter
-        recViewCategory.addItemDecoration(itemDecoration1)
-        categoryAdapter.submitList(categoryList)
+        recViewCategory.addItemDecoration(itemDecoration)
+
+        mCategoryViewModel?.businessCategory?.observe(viewLifecycleOwner, {
+            categoryAdapter.submitList(it)
+        })
     }
 
     private fun setViewModel() {

@@ -12,7 +12,6 @@ import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.model.LoginResponse
 import com.app.ia.ui.business_category.CategoryFragment
 import com.app.ia.ui.home.adapter.NavigationListAdapter
-import com.app.ia.ui.my_cart.MyCartActivity
 import com.app.ia.ui.my_order.MyOrdersFragment
 import com.app.ia.ui.my_profile.ProfileActivity
 import com.app.ia.ui.notification.NotificationActivity
@@ -58,7 +57,7 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
     }
 
     fun onCartClick() {
-        mActivity.startActivity<MyCartActivity>()
+        //mActivity.startActivity<MyCartActivity>()
     }
 
     fun onNotificationClick() {
@@ -104,6 +103,4 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
             }*/
         }
     }
-
-
 }

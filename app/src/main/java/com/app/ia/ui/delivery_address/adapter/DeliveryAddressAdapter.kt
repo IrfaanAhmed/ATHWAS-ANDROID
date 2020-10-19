@@ -6,11 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.databinding.AddressListItemBinding
-import com.app.ia.databinding.ProductCategoryListItemBinding
-import com.app.ia.ui.product_category.ProductCategoryActivity
-import com.app.ia.ui.sub_category.SubCategoryActivity
-import com.app.ia.utils.AppConstants
-import com.app.ia.utils.startActivity
 
 class DeliveryAddressAdapter : ListAdapter<String, DeliveryAddressAdapter.DeliveryAddressViewHolder>(OffersListDiffCallback()) {
 

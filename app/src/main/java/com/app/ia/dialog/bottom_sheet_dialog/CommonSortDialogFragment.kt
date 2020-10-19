@@ -18,7 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.dialog_common_sort.*
 
 
-class CommonSortDialogFragment(val sortOptionList: ArrayList<CommonSortBean>) : BottomSheetDialogFragment() {
+class CommonSortDialogFragment(private val sortOptionList: ArrayList<CommonSortBean>) : BottomSheetDialogFragment() {
 
     private var onClickListener: OnSortOptionClickListener? = null
 
@@ -40,8 +40,7 @@ class CommonSortDialogFragment(val sortOptionList: ArrayList<CommonSortBean>) : 
         dialog!!.setOnShowListener { dialog ->
             val d = dialog as BottomSheetDialog
             val bottomSheetInternal = d.findViewById<View>(R.id.design_bottom_sheet)
-            BottomSheetBehavior.from(bottomSheetInternal!!).state =
-                BottomSheetBehavior.STATE_EXPANDED
+            BottomSheetBehavior.from(bottomSheetInternal!!).state = BottomSheetBehavior.STATE_EXPANDED
         }
         return inflater.inflate(R.layout.dialog_common_sort, container, false)
     }
@@ -56,13 +55,33 @@ class CommonSortDialogFragment(val sortOptionList: ArrayList<CommonSortBean>) : 
         commonSortAdapter.submitList(sortOptionList)
         commonSortAdapter.setOnItemSelectListener(object : CommonSortAdapter.OnItemSelectListener {
             override fun onItemSelect(position: Int) {
+
                 dismiss()
+                var sortValue = ""
+                when (position) {
+                    0 -> {
+                        sortValue = ""
+                    }
+                    1 -> {
+                        sortValue = "price_low_to_high"
+                    }
+                    2 -> {
+                        sortValue = "price_high_to_low"
+                    }
+                    3 -> {
+                        sortValue = "newest"
+                    }
+                }
+
+                if (onClickListener != null) {
+                    onClickListener?.onSortOptionClick(sortValue, position)
+                }
             }
         })
     }
 
     interface OnSortOptionClickListener {
-        fun onSortOptionClick(filterValue: String)
+        fun onSortOptionClick(sortValue: String, sortPosition: Int)
     }
 
 }

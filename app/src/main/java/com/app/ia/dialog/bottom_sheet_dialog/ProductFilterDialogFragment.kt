@@ -1,28 +1,35 @@
 package com.app.ia.dialog.bottom_sheet_dialog
 
-import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.annotation.RequiresApi
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
 import com.app.ia.R
+import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.dialog.bottom_sheet_dialog.adapter.CarAdapter
+import com.app.ia.dialog.bottom_sheet_dialog.adapter.RatingAdapter
+import com.app.ia.model.CommonSortBean
+import com.app.ia.model.FilterData
 import com.app.ia.model.FilterDataResponse
+import com.app.ia.utils.toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.dialog_product_filter.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
-class ProductFilterDialogFragment : BottomSheetDialogFragment() {
+class ProductFilterDialogFragment(private val businessCategoryId: String, selectedFilterData: FilterData) : BottomSheetDialogFragment() {
 
     private var onClickListener: OnProductFilterClickListener? = null
-    private var filterValue = ""
+    private var filterData = selectedFilterData
 
     fun setOnItemClickListener(onClickListener: OnProductFilterClickListener) {
         this.onClickListener = onClickListener
@@ -52,174 +59,235 @@ class ProductFilterDialogFragment : BottomSheetDialogFragment() {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setUp() {
 
-        tvRateFirst.setOnClickListener {
-            setClickedAction(tvRateFirst)
-        }
+        edtTextMinPrice.setText(filterData.minPrice)
+        edtTextMaxPrice.setText(filterData.maxPrice)
 
-        tvRateSecond.setOnClickListener {
-            setClickedAction(tvRateSecond)
-        }
+        val list = ArrayList<CommonSortBean>()
+        list.add(CommonSortBean("1.0", filterData.ratingPosition == 0))
+        list.add(CommonSortBean("2.0", filterData.ratingPosition == 1))
+        list.add(CommonSortBean("3.0", filterData.ratingPosition == 2))
+        list.add(CommonSortBean("4.0", filterData.ratingPosition == 3))
+        list.add(CommonSortBean("5.0", filterData.ratingPosition == 4))
 
-        tvRateThird.setOnClickListener {
-            setClickedAction(tvRateThird)
-        }
+        val ratingAdapter = RatingAdapter()
+        recyclerViewRating.adapter = ratingAdapter
+        ratingAdapter.setOnItemSelectListener(object : RatingAdapter.OnRatingItemSelectListener {
+            override fun onRatingSelect(rating: String, position: Int) {
+                filterData.rating = rating
+                filterData.ratingPosition = position
+                for (ratings in 0 until list.size) {
+                    list[ratings].isSelected = position == ratings
+                }
+                ratingAdapter.notifyDataSetChanged()
+            }
 
-        tvRateFourth.setOnClickListener {
-            setClickedAction(tvRateFourth)
-        }
-
-        tvRateFifth.setOnClickListener {
-            setClickedAction(tvRateFifth)
-        }
+        })
+        ratingAdapter.submitList(list)
 
         tvCancel.setOnClickListener {
             dismiss()
         }
 
+        /**
+         * Call product Category on basis of business Category.
+         */
+        callProductCategory()
+
         val categoryList = ArrayList<FilterDataResponse>()
-        categoryList.add(FilterDataResponse(-1, "Category"))
-        categoryList.add(FilterDataResponse(1, "Test 1"))
-        categoryList.add(FilterDataResponse(2, "Test 2"))
-        categoryList.add(FilterDataResponse(3, "Test 3"))
+        categoryList.add(FilterDataResponse("-1", "Sub-Category"))
         val categoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, categoryList)
-        spinnerCategory.adapter = categoryAdapter
+        spinnerSubCategory.adapter = categoryAdapter
 
-
-        val subCategoryList = ArrayList<FilterDataResponse>()
-        subCategoryList.add(FilterDataResponse(-1, "Sub - Category"))
-        subCategoryList.add(FilterDataResponse(1, "Test 1"))
-        subCategoryList.add(FilterDataResponse(2, "Test 2"))
-        subCategoryList.add(FilterDataResponse(3, "Test 3"))
-        val subCategoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, subCategoryList)
-        spinnerSubCategory.adapter = subCategoryAdapter
-
-
-        val branchList = ArrayList<FilterDataResponse>()
-        branchList.add(FilterDataResponse(-1, "Branch"))
-        branchList.add(FilterDataResponse(1, "Test 1"))
-        branchList.add(FilterDataResponse(2, "Test 2"))
-        branchList.add(FilterDataResponse(3, "Test 3"))
-
-        val adapter = CarAdapter(requireContext(), R.layout.custom_spinner, branchList)
-        spinnerBrand.adapter = adapter
-
-        /* buttonApply.setOnClickListener {
-            if(filterValue.isEmpty()){
-                TivoDialog(requireActivity(), getString(R.string.please_select_filter_option), true)
-                return@setOnClickListener
+        spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                if (p2 != 0) {
+                    val product = spinnerCategory.getItemAtPosition(p2) as FilterDataResponse
+                    if (product.id != "-1") {
+                        filterData.categoryId = product.id!!
+                        filterData.categoryPos = p2
+                        callProductSubCategory(product.id!!)
+                    }
+                } else {
+                    filterData.categoryId = "-1"
+                    filterData.categoryPos = 0
+                }
             }
-            onClickListener!!.onSubmitClick(filterValue)
-            dismiss()
-        }*/
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+
+        }
+
+        spinnerSubCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                if (p2 != 0) {
+                    val product = spinnerSubCategory.getItemAtPosition(p2) as FilterDataResponse
+                    if (product.id != "-1") {
+                        filterData.subCategoryId = product.id!!
+                        filterData.subCategoryPos = p2
+                    }
+                } else {
+                    filterData.subCategoryId = "-1"
+                    filterData.subCategoryPos = 0
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+
+        }
+
+        spinnerBrand.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                if (p2 != 0) {
+                    val product = spinnerBrand.getItemAtPosition(p2) as FilterDataResponse
+                    if (product.id != "-1") {
+                        filterData.brandId = product.id!!
+                        filterData.brandPos = p2
+                    }
+                } else {
+                    filterData.brandId = "-1"
+                    filterData.brandPos = 0
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+        }
+        callBrandCategory()
+
+        btnApplyFilter.setOnClickListener {
+
+            filterData.minPrice = edtTextMinPrice.text.toString()
+            filterData.maxPrice = edtTextMaxPrice.text.toString()
+
+            when {
+                filterData.categoryPos == 0 -> {
+                    requireActivity().toast("Please select Category")
+                }
+
+                filterData.subCategoryPos == 0 -> {
+                    requireActivity().toast("Please select Sub Category")
+                }
+
+                else -> {
+                    onClickListener?.onSubmitClick(filterData)
+                    dismiss()
+                }
+            }
+        }
     }
 
     interface OnProductFilterClickListener {
-        fun onSubmitClick(filterValue: String)
+        fun onSubmitClick(filterValue: FilterData)
     }
 
-    @SuppressLint("UseCompatTextViewDrawableApis")
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun setClickedAction(textView: AppCompatTextView) {
-        if (textView.id == R.id.tvRateFirst) {
-            tvRateFirst.background = ContextCompat.getDrawable(requireContext(), R.drawable.primary_color_fill_gradient)
-            tvRateFirst.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-            tvRateFirst.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
+    private fun callProductCategory() {
+        val requestParams = HashMap<String, String>()
+        requestParams["business_category_id"] = businessCategoryId
 
-            tvRateSecond.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateSecond.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateSecond.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
+        val service = RetrofitFactory.getInstance()
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = service.getProductCategory(requestParams)
+            withContext(Dispatchers.Main) {
+                try {
+                    if (response.isSuccessful) {
+                        //Do something with response e.g show to the UI.
 
-            tvRateThird.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateThird.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateThird.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
+                        val productList = response.body()?.data?.docs
+                        val categoryList = ArrayList<FilterDataResponse>()
+                        categoryList.add(FilterDataResponse("-1", "Category"))
+                        for (product in productList!!) {
+                            categoryList.add(FilterDataResponse(product._Id, product.name))
+                        }
+                        val categoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, categoryList)
+                        spinnerCategory.adapter = categoryAdapter
+                        spinnerCategory.post {
+                            spinnerCategory.setSelection(filterData.categoryPos)
+                        }
 
-            tvRateFourth.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateFourth.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateFourth.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
+                    } else {
+                        requireActivity().toast("Error: ${response.code()}")
+                    }
+                } catch (e: HttpException) {
+                    requireActivity().toast("Exception ${e.message}")
+                } catch (e: Throwable) {
+                    requireActivity().toast("Ooops: Something else went wrong")
+                }
+            }
+        }
+    }
 
-            tvRateFifth.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateFifth.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateFifth.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
-        } else if (textView.id == R.id.tvRateSecond) {
-            tvRateSecond.background = ContextCompat.getDrawable(requireContext(), R.drawable.primary_color_fill_gradient)
-            tvRateSecond.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-            tvRateSecond.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
+    fun callProductSubCategory(category_id: String) {
+        val requestParams = HashMap<String, String>()
+        requestParams["business_category_id"] = businessCategoryId
+        requestParams["category_id"] = category_id
 
-            tvRateFirst.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateFirst.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateFirst.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
+        val service = RetrofitFactory.getInstance()
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = service.getProductSubCategory(requestParams)
+            withContext(Dispatchers.Main) {
+                try {
+                    if (response.isSuccessful) {
+                        //Do something with response e.g show to the UI.
 
-            tvRateThird.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateThird.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateThird.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
+                        val productList = response.body()?.data?.docs
+                        val categoryList = ArrayList<FilterDataResponse>()
+                        categoryList.add(FilterDataResponse("-1", "Sub-Category"))
+                        for (product in productList!!) {
+                            categoryList.add(FilterDataResponse(product._Id, product.name))
+                        }
+                        val categoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, categoryList)
+                        spinnerSubCategory.adapter = categoryAdapter
 
-            tvRateFourth.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateFourth.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateFourth.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
+                        spinnerSubCategory.post {
+                            spinnerSubCategory.setSelection(filterData.subCategoryPos)
+                        }
+                    } else {
+                        requireActivity().toast("Error: ${response.code()}")
+                    }
+                } catch (e: HttpException) {
+                    requireActivity().toast("Exception ${e.message}")
+                } catch (e: Throwable) {
+                    requireActivity().toast("Ooops: Something else went wrong")
+                }
+            }
+        }
+    }
 
-            tvRateFifth.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateFifth.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateFifth.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
-        } else if (textView.id == R.id.tvRateThird) {
-            tvRateThird.background = ContextCompat.getDrawable(requireContext(), R.drawable.primary_color_fill_gradient)
-            tvRateThird.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-            tvRateThird.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
 
-            tvRateFirst.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateFirst.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateFirst.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
+    private fun callBrandCategory() {
+        val requestParams = HashMap<String, String>()
+        requestParams["page_no"] = "1"
 
-            tvRateSecond.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateSecond.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateSecond.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
+        val service = RetrofitFactory.getInstance()
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = service.getBrands(requestParams)
+            withContext(Dispatchers.Main) {
+                try {
+                    if (response.isSuccessful) {
+                        //Do something with response e.g show to the UI.
 
-            tvRateFourth.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateFourth.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateFourth.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
-
-            tvRateFifth.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateFifth.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateFifth.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
-        } else if (textView.id == R.id.tvRateFourth) {
-            tvRateFourth.background = ContextCompat.getDrawable(requireContext(), R.drawable.primary_color_fill_gradient)
-            tvRateFourth.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-            tvRateFourth.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
-
-            tvRateFirst.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateFirst.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateFirst.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
-
-            tvRateSecond.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateSecond.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateSecond.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
-
-            tvRateThird.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateThird.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateThird.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
-
-            tvRateFifth.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateFifth.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateFifth.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
-        } else if (textView.id == R.id.tvRateFifth) {
-            tvRateFifth.background = ContextCompat.getDrawable(requireContext(), R.drawable.primary_color_fill_gradient)
-            tvRateFifth.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-            tvRateFifth.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
-
-            tvRateFirst.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateFirst.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateFirst.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
-
-            tvRateSecond.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateSecond.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateSecond.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
-
-            tvRateThird.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateThird.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateThird.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
-
-            tvRateFourth.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_bg)
-            tvRateFourth.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_grey))
-            tvRateFourth.compoundDrawableTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_grey))
+                        val brandList = response.body()?.data?.docs
+                        val categoryList = ArrayList<FilterDataResponse>()
+                        categoryList.add(FilterDataResponse("-1", "Brand"))
+                        for (product in brandList!!) {
+                            categoryList.add(FilterDataResponse(product._Id, product.name))
+                        }
+                        val adapter = CarAdapter(requireContext(), R.layout.custom_spinner, categoryList)
+                        spinnerBrand.adapter = adapter
+                        spinnerBrand.post {
+                            spinnerBrand.setSelection(filterData.brandPos)
+                        }
+                    } else {
+                        requireActivity().toast("Error: ${response.code()}")
+                    }
+                } catch (e: HttpException) {
+                    requireActivity().toast("Exception ${e.message}")
+                } catch (e: Throwable) {
+                    requireActivity().toast("Ooops: Something else went wrong")
+                }
+            }
         }
     }
 }

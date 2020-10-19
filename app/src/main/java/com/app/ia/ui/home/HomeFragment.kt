@@ -10,7 +10,6 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseFragment
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.FragmentHomeBinding
-import com.app.ia.model.BusinessCategoryBean
 import com.app.ia.ui.home.adapter.HomeCategoryAdapter
 import com.app.ia.ui.home.adapter.HomeProductAdapter
 import com.app.ia.ui.home.adapter.SlidingImageAdapter
@@ -60,22 +59,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
         homeCategoryList.add("Mobile")
         homeCategoryList.add("Mobile")
 
-        val categoryList = ArrayList<BusinessCategoryBean>()
-        categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile_cat))
-        categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile_cat))
-        categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile_cat))
-        categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile_cat))
-        categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile_cat))
-        categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile_cat))
-        categoryList.add(BusinessCategoryBean("Mobile", R.drawable.mobile_cat))
-
-
         val homeCategoryAdapter = HomeCategoryAdapter()
         val itemDecoration = EqualSpacingItemDecoration(50, EqualSpacingItemDecoration.HORIZONTAL)
         recyclerViewCategory.adapter = homeCategoryAdapter
         recyclerViewCategory.addItemDecoration(itemDecoration)
         recyclerViewCategory.isNestedScrollingEnabled = false
-        homeCategoryAdapter.submitList(categoryList)
+
+        mHomeViewModel?.businessCategory?.observe(viewLifecycleOwner, {
+            homeCategoryAdapter.submitList(it)
+        })
 
         //ViewPager
         val bannerPagerAdapter = SlidingImageAdapter(requireContext(), homeCategoryList)

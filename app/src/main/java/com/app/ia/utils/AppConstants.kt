@@ -42,7 +42,11 @@ object AppConstants {
     const val EXTRA_IS_FROM_SPLASH = "is_from_splash"
 
 
-    const val EXTRA_PRODUCT_CATEGORY = "product_category"
+    const val EXTRA_BUSINESS_CATEGORY_NAME = "business_category"
+    const val EXTRA_BUSINESS_CATEGORY_ID = "business_category_id"
+    const val EXTRA_PRODUCT_CATEGORY_NAME = "product_category_name"
+    const val EXTRA_PRODUCT_CATEGORY_ID = "product_category_id"
+    const val EXTRA_PRODUCT_SUB_CATEGORY_ID = "product_sub_category_id"
 
     const val IOS_APP_STORE_ID: String = "1527732977"
     const val IOS_PACKAGE_NAME: String = "com.app.wallet.tivo"

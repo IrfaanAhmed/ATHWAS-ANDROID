@@ -100,8 +100,7 @@ class OTPViewModel(private val baseRepository: BaseRepository) : BaseViewModel()
 
         override fun onTick(millisUntilFinished: Long) {
             val progress = (millisUntilFinished / 1000).toInt()
-            val time = String.format(Locale("en"), "%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
-                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)), // The change is in this line
+            val time = String.format(Locale("en"), "%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millisUntilFinished), TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)), // The change is in this line
                 TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)))
             expireTime.value = time
             if (progress == 0) {

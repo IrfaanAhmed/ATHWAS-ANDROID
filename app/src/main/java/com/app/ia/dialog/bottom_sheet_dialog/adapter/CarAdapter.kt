@@ -27,7 +27,7 @@ class CarAdapter(private val mContext: Context, textViewResourceId: Int, private
 
         binding.apply {
             spinnerText.text = items[position].name
-            spinnerText.setTextColor(if (items[position].id == -1) ContextCompat.getColor(mContext, R.color.light_grey) else ContextCompat.getColor(mContext, (R.color.black)))
+            spinnerText.setTextColor(if (position == 0) ContextCompat.getColor(mContext, R.color.light_grey) else ContextCompat.getColor(mContext, (R.color.black)))
             executePendingBindings()
         }
 
@@ -49,7 +49,7 @@ class CarAdapter(private val mContext: Context, textViewResourceId: Int, private
 
         binding.apply {
             text1.text = items[position].name
-            text1.setTextColor(if (items[position].id == -1) ContextCompat.getColor(mContext, R.color.light_grey) else ContextCompat.getColor(mContext, (R.color.black)))
+            text1.setTextColor(if (position == 0) ContextCompat.getColor(mContext, R.color.light_grey) else ContextCompat.getColor(mContext, (R.color.black)))
             executePendingBindings()
         }
         return dropDownView

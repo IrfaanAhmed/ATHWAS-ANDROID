@@ -19,6 +19,7 @@ import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityAddAddressBinding
 import com.app.ia.utils.AppLogger
+import com.example.easywaylocation.LocationData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -159,7 +160,8 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
                     latitude = it.latitude
                     longitude = it.longitude
                     mAddAddressViewModel?.cancelApi()
-                    mAddAddressViewModel?.getAddressFromLatLng(latitude, longitude)
+                    //mAddAddressViewModel?.getAddressFromLatLng(latitude, longitude)
+                    mLocationManager?.getLocationAddress(latitude, longitude)
                     AppLogger.w("Latitude is : $latitude Longitude is$longitude")
                 } else {
                     selectedFromAddressBar = false
@@ -182,7 +184,7 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
 
     val resultList: MutableList<MutableMap<String, String>> = ArrayList()
 
-    inner class PlacesAutoCompleteAdapter(var mContext: Context, mResource: Int) : ArrayAdapter<String>(mContext, mResource), Filterable {
+    inner class PlacesAutoCompleteAdapter(mContext: Context, mResource: Int) : ArrayAdapter<String>(mContext, mResource), Filterable {
 
         override fun getCount(): Int {
             var size = 0
@@ -246,13 +248,19 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16.0f))
     }
 
+
     private fun updateLocationUI() {
 
         try {
-            mMap.isMyLocationEnabled = false
+            mMap.isMyLocationEnabled = true
             //mMap.uiSettings.isMyLocationButtonEnabled = true
         } catch (e: SecurityException) {
             AppLogger.e("Exception: %s", e.message!!)
         }
+    }
+
+    override fun onAddressUpdate(locationData: LocationData?) {
+        super.onAddressUpdate(locationData)
+        mAddAddressViewModel?.currentAddress?.set(locationData?.full_address)
     }
 }
