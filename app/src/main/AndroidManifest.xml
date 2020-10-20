@@ -126,6 +126,13 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".ui.wishlist.WishListActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".ui.search.SearchActivity"
             android:configChanges="layoutDirection|locale"
             android:screenOrientation="portrait"

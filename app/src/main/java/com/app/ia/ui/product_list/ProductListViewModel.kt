@@ -21,8 +21,7 @@ import com.app.ia.utils.AppConstants
 import com.app.ia.utils.Resource
 import kotlinx.coroutines.Dispatchers
 
-class ProductListViewModel(private val baseRepository: BaseRepository) : BaseViewModel(),
-    LifecycleObserver {
+class ProductListViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), LifecycleObserver {
 
     lateinit var mActivity: Activity
     lateinit var mBinding: ActivityProductListBinding
@@ -151,11 +150,11 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
         })
     }
 
-    fun addFavorite(product_id: String) {
+    fun addFavorite(product_id: String, status: Int) {
         val requestParams = HashMap<String, String>()
         requestParams["product_id"] = product_id
-        requestParams["status"] = "1"
-        addFavourite(requestParams)
+        requestParams["status"] = "" + status
+        addFavoriteObserver(requestParams)
     }
 
     private fun addFavourite(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
@@ -176,7 +175,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                         resource.data?.let { users ->
                             if (users.status == "success") {
                                 val favItem = productList.value!![favPosition.value!!]
-                                favItem.isFavourite = !favItem.isFavourite
+                                favItem.isFavourite = if (favItem.isFavourite == 0) 1 else 0
                                 productList.value = productList.value
                             } else {
                                 IADialog(mActivity, users.message, true)

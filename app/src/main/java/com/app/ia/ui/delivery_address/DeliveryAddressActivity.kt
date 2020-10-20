@@ -1,9 +1,9 @@
 package com.app.ia.ui.delivery_address
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
-import androidx.core.view.ViewCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.app.ia.BR
@@ -13,11 +13,12 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityDeliveryAddressBinding
-import com.app.ia.databinding.ActivityProductListBinding
+import com.app.ia.model.AddressListResponse
 import com.app.ia.ui.delivery_address.adapter.DeliveryAddressAdapter
-import com.app.ia.ui.product_list.ProductListViewModel
-import com.app.ia.ui.product_list.adapter.ProductListAdapter
-import com.app.ia.utils.*
+import com.app.ia.utils.AppRequestCode
+import com.app.ia.utils.EqualSpacingItemDecoration
+import com.app.ia.utils.invisible
+import com.app.ia.utils.setOnApplyWindowInset1
 import kotlinx.android.synthetic.main.activity_delivery_address.*
 import kotlinx.android.synthetic.main.common_header.view.*
 
@@ -58,15 +59,37 @@ class DeliveryAddressActivity : BaseActivity<ActivityDeliveryAddressBinding, Del
         recViewAddress.addItemDecoration(DividerItemDecoration(this@DeliveryAddressActivity, LinearLayout.VERTICAL))
         addressAdapter = DeliveryAddressAdapter()
         recViewAddress.adapter = addressAdapter
-        val categoryList = ArrayList<String>()
-        categoryList.add("Work")
-        categoryList.add("Home")
-        categoryList.add("Office")
-        addressAdapter!!.submitList(categoryList)
+        mViewModel?.addressListResponse?.observe(this, {
+            if (addressAdapter!!.currentList.size == 0) {
+                addressAdapter?.submitList(it!!)
+            } else {
+                addressAdapter?.notifyDataSetChanged()
+            }
+        })
+
+        addressAdapter?.setOnAddressClickListener(object : DeliveryAddressAdapter.OnAddressClickListener {
+            override fun onAddressSelect(item: AddressListResponse.AddressList, position: Int) {
+            }
+
+            override fun onAddressDelete(item: AddressListResponse.AddressList, position: Int) {
+
+                mViewModel?.deletedPosition!!.value = position
+                val requestParams = HashMap<String, String>()
+                requestParams["address_id"] = item.Id
+                mViewModel?.deleteAddressesObserver(requestParams)
+            }
+        })
     }
 
     private fun setViewModel() {
         val factory = ViewModelFactory(DeliveryAddressViewModel(BaseRepository(RetrofitFactory.getInstance(), this)))
         mViewModel = ViewModelProvider(this, factory).get(DeliveryAddressViewModel::class.java)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == AppRequestCode.REQUEST_ADD_ADDRESS && resultCode == RESULT_OK) {
+            mViewModel?.getAddressesObserver(HashMap())
+        }
     }
 }

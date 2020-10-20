@@ -40,7 +40,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
 
     private lateinit var mActivity: Activity
     private lateinit var mBinding: ActivityLoginBinding
-    lateinit var androidId: String
+    private lateinit var androidId: String
 
     @SuppressLint("HardwareIds")
     fun setVariable(mBinding: ActivityLoginBinding) {
@@ -78,6 +78,10 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
                     IADialog(mActivity, mActivity.getString(R.string.enter_your_password), true)
                 }
 
+               /* password.length < 6 -> {
+                    IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+                }*/
+
                 else -> {
                     val requestParams = HashMap<String, String>()
                     requestParams["country_code"] = "+91"
@@ -100,7 +104,9 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
     }
 
     fun skipForNow() {
-        mActivity.startActivity<HomeActivity>()
+        mActivity.startActivity<HomeActivity> {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
     }
 
     private fun requestHint() {

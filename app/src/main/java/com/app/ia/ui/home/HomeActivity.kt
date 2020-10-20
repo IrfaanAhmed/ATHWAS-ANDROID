@@ -76,7 +76,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         fragmentTransaction.commit()
     }
 
-    fun setupHeader(title : String, isHomeScreen : Boolean) {
+    fun setupHeader(title: String, isHomeScreen: Boolean) {
         mViewModel?.isHomeScreen?.set(isHomeScreen)
         mViewModel?.title?.set(title)
     }

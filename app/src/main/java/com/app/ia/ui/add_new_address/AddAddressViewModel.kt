@@ -1,6 +1,7 @@
 package com.app.ia.ui.add_new_address
 
 import android.app.Activity
+import android.content.Intent
 import android.widget.Toast
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -14,20 +15,16 @@ import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
 import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
-import org.json.JSONArray
-import org.json.JSONObject
 
 class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
 
     val enteredAddress: ObservableField<String> = ObservableField("")
-    val searchedLocationName: ObservableField<String> = ObservableField("")
-    val progressVisible: ObservableField<Boolean> = ObservableField(false)
     val currentAddress: ObservableField<String> = ObservableField("")
     val resultList = MutableLiveData<MutableList<MutableMap<String, String>>>()
 
     val selectedChipValue: ObservableField<Int> = ObservableField(-1)
-    val isMapSatellite = ObservableBoolean(false)
 
     var isAddressAdded: Boolean = false
 
@@ -63,9 +60,9 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
         val requestJsonObject = HashMap<String, String>()
         requestJsonObject["full_address"] = currentAddress.get()!!
         requestJsonObject["latitude"] = (mActivity as AddAddressActivity).latitude.toString()
-        requestJsonObject["longitude"] =  (mActivity as AddAddressActivity).longitude.toString()
+        requestJsonObject["longitude"] = (mActivity as AddAddressActivity).longitude.toString()
         when {
-            selectedChipValue.get() == 1 -> requestJsonObject["address_type"] =  "Home"
+            selectedChipValue.get() == 1 -> requestJsonObject["address_type"] = "Home"
             selectedChipValue.get() == 2 -> requestJsonObject["address_type"] = "Work"
             selectedChipValue.get() == 3 -> requestJsonObject["address_type"] = "Other"
         }
@@ -74,7 +71,7 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
         requestJsonObject["flat"] = ""
         requestJsonObject["location_name"] = ""
         requestJsonObject["building"] = ""
-        requestJsonObject["floor"] = ""
+        requestJsonObject["floor"] = mBinding.edtTextAddress.text.toString()
         requestJsonObject["landmark"] = ""
         requestJsonObject["way"] = ""
         addAddressObserver(requestJsonObject)
@@ -89,9 +86,8 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
     }
 
     fun getAddress(input: String) {
-        progressVisible.set(true)
         val urlAddress = "https://maps.googleapis.com/maps/api/place/autocomplete/json"
-       // baseRepository.googleAddressAPI(urlAddress, input, false)
+        // baseRepository.googleAddressAPI(urlAddress, input, false)
     }
 
     private fun addAddress(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
@@ -111,7 +107,10 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             if (users.status == "success") {
-
+                                mActivity.toast(users.message)
+                                val intent = Intent()
+                                mActivity.setResult(Activity.RESULT_OK, intent)
+                                mActivity.finish()
                             } else {
                                 IADialog(mActivity, users.message, true)
                             }

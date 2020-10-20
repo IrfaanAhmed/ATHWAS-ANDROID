@@ -1,6 +1,7 @@
-package com.app.ia.ui.delivery_address
+package com.app.ia.ui.wishlist
 
 import android.app.Activity
+import android.content.Intent
 import android.widget.Toast
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
@@ -8,56 +9,60 @@ import androidx.lifecycle.liveData
 import com.app.ia.R
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
-import com.app.ia.databinding.ActivityDeliveryAddressBinding
+import com.app.ia.databinding.ActivityWishListBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
-import com.app.ia.model.AddressListResponse
-import com.app.ia.ui.add_new_address.AddAddressActivity
-import com.app.ia.ui.place_picker.PlacePickerActivity
-import com.app.ia.utils.*
+import com.app.ia.model.FavoriteListResponse
+import com.app.ia.utils.Resource
 import kotlinx.coroutines.Dispatchers
 
-class DeliveryAddressViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), LifecycleObserver {
+class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), LifecycleObserver {
 
     lateinit var mActivity: Activity
-    lateinit var mBinding: ActivityDeliveryAddressBinding
+    lateinit var mBinding: ActivityWishListBinding
+
+    var favoriteList = MutableLiveData<MutableList<FavoriteListResponse.Docs>>()
+    private val favoriteListAll = ArrayList<FavoriteListResponse.Docs>()
 
     val isItemAvailable = MutableLiveData(true)
 
-    private val addressList = ArrayList<AddressListResponse.AddressList>()
-    val addressListResponse = MutableLiveData<MutableList<AddressListResponse.AddressList>>()
-    var deletedPosition = MutableLiveData(-1)
+    val currentPage = MutableLiveData(1)
+    val isLastPage = MutableLiveData(false)
+    val favPosition = MutableLiveData<Int>()
 
-    fun setVariable(mBinding: ActivityDeliveryAddressBinding) {
+    fun setVariable(mBinding: ActivityWishListBinding) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
-        title.set(mActivity.getString(R.string.my_address))
-        getAddressesObserver(HashMap())
+        title.set(mActivity.getString(R.string.wish_list))
+        setUpObserver()
     }
 
-    fun onAddAddressClick() {
-        mActivity.mStartActivityForResult<AddAddressActivity>(AppRequestCode.REQUEST_ADD_ADDRESS)
+    fun setUpObserver() {
+        val requestParams = HashMap<String, String>()
+        requestParams["page_no"] = currentPage.value!!.toString()
+        productListingObserver(requestParams)
     }
 
-    private fun getAddresses(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
+    private fun getProductListing(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = baseRepository.getAddresses()))
+            emit(Resource.success(data = baseRepository.getFavoriteListing(requestParams)))
         } catch (exception: Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }
     }
 
-    fun getAddressesObserver(requestParams: HashMap<String, String>) {
-        addressList.clear()
-        getAddresses(requestParams).observe(mBinding.lifecycleOwner!!, {
+    private fun productListingObserver(requestParams: HashMap<String, String>) {
+
+        getProductListing(requestParams).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             if (users.status == "success") {
-                                addressList.addAll(users.data?.addresslist!!)
-                                addressListResponse.value = addressList
+                                isLastPage.value = (currentPage.value == users.data?.totalpages)
+                                favoriteListAll.addAll(users.data?.docs!!)
+                                favoriteList.value = favoriteListAll
                             } else {
                                 IADialog(mActivity, users.message, true)
                             }
@@ -77,25 +82,33 @@ class DeliveryAddressViewModel(private val baseRepository: BaseRepository) : Bas
         })
     }
 
-    private fun deleteAddresses(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
+    fun addFavorite(product_id: String, status: Int) {
+        val requestParams = HashMap<String, String>()
+        requestParams["product_id"] = product_id
+        requestParams["status"] = "" + status
+        addFavoriteObserver(requestParams)
+    }
+
+    private fun addFavourite(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = baseRepository.deleteAddress(requestParams)))
+            emit(Resource.success(data = baseRepository.addFavorite(requestParams)))
         } catch (exception: Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }
     }
 
-    fun deleteAddressesObserver(requestParams: HashMap<String, String>) {
-        deleteAddresses(requestParams).observe(mBinding.lifecycleOwner!!, {
+    private fun addFavoriteObserver(requestParams: HashMap<String, String>) {
+
+        addFavourite(requestParams).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             if (users.status == "success") {
-                                mActivity.toast(users.message)
-                                addressList.removeAt(deletedPosition.value!!)
-                                addressListResponse.value = addressList
+                                /*val favItem = favoriteList.value!![favPosition.value!!]
+                                favItem.isFavourite = if (favItem.isFavourite == 0) 1 else 0
+                                favoriteList.value = favoriteList.value*/
                             } else {
                                 IADialog(mActivity, users.message, true)
                             }

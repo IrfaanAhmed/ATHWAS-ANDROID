@@ -15,8 +15,11 @@ import androidx.databinding.ViewDataBinding
 import com.app.ia.IAApplication
 import com.app.ia.R
 import com.app.ia.callback.GeneralCallback
+import com.app.ia.dialog.IADialog
 import com.app.ia.image_picker.ImagePickerManager
 import com.app.ia.image_picker.OnImagePickListener
+import com.app.ia.ui.login.LoginActivity
+import com.app.ia.utils.AppRequestCode
 import com.app.ia.utils.CommonUtils
 import com.app.ia.utils.LocationManager
 import com.example.easywaylocation.LocationData
@@ -168,6 +171,21 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
         CleverDialog(this, getString(R.string.gold_coming_soon_msg), true)
     }*/
 
+    fun logoutDialog() {
+        val activity = this
+        val cleverDialog = IADialog(activity, "", getString(R.string.logout_msg), getString(R.string.ok), getString(R.string.cancel), false)
+        cleverDialog.setOnItemClickListener(object : IADialog.OnClickListener {
+            override fun onPositiveClick() {
+                val intent = Intent(activity, LoginActivity::class.java)
+                intent.putExtra("isFromOtherScreen", true)
+                startActivityForResult(intent, AppRequestCode.REQUEST_LOGIN)
+            }
+
+            override fun onNegativeClick() {
+            }
+        })
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         if (mLocationManager != null) {
@@ -196,5 +214,4 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
     override fun onAddressUpdate(locationData: LocationData?) {
 
     }
-
 }

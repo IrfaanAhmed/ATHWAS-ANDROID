@@ -194,4 +194,7 @@
     <string name="cart">Cart</string>
     <string name="checkout">Checkout</string>
     <string name="search_product">Search Product</string>
+    <string name="logout_msg">Are you sure you want to logout?</string>
+    <string name="name_should_be_min_2_char">Name should be at least 2 characters</string>
+    <string name="please_enter_amount">Please enter amount</string>
 </resources>

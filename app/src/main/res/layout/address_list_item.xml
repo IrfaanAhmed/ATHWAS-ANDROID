@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -8,7 +7,7 @@
 
         <variable
             name="address"
-            type="String" />
+            type="com.app.ia.model.AddressListResponse.AddressList" />
 
     </data>
 
@@ -29,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/linotte_bold"
-                android:text="@{address}"
+                android:text="@{address.addressType}"
                 android:textColor="@color/dark_green"
                 android:textSize="@dimen/_13sdp" />
 
@@ -38,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/linotte_regular"
-                android:text="6/78, Near Kardhani Shopping Center, Hari Marg, Roop Vihar Colony, Malviya Nagar, Jaipur, Rajasthan 302017"
+                android:text="@{address.fullAddress}"
                 android:textColor="@color/light_grey"
                 android:textSize="@dimen/_10sdp" />
 
@@ -50,9 +49,11 @@
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginEnd="@dimen/_5sdp"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:src="@android:drawable/ic_menu_edit"
+            android:visibility="gone" />
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgViewDelete"
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
             android:layout_gravity="center"

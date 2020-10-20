@@ -6,24 +6,31 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.databinding.AddressListItemBinding
+import com.app.ia.model.AddressListResponse
 
-class DeliveryAddressAdapter : ListAdapter<String, DeliveryAddressAdapter.DeliveryAddressViewHolder>(OffersListDiffCallback()) {
+class DeliveryAddressAdapter : ListAdapter<AddressListResponse.AddressList, DeliveryAddressAdapter.DeliveryAddressViewHolder>(OffersListDiffCallback()) {
 
-    class OffersListDiffCallback : DiffUtil.ItemCallback<String>() {
+    class OffersListDiffCallback : DiffUtil.ItemCallback<AddressListResponse.AddressList>() {
 
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areItemsTheSame(oldItem: AddressListResponse.AddressList, newItem: AddressListResponse.AddressList): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areContentsTheSame(oldItem: AddressListResponse.AddressList, newItem: AddressListResponse.AddressList): Boolean {
             return oldItem == newItem
         }
+    }
+
+    private var onAddressClickListener : OnAddressClickListener? = null
+
+    fun setOnAddressClickListener(onAddressClickListener : OnAddressClickListener) {
+        this.onAddressClickListener = onAddressClickListener
     }
 
 
     override fun onBindViewHolder(holder: DeliveryAddressViewHolder, position: Int) {
         holder.apply {
-            onBind(getItem(position))
+            onBind(getItem(position), position)
         }
     }
 
@@ -33,12 +40,30 @@ class DeliveryAddressAdapter : ListAdapter<String, DeliveryAddressAdapter.Delive
 
     inner class DeliveryAddressViewHolder(private val mBinding: AddressListItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun onBind(item: String) {
+        fun onBind(item: AddressListResponse.AddressList, position: Int) {
             mBinding.apply {
                 address = item
+
+                itemView.setOnClickListener {
+                    if(onAddressClickListener != null) {
+                        onAddressClickListener?.onAddressSelect(item, position)
+                    }
+                }
+
+                imgViewDelete.setOnClickListener {
+                    if(onAddressClickListener != null) {
+                        onAddressClickListener?.onAddressDelete(item, position)
+                    }
+                }
                 executePendingBindings()
             }
         }
+    }
+
+    interface OnAddressClickListener {
+
+        fun onAddressSelect(item: AddressListResponse.AddressList, position: Int)
+        fun onAddressDelete(item: AddressListResponse.AddressList, position: Int)
     }
 
 }

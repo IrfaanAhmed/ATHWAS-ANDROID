@@ -52,7 +52,9 @@ data class ProductListingResponse(
         @Expose
         @SerializedName("price")
         val price: String,
-        var isFavourite: Boolean)
+        @Expose
+        @SerializedName("is_favourite")
+        var isFavourite: Int)
 
     data class Subcategory(
         @Expose

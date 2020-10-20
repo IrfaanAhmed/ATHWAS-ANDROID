@@ -9,14 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.R
 import com.app.ia.apiclient.RetrofitFactory
-import com.app.ia.dialog.bottom_sheet_dialog.adapter.CarAdapter
+import com.app.ia.dialog.IADialog
 import com.app.ia.dialog.bottom_sheet_dialog.adapter.PaymentOptionAdapter
 import com.app.ia.dialog.bottom_sheet_dialog.adapter.TopUpValueAdapter
-import com.app.ia.model.FilterDataResponse
 import com.app.ia.model.PaymentOptionBean
 import com.app.ia.ui.home.HomeActivity
 import com.app.ia.utils.EqualSpacingItemDecoration
@@ -25,8 +22,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.dialog_add_money.*
-import kotlinx.android.synthetic.main.dialog_add_money.tvCancel
-import kotlinx.android.synthetic.main.dialog_product_filter.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -66,11 +61,7 @@ class AddMoneyDialogFragment(val paymentOptionList: ArrayList<PaymentOptionBean>
         super.onViewCreated(view, savedInstanceState)
 
         tvCancel.setOnClickListener { dismiss() }
-        buttonAddMoney.setOnClickListener {
-            addToMoney(edtTextAmount.text.toString())
-        }
 
-        recPaymentMethod.layoutManager = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
         val paymentOptionAdapter = PaymentOptionAdapter()
         recPaymentMethod.adapter = paymentOptionAdapter
         paymentOptionAdapter.submitList(paymentOptionList)
@@ -81,11 +72,10 @@ class AddMoneyDialogFragment(val paymentOptionList: ArrayList<PaymentOptionBean>
                 }
                 paymentOptionAdapter.notifyDataSetChanged()
             }
-
         })
 
         // For Top Up Value RecyclerView
-        val topUpValueList = java.util.ArrayList<String>()
+        val topUpValueList = ArrayList<String>()
         topUpValueList.add("20")
         topUpValueList.add("50")
         topUpValueList.add("100")
@@ -117,6 +107,20 @@ class AddMoneyDialogFragment(val paymentOptionList: ArrayList<PaymentOptionBean>
                 }
             }
         })
+
+        buttonAddMoney.setOnClickListener {
+
+            if (mTopUpValueAdapter.selectedPosition == -1 && edtTextAmount.text.toString().isEmpty()) {
+                IADialog(requireActivity(), getString(R.string.please_enter_amount), true)
+            } else {
+                val amount: String = if (mTopUpValueAdapter.selectedPosition == -1) {
+                    edtTextAmount.text.toString()
+                } else {
+                    topUpValueList[mTopUpValueAdapter.selectedPosition]
+                }
+                addToMoney(amount)
+            }
+        }
     }
 
     fun clearAmountValue() {
@@ -130,7 +134,7 @@ class AddMoneyDialogFragment(val paymentOptionList: ArrayList<PaymentOptionBean>
         fun onAddMoneyClick(data: String)
     }
 
-    private fun addToMoney(amount : String) {
+    private fun addToMoney(amount: String) {
         val requestParams = HashMap<String, String>()
         requestParams["amount"] = amount
         requestParams["reason"] = ""
@@ -145,7 +149,7 @@ class AddMoneyDialogFragment(val paymentOptionList: ArrayList<PaymentOptionBean>
                         dismiss()
                         val walletResponse = response.body()!!
                         requireActivity().toast(walletResponse.message)
-                        if(onClickListener != null) {
+                        if (onClickListener != null) {
                             onClickListener?.onAddMoneyClick(walletResponse.data?.wallet!!)
                         }
                     } else {

@@ -5,6 +5,7 @@ import com.app.ia.apiclient.ApiService
 import com.app.ia.callback.GeneralCallback
 import com.app.ia.model.*
 import com.app.wallet.tivo.model.ResendOTPResponse
+import retrofit2.http.FieldMap
 
 open class BaseRepository(private val myApi: ApiService, generalCallback: GeneralCallback) : ApiRequest(generalCallback) {
 
@@ -46,6 +47,10 @@ open class BaseRepository(private val myApi: ApiService, generalCallback: Genera
         return apiRequest { myApi.getProductListing(request) }
     }
 
+    suspend fun getFavoriteListing(request: Map<String, String>): BaseResponse<FavoriteListResponse> {
+        return apiRequest { myApi.getFavoriteListing(request) }
+    }
+
     suspend fun addFavorite(request: Map<String, String>): BaseResponse<NoDataResponse> {
         return apiRequest { myApi.addFavorite(request) }
     }
@@ -60,5 +65,13 @@ open class BaseRepository(private val myApi: ApiService, generalCallback: Genera
 
     suspend fun addAddress(request: Map<String, String>): BaseResponse<NoDataResponse> {
         return apiRequest { myApi.addAddress(request) }
+    }
+
+    suspend fun getAddresses(): BaseResponse<AddressListResponse> {
+        return apiRequest { myApi.getAddresses() }
+    }
+
+    suspend fun deleteAddress(params: Map<String, String>): BaseResponse<NoDataResponse> {
+        return apiRequest { myApi.deleteAddresses(params) }
     }
 }

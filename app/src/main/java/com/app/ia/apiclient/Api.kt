@@ -21,6 +21,8 @@ object Api {
     const val PRODUCT_SUB_CATEGORY = CATEGORY_PATH + "get_subcategory"
     const val PRODUCT_LISTING = CATEGORY_PATH + "get_products"
 
+    const val FAVORITE_LISTING = CATEGORY_PATH + "get_favourite_items"
+
     const val BRAND = CATEGORY_PATH + "brand/get_brands"
     const val FAVOURITE_PRODUCT = CATEGORY_PATH + "add_favourite_item"
 
@@ -29,7 +31,7 @@ object Api {
 
     const val ADD_ADDRESS = COMMON_PATH + "address/create_address"
     const val DELETE_ADDRESS = COMMON_PATH + "address/delete_address"
-    const val ADDRESS_LIST = COMMON_PATH + "address/update_address"
+    const val ADDRESS_LIST = COMMON_PATH + "address/get_addresses"
 
     private fun getBaseUrl(environmentType: Int): String {
 

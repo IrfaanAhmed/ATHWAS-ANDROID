@@ -85,7 +85,7 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
 
         mapFragment.getMapAsync(this)
 
-        mPlacesAutoCompleteAdapter = PlacesAutoCompleteAdapter(this, R.layout.layout_autocomlete_list_item)
+        /*mPlacesAutoCompleteAdapter = PlacesAutoCompleteAdapter(this, R.layout.layout_autocomlete_list_item)
         edtTextSearch.setAdapter(mPlacesAutoCompleteAdapter)
         edtTextSearch.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
 
@@ -109,7 +109,7 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
                 longitude = place.latLng?.longitude!!
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLng!!, 16.0f))
             }
-        }
+        }*/
 
         edtTextAddress.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
@@ -133,10 +133,10 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
                 mAddAddressViewModel?.getAddress(it)
             }
 
-        imgViewCross.setOnClickListener {
+        /*imgViewCross.setOnClickListener {
             mAddAddressViewModel?.searchedLocationName!!.set("")
             edtTextSearch.setText("")
-        }
+        }*/
 
         //makeStatusBarTransparent()
         //setOnApplyWindowInset(toolbar, content_container)
@@ -209,7 +209,7 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
                         val filterResults = FilterResults()
 
                         if (constraint != null) {
-                            mAddAddressViewModel!!.searchedLocationName.set(constraint.toString())
+                            //mAddAddressViewModel!!.searchedLocationName.set(constraint.toString())
                             subject.onNext(constraint.toString())
 
                             filterResults.values = resultList

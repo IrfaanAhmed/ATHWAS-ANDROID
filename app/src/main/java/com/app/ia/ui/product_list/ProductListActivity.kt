@@ -65,14 +65,14 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
         recViewProduct.addItemDecoration(EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.VERTICAL))
         recViewProduct.addItemDecoration(DividerItemDecoration(this@ProductListActivity, LinearLayout.VERTICAL))
         productAdapter = ProductListAdapter()
-        productAdapter?.setOnItemClickListener(object : ProductListAdapter.OnItemClickListener{
+        productAdapter?.setOnItemClickListener(object : ProductListAdapter.OnItemClickListener {
             override fun onItemClick(productItem: ProductListingResponse.Docs) {
                 startActivity<ProductDetailActivity>()
             }
 
             override fun onFavoriteClick(productItem: ProductListingResponse.Docs, position: Int) {
                 mViewModel?.favPosition?.value = position
-                mViewModel?.addFavorite(productItem.Id)
+                mViewModel?.addFavorite(productItem.Id, if (productItem.isFavourite == 0) 1 else 0)
             }
         })
 

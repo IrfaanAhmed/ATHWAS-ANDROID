@@ -45,6 +45,9 @@ interface ApiService {
     @FormUrlEncoded
     suspend fun getProductListing(@FieldMap params: Map<String, String>): Response<BaseResponse<ProductListingResponse>>
 
+    @GET(Api.FAVORITE_LISTING)
+    suspend fun getFavoriteListing(@QueryMap params: Map<String, String>): Response<BaseResponse<FavoriteListResponse>>
+
     @POST(Api.FAVOURITE_PRODUCT)
     @FormUrlEncoded
     suspend fun addFavorite(@FieldMap params: Map<String, String>): Response<BaseResponse<NoDataResponse>>
@@ -59,4 +62,11 @@ interface ApiService {
     @POST(Api.ADD_ADDRESS)
     @FormUrlEncoded
     suspend fun addAddress(@FieldMap params: Map<String, String>): Response<BaseResponse<NoDataResponse>>
+
+    @GET(Api.ADDRESS_LIST)
+    suspend fun getAddresses(): Response<BaseResponse<AddressListResponse>>
+
+    @POST(Api.DELETE_ADDRESS)
+    @FormUrlEncoded
+    suspend fun deleteAddresses(@FieldMap params: Map<String, String>): Response<BaseResponse<NoDataResponse>>
 }

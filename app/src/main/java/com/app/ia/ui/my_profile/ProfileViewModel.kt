@@ -7,8 +7,8 @@ import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityProfileBinding
 import com.app.ia.ui.delivery_address.DeliveryAddressActivity
 import com.app.ia.ui.edit_profile.EditProfileActivity
-import com.app.ia.ui.product_list.ProductListActivity
 import com.app.ia.ui.rewards.RewardsActivity
+import com.app.ia.ui.wishlist.WishListActivity
 import com.app.ia.utils.startActivity
 import kotlinx.android.synthetic.main.common_header.view.*
 
@@ -30,7 +30,7 @@ class ProfileViewModel(private val baseRepository: BaseRepository) : BaseViewMod
     }
 
     fun onWishListClick() {
-        mActivity.startActivity<ProductListActivity>()
+        mActivity.startActivity<WishListActivity>()
     }
 
     fun onDeliveryAddressClick() {

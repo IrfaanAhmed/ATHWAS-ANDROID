@@ -99,7 +99,7 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         } else if (name.isEmpty()) {
             IADialog(mActivity, mActivity.getString(R.string.enter_name), true)
         } else if (name.length < 2) {
-            IADialog(mActivity, "Name should be at least 2 characters", true)
+            IADialog(mActivity, mActivity.getString(R.string.name_should_be_min_2_char), true)
         } else if (email.isEmpty()) {
             IADialog(mActivity, mActivity.getString(R.string.enter_your_email), true)
         } else if (!email.isValidEmail()) {
