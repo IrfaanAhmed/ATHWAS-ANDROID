@@ -69,4 +69,11 @@ interface ApiService {
     @POST(Api.DELETE_ADDRESS)
     @FormUrlEncoded
     suspend fun deleteAddresses(@FieldMap params: Map<String, String>): Response<BaseResponse<NoDataResponse>>
+
+    @POST(Api.CHANGE_PASSWORD_URL)
+    @FormUrlEncoded
+    suspend fun changePassword(@FieldMap params: Map<String, String>): Response<BaseResponse<NoDataResponse>>
+
+    @GET(Api.GET_PROFILE_URL)
+    suspend fun getProfile(): Response<BaseResponse<ProfileResponse>>
 }

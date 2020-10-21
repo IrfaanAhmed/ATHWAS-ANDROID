@@ -145,3 +145,9 @@ inline fun <reified T : Activity> Activity.mStartActivityForResult(requestCode: 
     startActivityForResult(intent, requestCode)
 }
 
+inline fun <reified T : Activity> Activity.mStartActivityForResult(requestCode: Int, block: Intent.() -> Unit = {}) {
+    val intent = Intent(this, T::class.java)
+    block(intent)
+    startActivityForResult(intent, requestCode)
+}
+

@@ -1,5 +1,6 @@
 package com.app.ia.ui.delivery_address
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
@@ -15,6 +16,7 @@ import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityDeliveryAddressBinding
 import com.app.ia.model.AddressListResponse
 import com.app.ia.ui.delivery_address.adapter.DeliveryAddressAdapter
+import com.app.ia.utils.AppConstants.EXTRA_SELECTED_ADDRESS
 import com.app.ia.utils.AppRequestCode
 import com.app.ia.utils.EqualSpacingItemDecoration
 import com.app.ia.utils.invisible
@@ -48,6 +50,7 @@ class DeliveryAddressActivity : BaseActivity<ActivityDeliveryAddressBinding, Del
         mBinding?.lifecycleOwner = this
         mViewModel?.setActivityNavigator(this)
         mViewModel?.setVariable(mBinding!!)
+        mViewModel?.setIntent(intent)
 
         //makeStatusBarTransparent()
         setOnApplyWindowInset1(toolbar, content_container)
@@ -69,6 +72,12 @@ class DeliveryAddressActivity : BaseActivity<ActivityDeliveryAddressBinding, Del
 
         addressAdapter?.setOnAddressClickListener(object : DeliveryAddressAdapter.OnAddressClickListener {
             override fun onAddressSelect(item: AddressListResponse.AddressList, position: Int) {
+                    if(mViewModel?.isFromHomeScreen!!.value!!){
+                        val intent = Intent()
+                        intent.putExtra(EXTRA_SELECTED_ADDRESS, item)
+                        setResult(Activity.RESULT_OK, intent)
+                        finish()
+                    }
             }
 
             override fun onAddressDelete(item: AddressListResponse.AddressList, position: Int) {

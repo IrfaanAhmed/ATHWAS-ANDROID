@@ -74,4 +74,12 @@ open class BaseRepository(private val myApi: ApiService, generalCallback: Genera
     suspend fun deleteAddress(params: Map<String, String>): BaseResponse<NoDataResponse> {
         return apiRequest { myApi.deleteAddresses(params) }
     }
+
+    suspend fun changePassword(params: Map<String, String>): BaseResponse<NoDataResponse> {
+        return apiRequest { myApi.changePassword(params) }
+    }
+
+    suspend fun getProfile(): BaseResponse<ProfileResponse> {
+        return apiRequest { myApi.getProfile() }
+    }
 }

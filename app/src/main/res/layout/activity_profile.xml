@@ -76,7 +76,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/user_place_holder_image" />
+                            imageUrl="@{viewModel.userData.userImageUrl}"
+                            defaultImage="@{R.drawable.user_place_holder_image}"/>
 
                     </RelativeLayout>
 
@@ -88,7 +89,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:fontFamily="@font/linotte_bold"
-                    android:text="Umesh Kumar"
+                    android:text="@{viewModel.userData.userName}"
                     android:textAllCaps="true"
                     android:textColor="@color/colorLogout"
                     android:textSize="@dimen/_13sdp" />
@@ -97,7 +98,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="user@gmail.com"
+                    android:text="@{viewModel.userData.email}"
                     android:textColor="@color/colorLogout"
                     android:textSize="@dimen/_12sdp" />
 

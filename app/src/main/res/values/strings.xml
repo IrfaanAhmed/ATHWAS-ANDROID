@@ -79,6 +79,7 @@
     <string name="please_enter_confirm_password">Please enter confirm password</string>
     <string name="password_confirm_password_same">Password and confirm password should be same</string>
     <string name="password_should_be_min_6_char">Password should be at least 6 characters.</string>
+    <string name="confirm_password_should_be_same_as_new_password">Confirm Password should be same as new password.</string>
     <string name="you_can_not_request_yourself">You can\'t request to yourself.</string>
     <string name="no_deals_available">No Deals available</string>
     <string name="no_offer_available">No Offer Available</string>

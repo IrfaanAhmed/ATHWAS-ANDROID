@@ -21,6 +21,7 @@ object AppRequestCode {
     const val SELECT_DROP_LOCATION: Int = 2222
     const val REQUEST_ADD_CAR: Int = 7777
     const val REQUEST_ADD_ADDRESS: Int = 6666
+    const val REQUEST_SELECT_ADDRESS: Int = 3333
     const val REQUEST_APPLY_COUPON: Int = 8888
     const val REQUEST_LOGIN: Int = 9999
     const val REQUEST_SHARE_WALLET: Int = 5555

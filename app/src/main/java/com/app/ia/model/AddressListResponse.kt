@@ -2,12 +2,13 @@ package com.app.ia.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class AddressListResponse(
 
     @Expose
     @SerializedName("addresslist")
-    var addresslist: MutableList<AddressList>) {
+    var addresslist: MutableList<AddressList>): Serializable {
 
     data class AddressList(
         @Expose
@@ -48,7 +49,7 @@ data class AddressListResponse(
         val landmark: String,
         @Expose
         @SerializedName("full_address")
-        val fullAddress: String) {
+        val fullAddress: String): Serializable {
 
         data class Geolocation(
             @Expose
@@ -59,6 +60,8 @@ data class AddressListResponse(
             var coordinates: List<Double>,
             @Expose
             @SerializedName("_id")
-            val Id: String)
+            val Id: String): Serializable{
+
+        }
     }
 }

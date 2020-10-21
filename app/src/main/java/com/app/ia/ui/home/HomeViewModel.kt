@@ -12,7 +12,9 @@ import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityHomeBinding
 import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.model.LoginResponse
+import com.app.ia.ui.add_new_address.AddAddressActivity
 import com.app.ia.ui.business_category.CategoryFragment
+import com.app.ia.ui.delivery_address.DeliveryAddressActivity
 import com.app.ia.ui.home.adapter.NavigationListAdapter
 import com.app.ia.ui.login.LoginActivity
 import com.app.ia.ui.my_order.MyOrdersFragment
@@ -20,7 +22,10 @@ import com.app.ia.ui.my_profile.ProfileActivity
 import com.app.ia.ui.notification.NotificationActivity
 import com.app.ia.ui.offers.OffersFragment
 import com.app.ia.ui.wallet.WalletFragment
+import com.app.ia.utils.AppConstants.EXTRA_IS_HOME_SCREEN
+import com.app.ia.utils.AppRequestCode
 import com.app.ia.utils.EqualSpacingItemDecoration
+import com.app.ia.utils.mStartActivityForResult
 import com.app.ia.utils.startActivity
 import kotlinx.android.synthetic.main.nav_side_menu.*
 
@@ -29,6 +34,9 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
     lateinit var mActivity: Activity
     lateinit var mBinding: ActivityHomeBinding
     val userData = MutableLiveData<LoginResponse>()
+
+    var addressTitle = MutableLiveData<String>("Current Location")
+    var address = MutableLiveData<String>("Select Address")
 
     fun setVariable(mBinding: ActivityHomeBinding) {
         this.mBinding = mBinding
@@ -63,6 +71,12 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
 
     fun onHumBurgerMenuClick() {
         mBinding.drawerLayout.openDrawer(mBinding.navView)
+    }
+
+    fun onSelectAddressClick() {
+        mActivity.mStartActivityForResult<DeliveryAddressActivity>(AppRequestCode.REQUEST_SELECT_ADDRESS){
+            putExtra(EXTRA_IS_HOME_SCREEN, true)
+        }
     }
 
     fun onCartClick() {

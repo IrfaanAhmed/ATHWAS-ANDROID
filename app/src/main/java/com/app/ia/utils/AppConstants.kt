@@ -40,6 +40,9 @@ object AppConstants {
     const val EXTRA_PROMO_CODE_DETAIL = "promo_code_detail"
     const val EXTRA_MERCHANT_DETAIL = "merchant_detail"
     const val EXTRA_IS_FROM_SPLASH = "is_from_splash"
+    const val EXTRA_IS_HOME_SCREEN = "is_home_screen"
+    const val EXTRA_SELECTED_ADDRESS = "selected_address"
+    const val EXTRA_PROFILE_DETAIL = "profile_detail"
 
 
     const val EXTRA_BUSINESS_CATEGORY_NAME = "business_category"

@@ -1,5 +1,6 @@
 package com.app.ia.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -15,6 +16,10 @@ import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityHomeBinding
 import com.app.ia.helper.CardDrawerLayout
+import com.app.ia.model.AddressListResponse
+import com.app.ia.utils.AppConstants
+import com.app.ia.utils.AppRequestCode
+import com.app.ia.utils.CommonUtils.getAddressFromLocation
 import com.app.ia.utils.makeStatusBarTransparent
 import com.app.ia.utils.setOnApplyWindowInset
 import kotlinx.android.synthetic.main.activity_home.*
@@ -26,6 +31,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
 
     private var mDrawer: CardDrawerLayout? = null
     private var toggle: ActionBarDrawerToggle? = null
+    private var latitude = 0.0
+    private var longitude = 0.0
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
@@ -50,6 +57,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
 
         makeStatusBarTransparent()
         setOnApplyWindowInset(toolbar, content_container)
+        currentLocationManager()
 
         toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle!!)
@@ -79,6 +87,25 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     fun setupHeader(title: String, isHomeScreen: Boolean) {
         mViewModel?.isHomeScreen?.set(isHomeScreen)
         mViewModel?.title?.set(title)
+    }
+
+    override fun onCurrentLocation(latitude: Double, longitude: Double) {
+        super.onCurrentLocation(latitude, longitude)
+        this.latitude = latitude
+        this.longitude = longitude
+
+        mViewModel?.address!!.value = getAddressFromLocation(this@HomeActivity, this.latitude, this.longitude)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == AppRequestCode.REQUEST_SELECT_ADDRESS && resultCode == RESULT_OK) {
+           if(data != null){
+               var selectedAddress = data.getSerializableExtra(AppConstants.EXTRA_SELECTED_ADDRESS) as AddressListResponse.AddressList
+               mViewModel?.addressTitle!!.value = selectedAddress.addressType
+               mViewModel?.address!!.value = selectedAddress.fullAddress
+           }
+        }
     }
 
 }

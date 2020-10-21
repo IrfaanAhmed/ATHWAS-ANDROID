@@ -33,6 +33,9 @@ object Api {
     const val DELETE_ADDRESS = COMMON_PATH + "address/delete_address"
     const val ADDRESS_LIST = COMMON_PATH + "address/get_addresses"
 
+    const val GET_PROFILE_URL = COMMON_PATH + "profile/get_profile"
+    const val CHANGE_PASSWORD_URL = COMMON_PATH + "profile/change_password"
+
     private fun getBaseUrl(environmentType: Int): String {
 
         return when (environmentType) {

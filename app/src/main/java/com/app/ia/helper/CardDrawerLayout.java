@@ -275,7 +275,7 @@ public class CardDrawerLayout extends DrawerLayout {
         return getDrawerViewAbsoluteGravity(gravity);
     }
 
-    private class Setting {
+    class Setting {
         float percentage = 1f;
         int scrimColor = defaultScrimColor;
         float elevation = 0;

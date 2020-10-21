@@ -37,6 +37,7 @@ class EditProfileActivity : BaseActivity<ActivityEditProfileBinding, EditProfile
         mActivityBinding?.lifecycleOwner = this
         mViewModel?.setActivityNavigator(this)
         mViewModel?.setVariable(mActivityBinding!!)
+        mViewModel?.setIntent(intent)
 
         setOnApplyWindowInset1(toolbar, content_container)
 

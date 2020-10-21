@@ -1,6 +1,7 @@
 package com.app.ia.ui.delivery_address
 
 import android.app.Activity
+import android.content.Intent
 import android.widget.Toast
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +16,7 @@ import com.app.ia.model.AddressListResponse
 import com.app.ia.ui.add_new_address.AddAddressActivity
 import com.app.ia.ui.place_picker.PlacePickerActivity
 import com.app.ia.utils.*
+import com.app.ia.utils.AppConstants.EXTRA_IS_HOME_SCREEN
 import kotlinx.coroutines.Dispatchers
 
 class DeliveryAddressViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), LifecycleObserver {
@@ -23,6 +25,7 @@ class DeliveryAddressViewModel(private val baseRepository: BaseRepository) : Bas
     lateinit var mBinding: ActivityDeliveryAddressBinding
 
     val isItemAvailable = MutableLiveData(true)
+    var isFromHomeScreen = MutableLiveData(false)
 
     private val addressList = ArrayList<AddressListResponse.AddressList>()
     val addressListResponse = MutableLiveData<MutableList<AddressListResponse.AddressList>>()
@@ -33,6 +36,10 @@ class DeliveryAddressViewModel(private val baseRepository: BaseRepository) : Bas
         this.mActivity = getActivityNavigator()!!
         title.set(mActivity.getString(R.string.my_address))
         getAddressesObserver(HashMap())
+    }
+
+    fun setIntent(intent: Intent){
+        isFromHomeScreen.value = intent.getBooleanExtra(EXTRA_IS_HOME_SCREEN, false)
     }
 
     fun onAddAddressClick() {
