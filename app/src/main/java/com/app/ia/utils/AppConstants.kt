@@ -29,6 +29,8 @@ object AppConstants {
     const val SERVER_TIME_STAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
     const val ACTION_BROADCAST_GOLD_MEMBER_PLAN = "gold_member_plan"
+    const val ACTION_BROADCAST_UPDATE_PROFILE = "update_profile"
+
 
     const val EXTRA_IS_PENDING_REQUEST = "is_pending_request"
 

@@ -68,7 +68,7 @@ class ProfileViewModel(private val baseRepository: BaseRepository) : BaseViewMod
         }
     }
 
-    private fun setupObservers() {
+    fun setupObservers() {
         getProfile().observe(mBinding.lifecycleOwner!!, Observer{
             it?.let { resource ->
                 when (resource.status) {

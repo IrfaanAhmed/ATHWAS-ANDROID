@@ -198,4 +198,10 @@
     <string name="logout_msg">Are you sure you want to logout?</string>
     <string name="name_should_be_min_2_char">Name should be at least 2 characters</string>
     <string name="please_enter_amount">Please enter amount</string>
+    <string name="please_enter_otp">Please enter otp</string>
+
+    <string name="otp_sent_on_mobile_or_email">OTP has been sent to your mobile number or email address.Please verify</string>
+    <string name="please_enter_name">Please enter name</string>
+    <string name="update">Update</string>
+    <string name="search">Search</string>
 </resources>

@@ -2,6 +2,8 @@ package com.app.ia.apiclient
 
 import com.app.ia.model.*
 import com.app.wallet.tivo.model.ResendOTPResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -76,4 +78,13 @@ interface ApiService {
 
     @GET(Api.GET_PROFILE_URL)
     suspend fun getProfile(): Response<BaseResponse<ProfileResponse>>
+
+    @POST(Api.UPDATE_PROFILE_URL)
+    @FormUrlEncoded
+    suspend fun updateProfile(@FieldMap params: Map<String, String>): Response<BaseResponse<UpdateProfileResponse>>
+
+    @POST(Api.UPDATE_PROFILE_URL)
+    @Multipart
+    suspend fun updateProfile(@PartMap() partData: Map<String, @JvmSuppressWildcards RequestBody>,
+                              @Part() file: MultipartBody.Part): Response<BaseResponse<UpdateProfileResponse>>
 }

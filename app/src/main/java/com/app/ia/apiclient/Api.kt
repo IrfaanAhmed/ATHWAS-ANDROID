@@ -35,6 +35,7 @@ object Api {
 
     const val GET_PROFILE_URL = COMMON_PATH + "profile/get_profile"
     const val CHANGE_PASSWORD_URL = COMMON_PATH + "profile/change_password"
+    const val UPDATE_PROFILE_URL = COMMON_PATH + "profile/update_profile"
 
     private fun getBaseUrl(environmentType: Int): String {
 

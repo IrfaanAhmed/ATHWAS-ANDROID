@@ -5,6 +5,8 @@ import com.app.ia.apiclient.ApiService
 import com.app.ia.callback.GeneralCallback
 import com.app.ia.model.*
 import com.app.wallet.tivo.model.ResendOTPResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.FieldMap
 
 open class BaseRepository(private val myApi: ApiService, generalCallback: GeneralCallback) : ApiRequest(generalCallback) {
@@ -81,5 +83,14 @@ open class BaseRepository(private val myApi: ApiService, generalCallback: Genera
 
     suspend fun getProfile(): BaseResponse<ProfileResponse> {
         return apiRequest { myApi.getProfile() }
+    }
+
+
+    suspend fun updateProfile(request: Map<String, String>): BaseResponse<UpdateProfileResponse> {
+        return apiRequest { myApi.updateProfile(request) }
+    }
+
+    suspend fun updateProfile(partData: Map<String, RequestBody>, file: MultipartBody.Part): BaseResponse<UpdateProfileResponse> {
+        return apiRequest { myApi.updateProfile(partData, file) }
     }
 }

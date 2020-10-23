@@ -11,6 +11,7 @@ import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
 import com.app.ia.model.BusinessCategoryResponse
 import com.app.ia.ui.product_list.ProductListActivity
+import com.app.ia.ui.search.SearchActivity
 import com.app.ia.utils.Resource
 import com.app.ia.utils.startActivity
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +30,10 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
     fun onViewAllClick() {
         mActivity.startActivity<ProductListActivity>()
+    }
+
+    fun onSearchProductClick(){
+        mActivity.startActivity<SearchActivity>()
     }
 
     private fun getBusinessCategory() = liveData(Dispatchers.Main) {

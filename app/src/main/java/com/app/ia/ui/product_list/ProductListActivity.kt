@@ -58,8 +58,7 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
         }
 
         toolbar.ivSearchIcon.setOnClickListener {
-            startActivity<SearchActivity> {
-            }
+            startActivity<SearchActivity>()
         }
 
         recViewProduct.addItemDecoration(EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.VERTICAL))

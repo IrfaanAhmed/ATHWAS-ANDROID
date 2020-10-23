@@ -31,6 +31,9 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.app.ia.IAApplication
 import com.app.ia.R
 import com.app.ia.local.AppPreferencesHelper
+import com.google.i18n.phonenumbers.NumberParseException
+import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.google.i18n.phonenumbers.Phonenumber
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -63,6 +66,18 @@ object CommonUtils {
 
     fun isEmailValid(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    fun validateNumber(countryCode: String, phNumber: String): Boolean {
+        val phoneNumberUtil = PhoneNumberUtil.getInstance()
+        val isoCode = phoneNumberUtil.getRegionCodeForCountryCode(Integer.parseInt(countryCode))
+        var phoneNumber: Phonenumber.PhoneNumber? = null
+        try {
+            phoneNumber = phoneNumberUtil.parse(phNumber, isoCode)
+        } catch (e: NumberParseException) {
+            e.printStackTrace()
+        }
+        return phoneNumberUtil.isValidNumber(phoneNumber)
     }
 
     /**

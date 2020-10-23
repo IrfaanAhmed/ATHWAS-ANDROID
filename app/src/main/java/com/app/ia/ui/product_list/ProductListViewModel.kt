@@ -17,8 +17,10 @@ import com.app.ia.enums.Status
 import com.app.ia.model.CommonSortBean
 import com.app.ia.model.FilterData
 import com.app.ia.model.ProductListingResponse
+import com.app.ia.ui.search.SearchActivity
 import com.app.ia.utils.AppConstants
 import com.app.ia.utils.Resource
+import com.app.ia.utils.startActivity
 import kotlinx.coroutines.Dispatchers
 
 class ProductListViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), LifecycleObserver {

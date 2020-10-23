@@ -1,7 +1,12 @@
 package com.app.ia.ui.my_profile
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.ia.BR
 import com.app.ia.R
 import com.app.ia.ViewModelFactory
@@ -9,6 +14,7 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityProfileBinding
+import com.app.ia.utils.AppConstants
 import com.app.ia.utils.setOnApplyWindowInset1
 import com.app.ia.utils.visible
 import kotlinx.android.synthetic.main.activity_profile.*
@@ -18,6 +24,12 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
 
     private var mActivityBinding: ActivityProfileBinding? = null
     private var mViewModel: ProfileViewModel? = null
+
+    private val updateProfileListReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            mViewModel?.setupObservers()
+        }
+    }
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
@@ -31,6 +43,12 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
         return mViewModel!!
     }
 
+    override fun onDestroy() {
+        var localBroadcastReceiver = LocalBroadcastManager.getInstance(this@ProfileActivity)
+        localBroadcastReceiver.unregisterReceiver(updateProfileListReceiver)
+        super.onDestroy()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setViewModel()
         super.onCreate(savedInstanceState)
@@ -42,6 +60,11 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
         setOnApplyWindowInset1(toolbar, content_container)
 
         toolbar.ivEditProfileIcon.visible()
+
+        val localBroadcastReceiver = LocalBroadcastManager.getInstance(this@ProfileActivity)
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(AppConstants.ACTION_BROADCAST_UPDATE_PROFILE)
+        localBroadcastReceiver.registerReceiver(updateProfileListReceiver, intentFilter)
     }
 
     private fun setViewModel() {

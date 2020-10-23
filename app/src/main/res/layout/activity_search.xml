@@ -14,10 +14,11 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:fitsSystemWindows="true"
         android:focusable="true"
         android:focusableInTouchMode="true">
@@ -34,10 +35,7 @@
             app:contentInsetEnd="0dp"
             app:contentInsetLeft="0dp"
             app:contentInsetRight="0dp"
-            app:contentInsetStart="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:contentInsetStart="0dp">
 
             <include
                 layout="@layout/common_header"
@@ -46,50 +44,80 @@
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llSearchBox"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@color/white"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            app:layout_constraintVertical_bias="0.0">
+            android:layout_height="@dimen/_33sdp"
+            android:layout_margin="@dimen/_8sdp"
+            android:orientation="horizontal"
+            android:layout_below="@+id/toolbar">
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_33sdp"
-                android:layout_margin="@dimen/_8sdp"
-                android:background="@drawable/edittext_bg"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/search_edittext_bg"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtSearchText"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_33sdp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@null"
                     android:drawableStart="@drawable/ic_search"
                     android:drawablePadding="@dimen/_8sdp"
+                    android:layout_gravity="center"
                     android:gravity="center_vertical"
                     android:hint="@string/what_are_you_looking_for"
                     android:paddingStart="@dimen/_8sdp"
                     android:paddingEnd="@dimen/_8sdp"
                     android:textSize="@dimen/_12sdp" />
 
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:visibility="@{viewModel.isSearchTextEntered ? View.VISIBLE : View.GONE}"
+                    android:src="@drawable/ic_cancel"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:layout_gravity="center"/>
+
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recViewAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="3"
-                tools:listitem="@layout/search_list_item" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/cancel"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:onClick="@{() -> viewModel.onCancelClick()}"
+                android:textColor="@color/blue"
+                android:fontFamily="@font/linotte_bold"
+                android:textSize="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_8sdp"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recViewSearchProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llSearchBox"
+                android:background="@color/white"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                android:visibility="@{viewModel.isItemAvailable ? View.VISIBLE : View.GONE}"
+                tools:listitem="@layout/search_list_item" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/no_item_available"
+            android:visibility="@{viewModel.isItemAvailable ? View.GONE : View.VISIBLE}"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/_10sdp"/>
+
+    </RelativeLayout>
 
 </layout>

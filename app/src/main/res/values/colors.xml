@@ -12,6 +12,7 @@
     <color name="out_of_stock_trans">#99000000</color>
     <color name="colorLogout">#3B2B98</color>
     <color name="light_grey">#afb1b3</color>
+    <color name="search_box_grey">#EFEFF0</color>
     <color name="very_light_grey">#DBDBDB</color>
     <color name="green">#009937</color>
     <color name="dark_grey">#3c3f41</color>

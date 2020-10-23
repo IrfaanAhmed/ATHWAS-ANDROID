@@ -77,6 +77,13 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".ui.otp_verify.OTPVerifyActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".ui.home.HomeActivity"
             android:configChanges="layoutDirection|locale"
             android:screenOrientation="portrait"

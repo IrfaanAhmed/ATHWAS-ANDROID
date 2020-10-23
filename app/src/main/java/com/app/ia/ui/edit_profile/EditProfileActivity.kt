@@ -54,7 +54,9 @@ class EditProfileActivity : BaseActivity<ActivityEditProfileBinding, EditProfile
 
     override fun onImageSelect(path: String) {
         super.onImageSelect(path)
-        val imgBitmap = BitmapFactory.decodeFile(path)
-        profileImg.setImageBitmap(imgBitmap)
+        mViewModel?.filePath!!.value = path
+        mViewModel?.updateProfileImage()
+        //val imgBitmap = BitmapFactory.decodeFile(path)
+        //profileImg.setImageBitmap(imgBitmap)
     }
 }
