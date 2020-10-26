@@ -34,7 +34,7 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
 
     var userData = MutableLiveData<ProfileResponse>()
     var filePath = MutableLiveData<String>()
-    var oldMobileEmail = MutableLiveData<String>()
+    private var oldMobileEmail = MutableLiveData<String>()
 
     fun setVariable(mBinding: ActivityEditProfileBinding) {
         this.mBinding = mBinding
@@ -42,7 +42,7 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
         title.set(mActivity.getString(R.string.edit_profile))
     }
 
-    fun setIntent(intent: Intent){
+    fun setIntent(intent: Intent) {
         userData.value = intent.getSerializableExtra(AppConstants.EXTRA_PROFILE_DETAIL) as ProfileResponse
     }
 
@@ -50,12 +50,12 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
         mActivity.startActivity<ChangePasswordActivity>()
     }
 
-    fun updateUserName(){
+    fun updateUserName() {
         val name = mBinding.edtTextName.text.toString()
 
-        if(name.isEmpty()){
+        if (name.isEmpty()) {
             IADialog(mActivity, mActivity.getString(R.string.please_enter_name), true)
-        }else {
+        } else {
             val requestParams = HashMap<String, String>()
             requestParams["field_key"] = "username"
             requestParams["field_value"] = name
@@ -64,16 +64,16 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
         }
     }
 
-    fun updateMobileNumber(){
+    fun updateMobileNumber() {
         val mobileNumber = mBinding.edtTextMobile.text.toString()
 
-        if(mobileNumber.isEmpty()){
+        if (mobileNumber.isEmpty()) {
             IADialog(mActivity, mActivity.getString(R.string.enter_your_mobile_no), true)
-        }else if (mobileNumber.length < 7 || mobileNumber.length > 15) {
+        } else if (mobileNumber.length < 7 || mobileNumber.length > 15) {
             IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
-        }else if (!validateNumber("91", mobileNumber)) {
+        } else if (!validateNumber("91", mobileNumber)) {
             IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
-        }else{
+        } else {
             oldMobileEmail.value = AppPreferencesHelper.getInstance().phone
             val requestParams = HashMap<String, String>()
             requestParams["field_key"] = "new_phone"
@@ -83,14 +83,14 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
         }
     }
 
-    fun updateEmailAddress(){
+    fun updateEmailAddress() {
         val emailAddress = mBinding.edtTextEmail.text.toString()
 
-        if(emailAddress.isEmpty()){
+        if (emailAddress.isEmpty()) {
             IADialog(mActivity, mActivity.getString(R.string.enter_your_email), true)
-        }else if(!isEmailValid(emailAddress)){
+        } else if (!isEmailValid(emailAddress)) {
             IADialog(mActivity, mActivity.getString(R.string.enter_valid_email), true)
-        }else {
+        } else {
             oldMobileEmail.value = AppPreferencesHelper.getInstance().email
             val requestParams = HashMap<String, String>()
             requestParams["field_key"] = "new_email"
@@ -101,14 +101,8 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
 
     }
 
-    fun updateProfileImage(){
-        var selectedImageFile =
-                CommonUtils.prepareFilePart(
-                        mActivity,
-                        "field_value",
-                        Uri.parse(filePath.value),
-                        File(filePath.value)
-                )
+    fun updateProfileImage() {
+        val selectedImageFile = CommonUtils.prepareFilePart(mActivity, "field_value", Uri.parse(filePath.value), File(filePath.value!!))
 
         val requestParams = HashMap<String, RequestBody>()
         requestParams["field_key"] = CommonUtils.prepareDataPart("user_image")
@@ -125,22 +119,22 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
     }
 
     private fun updateProfile(partData: Map<String, RequestBody>, file: MultipartBody.Part) =
-            liveData(Dispatchers.Main) {
-                emit(Resource.loading(data = null))
-                try {
-                    emit(
-                            Resource.success(
-                                    data = baseRepository.updateProfile(
-                                            partData,
-                                            file
-                                    )
-                            )
+        liveData(Dispatchers.Main) {
+            emit(Resource.loading(data = null))
+            try {
+                emit(
+                    Resource.success(
+                        data = baseRepository.updateProfile(
+                            partData,
+                            file
+                        )
                     )
+                )
 
-                } catch (exception: Exception) {
-                    emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
-                }
+            } catch (exception: Exception) {
+                emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
             }
+        }
 
     private fun setupObservers(partData: Map<String, RequestBody>, file: MultipartBody.Part) {
         updateProfile(partData, file).observe(mBinding.lifecycleOwner!!, Observer {
@@ -153,9 +147,9 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
                                 val imgBitmap = BitmapFactory.decodeFile(filePath.value)
                                 mBinding.profileImg.setImageBitmap(imgBitmap)
                                 val localBroadCast =
-                                        LocalBroadcastManager.getInstance(mActivity)
+                                    LocalBroadcastManager.getInstance(mActivity)
                                 val intent =
-                                        Intent(AppConstants.ACTION_BROADCAST_UPDATE_PROFILE)
+                                    Intent(AppConstants.ACTION_BROADCAST_UPDATE_PROFILE)
                                 localBroadCast.sendBroadcast(intent)
                             } else {
                                 IADialog(mActivity, users.message, true)
@@ -176,25 +170,25 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
     }
 
     private fun setupObservers(isVerify: Boolean, requestParams: HashMap<String, String>) {
-        updateProfile(requestParams).observe(mBinding.lifecycleOwner!!, Observer{
+        updateProfile(requestParams).observe(mBinding.lifecycleOwner!!, Observer {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             if (users.status == "success") {
                                 mActivity.toast(users.message)
-                                if(isVerify){
+                                if (isVerify) {
                                     mActivity.startActivity<OTPVerifyActivity> {
                                         putExtra("countryCode", users.data?.countryCode)
                                         putExtra("mobileNumber", users.data?.phone)
                                         putExtra("otp", users.data?.otpNumber)
                                         putExtra("otpFor", users.data?.otpFor)
                                     }
-                                }else{
+                                } else {
                                     val localBroadCast =
-                                            LocalBroadcastManager.getInstance(mActivity)
+                                        LocalBroadcastManager.getInstance(mActivity)
                                     val intent =
-                                            Intent(AppConstants.ACTION_BROADCAST_UPDATE_PROFILE)
+                                        Intent(AppConstants.ACTION_BROADCAST_UPDATE_PROFILE)
                                     localBroadCast.sendBroadcast(intent)
                                     //setupObservers()
                                 }

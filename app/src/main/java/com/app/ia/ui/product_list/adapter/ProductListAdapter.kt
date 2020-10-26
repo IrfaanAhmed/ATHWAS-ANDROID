@@ -58,6 +58,7 @@ class ProductListAdapter : ListAdapter<ProductListingResponse.Docs, ProductListA
                 cbFavorite.setOnClickListener {
                     onItemClickListener?.onFavoriteClick(productItem, position)
                 }
+
                 executePendingBindings()
             }
         }

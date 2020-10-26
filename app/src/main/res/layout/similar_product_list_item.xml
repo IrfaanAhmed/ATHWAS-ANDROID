@@ -6,6 +6,10 @@
         
         <import type="android.view.View" />
 
+        <variable
+            name="similarProduct"
+            type="com.app.ia.model.SimilarProductListResponse.Docs" />
+
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -26,6 +30,7 @@
             android:layout_height="@dimen/_90sdp"
             android:src="@drawable/surf"
             android:scaleType="centerCrop"
+            imageUrl="@{similarProduct.images.size() > 0 ? similarProduct.images.get(0).productImageUrl : ``}"
             android:layout_gravity="center"/>
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -42,7 +47,7 @@
             android:id="@+id/tvProductName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Vedaka Raw Penuts, Pink 1KG"
+            android:text="@{similarProduct.name}"
             android:fontFamily="@font/linotte_semi_bold"
             android:textColor="@color/black"
             android:textSize="@dimen/_10sdp"
@@ -55,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvProductName"
-            android:text="₹350"
+            android:text="@{`₹`+ similarProduct.offerPrice}"
             android:fontFamily="@font/linotte_bold"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/_8sdp"/>
@@ -65,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvProductName"
             android:layout_alignParentEnd="true"
-            android:text="₹450"
+            android:text="@{`₹`+ similarProduct.price}"
             android:fontFamily="@font/linotte_bold"
             android:textColor="@color/black"
             android:textSize="@dimen/_8sdp"/>

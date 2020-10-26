@@ -49,7 +49,9 @@ class SearchAdapter : ListAdapter<ProductListingResponse.Docs, SearchAdapter.Pro
                 product = productItem
 
                 itemView.setOnClickListener {
-                    itemView.context.startActivity<ProductDetailActivity>()
+                    itemView.context.startActivity<ProductDetailActivity> {
+                        putExtra("product_id", productItem.Id)
+                    }
                 }
                 executePendingBindings()
             }

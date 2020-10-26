@@ -10,67 +10,93 @@ data class FavoriteListResponse(
     var docs: MutableList<Docs>,
     @Expose
     @SerializedName("totalDocs")
-    var totalDocs: Int,
+    var totaldocs: Int,
     @Expose
     @SerializedName("limit")
     var limit: Int,
     @Expose
-    @SerializedName("totalPages")
-    var totalpages: Int,
-    @Expose
     @SerializedName("page")
     var page: Int,
+    @Expose
+    @SerializedName("totalPages")
+    var totalpages: Int,
     @Expose
     @SerializedName("pagingCounter")
     var pagingCounter: Int,
     @Expose
     @SerializedName("hasPrevPage")
-    var hasPrevPage: Boolean,
+    var hasprevpage: Boolean,
     @Expose
     @SerializedName("hasNextPage")
-    var hasNextPage: Boolean) {
+    var hasnextpage: Boolean) {
 
     data class Docs(
         @Expose
         @SerializedName("_id")
-        val _Id: String,
+        val Id: String,
         @Expose
-        @SerializedName("user_id")
-        var userId: UserId,
+        @SerializedName("name")
+        val name: String,
         @Expose
         @SerializedName("product_id")
         val productId: String,
         @Expose
-        @SerializedName("createdAt")
-        val createdAt: String,
+        @SerializedName("price")
+        var price: Int,
         @Expose
-        @SerializedName("updatedAt")
-        val updatedAt: String,
+        @SerializedName("quantity")
+        var quantity: Int,
         @Expose
-        @SerializedName("__v")
-        var V: Int,
+        @SerializedName("product_code")
+        val productCode: String,
         @Expose
-        @SerializedName("id")
-        val id: String) {
+        @SerializedName("images")
+        var images: List<Images>,
+        @Expose
+        @SerializedName("business_category")
+        var businessCategory: BusinessCategory,
+        @Expose
+        @SerializedName("category")
+        var category: Category,
+        @Expose
+        @SerializedName("subcategory")
+        var subcategory: Subcategory,
+        @Expose
+        @SerializedName("offer_price")
+        val offerPrice: String)
 
-        data class UserId(
-            @Expose
-            @SerializedName("_id")
-            val _Id: String,
-            @Expose
-            @SerializedName("username")
-            val username: String,
-            @Expose
-            @SerializedName("register_id")
-            val registerId: String,
-            @Expose
-            @SerializedName("user_image_url")
-            val userImageUrl: String,
-            @Expose
-            @SerializedName("user_image_thumb_url")
-            val userImageThumbUrl: String,
-            @Expose
-            @SerializedName("id")
-            val id: String)
-    }
+    data class Subcategory(
+        @Expose
+        @SerializedName("_id")
+        val Id: String,
+        @Expose
+        @SerializedName("name")
+        val name: String)
+
+    data class Category(
+        @Expose
+        @SerializedName("_id")
+        val Id: String,
+        @Expose
+        @SerializedName("name")
+        val name: String)
+
+    data class BusinessCategory(
+        @Expose
+        @SerializedName("_id")
+        val Id: String,
+        @Expose
+        @SerializedName("name")
+        val name: String)
+
+    data class Images(
+        @Expose
+        @SerializedName("_id")
+        val Id: String,
+        @Expose
+        @SerializedName("product_image_url")
+        val productImageUrl: String,
+        @Expose
+        @SerializedName("product_image_thumb_url")
+        val productImageThumbUrl: String)
 }

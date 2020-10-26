@@ -12,7 +12,7 @@ import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityWishListBinding
 import com.app.ia.model.FavoriteListResponse
-import com.app.ia.model.ProductListingResponse
+import com.app.ia.ui.product_detail.ProductDetailActivity
 import com.app.ia.ui.search.SearchActivity
 import com.app.ia.ui.wishlist.adapter.WishListAdapter
 import com.app.ia.utils.*
@@ -69,6 +69,12 @@ class WishListActivity : BaseActivity<ActivityWishListBinding, WishListViewModel
             override fun onFavoriteClick(productItem: FavoriteListResponse.Docs, position: Int) {
                 mViewModel?.favPosition?.value = position
                 //mViewModel?.addFavorite(productItem.Id, if (productItem.isFavourite == 0) 1 else 0)
+            }
+
+            override fun onItemClick(productItem: FavoriteListResponse.Docs, position: Int) {
+                startActivity<ProductDetailActivity> {
+                    putExtra("product_id", productItem.productId)
+                }
             }
         })
 

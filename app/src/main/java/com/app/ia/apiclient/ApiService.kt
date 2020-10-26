@@ -47,8 +47,24 @@ interface ApiService {
     @FormUrlEncoded
     suspend fun getProductListing(@FieldMap params: Map<String, String>): Response<BaseResponse<ProductListingResponse>>
 
+    @POST(Api.SIMILAR_PRODUCT_LISTING)
+    @FormUrlEncoded
+    suspend fun getSimilarProductListing(@FieldMap params: Map<String, String>): Response<BaseResponse<SimilarProductListResponse>>
+
     @GET(Api.FAVORITE_LISTING)
     suspend fun getFavoriteListing(@QueryMap params: Map<String, String>): Response<BaseResponse<FavoriteListResponse>>
+
+    @GET(Api.BANNER_LISTING)
+    suspend fun getBannerListing(): Response<BaseResponse<BannerResponse>>
+
+    @POST(Api.PRODUCT_DETAIL)
+    @FormUrlEncoded
+    suspend fun getProductDetail(@FieldMap params: Map<String, String>): Response<BaseResponse<ProductDetailResponse>>
+
+    @POST(Api.CUSTOMIZATION_PRODUCT)
+    @FormUrlEncoded
+    suspend fun getCustomizationProductDetail(@FieldMap params: Map<String, String>): Response<CustomizationProductDetail>
+
 
     @POST(Api.FAVOURITE_PRODUCT)
     @FormUrlEncoded

@@ -66,7 +66,6 @@
                     android:id="@+id/bannerLayout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_220sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
                     android:fitsSystemWindows="true">
 
                     <com.santalu.autoviewpager.AutoViewPager
@@ -89,15 +88,14 @@
                         app:strokeColor="@color/transparent"
                         app:strokeWidth="0dp" />
 
-                    <androidx.appcompat.widget.AppCompatCheckBox
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/cbFavorite"
                         android:layout_width="@dimen/_24sdp"
                         android:layout_height="@dimen/_24sdp"
                         android:layout_gravity="end|top"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
-                        android:button="@drawable/selector_favorite_checkbox"
-                        android:checked="true" />
+                        android:src="@{viewModel.productDetail.isFavourite() == 1 ? @drawable/ic_like : @drawable/ic_unlike}"/>
 
                 </FrameLayout>
 
@@ -140,7 +138,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:isIndicator="false"
-                                android:rating="4.0"
+                                android:rating="@{viewModel.productDetail.rating == null ? 0f : Float.parseFloat(viewModel.productDetail.rating)}"
                                 android:scaleX="0.9"
                                 android:scaleY="0.9" />
 
@@ -148,7 +146,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="4.0"
+                                android:text="@{viewModel.productDetail.rating}"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_9sdp" />
                         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -160,7 +158,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/linotte_semi_bold"
-                        android:text="Vedaka Raw Penuts, Pink 1KG"
+                        android:text="@{viewModel.productDetail.name}"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12sdp" />
 
@@ -182,7 +180,7 @@
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Household"
+                            android:text="@{viewModel.productDetail.category.name}"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_10sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -191,10 +189,10 @@
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:fontFamily="@font/linotte_bold"
-                            android:text="₹350"
+                            android:text="@{`₹`+viewModel.productDetail.offerPrice}"
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="@dimen/_13sdp"
+                            app:fontFamily="@font/linotte_bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -218,19 +216,20 @@
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Surf Excel"
+                            android:text="@{viewModel.productDetail.brand.name}"
                             android:textColor="@color/sky_blue"
                             android:textSize="@dimen/_10sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/tvBrand" />
 
                         <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/priceTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:fontFamily="@font/linotte_light"
-                            android:text="₹450"
+                            android:text="@{`₹`+ viewModel.productDetail.price}"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_10sdp"
+                            app:fontFamily="@font/linotte_light"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -243,56 +242,14 @@
                         android:layout_marginBottom="@dimen/_8sdp"
                         android:background="@color/light_grey" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewCustomization"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:fontFamily="@font/linotte_bold"
-                        android:text="@string/pack_size"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_12sdp" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        android:background="@drawable/pack_size_bg"
-                        android:onClick="@{() -> viewModel.onCustomisationClick()}"
-                        android:padding="@dimen/_8sdp">
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/tvSize"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/linotte_bold"
-                            android:text="@string/size"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_10sdp"
-                            app:layout_constraintBottom_toTopOf="@+id/tvSizeValue"
-                            app:layout_constraintStart_toStartOf="parent" />
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/tvSizeValue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/linotte_bold"
-                            android:text="10 kg"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_10sdp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tvSize" />
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="@dimen/_24sdp"
-                            android:layout_height="@dimen/_24sdp"
-                            android:padding="@dimen/_5sdp"
-                            android:rotation="180"
-                            android:src="@drawable/ic_back"
-                            android:tint="@color/colorPrimary"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:orientation="vertical"
+                        tools:listitem="@layout/detail_customization_type"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="3" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -342,7 +299,7 @@
                             android:id="@+id/tvAboutProductValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages."
+                            android:text="@{viewModel.productDetail.description}"
                             android:textColor="@color/light_grey"
                             android:textSize="@dimen/_10sdp"
                             app:layout_constraintStart_toStartOf="parent"
@@ -353,6 +310,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_8sdp"
+                        android:visibility="@{viewModel.similarProductList.size() > 0 ? View.VISIBLE : View.GONE}"
                         android:layout_marginBottom="@dimen/_8sdp">
 
                         <androidx.appcompat.widget.AppCompatTextView
@@ -370,6 +328,9 @@
                             android:id="@+id/recViewSimilarProduct"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            tools:listitem="@layout/similar_product_list_item"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvSimilarProduct" />
 

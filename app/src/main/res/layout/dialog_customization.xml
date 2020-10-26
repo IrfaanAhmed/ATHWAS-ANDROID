@@ -8,33 +8,33 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/consHeader"
-            android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/top_rounded_corner_primary">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDone"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/top_rounded_corner_primary">
+            android:fontFamily="@font/linotte_semi_bold"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/done"
+            android:textColor="@color/colorLogout"
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvDone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/linotte_semi_bold"
-                android:text="@string/done"
-                android:textColor="@color/colorLogout"
-                android:padding="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
         android:id="@+id/relMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/consHeader"
-        android:paddingStart="@dimen/_15sdp"
+        android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_15sdp"
         android:paddingBottom="@dimen/_12sdp">
 
@@ -48,10 +48,10 @@
                 android:id="@+id/tvSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/linotte_semi_bold"
-                android:text="Size: 10kg"
+                android:text="Customization"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11sdp"
+                app:fontFamily="@font/linotte_semi_bold"
                 app:layout_constraintBottom_toTopOf="@+id/recViewSize"
                 app:layout_constraintStart_toStartOf="parent" />
 

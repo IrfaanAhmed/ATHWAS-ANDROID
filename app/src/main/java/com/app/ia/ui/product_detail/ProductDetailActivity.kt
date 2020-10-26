@@ -1,9 +1,8 @@
 package com.app.ia.ui.product_detail
 
+import android.graphics.Paint
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.BR
 import com.app.ia.R
 import com.app.ia.ViewModelFactory
@@ -11,25 +10,17 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityProductDetailBinding
-import com.app.ia.ui.my_cart.MyCartActivity
 import com.app.ia.ui.product_detail.adapter.ProductImageAdapter
-import com.app.ia.ui.product_detail.adapter.SimilarProductListAdapter
 import com.app.ia.utils.gone
 import com.app.ia.utils.setOnApplyWindowInset1
-import com.app.ia.utils.startActivity
 import com.app.ia.utils.visible
 import kotlinx.android.synthetic.main.activity_product_detail.*
-import kotlinx.android.synthetic.main.activity_product_detail.content_container
-import kotlinx.android.synthetic.main.activity_product_detail.toolbar
-import kotlinx.android.synthetic.main.activity_product_list.*
 import kotlinx.android.synthetic.main.common_header.view.*
 
 class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding, ProductDetailViewModel>() {
 
     private var mBinding: ActivityProductDetailBinding? = null
     private var mViewModel: ProductDetailViewModel? = null
-
-    var similarProductAdapter: SimilarProductListAdapter? = null
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
@@ -49,8 +40,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding, Product
         mBinding = getViewDataBinding()
         mBinding?.lifecycleOwner = this
         mViewModel?.setActivityNavigator(this)
-        mViewModel?.setVariable(mBinding!!)
-        //mViewModel?.setIntent(intent)
+        mViewModel?.setVariable(mBinding!!, intent)
 
         setOnApplyWindowInset1(toolbar, content_container)
 
@@ -63,33 +53,13 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding, Product
         }
 
 
-        val imageList = ArrayList<String>()
-        imageList.add("https://images-na.ssl-images-amazon.com/images/I/61rDJVoKpeL._SL1000_.jpg")
-        imageList.add("https://images-na.ssl-images-amazon.com/images/I/619-6lqjiWL._SL1000_.jpg")
-        imageList.add("https://images-na.ssl-images-amazon.com/images/I/61CCg6TPCkL._SL1000_.jpg")
-        imageList.add("https://images-na.ssl-images-amazon.com/images/I/61f5taWUTnL._SL1000_.jpg")
-        imageList.add("https://images-na.ssl-images-amazon.com/images/I/61hMY2fhtVL._SL1000_.jpg")
-        imageList.add("https://images-na.ssl-images-amazon.com/images/I/61-74EQUnVL._SL1000_.jpg")
-        imageList.add("https://images-na.ssl-images-amazon.com/images/I/61WJkNTymYL._SL1000_.jpg")
+        mViewModel?.productDetail?.observe(this, {
+            val bannerPagerAdapter = ProductImageAdapter(this@ProductDetailActivity, it?.images)
+            viewPagerBanner.adapter = bannerPagerAdapter
+            viewPagerIndicator.setViewPager(viewPagerBanner)
+        })
 
-        val bannerPagerAdapter = ProductImageAdapter(this@ProductDetailActivity, imageList)
-        viewPagerBanner.adapter = bannerPagerAdapter
-        viewPagerIndicator.setViewPager(viewPagerBanner)
-
-        recViewSimilarProduct.layoutManager = LinearLayoutManager(this@ProductDetailActivity, RecyclerView.HORIZONTAL, false)
-        similarProductAdapter = SimilarProductListAdapter()
-        recViewSimilarProduct.adapter = similarProductAdapter
-        val categoryList = ArrayList<String>()
-        categoryList.add("Oppo")
-        categoryList.add("Samsung")
-        categoryList.add("Nokia")
-        categoryList.add("Vivo")
-        categoryList.add("One Plus")
-        categoryList.add("iPhone")
-        categoryList.add("Motorola")
-        categoryList.add("RealMe")
-        categoryList.add("MI")
-        similarProductAdapter!!.submitList(categoryList)
+        priceTextView.paintFlags = priceTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
     }
 
     private fun setViewModel() {

@@ -7,7 +7,6 @@ import com.app.ia.model.*
 import com.app.wallet.tivo.model.ResendOTPResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.http.FieldMap
 
 open class BaseRepository(private val myApi: ApiService, generalCallback: GeneralCallback) : ApiRequest(generalCallback) {
 
@@ -49,8 +48,20 @@ open class BaseRepository(private val myApi: ApiService, generalCallback: Genera
         return apiRequest { myApi.getProductListing(request) }
     }
 
+    suspend fun getSimilarProductListing(request: Map<String, String>): BaseResponse<SimilarProductListResponse> {
+        return apiRequest { myApi.getSimilarProductListing(request) }
+    }
+
     suspend fun getFavoriteListing(request: Map<String, String>): BaseResponse<FavoriteListResponse> {
         return apiRequest { myApi.getFavoriteListing(request) }
+    }
+
+    suspend fun getBannerListing(): BaseResponse<BannerResponse> {
+        return apiRequest { myApi.getBannerListing() }
+    }
+
+    suspend fun getProductDetail(request: Map<String, String>): BaseResponse<ProductDetailResponse> {
+        return apiRequest { myApi.getProductDetail(request) }
     }
 
     suspend fun addFavorite(request: Map<String, String>): BaseResponse<NoDataResponse> {

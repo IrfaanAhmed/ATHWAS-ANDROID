@@ -51,6 +51,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
         mFragmentHomeBinding?.lifecycleOwner = this
         mHomeViewModel?.setVariable(mFragmentHomeBinding!!)
 
+
         val homeCategoryList = ArrayList<String>()
 
         homeCategoryList.add("Mobile")
@@ -60,7 +61,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
         homeCategoryList.add("Mobile")
 
         val homeCategoryAdapter = HomeCategoryAdapter()
-        val itemDecoration = EqualSpacingItemDecoration(50, EqualSpacingItemDecoration.HORIZONTAL)
+        val itemDecoration = EqualSpacingItemDecoration(30, EqualSpacingItemDecoration.HORIZONTAL)
         recyclerViewCategory.adapter = homeCategoryAdapter
         recyclerViewCategory.addItemDecoration(itemDecoration)
         recyclerViewCategory.isNestedScrollingEnabled = false
@@ -70,9 +71,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
         })
 
         //ViewPager
-        val bannerPagerAdapter = SlidingImageAdapter(requireContext(), homeCategoryList)
-        viewPagerBanner.adapter = bannerPagerAdapter
-        view_pager_indicator.setViewPager(viewPagerBanner)
+        mHomeViewModel?.bannerList?.observe(viewLifecycleOwner, {
+            val bannerPagerAdapter = SlidingImageAdapter(requireContext(), it!!)
+            viewPagerBanner.adapter = bannerPagerAdapter
+            view_pager_indicator.setViewPager(viewPagerBanner)
+        })
 
         //products
         val homeProductAdapter = HomeProductAdapter(false)

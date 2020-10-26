@@ -18,12 +18,13 @@
         android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:focusable="true"
         android:focusableInTouchMode="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,15 +35,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">-->
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recViewCategory"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="@{viewModel.isItemAvailable ? View.VISIBLE : View.GONE}"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="4"
-                    tools:itemCount="3"
-                    tools:listitem="@layout/home_category_list_item" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recViewCategory"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{viewModel.isItemAvailable ? View.VISIBLE : View.GONE}"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="4"
+                tools:itemCount="3"
+                tools:listitem="@layout/home_category_list_item" />
 
             <!--</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 

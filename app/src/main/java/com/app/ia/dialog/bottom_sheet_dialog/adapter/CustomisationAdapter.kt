@@ -6,29 +6,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.databinding.CustomisationListItemBinding
-import com.app.ia.model.CustomisationBean
+import com.app.ia.model.CustomizationProductDetail
 
-class CustomisationAdapter :
-    ListAdapter<CustomisationBean, CustomisationAdapter.CommonSortViewHolder>(
-        OffersListDiffCallback()
-    ) {
+class CustomisationAdapter : ListAdapter<CustomizationProductDetail.Data, CustomisationAdapter.CommonSortViewHolder>(OffersListDiffCallback()) {
 
     private var onItemSelectListener: OnItemSelectListener? = null
 
-    class OffersListDiffCallback : DiffUtil.ItemCallback<CustomisationBean>() {
+    class OffersListDiffCallback : DiffUtil.ItemCallback<CustomizationProductDetail.Data>() {
 
-        override fun areItemsTheSame(
-            oldItem: CustomisationBean,
-            newItem: CustomisationBean
-        ): Boolean {
+        override fun areItemsTheSame(oldItem: CustomizationProductDetail.Data, newItem: CustomizationProductDetail.Data): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(
-            oldItem: CustomisationBean,
-            newItem: CustomisationBean
-        ): Boolean {
-            return oldItem.equals(newItem)
+        override fun areContentsTheSame(oldItem: CustomizationProductDetail.Data, newItem: CustomizationProductDetail.Data): Boolean {
+            return oldItem.Id == newItem.Id
         }
     }
 
@@ -38,31 +29,25 @@ class CustomisationAdapter :
 
     override fun onBindViewHolder(holder: CommonSortViewHolder, position: Int) {
         holder.apply {
-            onBind(getItem(position))
+            onBind(getItem(position), position)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommonSortViewHolder {
-        return CommonSortViewHolder(
-            CustomisationListItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+        return CommonSortViewHolder(CustomisationListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     inner class CommonSortViewHolder(private val mBinding: CustomisationListItemBinding) :
         RecyclerView.ViewHolder(mBinding.root) {
 
-        fun onBind(item: CustomisationBean) {
+        fun onBind(item: CustomizationProductDetail.Data, position: Int) {
             mBinding.apply {
                 customSize = item
                 executePendingBindings()
 
                 itemView.setOnClickListener {
                     if (onItemSelectListener != null) {
-                        onItemSelectListener?.onItemSelect(adapterPosition)
+                        onItemSelectListener?.onItemSelect(item, position)
                     }
                 }
             }
@@ -70,7 +55,7 @@ class CustomisationAdapter :
     }
 
     interface OnItemSelectListener {
-        fun onItemSelect(position: Int)
+        fun onItemSelect(item: CustomizationProductDetail.Data, position: Int)
     }
 
 }

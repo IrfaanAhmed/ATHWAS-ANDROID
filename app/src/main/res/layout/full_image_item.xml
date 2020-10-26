@@ -4,7 +4,7 @@
     <data>
 
         <variable
-            name="imageName"
+            name="imageUrl"
             type="String" />
     </data>
 
@@ -13,6 +13,7 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatImageView
+            imageUrl="@{imageUrl}"
             android:id="@+id/imgViewBanner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -6,29 +6,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.databinding.SimilarProductListItemBinding
+import com.app.ia.model.SimilarProductListResponse
 
-class SimilarProductListAdapter :
-    ListAdapter<String, SimilarProductListAdapter.SimilarProductViewHolder>(
-        OffersListDiffCallback()
-    ) {
+class SimilarProductListAdapter : ListAdapter<SimilarProductListResponse.Docs, SimilarProductListAdapter.SimilarProductViewHolder>(
+    OffersListDiffCallback()
+) {
 
-    class OffersListDiffCallback : DiffUtil.ItemCallback<String>() {
+    class OffersListDiffCallback : DiffUtil.ItemCallback<SimilarProductListResponse.Docs>() {
 
-        override fun areItemsTheSame(
-            oldItem: String,
-            newItem: String
-        ): Boolean {
+        override fun areItemsTheSame(oldItem: SimilarProductListResponse.Docs, newItem: SimilarProductListResponse.Docs): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(
-            oldItem: String,
-            newItem: String
-        ): Boolean {
+        override fun areContentsTheSame(oldItem: SimilarProductListResponse.Docs, newItem: SimilarProductListResponse.Docs): Boolean {
             return oldItem == newItem
         }
     }
-
 
     override fun onBindViewHolder(holder: SimilarProductViewHolder, position: Int) {
         holder.apply {
@@ -37,21 +30,15 @@ class SimilarProductListAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimilarProductViewHolder {
-        return SimilarProductViewHolder(
-            SimilarProductListItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+        return SimilarProductViewHolder(SimilarProductListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     inner class SimilarProductViewHolder(private val mBinding: SimilarProductListItemBinding) :
         RecyclerView.ViewHolder(mBinding.root) {
 
-        fun onBind(categoryItem: String) {
+        fun onBind(categoryItem: SimilarProductListResponse.Docs) {
             mBinding.apply {
-                //category = categoryItem
+                similarProduct = categoryItem
                 executePendingBindings()
 
                 /* itemView.setOnClickListener {

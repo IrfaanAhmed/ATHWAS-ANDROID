@@ -20,8 +20,12 @@ object Api {
     const val PRODUCT_CATEGORY = CATEGORY_PATH + "get_category"
     const val PRODUCT_SUB_CATEGORY = CATEGORY_PATH + "get_subcategory"
     const val PRODUCT_LISTING = CATEGORY_PATH + "get_products"
+    const val SIMILAR_PRODUCT_LISTING = CATEGORY_PATH + "similar_products"
 
+    const val PRODUCT_DETAIL = CATEGORY_PATH + "get_product_detail"
+    const val CUSTOMIZATION_PRODUCT = CATEGORY_PATH + "other_customization_products"
     const val FAVORITE_LISTING = CATEGORY_PATH + "get_favourite_items"
+    const val BANNER_LISTING = CATEGORY_PATH + "banner/get_banners"
 
     const val BRAND = CATEGORY_PATH + "brand/get_brands"
     const val FAVOURITE_PRODUCT = CATEGORY_PATH + "add_favourite_item"

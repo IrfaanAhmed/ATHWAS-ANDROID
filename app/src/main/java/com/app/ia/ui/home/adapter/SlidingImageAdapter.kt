@@ -8,11 +8,12 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.viewpager.widget.PagerAdapter
 import com.app.ia.databinding.FullImageItemBinding
+import com.app.ia.model.BannerResponse
 
 /**
  * Created by umeshk on 23/04/2016.
  */
-class SlidingImageAdapter(context: Context, private val restaurantImages: List<String>?) : PagerAdapter() {
+class SlidingImageAdapter(context: Context, private val restaurantImages: MutableList<BannerResponse.Docs>) : PagerAdapter() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var onImageClickListener: OnImageClickListener? = null
@@ -26,15 +27,14 @@ class SlidingImageAdapter(context: Context, private val restaurantImages: List<S
     }
 
     override fun getCount(): Int {
-        return restaurantImages?.size!!
+        return restaurantImages.size
     }
 
     override fun instantiateItem(view: ViewGroup, position: Int): Any {
 
         val fullImageItemBinding = FullImageItemBinding.inflate(inflater, view, false)
         fullImageItemBinding.apply {
-            imageName = restaurantImages!![position]
-
+            imageUrl = restaurantImages!![position].bannerImageUrl
             imgViewBanner.setOnClickListener {
                 if (onImageClickListener != null) {
                     onImageClickListener?.onImageClick(it, restaurantImages[position])
@@ -57,6 +57,6 @@ class SlidingImageAdapter(context: Context, private val restaurantImages: List<S
     }
 
     interface OnImageClickListener {
-        fun onImageClick(view :View, image: String)
+        fun onImageClick(view :View, image: BannerResponse.Docs)
     }
 }

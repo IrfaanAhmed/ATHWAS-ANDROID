@@ -11,7 +11,6 @@ import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivitySubCategoryBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
-import com.app.ia.model.ProductCategoryResponse
 import com.app.ia.model.ProductSubCategoryResponse
 import com.app.ia.utils.AppConstants
 import com.app.ia.utils.Resource
@@ -22,8 +21,7 @@ class SubCategoryViewModel(private val baseRepository: BaseRepository) : BaseVie
     lateinit var mActivity: Activity
     lateinit var mBinding: ActivitySubCategoryBinding
 
-    val isItemAvailable = MutableLiveData(true)
-    val titleValue = MutableLiveData("")
+    private val titleValue = MutableLiveData("")
     var productSubCategory = MutableLiveData<MutableList<ProductSubCategoryResponse.Docs>>()
 
     fun setVariable(mBinding: ActivitySubCategoryBinding) {

@@ -10,9 +10,10 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import com.app.ia.R
+import com.app.ia.model.ProductDetailResponse
 import com.squareup.picasso.Picasso
 
-class ProductImageAdapter(context: Context, images: MutableList<String>) : PagerAdapter() {
+class ProductImageAdapter(context: Context, images: List<ProductDetailResponse.Product.Images>?) : PagerAdapter() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var mContext = context
@@ -23,14 +24,14 @@ class ProductImageAdapter(context: Context, images: MutableList<String>) : Pager
     }
 
     override fun getCount(): Int {
-        return imageList.size
+        return imageList?.size!!
     }
 
     override fun instantiateItem(view: ViewGroup, position: Int): Any {
         val imageLayout = inflater.inflate(R.layout.full_image_item, view, false)!!
 
         val imageView = imageLayout.findViewById(R.id.imgViewBanner) as ImageView
-        val imageUrl = imageList[position]
+        val imageUrl = imageList!![position].productImageUrl
         if (URLUtil.isValidUrl(imageUrl)) {
             Picasso.get().load(imageUrl).placeholder(R.drawable.mobile).into(imageView)
         } else {

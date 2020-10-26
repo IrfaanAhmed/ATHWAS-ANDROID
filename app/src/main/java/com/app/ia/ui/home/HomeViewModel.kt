@@ -12,7 +12,7 @@ import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityHomeBinding
 import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.model.LoginResponse
-import com.app.ia.ui.add_new_address.AddAddressActivity
+import com.app.ia.model.ProfileResponse
 import com.app.ia.ui.business_category.CategoryFragment
 import com.app.ia.ui.delivery_address.DeliveryAddressActivity
 import com.app.ia.ui.home.adapter.NavigationListAdapter
@@ -74,7 +74,7 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
     }
 
     fun onSelectAddressClick() {
-        mActivity.mStartActivityForResult<DeliveryAddressActivity>(AppRequestCode.REQUEST_SELECT_ADDRESS){
+        mActivity.mStartActivityForResult<DeliveryAddressActivity>(AppRequestCode.REQUEST_SELECT_ADDRESS) {
             putExtra(EXTRA_IS_HOME_SCREEN, true)
         }
     }

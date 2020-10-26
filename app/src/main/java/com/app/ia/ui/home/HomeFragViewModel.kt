@@ -9,6 +9,7 @@ import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.FragmentHomeBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
+import com.app.ia.model.BannerResponse
 import com.app.ia.model.BusinessCategoryResponse
 import com.app.ia.ui.product_list.ProductListActivity
 import com.app.ia.ui.search.SearchActivity
@@ -21,15 +22,17 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
     lateinit var mActivity: Activity
     lateinit var mBinding: FragmentHomeBinding
     var businessCategory = MutableLiveData<MutableList<BusinessCategoryResponse.Docs>>()
+    var bannerList = MutableLiveData<MutableList<BannerResponse.Docs>>()
 
     fun setVariable(mBinding: FragmentHomeBinding) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
         businessCategoryObserver()
+        bannerObserver()
     }
 
     fun onViewAllClick() {
-        mActivity.startActivity<ProductListActivity>()
+        //mActivity.startActivity<ProductListActivity>()
     }
 
     fun onSearchProductClick(){
@@ -53,6 +56,40 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                         resource.data?.let { users ->
                             if (users.status == "success") {
                                 businessCategory.value = users.data?.docs!!
+                            } else {
+                                IADialog(mActivity, users.message, true)
+                            }
+                        }
+                    }
+                    Status.ERROR -> {
+                        baseRepository.callback.hideProgress()
+                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                    }
+                    Status.LOADING -> {
+                        baseRepository.callback.showProgress()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun getBannerListing() = liveData(Dispatchers.Main) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = baseRepository.getBannerListing()))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
+    }
+
+    private fun bannerObserver() {
+        getBannerListing().observe(mBinding.lifecycleOwner!!, {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { users ->
+                            if (users.status == "success") {
+                                bannerList.value = users?.data?.docs!!
                             } else {
                                 IADialog(mActivity, users.message, true)
                             }

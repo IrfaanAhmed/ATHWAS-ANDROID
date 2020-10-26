@@ -18,6 +18,7 @@ import com.app.ia.callback.GeneralCallback
 import com.app.ia.dialog.IADialog
 import com.app.ia.image_picker.ImagePickerManager
 import com.app.ia.image_picker.OnImagePickListener
+import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.ui.login.LoginActivity
 import com.app.ia.utils.AppRequestCode
 import com.app.ia.utils.CommonUtils
@@ -176,6 +177,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
         val cleverDialog = IADialog(activity, "", getString(R.string.logout_msg), getString(R.string.ok), getString(R.string.cancel), false)
         cleverDialog.setOnItemClickListener(object : IADialog.OnClickListener {
             override fun onPositiveClick() {
+                AppPreferencesHelper.getInstance().clearAllPreferences()
                 val intent = Intent(activity, LoginActivity::class.java)
                 intent.putExtra("isFromOtherScreen", true)
                 startActivityForResult(intent, AppRequestCode.REQUEST_LOGIN)

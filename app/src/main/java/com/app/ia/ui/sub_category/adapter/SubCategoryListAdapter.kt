@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.databinding.SubCategoryListItemBinding
-import com.app.ia.model.ProductCategoryResponse
 import com.app.ia.model.ProductSubCategoryResponse
 import com.app.ia.ui.product_list.ProductListActivity
 import com.app.ia.utils.AppConstants

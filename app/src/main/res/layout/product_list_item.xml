@@ -6,6 +6,8 @@
 
         <import type="android.view.View" />
 
+        <import type="com.app.ia.R"/>
+
         <variable
             name="product"
             type="com.app.ia.model.ProductListingResponse.Docs" />
@@ -31,11 +33,11 @@
                  app:cardCornerRadius="@dimen/_5sdp">-->
 
             <androidx.appcompat.widget.AppCompatImageView
-                imageUrl="@{product.images.get(0).productImageUrl}"
+                imageUrl="@{product.images.size() > 0 ? product.images.get(0).productImageUrl : ``}"
+                defaultImage="@{R.mipmap.ic_launcher}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/mobile" />
+                android:scaleType="centerCrop" />
 
             <View
                 android:layout_width="match_parent"

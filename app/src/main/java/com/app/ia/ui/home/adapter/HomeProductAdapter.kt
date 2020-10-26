@@ -45,7 +45,7 @@ class HomeProductAdapter(private val isDiscountedProduct: Boolean) : ListAdapter
                 }
 
                 itemView.setOnClickListener {
-                    itemView.context.startActivity<ProductDetailActivity>()
+                    //itemView.context.startActivity<ProductDetailActivity>()
                 }
                 executePendingBindings()
             }

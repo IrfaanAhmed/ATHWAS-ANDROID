@@ -95,7 +95,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding, SearchViewModel>() {
             }
         })
 
-        edtSearchText.addTextChangedListener(object: TextWatcher{
+        edtSearchText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
@@ -103,7 +103,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding, SearchViewModel>() {
             override fun onTextChanged(charater: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 keyword = charater.toString()
                 mViewModel?.isSearchTextEntered!!.value = keyword.isNotEmpty()
-                if(keyword.length > 2){
+                if (keyword.length > 2) {
                     mViewModel?.setUpObserver(keyword)
                 }
             }

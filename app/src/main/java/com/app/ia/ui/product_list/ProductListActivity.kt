@@ -66,7 +66,9 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
         productAdapter = ProductListAdapter()
         productAdapter?.setOnItemClickListener(object : ProductListAdapter.OnItemClickListener {
             override fun onItemClick(productItem: ProductListingResponse.Docs) {
-                startActivity<ProductDetailActivity>()
+                startActivity<ProductDetailActivity> {
+                    putExtra("product_id", productItem.Id)
+                }
             }
 
             override fun onFavoriteClick(productItem: ProductListingResponse.Docs, position: Int) {

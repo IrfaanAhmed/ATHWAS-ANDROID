@@ -34,7 +34,7 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_3sdp"
             android:ellipsize="end"
             android:gravity="center"
             android:maxWidth="@dimen/_80sdp"
@@ -43,7 +43,7 @@
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp"
+            android:textSize="@dimen/_11sdp"
             app:fontFamily="@font/linotte_semi_bold" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

@@ -6,11 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.app.ia.R
-import com.app.ia.databinding.ProductListItemBinding
 import com.app.ia.databinding.WishListItemBinding
 import com.app.ia.model.FavoriteListResponse
-import com.app.ia.model.ProductListingResponse
 
 class WishListAdapter : ListAdapter<FavoriteListResponse.Docs, WishListAdapter.ProductViewHolder>(OffersListDiffCallback()) {
 
@@ -55,6 +52,10 @@ class WishListAdapter : ListAdapter<FavoriteListResponse.Docs, WishListAdapter.P
                 cbFavorite.setOnClickListener {
                     onItemClickListener?.onFavoriteClick(productItem, position)
                 }
+
+                itemView.setOnClickListener {
+                    onItemClickListener?.onItemClick(productItem, position)
+                }
                 executePendingBindings()
             }
         }
@@ -63,5 +64,6 @@ class WishListAdapter : ListAdapter<FavoriteListResponse.Docs, WishListAdapter.P
 
     interface OnItemClickListener {
         fun onFavoriteClick(productItem: FavoriteListResponse.Docs, position: Int)
+        fun onItemClick(productItem: FavoriteListResponse.Docs, position: Int)
     }
 }

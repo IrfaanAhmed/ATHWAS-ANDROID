@@ -58,19 +58,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@+id/llFilterView"
-                android:visibility="@{viewModel.isItemAvailable ? View.VISIBLE : View.GONE}"
+                android:visibility="@{(viewModel.productList.size() > 0) ? View.VISIBLE : View.GONE}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="3"
                 tools:listitem="@layout/product_list_item" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_above="@+id/llFilterView"
                 android:fontFamily="@font/linotte_semi_bold"
-                android:text="@string/no_item_available"
-                android:textSize="@dimen/_10sdp"
-                android:visibility="@{viewModel.isItemAvailable ? View.GONE : View.VISIBLE}" />
+                android:text="@string/no_data_found"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15sdp"
+                android:visibility="@{(viewModel.productList.size() > 0) ? View.GONE : View.VISIBLE}" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/llFilterView"

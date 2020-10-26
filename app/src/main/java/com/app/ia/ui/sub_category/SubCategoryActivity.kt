@@ -10,7 +10,6 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivitySubCategoryBinding
-import com.app.ia.model.BusinessCategoryBean
 import com.app.ia.ui.sub_category.adapter.SubCategoryListAdapter
 import com.app.ia.utils.EqualSpacingItemDecoration
 import com.app.ia.utils.invisible
@@ -22,7 +21,7 @@ class SubCategoryActivity : BaseActivity<ActivitySubCategoryBinding, SubCategory
 
     private var mBinding: ActivitySubCategoryBinding? = null
     private var mViewModel: SubCategoryViewModel? = null
-    var subCategoryAdapter: SubCategoryListAdapter? = null
+    private var subCategoryAdapter: SubCategoryListAdapter? = null
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
@@ -52,7 +51,7 @@ class SubCategoryActivity : BaseActivity<ActivitySubCategoryBinding, SubCategory
         subCategoryAdapter = SubCategoryListAdapter()
         recViewSubCategory.adapter = subCategoryAdapter
 
-        mViewModel?.productSubCategory?.observe(this, Observer {
+        mViewModel?.productSubCategory?.observe(this, {
             subCategoryAdapter!!.submitList(it)
         })
     }

@@ -1,7 +1,6 @@
 package com.app.ia.ui.product_category
 
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.app.ia.BR
 import com.app.ia.R
@@ -49,7 +48,6 @@ class ProductCategoryActivity : BaseActivity<ActivityProductCategoryBinding, Pro
 
         recViewProductCategory.addItemDecoration(EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.GRID))
         productCategoryAdapter = ProductCategoryListAdapter()
-        //productCategoryAdapter!!.setBusinessCategoryID(mViewModel?.businessCategoryID?.value!!)
         recViewProductCategory.adapter = productCategoryAdapter
 
         mViewModel?.productCategory?.observe(this, {

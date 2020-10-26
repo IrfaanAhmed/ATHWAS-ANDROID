@@ -42,6 +42,7 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
 
 
     fun setUpObserver(keyword: String) {
+        productListAll.clear()
         val requestParams = HashMap<String, String>()
         requestParams["page_no"] = currentPage.value!!.toString()
         requestParams["keyword"] = keyword
