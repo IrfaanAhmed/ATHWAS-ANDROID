@@ -2,12 +2,16 @@ package com.app.ia.ui.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ia.R
 import com.app.ia.databinding.SideMenuListItemBinding
 
 class NavigationListAdapter : ListAdapter<String, NavigationListAdapter.NavigationViewHolder>(OffersListDiffCallback()) {
+
+    var selectedMenuPosition = 0
 
     class OffersListDiffCallback : DiffUtil.ItemCallback<String>() {
 
@@ -44,9 +48,17 @@ class NavigationListAdapter : ListAdapter<String, NavigationListAdapter.Navigati
                 navigationItem = item
                 executePendingBindings()
 
+                if (position == selectedMenuPosition) {
+                    textViewMenu.setTextColor(ContextCompat.getColor(itemView.context, R.color.colorPrimary))
+                } else {
+                    textViewMenu.setTextColor(ContextCompat.getColor(itemView.context, R.color.light_grey))
+                }
+
                 itemView.setOnClickListener {
                     if (onSideMenuItemClickListener != null) {
                         onSideMenuItemClickListener?.onSideMenuClick(position)
+                        selectedMenuPosition = position
+                        notifyDataSetChanged()
                     }
                 }
             }

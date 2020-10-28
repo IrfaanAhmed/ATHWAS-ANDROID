@@ -50,7 +50,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding, SearchViewModel>() {
         mBinding?.lifecycleOwner = this
         mViewModel?.setActivityNavigator(this)
         mViewModel?.setVariable(mBinding!!)
-        //mViewModel?.setIntent(intent)
+        mViewModel?.setIntent(intent)
 
         setOnApplyWindowInset1(toolbar, content_container)
         toolbar.imageViewIcon.invisible()

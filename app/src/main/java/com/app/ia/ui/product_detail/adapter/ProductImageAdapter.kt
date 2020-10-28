@@ -33,9 +33,9 @@ class ProductImageAdapter(context: Context, images: List<ProductDetailResponse.P
         val imageView = imageLayout.findViewById(R.id.imgViewBanner) as ImageView
         val imageUrl = imageList!![position].productImageUrl
         if (URLUtil.isValidUrl(imageUrl)) {
-            Picasso.get().load(imageUrl).placeholder(R.drawable.mobile).into(imageView)
+            Picasso.get().load(imageUrl).placeholder(R.mipmap.ic_launcher).into(imageView)
         } else {
-            Picasso.get().load(R.drawable.mobile).into(imageView)
+            Picasso.get().load(R.mipmap.ic_launcher).into(imageView)
         }
         view.addView(imageLayout, 0)
         return imageLayout

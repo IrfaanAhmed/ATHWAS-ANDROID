@@ -42,6 +42,8 @@
     <string name="please_enter_4_digit_otp_msg">Please enter the 4 digits OTP sent \nto %1$s-%2$s</string>
     <string name="verify">verify</string>
     <string name="didn_t_receive_the_otp">Didn\'t receive the OTP?</string>
+    <string name="enter_email_mobile_no">Please enter mobile number or email</string>
+    <string name="enter_valid_email_mobile_no">Please enter valid mobile number or email</string>
     <string name="enter_valid_mobile_no">Please enter valid mobile number</string>
     <string name="enter_your_mobile_no">Please enter your mobile number</string>
     <string name="enter_registered_mobile_no">Please enter your registered Mobile Number</string>
@@ -79,6 +81,7 @@
     <string name="please_enter_confirm_password">Please enter confirm password</string>
     <string name="password_confirm_password_same">Password and confirm password should be same</string>
     <string name="password_should_be_min_6_char">Password should be at least 6 characters.</string>
+    <string name="accept_terms_n_condition">Please accept terms &amp; Condition.</string>
     <string name="confirm_password_should_be_same_as_new_password">Confirm Password should be same as new password.</string>
     <string name="you_can_not_request_yourself">You can\'t request to yourself.</string>
     <string name="no_deals_available">No Deals available</string>

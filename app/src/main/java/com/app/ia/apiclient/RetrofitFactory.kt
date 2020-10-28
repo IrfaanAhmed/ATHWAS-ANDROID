@@ -6,6 +6,7 @@ import com.app.ia.utils.CryptLib
 import com.app.ia.utils.NetworkConnectionInterceptor
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
@@ -54,14 +55,24 @@ object RetrofitFactory {
 
         val cryptLib = CryptLib()
         val cipherText = cryptLib.encryptPlainTextWithRandomIV(Date().time.toString(), "keMStjdies")
-
-        val newRequest = chain.request()
-            .newBuilder()
-            .addHeader("Content-Type", "multipart/form-data")
-            .addHeader("X-Access-Token", cipherText.trim())
-            .addHeader("Authorization", "Bearer ${AppPreferencesHelper.getInstance().authToken}")
-            .addHeader("login_user_id", AppPreferencesHelper.getInstance().userID)
-            .build()
+        val newRequest : Request
+        if(AppPreferencesHelper.getInstance().authToken.isEmpty()) {
+            newRequest = chain.request()
+                .newBuilder()
+                .addHeader("Content-Type", "multipart/form-data")
+                .addHeader("X-Access-Token", cipherText.trim())
+                //.addHeader("Authorization", "Bearer ${AppPreferencesHelper.getInstance().authToken}")
+                .addHeader("login_user_id", AppPreferencesHelper.getInstance().userID)
+                .build()
+        } else {
+             newRequest = chain.request()
+                .newBuilder()
+                .addHeader("Content-Type", "multipart/form-data")
+                .addHeader("X-Access-Token", cipherText.trim())
+                .addHeader("Authorization", "Bearer ${AppPreferencesHelper.getInstance().authToken}")
+                .addHeader("login_user_id", AppPreferencesHelper.getInstance().userID)
+                .build()
+        }
         chain.proceed(newRequest)
     }
 }

@@ -25,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import java.lang.Exception
 
 class ProductFilterDialogFragment(private val businessCategoryId: String, selectedFilterData: FilterData) : BottomSheetDialogFragment() {
 
@@ -56,35 +57,44 @@ class ProductFilterDialogFragment(private val businessCategoryId: String, select
         setUp()
     }
 
+    var selectedRating : String = ""
+    var ratingPosition : Int = -1
+
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setUp() {
 
         edtTextMinPrice.setText(filterData.minPrice)
         edtTextMaxPrice.setText(filterData.maxPrice)
+        selectedRating = filterData.rating
+        ratingPosition = filterData.ratingPosition
 
         val list = ArrayList<CommonSortBean>()
-        list.add(CommonSortBean("1.0", filterData.ratingPosition == 0))
-        list.add(CommonSortBean("2.0", filterData.ratingPosition == 1))
-        list.add(CommonSortBean("3.0", filterData.ratingPosition == 2))
-        list.add(CommonSortBean("4.0", filterData.ratingPosition == 3))
-        list.add(CommonSortBean("5.0", filterData.ratingPosition == 4))
+        list.add(CommonSortBean("1.0", ratingPosition == 0))
+        list.add(CommonSortBean("2.0", ratingPosition == 1))
+        list.add(CommonSortBean("3.0", ratingPosition == 2))
+        list.add(CommonSortBean("4.0", ratingPosition == 3))
+        list.add(CommonSortBean("5.0", ratingPosition == 4))
 
         val ratingAdapter = RatingAdapter()
         recyclerViewRating.adapter = ratingAdapter
         ratingAdapter.setOnItemSelectListener(object : RatingAdapter.OnRatingItemSelectListener {
             override fun onRatingSelect(rating: String, position: Int) {
-                filterData.rating = rating
-                filterData.ratingPosition = position
+                selectedRating = rating
+                ratingPosition = position
                 for (ratings in 0 until list.size) {
                     list[ratings].isSelected = position == ratings
                 }
                 ratingAdapter.notifyDataSetChanged()
             }
-
         })
         ratingAdapter.submitList(list)
 
         tvCancel.setOnClickListener {
+            dismiss()
+        }
+
+        btnResetFilter.setOnClickListener {
+            onClickListener?.onSubmitClick(FilterData())
             dismiss()
         }
 
@@ -93,10 +103,10 @@ class ProductFilterDialogFragment(private val businessCategoryId: String, select
          */
         callProductCategory()
 
-        val categoryList = ArrayList<FilterDataResponse>()
+       /* val categoryList = ArrayList<FilterDataResponse>()
         categoryList.add(FilterDataResponse("-1", "Sub-Category"))
         val categoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, categoryList)
-        spinnerSubCategory.adapter = categoryAdapter
+        spinnerSubCategory.adapter = categoryAdapter*/
 
         spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -114,8 +124,8 @@ class ProductFilterDialogFragment(private val businessCategoryId: String, select
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-            }
 
+            }
         }
 
         spinnerSubCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -128,7 +138,7 @@ class ProductFilterDialogFragment(private val businessCategoryId: String, select
                     }
                 } else {
                     filterData.subCategoryId = "-1"
-                    filterData.subCategoryPos = 0
+                    //filterData.subCategoryPos = 0
                 }
             }
 
@@ -160,6 +170,8 @@ class ProductFilterDialogFragment(private val businessCategoryId: String, select
 
             filterData.minPrice = edtTextMinPrice.text.toString()
             filterData.maxPrice = edtTextMaxPrice.text.toString()
+            filterData.rating = selectedRating
+            filterData.ratingPosition = ratingPosition
 
             when {
                 filterData.categoryPos == 0 -> {
@@ -212,7 +224,7 @@ class ProductFilterDialogFragment(private val businessCategoryId: String, select
                 } catch (e: HttpException) {
                     requireActivity().toast("Exception ${e.message}")
                 } catch (e: Throwable) {
-                    requireActivity().toast("Ooops: Something else went wrong")
+                    requireActivity().toast("Oops: Something else went wrong")
                 }
             }
         }
@@ -241,7 +253,14 @@ class ProductFilterDialogFragment(private val businessCategoryId: String, select
                         spinnerSubCategory.adapter = categoryAdapter
 
                         spinnerSubCategory.post {
-                            spinnerSubCategory.setSelection(filterData.subCategoryPos)
+                            /*if(categoryList.size > filterData.subCategoryPos ) {
+                                spinnerSubCategory.setSelection(filterData.subCategoryPos)
+                            }*/
+                            try {
+                                spinnerSubCategory.setSelection(filterData.subCategoryPos)
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
                         }
                     } else {
                         requireActivity().toast("Error: ${response.code()}")

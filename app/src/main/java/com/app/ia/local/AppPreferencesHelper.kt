@@ -34,45 +34,21 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
         get() = sharedPreferences.getString(PREF_KEY_USER_ID, AppConstants.EMPTY_STRING)!!
         set(userId) = sharedPreferences.edit().putString(PREF_KEY_USER_ID, userId).apply()
 
-    override var firstName: String
-        get() = sharedPreferences.getString(PREF_KEY_FIRST_NAME, AppConstants.EMPTY_STRING)!!
-        set(userName) = sharedPreferences.edit().putString(PREF_KEY_FIRST_NAME, userName).apply()
-
-    override var lastName: String
-        get() = sharedPreferences.getString(PREF_KEY_LAST_NAME, AppConstants.EMPTY_STRING)!!
-        set(userName) = sharedPreferences.edit().putString(PREF_KEY_LAST_NAME, userName).apply()
+    override var userName: String
+        get() = sharedPreferences.getString(PREF_KEY_USER_NAME, AppConstants.EMPTY_STRING)!!
+        set(userName) = sharedPreferences.edit().putString(PREF_KEY_USER_NAME, userName).apply()
 
     override var userImage: String
         get() = sharedPreferences.getString(PREF_KEY_USER_IMAGE_URL, AppConstants.EMPTY_STRING)!!
         set(profilePicUrl) = sharedPreferences.edit().putString(PREF_KEY_USER_IMAGE_URL, profilePicUrl).apply()
 
-    override var qrCodeImage: String
-        get() = sharedPreferences.getString(PREF_KEY_QR_CODE_IMAGE_URL, AppConstants.EMPTY_STRING)!!
-        set(value) = sharedPreferences.edit().putString(PREF_KEY_QR_CODE_IMAGE_URL, value).apply()
-
-    override var securityPin: String
-        get() = sharedPreferences.getString(PREF_KEY_SECURITY_PIN, AppConstants.EMPTY_STRING)!!
-        set(securityPin) = sharedPreferences.edit().putString(PREF_KEY_SECURITY_PIN, securityPin).apply()
-
     override var allowNotification: Int
         get() = sharedPreferences.getInt(PREF_KEY_ALLOW_NOTIFICATION, 0)
         set(allowNotification) = sharedPreferences.edit().putInt(PREF_KEY_ALLOW_NOTIFICATION, allowNotification).apply()
 
-    override var enableSecurityPin: Int
-        get() = sharedPreferences.getInt(PREF_KEY_ENABLE_SECURITY_PIN, 0)
-        set(enableSecurityPin) = sharedPreferences.edit().putInt(PREF_KEY_ENABLE_SECURITY_PIN, enableSecurityPin).apply()
-
-    override var availableWalletBalance: String
-        get() = sharedPreferences.getString(PREF_KEY_WALLET_BALANCE, "0")!!
-        set(availableWalletBalance) = sharedPreferences.edit().putString(PREF_KEY_WALLET_BALANCE, availableWalletBalance).apply()
-
     override var phone: String
         get() = sharedPreferences.getString(PREF_KEY_USER_MOBILE, AppConstants.EMPTY_STRING)!!
         set(value) = sharedPreferences.edit().putString(PREF_KEY_USER_MOBILE, value).apply()
-
-    override var userRole: String
-        get() = sharedPreferences.getString(PREF_KEY_USER_ROLE, AppConstants.EMPTY_STRING)!!
-        set(value) = sharedPreferences.edit().putString(PREF_KEY_USER_ROLE, value).apply()
 
     override var showIntroScreen: Boolean
         get() = sharedPreferences.getBoolean(PREF_KEY_INTRO_SCREEN, true)
@@ -114,16 +90,9 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
             authToken = value.authToken
             phone = value.phone
             userImage = value.userImageUrl
-            qrCodeImage = value.qrCodeImageUrl
-            firstName = value.firstName
-            lastName = value.lastName
+            userName = value.username
             email = value.email
-            userRole = value.userRole
-            userID = value.Id
-            securityPin = value.securityPin
-            allowNotification = value.allowNotifications
-            enableSecurityPin = value.enableSecurityPin
-            availableWalletBalance = value.availableWalletBalance
+            userID = value._Id
             countryCode = value.countryCode
         }
 
@@ -136,16 +105,9 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
         loginResponse.authToken = authToken
         loginResponse.phone = phone
         loginResponse.userImage = userImage
-        loginResponse.qrCodeImage = qrCodeImage
-        loginResponse.firstName = firstName
-        loginResponse.lastName = lastName
+        loginResponse.username = userName
         loginResponse.email = email
-        loginResponse.userRole = userRole
-        loginResponse.Id = userID
-        loginResponse.securityPin = securityPin
-        loginResponse.allowNotifications = allowNotification
-        loginResponse.enableSecurityPin = enableSecurityPin
-        loginResponse.availableWalletBalance = availableWalletBalance
+        loginResponse._Id = userID
         loginResponse.countryCode = countryCode
         return loginResponse
     }
@@ -159,17 +121,11 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
         private const val PREF_KEY_LANGUAGE = "LANGUAGE"
         private const val PREF_KEY_USER_EMAIL = "USER_EMAIL"
         private const val PREF_KEY_USER_ID = "USER_ID"
-        private const val PREF_KEY_FIRST_NAME = "FIRST_NAME"
-        private const val PREF_KEY_LAST_NAME = "LAST_NAME"
+        private const val PREF_KEY_USER_NAME = "USER_NAME"
         private const val PREF_KEY_USER_IMAGE_URL = "USER_PROFILE_IMAGE_URL"
-        private const val PREF_KEY_QR_CODE_IMAGE_URL = "USER_QR_CODE_IMAGE_URL"
         private const val PREF_KEY_USER_COUNTRY_CODE = "USER_COUNTRY_CODE"
         private const val PREF_KEY_USER_MOBILE = "USER_MOBILE"
-        private const val PREF_KEY_SECURITY_PIN = "SECURITY_PIN"
         private const val PREF_KEY_ALLOW_NOTIFICATION = "ALLOW_NOTIFICATION"
-        private const val PREF_KEY_ENABLE_SECURITY_PIN = "ENABLE_SECURITY_PIN"
-        private const val PREF_KEY_WALLET_BALANCE = "WALLET_BALANCE"
-        private const val PREF_KEY_USER_ROLE = "USER_ROLE"
         private const val PREF_KEY_CART_ITEM_COUNT = "CART_ITEM_COUNT"
 
         private const val PREF_KEY_NOTIFICATION_COUNT = "NOTIFICATION_COUNT"

@@ -35,8 +35,8 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
     lateinit var mBinding: ActivityHomeBinding
     val userData = MutableLiveData<LoginResponse>()
 
-    var addressTitle = MutableLiveData<String>("Current Location")
-    var address = MutableLiveData<String>("Select Address")
+    var addressTitle = MutableLiveData("Current Location")
+    var address = MutableLiveData("Select Address")
 
     fun setVariable(mBinding: ActivityHomeBinding) {
         this.mBinding = mBinding

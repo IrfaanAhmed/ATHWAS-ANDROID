@@ -45,6 +45,7 @@ object AppConstants {
     const val EXTRA_IS_HOME_SCREEN = "is_home_screen"
     const val EXTRA_SELECTED_ADDRESS = "selected_address"
     const val EXTRA_PROFILE_DETAIL = "profile_detail"
+    const val EXTRA_VOICE_TEXT = "voice_text"
 
 
     const val EXTRA_BUSINESS_CATEGORY_NAME = "business_category"

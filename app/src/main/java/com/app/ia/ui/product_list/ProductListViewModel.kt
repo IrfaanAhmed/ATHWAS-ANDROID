@@ -19,6 +19,7 @@ import com.app.ia.model.FilterData
 import com.app.ia.model.ProductListingResponse
 import com.app.ia.utils.AppConstants
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
 
 class ProductListViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), LifecycleObserver {
@@ -40,16 +41,22 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
 
     val currentPage = MutableLiveData(1)
     val isLastPage = MutableLiveData(false)
-    private val filterData = FilterData()
+    private var filterData = FilterData()
     val favPosition = MutableLiveData<Int>()
+
+    private var constCategoryId = ""
+    private var constSubCategoryId = ""
 
     fun setVariable(mBinding: ActivityProductListBinding, intent: Intent) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
         title.set("")
+
+        constCategoryId = intent.getStringExtra(AppConstants.EXTRA_PRODUCT_CATEGORY_ID)!!
+        constSubCategoryId = intent.getStringExtra(AppConstants.EXTRA_PRODUCT_SUB_CATEGORY_ID)!!
         businessCategoryId.value = intent.getStringExtra(AppConstants.EXTRA_BUSINESS_CATEGORY_ID)!!
-        categoryId.value = intent.getStringExtra(AppConstants.EXTRA_PRODUCT_CATEGORY_ID)!!
-        subCategoryId.value = intent.getStringExtra(AppConstants.EXTRA_PRODUCT_SUB_CATEGORY_ID)!!
+        categoryId.value = constCategoryId
+        subCategoryId.value = constSubCategoryId
         setUpObserver()
     }
 
@@ -71,12 +78,23 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
         val bottomSheetFragment = ProductFilterDialogFragment(businessCategoryId.value!!, filterData)
         bottomSheetFragment.setOnItemClickListener(object : ProductFilterDialogFragment.OnProductFilterClickListener {
             override fun onSubmitClick(filterValue: FilterData) {
+                filterData = filterValue
                 minPrice.value = filterValue.minPrice
                 maxPrice.value = filterValue.maxPrice
-                categoryId.value = filterValue.categoryId
+                if (filterValue.categoryId.isEmpty() || filterValue.categoryId == "-1") {
+                    categoryId.value = constCategoryId
+                } else {
+                    categoryId.value = filterValue.categoryId
+                }
                 brandId.value = if (filterValue.brandId == "-1") "" else filterValue.brandId
-                subCategoryId.value = filterValue.subCategoryId
+
+                if (filterValue.subCategoryId.isEmpty() || filterValue.subCategoryId == "-1") {
+                    subCategoryId.value = constSubCategoryId
+                } else {
+                    subCategoryId.value = filterValue.subCategoryId
+                }
                 productListAll.clear()
+
                 setUpObserver()
             }
 
@@ -174,6 +192,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             if (users.status == "success") {
+                                mActivity.toast(users.message)
                                 val favItem = productList.value!![favPosition.value!!]
                                 favItem.isFavourite = if (favItem.isFavourite == 0) 1 else 0
                                 productList.value = productList.value

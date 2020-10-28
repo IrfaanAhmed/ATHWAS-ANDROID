@@ -3,7 +3,6 @@ package com.app.ia.ui.my_profile
 import android.app.Activity
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.liveData
 import com.app.ia.R
 import com.app.ia.base.BaseRepository
@@ -14,6 +13,7 @@ import com.app.ia.enums.Status
 import com.app.ia.model.ProfileResponse
 import com.app.ia.ui.delivery_address.DeliveryAddressActivity
 import com.app.ia.ui.edit_profile.EditProfileActivity
+import com.app.ia.ui.home.HomeActivity
 import com.app.ia.ui.rewards.RewardsActivity
 import com.app.ia.ui.wishlist.WishListActivity
 import com.app.ia.utils.AppConstants
@@ -47,16 +47,19 @@ class ProfileViewModel(private val baseRepository: BaseRepository) : BaseViewMod
     }
 
     fun onDeliveryAddressClick() {
-        mActivity.startActivity<DeliveryAddressActivity>{
+        mActivity.startActivity<DeliveryAddressActivity> {
             putExtra(AppConstants.EXTRA_IS_HOME_SCREEN, false)
         }
     }
 
-    fun onEditProfileClick() {
+    private fun onEditProfileClick() {
         mActivity.startActivity<EditProfileActivity> {
             putExtra(EXTRA_PROFILE_DETAIL, userData.value)
         }
+    }
 
+    fun onLogOutClick() {
+        (mActivity as ProfileActivity).logoutDialog()
     }
 
     private fun getProfile() = liveData(Dispatchers.Main) {
@@ -69,7 +72,7 @@ class ProfileViewModel(private val baseRepository: BaseRepository) : BaseViewMod
     }
 
     fun setupObservers() {
-        getProfile().observe(mBinding.lifecycleOwner!!, Observer{
+        getProfile().observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {

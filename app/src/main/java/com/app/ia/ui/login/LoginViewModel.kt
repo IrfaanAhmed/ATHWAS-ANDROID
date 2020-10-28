@@ -25,7 +25,6 @@ import com.app.ia.spanly.color
 import com.app.ia.spanly.font
 import com.app.ia.ui.forgot_password.ForgotPasswordActivity
 import com.app.ia.ui.home.HomeActivity
-import com.app.ia.ui.otp.OTPActivity
 import com.app.ia.ui.signup.SignUpActivity
 import com.app.ia.utils.*
 import com.google.android.gms.auth.api.credentials.Credentials
@@ -35,6 +34,7 @@ import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
 import kotlinx.coroutines.Dispatchers
+import java.util.regex.Pattern
 
 class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
 
@@ -67,35 +67,47 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
         (baseRepository.callback).hideKeyboard()
         val mobileNumber = mBinding.edtTextMobileNumber.text.toString()
         val password = mBinding.edtTextPassword.text.toString()
+        val flag: Boolean
 
-        if (isValidPhoneNumber(mobileNumber)) {
-            when {
-                mobileNumber.length < 6 -> {
+        if (TextUtils.isEmpty(mobileNumber)) {
+            IADialog(mActivity, mActivity.getString(R.string.enter_email_mobile_no), true)
+            return
+        } else {
+            flag = if (Pattern.matches("[0-9]+", mobileNumber)) {
+                if (mobileNumber.length < 5 || mobileNumber.length > 15) {
                     IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
+                    return
+                } else {
+                    true
                 }
-
-                password.isEmpty() -> {
-                    IADialog(mActivity, mActivity.getString(R.string.enter_your_password), true)
-                }
-
-               /* password.length < 6 -> {
-                    IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
-                }*/
-
-                else -> {
-                    val requestParams = HashMap<String, String>()
-                    requestParams["country_code"] = "+91"
-                    requestParams["phone"] = mobileNumber
-                    requestParams["password"] = password
-                    requestParams["device_token"] = AppPreferencesHelper.getInstance().deviceToken
-                    requestParams["device_type"] = "1"
-                    requestParams["device_id"] = androidId
-                    requestParams["login_through"] = "password"
-                    setupObservers(requestParams)
+            } else {
+                if (!isEmailValid(mobileNumber)) {
+                    IADialog(mActivity, mActivity.getString(R.string.enter_valid_email), true)
+                    return
+                } else {
+                    true
                 }
             }
-        } else {
-            IADialog(mActivity, mActivity.getString(R.string.enter_your_mobile_no), true)
+        }
+
+        if (password.isEmpty()) {
+            IADialog(mActivity, mActivity.getString(R.string.enter_your_password), true)
+            return
+        } else if (password.length < 6) {
+            IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+            return
+        }
+
+        if (!TextUtils.isEmpty(password) && flag) {
+            val requestParams = HashMap<String, String>()
+            requestParams["country_code"] = "+91"
+            requestParams["phone"] = mobileNumber
+            requestParams["password"] = password
+            requestParams["device_token"] = AppPreferencesHelper.getInstance().deviceToken
+            requestParams["device_type"] = "1"
+            requestParams["device_id"] = androidId
+            requestParams["login_through"] = "password"
+            setupObservers(requestParams)
         }
     }
 
@@ -116,10 +128,14 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
         getActivityNavigator()!!.startIntentSenderForResult(pendingIntent.intentSender, AppRequestCode.PHONE_REQUEST, null, 0, 0, 0)
     }
 
-    private fun isValidPhoneNumber(phoneNumber: CharSequence): Boolean {
+    /*private fun isValidPhoneNumber(phoneNumber: CharSequence): Boolean {
         return if (!TextUtils.isEmpty(phoneNumber)) {
             Patterns.PHONE.matcher(phoneNumber).matches()
         } else false
+    }*/
+
+    private fun isEmailValid(email: CharSequence?): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email!!).matches()
     }
 
     @Suppress("unused")
@@ -167,11 +183,11 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
 
                                 if (users.data?.isUserVerified == 0) {
                                     mActivity.toast(users.message)
-                                    mActivity.startActivity<OTPActivity> {
+                                    /*mActivity.startActivity<OTPActivity> {
                                         putExtra("countryCode", users.data?.countryCode)
                                         putExtra("mobileNumber", users.data?.phone)
-                                        putExtra("otp", users.data?.otpNumber)
-                                    }
+                                        //putExtra("otp", users.data?.otpNumber)
+                                    }*/
                                 } else {
                                     AppPreferencesHelper.getInstance().userData = users.data!!
                                     mActivity.startActivityWithFinish<HomeActivity> {

@@ -20,27 +20,15 @@ interface PreferencesHelper {
 
     var isFirstRun: Boolean
 
-    var securityPin: String
-    
     var allowNotification: Int
     
-    var enableSecurityPin: Int
-
     var authToken: String
 
     var userImage: String
 
-    var qrCodeImage: String
-
     var userID: String
 
-    var availableWalletBalance: String
-
-    var firstName: String
-
-    var lastName: String
-
-    var userRole: String
+    var userName: String
 
     var countryCode: String
 

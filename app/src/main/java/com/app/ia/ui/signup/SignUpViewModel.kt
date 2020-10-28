@@ -92,14 +92,14 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         val phone = mBinding.editTextMobile.text.toString().trim()
         val password = mBinding.edtTextPassword.text.toString().trim()
 
-        if (phone.isEmpty()) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_your_mobile_no), true)
-        } else if (phone.length < 6) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
-        } else if (name.isEmpty()) {
+        if (name.isEmpty()) {
             IADialog(mActivity, mActivity.getString(R.string.enter_name), true)
         } else if (name.length < 2) {
             IADialog(mActivity, mActivity.getString(R.string.name_should_be_min_2_char), true)
+        } else if (phone.isEmpty()) {
+            IADialog(mActivity, mActivity.getString(R.string.enter_your_mobile_no), true)
+        } else if (phone.length < 6) {
+            IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
         } else if (email.isEmpty()) {
             IADialog(mActivity, mActivity.getString(R.string.enter_your_email), true)
         } else if (!email.isValidEmail()) {
@@ -108,6 +108,8 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
             IADialog(mActivity, mActivity.getString(R.string.enter_your_password), true)
         } else if (password.length < 6) {
             IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+        } else if (!mBinding.checkBox.isChecked) {
+            IADialog(mActivity, mActivity.getString(R.string.accept_terms_n_condition), true)
         } else {
 
             val requestParams = HashMap<String, String>()

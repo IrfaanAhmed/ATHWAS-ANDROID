@@ -7,16 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.R
 import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.dialog.bottom_sheet_dialog.adapter.CustomisationAdapter
-import com.app.ia.model.*
+import com.app.ia.model.CustomizationProductDetail
 import com.app.ia.utils.toast
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.dialog_customization.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,15 +22,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
+class CustomisationDialogFragment(private val mySelectedCustomizationPos: Int, private val mainProductId: String) : BottomSheetDialogFragment() {
 
-class CustomisationDialogFragment(val customisationList: ProductDetailResponse.Product.Customizations, private val mainProductId: String) : BottomSheetDialogFragment() {
-
-    private var onClickListener: OnAddMoneyClickListener? = null
+    private var onClickListener: OnCustomizationSelectListener? = null
 
     val adapter = CustomisationAdapter()
     val customizationList = ArrayList<CustomizationProductDetail.Data>()
 
-    fun setOnItemClickListener(onClickListener: OnAddMoneyClickListener) {
+    fun setOnItemClickListener(onClickListener: OnCustomizationSelectListener) {
         this.onClickListener = onClickListener
     }
 
@@ -41,10 +38,6 @@ class CustomisationDialogFragment(val customisationList: ProductDetailResponse.P
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = BottomSheetDialog(requireContext(), theme)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog!!.setOnShowListener { dialog ->
@@ -56,38 +49,43 @@ class CustomisationDialogFragment(val customisationList: ProductDetailResponse.P
         return inflater.inflate(R.layout.dialog_customization, container, false)
     }
 
+    var selectedCustomizationPos = -1
+    var selectedCustomizationId = ""
+
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tvDone.setOnClickListener { dismiss() }
+        selectedCustomizationPos = mySelectedCustomizationPos
 
-        recViewSize.layoutManager = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
+        tvDone.setOnClickListener {
+
+            if (selectedCustomizationPos != -1) {
+                if (onClickListener != null) {
+                    onClickListener?.onCustomizationSelect(selectedCustomizationId, selectedCustomizationPos)
+                }
+            }
+            dismiss()
+        }
+
         recViewSize.adapter = adapter
 
         callCustomizationProductDetail(mainProductId)
-//        adapter.submitList(customisationList)
         adapter.setOnItemSelectListener(object : CustomisationAdapter.OnItemSelectListener {
-            /* override fun onItemSelect(position: Int) {
-                 for(index in customisationList.indices){
-                     customisationList[index].isSelected = index == position
-                 }
-                 adapter.notifyDataSetChanged()
-             }*/
-
             override fun onItemSelect(item: CustomizationProductDetail.Data, position: Int) {
 
+                selectedCustomizationPos = position
+                selectedCustomizationId = item.Id
                 for (i in 0 until customizationList.size) {
-                    customizationList[position].isSelected = (position == i)
+                    customizationList[i].isSelected = (position == i)
                 }
                 adapter.notifyDataSetChanged()
             }
-
         })
     }
 
-    interface OnAddMoneyClickListener {
-        fun onAddMoneyClick(data: String)
+    interface OnCustomizationSelectListener {
+        fun onCustomizationSelect(id: String, pos: Int)
     }
 
     private fun callCustomizationProductDetail(main_product_id: String) {
@@ -97,6 +95,7 @@ class CustomisationDialogFragment(val customisationList: ProductDetailResponse.P
         val service = RetrofitFactory.getInstance()
         CoroutineScope(Dispatchers.IO).launch {
             val response = service.getCustomizationProductDetail(requestParams)
+
             withContext(Dispatchers.Main) {
                 try {
                     if (response.isSuccessful) {
@@ -106,16 +105,20 @@ class CustomisationDialogFragment(val customisationList: ProductDetailResponse.P
                             adapter.submitList(customizationList)
                         }
 
+                        if (customizationList.size > selectedCustomizationPos) {
+                            customizationList[selectedCustomizationPos].isSelected = true
+                        }
+                        adapter.notifyDataSetChanged()
+
                     } else {
                         requireActivity().toast("Error: ${response.code()}")
                     }
                 } catch (e: HttpException) {
-                    requireActivity().toast("Exception ${e.message}")
+                    //requireActivity().toast("Exception ${e.message}")
                 } catch (e: Throwable) {
-                    requireActivity().toast("Oops: Something else went wrong")
+                    //requireActivity().toast("Oops: Something else went wrong")
                 }
             }
         }
     }
-
 }

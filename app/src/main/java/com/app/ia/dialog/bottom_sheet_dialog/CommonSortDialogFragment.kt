@@ -78,6 +78,10 @@ class CommonSortDialogFragment(private val sortOptionList: ArrayList<CommonSortB
                 }
             }
         })
+
+        tvCancel.setOnClickListener {
+            dismiss()
+        }
     }
 
     interface OnSortOptionClickListener {

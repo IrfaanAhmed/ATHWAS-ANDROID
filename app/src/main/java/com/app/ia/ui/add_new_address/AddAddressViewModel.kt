@@ -3,7 +3,6 @@ package com.app.ia.ui.add_new_address
 import android.app.Activity
 import android.content.Intent
 import android.widget.Toast
-import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
@@ -56,6 +55,11 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
 
         baseRepository.callback.hideKeyboard()
 
+        if (mBinding.edtTextAddress.text.toString().isEmpty()) {
+            IADialog(mActivity, "Please enter Floor/Apartment No./House No.", true)
+            return
+        }
+
         isAddressAdded = true
         val requestJsonObject = HashMap<String, String>()
         requestJsonObject["full_address"] = currentAddress.get()!!
@@ -67,7 +71,7 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
             selectedChipValue.get() == 3 -> requestJsonObject["address_type"] = "Other"
         }
         requestJsonObject["mobile"] = AppPreferencesHelper.getInstance().phone
-        requestJsonObject["name"] = AppPreferencesHelper.getInstance().firstName
+        requestJsonObject["name"] = AppPreferencesHelper.getInstance().userName
         requestJsonObject["flat"] = ""
         requestJsonObject["location_name"] = ""
         requestJsonObject["building"] = ""

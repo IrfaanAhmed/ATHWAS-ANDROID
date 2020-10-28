@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -19,12 +18,13 @@
         android:padding="@dimen/_8sdp">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{navigationItem}"
             android:fontFamily="@font/linotte_semi_bold"
-            android:textSize="@dimen/_12sdp"
-            android:textColor="@color/light_grey"/>
+            android:text="@{navigationItem}"
+            android:textColor="@color/light_grey"
+            android:textSize="@dimen/_12sdp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

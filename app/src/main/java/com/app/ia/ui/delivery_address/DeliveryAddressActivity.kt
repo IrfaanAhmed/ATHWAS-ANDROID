@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.app.ia.BR
@@ -14,6 +13,7 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityDeliveryAddressBinding
+import com.app.ia.dialog.IADialog
 import com.app.ia.model.AddressListResponse
 import com.app.ia.ui.delivery_address.adapter.DeliveryAddressAdapter
 import com.app.ia.utils.AppConstants.EXTRA_SELECTED_ADDRESS
@@ -72,20 +72,30 @@ class DeliveryAddressActivity : BaseActivity<ActivityDeliveryAddressBinding, Del
 
         addressAdapter?.setOnAddressClickListener(object : DeliveryAddressAdapter.OnAddressClickListener {
             override fun onAddressSelect(item: AddressListResponse.AddressList, position: Int) {
-                    if(mViewModel?.isFromHomeScreen!!.value!!){
-                        val intent = Intent()
-                        intent.putExtra(EXTRA_SELECTED_ADDRESS, item)
-                        setResult(Activity.RESULT_OK, intent)
-                        finish()
-                    }
+                if (mViewModel?.isFromHomeScreen!!.value!!) {
+                    val intent = Intent()
+                    intent.putExtra(EXTRA_SELECTED_ADDRESS, item)
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
             }
 
             override fun onAddressDelete(item: AddressListResponse.AddressList, position: Int) {
 
-                mViewModel?.deletedPosition!!.value = position
-                val requestParams = HashMap<String, String>()
-                requestParams["address_id"] = item.Id
-                mViewModel?.deleteAddressesObserver(requestParams)
+                val iaDialog = IADialog(this@DeliveryAddressActivity, "Are you sure you want to delete this address?", false)
+                iaDialog.setOnItemClickListener(object : IADialog.OnClickListener {
+                    override fun onPositiveClick() {
+                        mViewModel?.deletedPosition!!.value = position
+                        val requestParams = HashMap<String, String>()
+                        requestParams["address_id"] = item.Id
+                        mViewModel?.deleteAddressesObserver(requestParams)
+                    }
+
+                    override fun onNegativeClick() {
+                    }
+
+                })
+
             }
         })
     }

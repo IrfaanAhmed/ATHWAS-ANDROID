@@ -1,5 +1,6 @@
 package com.app.ia.dialog.bottom_sheet_dialog.adapter
 
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -43,6 +44,7 @@ class CustomisationAdapter : ListAdapter<CustomizationProductDetail.Data, Custom
         fun onBind(item: CustomizationProductDetail.Data, position: Int) {
             mBinding.apply {
                 customSize = item
+                priceTextView.paintFlags = priceTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 executePendingBindings()
 
                 itemView.setOnClickListener {

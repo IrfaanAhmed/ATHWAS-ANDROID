@@ -95,6 +95,7 @@
                         android:layout_gravity="end|top"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
+                        android:onClick="@{()-> viewModel.onFavoriteClick()}"
                         android:src="@{viewModel.productDetail.isFavourite() == 1 ? @drawable/ic_like : @drawable/ic_unlike}"/>
 
                 </FrameLayout>

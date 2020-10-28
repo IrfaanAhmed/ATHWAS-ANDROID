@@ -31,11 +31,10 @@
                  app:cardCornerRadius="@dimen/_5sdp">-->
 
             <androidx.appcompat.widget.AppCompatImageView
+                imageUrl="@{(product.images.size() > 0) ? product.images.get(0).productImageUrl : ``}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                imageUrl="@{(product.images.size() > 0) ? product.images.get(0).productImageUrl : ``}"
-                android:src="@drawable/mobile" />
+                android:scaleType="centerCrop" />
 
             <View
                 android:layout_width="match_parent"
@@ -89,9 +88,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:text="@{product.subcategory.name}"
                 android:textColor="@color/light_grey"
                 android:textSize="@dimen/_10sdp"
-                android:text="@{product.subcategory.name}"
                 app:fontFamily="@font/linotte_regular" />
 
             <androidx.appcompat.widget.LinearLayoutCompat

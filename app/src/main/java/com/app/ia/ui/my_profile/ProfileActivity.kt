@@ -44,7 +44,7 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
     }
 
     override fun onDestroy() {
-        var localBroadcastReceiver = LocalBroadcastManager.getInstance(this@ProfileActivity)
+        val localBroadcastReceiver = LocalBroadcastManager.getInstance(this@ProfileActivity)
         localBroadcastReceiver.unregisterReceiver(updateProfileListReceiver)
         super.onDestroy()
     }

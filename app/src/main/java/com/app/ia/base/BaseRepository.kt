@@ -96,7 +96,6 @@ open class BaseRepository(private val myApi: ApiService, generalCallback: Genera
         return apiRequest { myApi.getProfile() }
     }
 
-
     suspend fun updateProfile(request: Map<String, String>): BaseResponse<UpdateProfileResponse> {
         return apiRequest { myApi.updateProfile(request) }
     }

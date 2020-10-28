@@ -22,9 +22,9 @@ class ProductCategoryViewModel(private val baseRepository: BaseRepository) : Bas
     lateinit var mBinding: ActivityProductCategoryBinding
 
     val isItemAvailable = MutableLiveData(true)
-    val titleValue = MutableLiveData("")
+    private val titleValue = MutableLiveData("")
     var productCategory = MutableLiveData<MutableList<ProductCategoryResponse.Docs>>()
-    var businessCategoryID = MutableLiveData<String>()
+    private var businessCategoryID = MutableLiveData<String>()
 
     fun setVariable(mBinding: ActivityProductCategoryBinding) {
         this.mBinding = mBinding

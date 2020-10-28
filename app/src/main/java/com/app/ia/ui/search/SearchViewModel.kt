@@ -1,6 +1,7 @@
 package com.app.ia.ui.search
 
 import android.app.Activity
+import android.content.Intent
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
@@ -8,11 +9,10 @@ import com.app.ia.R
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivitySearchBinding
-import com.app.ia.databinding.ActivitySubCategoryBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
 import com.app.ia.model.ProductListingResponse
-import com.app.ia.model.ProductSubCategoryResponse
+import com.app.ia.utils.AppConstants.EXTRA_VOICE_TEXT
 import com.app.ia.utils.Resource
 import kotlinx.coroutines.Dispatchers
 
@@ -29,6 +29,7 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
     val isItemAvailable = MutableLiveData(true)
     val currentPage = MutableLiveData(1)
     val isLastPage = MutableLiveData(false)
+    var voiceText = MutableLiveData("")
 
     fun setVariable(mBinding: ActivitySearchBinding) {
         this.mBinding = mBinding
@@ -36,7 +37,16 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         title.set(mActivity.getString(R.string.search))
     }
 
-    fun onCancelClick(){
+    fun setIntent(intent: Intent) {
+        voiceText.value = intent.getStringExtra(EXTRA_VOICE_TEXT)
+
+        if (voiceText.value!!.isNotEmpty()) {
+            mBinding.edtSearchText.setText(voiceText.value)
+            setUpObserver(voiceText.value!!)
+        }
+    }
+
+    fun onCancelClick() {
         mActivity.finish()
     }
 

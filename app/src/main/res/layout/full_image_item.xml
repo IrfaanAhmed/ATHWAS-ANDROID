@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="com.app.ia.R" />
+
         <variable
             name="imageUrl"
             type="String" />
@@ -13,13 +15,13 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatImageView
-            imageUrl="@{imageUrl}"
             android:id="@+id/imgViewBanner"
+            defaultImage="@{R.mipmap.ic_launcher}"
+            imageUrl="@{imageUrl}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/temp_banner" />
+            android:scaleType="centerCrop" />
 
     </FrameLayout>
 </layout>
