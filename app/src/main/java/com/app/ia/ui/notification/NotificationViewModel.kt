@@ -1,39 +1,45 @@
 package com.app.ia.ui.notification
 
-import android.app.Activity
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.app.ia.R
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityNotificationBinding
+import com.app.ia.dialog.IADialog
+import com.app.ia.enums.Status
 import com.app.ia.model.NotificationResponse
+import com.app.ia.utils.Resource
+import com.app.ia.utils.plusAssign
+import com.app.ia.utils.toast
+import kotlinx.coroutines.Dispatchers
 
 class NotificationViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
 
     val currentPage = MutableLiveData(1)
     val isLastPage = MutableLiveData(false)
     var notificationListData = MutableLiveData<MutableList<NotificationResponse.Docs>>()
-    lateinit var mActivity: Activity
+    lateinit var mActivity: NotificationActivity
     lateinit var mBinding: ActivityNotificationBinding
 
     fun setVariable(mBinding: ActivityNotificationBinding) {
         this.mBinding = mBinding
-        this.mActivity = getActivityNavigator()!!
+        this.mActivity = getActivityNavigator()!! as NotificationActivity
         this.title.set(mActivity.getString(R.string.notifications))
     }
 
-    /*private fun getNotifications(notification_id: String?, requestParams: HashMap<String, String>?, notificationType: Int) = liveData(Dispatchers.Main) {
+    private fun getNotifications(notification_id: String?, requestParams: HashMap<String, String>?, notificationType: Int) = liveData(Dispatchers.Main) {
         emit(Resource.loading(data = null))
         try {
             when (notificationType) {
-                NotificationFragment.NOTIFICATION_LIST -> {
+                NotificationActivity.NOTIFICATION_LIST -> {
                     emit(Resource.success(data = baseRepository.getNotification(requestParams!!)))
                 }
-                NotificationFragment.DELETE_NOTIFICATION -> {
+                NotificationActivity.DELETE_NOTIFICATION -> {
                     emit(Resource.success(data = baseRepository.deleteNotification(notification_id!!)))
                 }
-                NotificationFragment.DELETE_ALL_NOTIFICATION -> {
+                NotificationActivity.DELETE_ALL_NOTIFICATION -> {
                     emit(Resource.success(data = baseRepository.deleteAllNotification()))
                 }
             }
@@ -52,45 +58,44 @@ class NotificationViewModel(private val baseRepository: BaseRepository) : BaseVi
                             if (users.status == "success") {
 
                                 when (notificationType) {
-                                    NotificationFragment.NOTIFICATION_LIST -> {
+                                    NotificationActivity.NOTIFICATION_LIST -> {
                                         val response = users.data as NotificationResponse
                                         isLastPage.value = (currentPage.value == response.totalPages)
                                         notificationListData.plusAssign(response.docs)
-                                        fragment.mNotificationAdapter.notifyDataSetChanged()
+                                        mActivity.mNotificationAdapter.notifyDataSetChanged()
                                         showHide()
-                                        (mActivity as HomeActivity).removeNotificationBadge()
                                     }
 
-                                    NotificationFragment.DELETE_ALL_NOTIFICATION -> {
+                                    NotificationActivity.DELETE_ALL_NOTIFICATION -> {
                                         val notificationList = notificationListData.value
                                         notificationList?.clear()
                                         notificationListData.value = notificationList
-                                        fragment.mNotificationAdapter.notifyDataSetChanged()
+                                        mActivity.mNotificationAdapter.notifyDataSetChanged()
                                         showHide()
                                     }
 
-                                    NotificationFragment.DELETE_NOTIFICATION -> {
+                                    NotificationActivity.DELETE_NOTIFICATION -> {
                                         val updatedList = notificationListData.value
                                         updatedList?.removeAt(deletedPosition)
                                         notificationListData.value = updatedList
-                                        fragment.mNotificationAdapter.notifyItemRemoved(deletedPosition)
-                                        fragment.mNotificationAdapter.notifyItemRangeChanged(deletedPosition, updatedList?.size!!)
+                                        mActivity.mNotificationAdapter.notifyItemRemoved(deletedPosition)
+                                        mActivity.mNotificationAdapter.notifyItemRangeChanged(deletedPosition, updatedList?.size!!)
                                         showHide()
                                     }
 
                                     else -> {
-                                        TivoDialog(mActivity, users.message, true)
+                                        IADialog(mActivity, users.message, true)
                                     }
                                 }
                             } else {
-                                TivoDialog(mActivity, users.message, true)
+                                IADialog(mActivity, users.message, true)
                             }
                         }
                     }
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {
@@ -99,7 +104,7 @@ class NotificationViewModel(private val baseRepository: BaseRepository) : BaseVi
                 }
             }
         })
-    }*/
+    }
 
     private fun showHide() {
         if (notificationListData.value?.size!! > 0) {

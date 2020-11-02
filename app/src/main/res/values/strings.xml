@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ATHWAS</string>
 
-    <string name="google_map_key" translatable="false">AIzaSyAtpVo2jh44ixSzbuqoVSSJWv_7SFYh40c</string>
+    <string name="google_map_key" translatable="false">AIzaSyDpJJNB7IhJWUPnxo57hIp6Gwhvih31eas</string>
     <string name="google_map_direction_key" translatable="false">AIzaSyC4MhJYysKpRFHe9Re--y5S0_PCtxGir9Q</string>
 
     <string name="settings">Go to setting</string>
@@ -208,4 +208,13 @@
     <string name="update">Update</string>
     <string name="search">Search</string>
     <string name="no_data_found">No Data Found</string>
+    <string name="change">Change</string>
+    <string name="promo_code">Promo Code</string>
+    <string name="have_a_promo_code">Have a promo code? Enter here</string>
+    <string name="apply_code">Apply Code</string>
+    <string name="promo_code_applied">Promo code applied</string>
+    <string name="delete">Delete</string>
+    <string name="need_login_msg">You need to login to access this feature</string>
+    <string name="continues">Continue</string>
+
 </resources>

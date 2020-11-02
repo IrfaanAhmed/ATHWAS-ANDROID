@@ -3,6 +3,7 @@ package com.app.ia
 import android.app.Activity
 import android.app.Application
 import com.app.ia.utils.AppLogger
+import com.google.firebase.FirebaseApp
 
 
 class IAApplication : Application() {
@@ -13,7 +14,7 @@ class IAApplication : Application() {
         super.onCreate()
         iaApplication = this
         AppLogger.init()
-        //FirebaseApp.initializeApp(this)
+        FirebaseApp.initializeApp(this)
         //initPlace()
     }
 

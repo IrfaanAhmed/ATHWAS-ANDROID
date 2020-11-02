@@ -110,8 +110,6 @@ class CustomisationDialogFragment(private val mySelectedCustomizationPos: Int, p
                         }
                         adapter.notifyDataSetChanged()
 
-                    } else {
-                        requireActivity().toast("Error: ${response.code()}")
                     }
                 } catch (e: HttpException) {
                     //requireActivity().toast("Exception ${e.message}")

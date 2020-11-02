@@ -149,10 +149,10 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
 
     }
 
-    /*fun loginDialog() {
+    fun loginDialog() {
         val activity = this
-        val cleverDialog = CleverDialog(activity, "", getString(R.string.need_login_msg), getString(R.string.continues), getString(R.string.cancel), false)
-        cleverDialog.setOnItemClickListener(object : CleverDialog.OnClickListener {
+        val iaDialog = IADialog(activity, "", getString(R.string.need_login_msg), getString(R.string.continues), getString(R.string.cancel), false)
+        iaDialog.setOnItemClickListener(object : IADialog.OnClickListener {
             override fun onPositiveClick() {
                 val intent = Intent(activity, LoginActivity::class.java)
                 intent.putExtra("isFromOtherScreen", true)
@@ -162,7 +162,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
             override fun onNegativeClick() {
             }
         })
-    }*/
+    }
 
     /*fun comingSoonDialog() {
         CleverDialog(this, getString(R.string.soon), true)

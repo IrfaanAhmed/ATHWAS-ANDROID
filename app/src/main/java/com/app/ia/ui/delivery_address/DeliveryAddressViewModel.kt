@@ -12,6 +12,7 @@ import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityDeliveryAddressBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
+import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.model.AddressListResponse
 import com.app.ia.ui.add_new_address.AddAddressActivity
 import com.app.ia.ui.place_picker.PlacePickerActivity
@@ -35,15 +36,21 @@ class DeliveryAddressViewModel(private val baseRepository: BaseRepository) : Bas
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
         title.set(mActivity.getString(R.string.my_address))
-        getAddressesObserver(HashMap())
+        if (AppPreferencesHelper.getInstance().authToken.isNotEmpty()) {
+            getAddressesObserver(HashMap())
+        }
     }
 
-    fun setIntent(intent: Intent){
+    fun setIntent(intent: Intent) {
         isFromHomeScreen.value = intent.getBooleanExtra(EXTRA_IS_HOME_SCREEN, false)
     }
 
     fun onAddAddressClick() {
-        mActivity.mStartActivityForResult<AddAddressActivity>(AppRequestCode.REQUEST_ADD_ADDRESS)
+        if (AppPreferencesHelper.getInstance().authToken.isNotEmpty()) {
+            mActivity.mStartActivityForResult<AddAddressActivity>(AppRequestCode.REQUEST_ADD_ADDRESS)
+        } else {
+            (mActivity as DeliveryAddressActivity).loginDialog()
+        }
     }
 
     private fun getAddresses(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {

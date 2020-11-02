@@ -11,6 +11,7 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityProductListBinding
+import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.model.ProductListingResponse
 import com.app.ia.ui.product_detail.ProductDetailActivity
 import com.app.ia.ui.product_list.adapter.ProductListAdapter
@@ -72,8 +73,13 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
             }
 
             override fun onFavoriteClick(productItem: ProductListingResponse.Docs, position: Int) {
-                mViewModel?.favPosition?.value = position
-                mViewModel?.addFavorite(productItem.Id, if (productItem.isFavourite == 0) 1 else 0)
+
+                if (AppPreferencesHelper.getInstance().authToken.isEmpty()) {
+                    loginDialog()
+                } else {
+                    mViewModel?.favPosition?.value = position
+                    mViewModel?.addFavorite(productItem.Id, if (productItem.isFavourite == 0) 1 else 0)
+                }
             }
         })
 

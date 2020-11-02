@@ -41,6 +41,9 @@ object Api {
     const val CHANGE_PASSWORD_URL = COMMON_PATH + "profile/change_password"
     const val UPDATE_PROFILE_URL = COMMON_PATH + "profile/update_profile"
 
+    const val NOTIFICATION_URL = COMMON_PATH + "notifications"
+    const val DELETE_NOTIFICATION_URL = COMMON_PATH + "notifications/{notification_id}"
+
     private fun getBaseUrl(environmentType: Int): String {
 
         return when (environmentType) {

@@ -25,7 +25,7 @@ class SimilarProductListAdapter : ListAdapter<SimilarProductListResponse.Docs, S
 
     override fun onBindViewHolder(holder: SimilarProductViewHolder, position: Int) {
         holder.apply {
-            onBind(getItem(position))
+            onBind(getItem(position), position)
         }
     }
 
@@ -36,18 +36,28 @@ class SimilarProductListAdapter : ListAdapter<SimilarProductListResponse.Docs, S
     inner class SimilarProductViewHolder(private val mBinding: SimilarProductListItemBinding) :
         RecyclerView.ViewHolder(mBinding.root) {
 
-        fun onBind(categoryItem: SimilarProductListResponse.Docs) {
+        fun onBind(categoryItem: SimilarProductListResponse.Docs, position: Int) {
             mBinding.apply {
                 similarProduct = categoryItem
                 executePendingBindings()
 
-                /* itemView.setOnClickListener {
-                     itemView.context.startActivity<SubCategoryActivity> {
-                         putExtra(AppConstants.EXTRA_PRODUCT_CATEGORY, categoryItem)
-                     }
-                 }*/
+                itemView.setOnClickListener {
+                    if (onSimilarProductClickListener != null) {
+                        onSimilarProductClickListener?.onSimilarProductClick(categoryItem, position)
+                    }
+                }
             }
         }
+    }
+
+    private var onSimilarProductClickListener: OnSimilarProductClickListener? = null
+
+    fun setOnSimilarProductClickListener(onSimilarProductClickListener: OnSimilarProductClickListener) {
+        this.onSimilarProductClickListener = onSimilarProductClickListener
+    }
+
+    interface OnSimilarProductClickListener {
+        fun onSimilarProductClick(customization: SimilarProductListResponse.Docs, position: Int)
     }
 
 }

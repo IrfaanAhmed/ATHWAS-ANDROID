@@ -56,17 +56,11 @@ class NotificationActivity : BaseActivity<ActivityNotificationBinding, Notificat
 
         val notificationList = ArrayList<NotificationResponse.Docs>()
 
-        for(i in 0 until  10) {
-            val notification = NotificationResponse.Docs()
-            notification.title = "Notification Title"
-            notification.message = "Notification Message.This is dummy project."
-            notificationList.add(notification)
-        }
-//        notification.getCreatedAt() = "Notification Title"
-        mNotificationAdapter = NotificationAdapter()
+        mNotificationAdapter = NotificationAdapter(mViewModel)
         notificationRecyclerView.adapter = mNotificationAdapter
         mNotificationAdapter.submitList(notificationList)
 
+        resetNotification()
 
         mSwipeRefresh.setOnRefreshListener {
             resetNotification()
@@ -85,7 +79,7 @@ class NotificationActivity : BaseActivity<ActivityNotificationBinding, Notificat
         mViewModel?.currentPage?.value = 1
         mViewModel?.notificationListData?.value = ArrayList()
 
-        mNotificationAdapter = NotificationAdapter()
+        mNotificationAdapter = NotificationAdapter(mViewModel)
         notificationRecyclerView.adapter = mNotificationAdapter
 
         if (mSwipeRefresh.isRefreshing) {
@@ -104,7 +98,7 @@ class NotificationActivity : BaseActivity<ActivityNotificationBinding, Notificat
                 mViewModel?.currentPage?.value = start
                 val requestParams = HashMap<String, String>()
                 requestParams["page_no"] = start.toString()
-                //mViewModel?.setupObservers(null, requestParams, NOTIFICATION_LIST, -1)
+                mViewModel?.setupObservers(null, requestParams, NOTIFICATION_LIST, -1)
             }
         }
 
@@ -116,6 +110,6 @@ class NotificationActivity : BaseActivity<ActivityNotificationBinding, Notificat
 
         val requestParams = HashMap<String, String>()
         requestParams["page_no"] = mViewModel?.currentPage?.value.toString()
-        //mViewModel?.setupObservers(null, requestParams, NOTIFICATION_LIST, -1)
+        mViewModel?.setupObservers(null, requestParams, NOTIFICATION_LIST, -1)
     }
 }

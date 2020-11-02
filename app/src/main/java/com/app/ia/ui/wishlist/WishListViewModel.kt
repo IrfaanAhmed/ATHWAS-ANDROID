@@ -38,6 +38,7 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
     }
 
     fun setUpObserver() {
+        favoriteListAll.clear()
         val requestParams = HashMap<String, String>()
         requestParams["page_no"] = currentPage.value!!.toString()
         productListingObserver(requestParams)
@@ -82,10 +83,10 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
         })
     }
 
-    fun addFavorite(product_id: String, status: Int) {
+    fun addFavorite(product_id: String) {
         val requestParams = HashMap<String, String>()
         requestParams["product_id"] = product_id
-        requestParams["status"] = "" + status
+        requestParams["status"] = "0"
         addFavoriteObserver(requestParams)
     }
 
@@ -106,9 +107,7 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             if (users.status == "success") {
-                                /*val favItem = favoriteList.value!![favPosition.value!!]
-                                favItem.isFavourite = if (favItem.isFavourite == 0) 1 else 0
-                                favoriteList.value = favoriteList.value*/
+                                setUpObserver()
                             } else {
                                 IADialog(mActivity, users.message, true)
                             }

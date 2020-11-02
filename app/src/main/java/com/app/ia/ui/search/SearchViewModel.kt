@@ -37,10 +37,15 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         title.set(mActivity.getString(R.string.search))
     }
 
+    fun onClearClick() {
+        isSearchTextEntered.value = false
+        mBinding.edtSearchText.setText("")
+    }
+
     fun setIntent(intent: Intent) {
         voiceText.value = intent.getStringExtra(EXTRA_VOICE_TEXT)
 
-        if (voiceText.value!!.isNotEmpty()) {
+        if (voiceText.value != null) {
             mBinding.edtSearchText.setText(voiceText.value)
             setUpObserver(voiceText.value!!)
         }

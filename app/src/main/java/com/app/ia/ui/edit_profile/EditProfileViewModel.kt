@@ -53,14 +53,20 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
     fun updateUserName() {
         val name = mBinding.edtTextName.text.toString()
 
-        if (name.isEmpty()) {
-            IADialog(mActivity, mActivity.getString(R.string.please_enter_name), true)
-        } else {
-            val requestParams = HashMap<String, String>()
-            requestParams["field_key"] = "username"
-            requestParams["field_value"] = name
-            setupObservers(false, requestParams)
-            (mActivity as EditProfileActivity).hideKeyboard()
+        when {
+            name.isEmpty() -> {
+                IADialog(mActivity, mActivity.getString(R.string.please_enter_name), true)
+            }
+            name.length < 2 -> {
+                IADialog(mActivity, mActivity.getString(R.string.name_should_be_min_2_char), true)
+            }
+            else -> {
+                val requestParams = HashMap<String, String>()
+                requestParams["field_key"] = "username"
+                requestParams["field_value"] = name
+                setupObservers(false, requestParams)
+                (mActivity as EditProfileActivity).hideKeyboard()
+            }
         }
     }
 
@@ -70,8 +76,6 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
         if (mobileNumber.isEmpty()) {
             IADialog(mActivity, mActivity.getString(R.string.enter_your_mobile_no), true)
         } else if (mobileNumber.length < 7 || mobileNumber.length > 15) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
-        } else if (!validateNumber("91", mobileNumber)) {
             IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
         } else {
             oldMobileEmail.value = AppPreferencesHelper.getInstance().phone
@@ -137,7 +141,7 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
         }
 
     private fun setupObservers(partData: Map<String, RequestBody>, file: MultipartBody.Part) {
-        updateProfile(partData, file).observe(mBinding.lifecycleOwner!!, Observer {
+        updateProfile(partData, file).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {

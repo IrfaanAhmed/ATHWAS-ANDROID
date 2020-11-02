@@ -98,7 +98,7 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
             IADialog(mActivity, mActivity.getString(R.string.name_should_be_min_2_char), true)
         } else if (phone.isEmpty()) {
             IADialog(mActivity, mActivity.getString(R.string.enter_your_mobile_no), true)
-        } else if (phone.length < 6) {
+        } else if (phone.length < 7 || phone.length > 15) {
             IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
         } else if (email.isEmpty()) {
             IADialog(mActivity, mActivity.getString(R.string.enter_your_email), true)

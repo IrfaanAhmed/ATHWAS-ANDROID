@@ -103,4 +103,16 @@ open class BaseRepository(private val myApi: ApiService, generalCallback: Genera
     suspend fun updateProfile(partData: Map<String, RequestBody>, file: MultipartBody.Part): BaseResponse<UpdateProfileResponse> {
         return apiRequest { myApi.updateProfile(partData, file) }
     }
+
+    suspend fun getNotification(request: Map<String, String>): BaseResponse<NotificationResponse> {
+        return apiRequest { myApi.getNotification(request) }
+    }
+
+    suspend fun deleteNotification(notification_id: String): BaseResponse<NoDataResponse> {
+        return apiRequest { myApi.deleteNotification(notification_id) }
+    }
+
+    suspend fun deleteAllNotification(): BaseResponse<NoDataResponse> {
+        return apiRequest { myApi.deleteAllNotification() }
+    }
 }

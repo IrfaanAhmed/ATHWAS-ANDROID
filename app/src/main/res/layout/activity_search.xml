@@ -64,9 +64,11 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:singleLine="true"
                     android:drawableStart="@drawable/ic_search"
                     android:drawablePadding="@dimen/_8sdp"
                     android:layout_gravity="center"
+                    android:inputType="textNoSuggestions"
                     android:gravity="center_vertical"
                     android:hint="@string/what_are_you_looking_for"
                     android:paddingStart="@dimen/_8sdp"
@@ -80,6 +82,7 @@
                     android:visibility="@{viewModel.isSearchTextEntered ? View.VISIBLE : View.GONE}"
                     android:src="@drawable/ic_cancel"
                     android:layout_marginEnd="@dimen/_8sdp"
+                    android:onClick="@{()-> viewModel.onClearClick()}"
                     android:layout_gravity="center"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>

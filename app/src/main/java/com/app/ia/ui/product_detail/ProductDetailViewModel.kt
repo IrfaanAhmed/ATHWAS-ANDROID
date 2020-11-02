@@ -13,6 +13,7 @@ import com.app.ia.databinding.ActivityProductDetailBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.dialog.bottom_sheet_dialog.CustomisationDialogFragment
 import com.app.ia.enums.Status
+import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.model.ProductDetailResponse
 import com.app.ia.model.SimilarProductListResponse
 import com.app.ia.ui.product_detail.adapter.CustomizationTypeAdapter
@@ -55,12 +56,22 @@ class ProductDetailViewModel(private val baseRepository: BaseRepository) : BaseV
             customizationTypeAdapter.submitList(it?.customizations)
             val requestParams = HashMap<String, String>()
             requestParams["sub_category_id"] = it?.subcategory?.Id!!
+            requestParams["product_id"] = it.Id
             getSimilarProductObserver(requestParams)
         })
 
         mBinding.recViewSimilarProduct.adapter = similarProductAdapter
         similarProductList.observe(mBinding.lifecycleOwner!!, {
             similarProductAdapter.submitList(it)
+        })
+
+        similarProductAdapter.setOnSimilarProductClickListener(object  : SimilarProductListAdapter.OnSimilarProductClickListener{
+            override fun onSimilarProductClick(customization: SimilarProductListResponse.Docs, position: Int) {
+                val requestParams = HashMap<String, String>()
+                requestParams["product_id"] = customization.Id
+                productDetailObserver(requestParams)
+                setCustomizationAdapter()
+            }
         })
     }
 
@@ -107,7 +118,6 @@ class ProductDetailViewModel(private val baseRepository: BaseRepository) : BaseV
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
                     }
 
                     Status.LOADING -> {
@@ -144,7 +154,7 @@ class ProductDetailViewModel(private val baseRepository: BaseRepository) : BaseV
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        //Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
                     }
 
                     Status.LOADING -> {
@@ -156,10 +166,15 @@ class ProductDetailViewModel(private val baseRepository: BaseRepository) : BaseV
     }
 
     fun onFavoriteClick() {
-        val requestParams = HashMap<String, String>()
-        requestParams["product_id"] = productDetail.value?.Id!!
-        requestParams["status"] = "" + if (productDetail.value?.isFavourite == 0) 1 else 0
-        addFavoriteObserver(requestParams)
+
+        if (AppPreferencesHelper.getInstance().authToken.isEmpty()) {
+            (mActivity as ProductDetailActivity).loginDialog()
+        } else {
+            val requestParams = HashMap<String, String>()
+            requestParams["product_id"] = productDetail.value?.Id!!
+            requestParams["status"] = "" + if (productDetail.value?.isFavourite == 0) 1 else 0
+            addFavoriteObserver(requestParams)
+        }
     }
 
     private fun addFavourite(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
@@ -194,7 +209,7 @@ class ProductDetailViewModel(private val baseRepository: BaseRepository) : BaseV
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        //Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
                     }
 
                     Status.LOADING -> {

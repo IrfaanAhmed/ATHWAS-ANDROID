@@ -12,6 +12,9 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseRepository
 import com.app.ia.dialog.IADialog
 import com.app.ia.local.AppPreferencesHelper
+import com.app.ia.utils.AppLogger
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.installations.FirebaseInstallations
 
 class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
 
@@ -48,11 +51,17 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
     }
 
     private fun storeDeviceToken() {
-        /*FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
+
+        /*FirebaseInstallations.getInstance().getToken().addOnSuccessListener {
             val deviceToken = instanceIdResult.token
             AppLogger.d("device token : $deviceToken")
             AppPreferencesHelper.getInstance().deviceToken = deviceToken
         }*/
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
+            val deviceToken = instanceIdResult.token
+            AppLogger.d("device token : $deviceToken")
+            AppPreferencesHelper.getInstance().deviceToken = deviceToken
+        }
     }
 
     override fun onCurrentLocation(latitude: Double, longitude: Double) {

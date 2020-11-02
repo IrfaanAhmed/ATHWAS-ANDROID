@@ -103,10 +103,10 @@ class ProductFilterDialogFragment(private val businessCategoryId: String, select
          */
         callProductCategory()
 
-       /* val categoryList = ArrayList<FilterDataResponse>()
+        val categoryList = ArrayList<FilterDataResponse>()
         categoryList.add(FilterDataResponse("-1", "Sub-Category"))
         val categoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, categoryList)
-        spinnerSubCategory.adapter = categoryAdapter*/
+        spinnerSubCategory.adapter = categoryAdapter
 
         spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -119,7 +119,7 @@ class ProductFilterDialogFragment(private val businessCategoryId: String, select
                     }
                 } else {
                     filterData.categoryId = "-1"
-                    filterData.categoryPos = 0
+                    //filterData.categoryPos = 0
                 }
             }
 

@@ -103,4 +103,14 @@ interface ApiService {
     @Multipart
     suspend fun updateProfile(@PartMap() partData: Map<String, @JvmSuppressWildcards RequestBody>,
                               @Part() file: MultipartBody.Part): Response<BaseResponse<UpdateProfileResponse>>
+
+    @GET(Api.NOTIFICATION_URL)
+    suspend fun getNotification(@QueryMap params: Map<String, String>): Response<BaseResponse<NotificationResponse>>
+
+    @DELETE(Api.NOTIFICATION_URL)
+    suspend fun deleteAllNotification(): Response<BaseResponse<NoDataResponse>>
+
+    @DELETE(Api.DELETE_NOTIFICATION_URL)
+    suspend fun deleteNotification(@Path("notification_id") id: String): Response<BaseResponse<NoDataResponse>>
+
 }

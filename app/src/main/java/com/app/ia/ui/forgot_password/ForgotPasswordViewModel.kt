@@ -12,6 +12,7 @@ import com.app.ia.databinding.ActivityForgotPasswordBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
 import com.app.ia.ui.reset_password.ResetPasswordActivity
+import com.app.ia.utils.CommonUtils.isEmailValid
 import com.app.ia.utils.Resource
 import com.app.ia.utils.startActivity
 import com.google.i18n.phonenumbers.NumberParseException
@@ -19,6 +20,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
 import kotlinx.coroutines.Dispatchers
 import java.util.*
+import java.util.regex.Pattern
 
 class ForgotPasswordViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
 
@@ -36,14 +38,35 @@ class ForgotPasswordViewModel(private val baseRepository: BaseRepository) : Base
         (baseRepository.callback).hideKeyboard()
         val mobileNumber = mBinding.edtTextMobileNumber.text.toString()
 
-        if (isValidPhoneNumber(mobileNumber)) {
+        val flag: Boolean
+
+        if (TextUtils.isEmpty(mobileNumber)) {
+            IADialog(mActivity, mActivity.getString(R.string.enter_email_mobile_no), true)
+            return
+        } else {
+            flag = if (Pattern.matches("[0-9]+", mobileNumber)) {
+                if (mobileNumber.length < 7 || mobileNumber.length > 15) {
+                    IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
+                    return
+                } else {
+                    true
+                }
+            } else {
+                if (!isEmailValid(mobileNumber)) {
+                    IADialog(mActivity, mActivity.getString(R.string.enter_valid_email), true)
+                    return
+                } else {
+                    true
+                }
+            }
+        }
+
+        if (flag) {
             val requestParams = HashMap<String, String>()
             requestParams["country_code"] = "+91"
             requestParams["phone"] = mobileNumber
             requestParams["otp_for"] = "forgot_password"
             setupObservers(requestParams)
-        } else {
-            IADialog(mActivity, mActivity.getString(R.string.enter_registered_mobile_no), true)
         }
     }
 

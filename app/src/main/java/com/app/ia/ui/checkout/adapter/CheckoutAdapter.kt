@@ -1,4 +1,4 @@
-package com.app.ia.ui.my_cart.adapter
+package com.app.ia.ui.checkout.adapter
 
 import android.graphics.Paint
 import android.view.LayoutInflater
@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.app.ia.databinding.CartListItemBinding
+import com.app.ia.databinding.CheckoutListItemBinding
 import kotlinx.android.synthetic.main.cart_list_item.view.*
 
-class CartListAdapter : ListAdapter<String, CartListAdapter.CartViewHolder>(OffersListDiffCallback()) {
+class CheckoutAdapter : ListAdapter<String, CheckoutAdapter.CheckoutViewHolder>(OffersListDiffCallback()) {
 
     class OffersListDiffCallback : DiffUtil.ItemCallback<String>() {
 
@@ -24,17 +24,17 @@ class CartListAdapter : ListAdapter<String, CartListAdapter.CartViewHolder>(Offe
     }
 
 
-    override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CheckoutViewHolder, position: Int) {
         holder.apply {
             onBind(getItem(position), position)
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
-        return CartViewHolder(CartListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheckoutViewHolder {
+        return CheckoutViewHolder(CheckoutListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    inner class CartViewHolder(private val mBinding: CartListItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
+    inner class CheckoutViewHolder(private val mBinding: CheckoutListItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
         fun onBind(productItem: String, position: Int) {
             mBinding.apply {

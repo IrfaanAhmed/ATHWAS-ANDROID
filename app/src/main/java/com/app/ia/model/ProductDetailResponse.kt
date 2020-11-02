@@ -19,6 +19,10 @@ data class ProductDetailResponse(
         @Expose
         @SerializedName("main_product_id")
         val mainProductId: String,
+        //inventory_name
+        @Expose
+        @SerializedName("inventory_name")
+        val inventoryName: String,
         @Expose
         @SerializedName("price")
         var price: Int,

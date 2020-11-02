@@ -117,7 +117,6 @@
                         android:background="@drawable/edittext_bg"
                         android:hint="@string/mobile_number"
                         android:inputType="number"
-                        android:maxLength="15"
                         android:maxLines="1"
                         android:padding="@dimen/_10sdp"
                         android:textAlignment="viewStart"
@@ -173,11 +172,11 @@
                             android:id="@+id/checkBox"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/label_check_term_policy"
-                            android:textSize="@dimen/_9sdp"
+                            android:button="@drawable/my_compound_button_color_selector"
                             android:paddingStart="@dimen/_5sdp"
                             android:paddingEnd="@dimen/_3sdp"
-                            android:button="@drawable/my_compound_button_color_selector"
+                            android:text="@string/label_check_term_policy"
+                            android:textSize="@dimen/_9sdp"
                             app:fontFamily="@font/linotte_light" />
 
                         <androidx.appcompat.widget.AppCompatTextView

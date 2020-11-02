@@ -34,6 +34,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     private var latitude = 0.0
     private var longitude = 0.0
 
+    companion object {
+        const val KEY_REDIRECTION = "KEY_REDIRECTION"
+        const val KEY_REDIRECTION_ID = "KEY_REDIRECTION_ID"
+    }
+
+
     override fun getBindingVariable(): Int {
         return BR.viewModel
     }

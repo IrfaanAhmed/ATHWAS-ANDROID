@@ -21,59 +21,97 @@
         android:orientation="vertical"
         android:padding="@dimen/_5sdp">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <com.chauthai.swipereveallayout.SwipeRevealLayout
+            android:id="@+id/swipe_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            app:dragEdge="right"
+            app:mode="same_level">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivNotification"
+            <FrameLayout
+                android:id="@+id/delete_layout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_8sdp"
-                app:srcCompat="@drawable/ic_info" />
+                android:layout_height="match_parent"
+                android:background="#ffcc0000"
+                android:minHeight="60dp">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@android:color/holo_red_dark"
+                    android:gravity="center"
+                    android:text="@string/delete"
+                    android:textColor="@android:color/white" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/front_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:orientation="vertical">
+                android:minHeight="50dp"
+                android:paddingStart="@dimen/_1sdp"
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingEnd="@dimen/_8sdp"
+                android:paddingBottom="@dimen/_5sdp">
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{notificationItem.title}"
-                    android:textAlignment="viewStart"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_13sdp"
-                    app:fontFamily="@font/linotte_semi_bold"
-                    tools:text="Buy Prepaid Card" />
+                    android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_1sdp"
-                    android:text="@{notificationItem.message}"
-                    android:textAlignment="viewStart"
-                    android:textSize="@dimen/_10sdp"
-                    tools:text="Buy Prepaid Card" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivNotification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        app:srcCompat="@drawable/ic_info" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:text="@{notificationItem.getCreatedAt()}"
-                    android:textAlignment="viewEnd"
-                    android:textColor="@color/theme_color"
-                    android:textSize="@dimen/_9sdp"
-                    tools:text="2020-06-12" />
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:orientation="vertical">
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{notificationItem.title}"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_13sdp"
+                            app:fontFamily="@font/linotte_semi_bold"
+                            tools:text="Buy Prepaid Card" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_1sdp"
+                            android:text="@{notificationItem.message}"
+                            android:textAlignment="viewStart"
+                            android:textSize="@dimen/_10sdp"
+                            tools:text="Buy Prepaid Card" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|end"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:text="@{notificationItem.getCreatedAt()}"
+                            android:textAlignment="viewEnd"
+                            android:textColor="@color/theme_color"
+                            android:textSize="@dimen/_9sdp"
+                            tools:text="2020-06-12" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </FrameLayout>
+
+        </com.chauthai.swipereveallayout.SwipeRevealLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -47,4 +47,7 @@ data class LoginResponse(
     var userImageThumbUrl: String = "",
     @Expose
     @SerializedName("id")
-    var id: String = "")
+    var id: String = "",
+    @Expose
+    @SerializedName("otp_number")
+    var otpNumber: String = "")

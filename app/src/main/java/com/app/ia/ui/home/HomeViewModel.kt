@@ -17,6 +17,7 @@ import com.app.ia.ui.business_category.CategoryFragment
 import com.app.ia.ui.delivery_address.DeliveryAddressActivity
 import com.app.ia.ui.home.adapter.NavigationListAdapter
 import com.app.ia.ui.login.LoginActivity
+import com.app.ia.ui.my_cart.MyCartActivity
 import com.app.ia.ui.my_order.MyOrdersFragment
 import com.app.ia.ui.my_profile.ProfileActivity
 import com.app.ia.ui.notification.NotificationActivity

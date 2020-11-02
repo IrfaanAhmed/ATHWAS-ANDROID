@@ -91,7 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@{product.subcategory.name}"
+                android:text="@{product.subcategory.name + ` - `+product.category.name}"
                 android:textColor="@color/light_grey"
                 android:textSize="@dimen/_10sdp"
                 app:fontFamily="@font/linotte_regular" />

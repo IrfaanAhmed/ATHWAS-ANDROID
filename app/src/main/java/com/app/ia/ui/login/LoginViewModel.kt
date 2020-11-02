@@ -25,11 +25,13 @@ import com.app.ia.spanly.color
 import com.app.ia.spanly.font
 import com.app.ia.ui.forgot_password.ForgotPasswordActivity
 import com.app.ia.ui.home.HomeActivity
+import com.app.ia.ui.otp.OTPActivity
 import com.app.ia.ui.signup.SignUpActivity
 import com.app.ia.utils.*
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.CredentialsOptions
 import com.google.android.gms.auth.api.credentials.HintRequest
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
@@ -55,11 +57,11 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
     }
 
     private fun storeDeviceToken() {
-        /* FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
+         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
              val deviceToken = instanceIdResult.token
              AppLogger.d("device token : $deviceToken")
              AppPreferencesHelper.getInstance().deviceToken = deviceToken
-         }*/
+         }
     }
 
     fun onLoginClick() {
@@ -74,7 +76,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
             return
         } else {
             flag = if (Pattern.matches("[0-9]+", mobileNumber)) {
-                if (mobileNumber.length < 5 || mobileNumber.length > 15) {
+                if (mobileNumber.length < 7 || mobileNumber.length > 15) {
                     IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
                     return
                 } else {
@@ -183,11 +185,11 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
 
                                 if (users.data?.isUserVerified == 0) {
                                     mActivity.toast(users.message)
-                                    /*mActivity.startActivity<OTPActivity> {
+                                    mActivity.startActivity<OTPActivity> {
                                         putExtra("countryCode", users.data?.countryCode)
                                         putExtra("mobileNumber", users.data?.phone)
-                                        //putExtra("otp", users.data?.otpNumber)
-                                    }*/
+                                        putExtra("otp", users.data?.otpNumber)
+                                    }
                                 } else {
                                     AppPreferencesHelper.getInstance().userData = users.data!!
                                     mActivity.startActivityWithFinish<HomeActivity> {
