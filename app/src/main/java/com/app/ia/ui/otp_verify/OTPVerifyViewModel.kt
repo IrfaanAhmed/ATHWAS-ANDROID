@@ -8,7 +8,6 @@ import android.os.CountDownTimer
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
@@ -31,7 +30,6 @@ import com.app.ia.utils.toast
 import com.app.wallet.tivo.receiver.SMSReceiver
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.tasks.Task
-import kotlinx.android.synthetic.main.common_header.*
 import kotlinx.coroutines.Dispatchers
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -42,14 +40,14 @@ class OTPVerifyViewModel(private val baseRepository: BaseRepository) : BaseViewM
     lateinit var mBinding: ActivityOtpVerifyBinding
 
     private var myCountDownTimer: MyCountDownTimer? = null
-    private var resendTimeInSec = 120
-    var isTimeFinished = MutableLiveData<Boolean>(false)
+    private var resendTimeInSec = 60
+    var isTimeFinished = MutableLiveData(false)
     var expireTime = MutableLiveData<String>()
 
-    var countryCode = MutableLiveData<String>("")
-    var mobileNumber = MutableLiveData<String>("")
-    var otp = MutableLiveData<String>("")
-    var otpFor = MutableLiveData<String>("")
+    var countryCode = MutableLiveData("")
+    var mobileNumber = MutableLiveData("")
+    var otp = MutableLiveData("")
+    var otpFor = MutableLiveData("")
 
     private var smsReceiver: SMSReceiver? = null
 
@@ -139,7 +137,7 @@ class OTPVerifyViewModel(private val baseRepository: BaseRepository) : BaseViewM
         val fontSemiBold: Typeface = ResourcesCompat.getFont(mActivity, R.font.linotte_bold)!!
         val spanly = Spanly()
 
-        spanly.append(mActivity.getString(R.string.didn_t_receive_the_otp)).space().append(mActivity.getString(R.string.resend_otp), color(mActivity.getColorCompat(R.color.green)), font(fontSemiBold), clickable(View.OnClickListener {
+        spanly.append(mActivity.getString(R.string.didn_t_receive_the_otp)).space().append(mActivity.getString(R.string.resend_otp), color(mActivity.getColorCompat(R.color.colorPrimary)), font(fontSemiBold), clickable(View.OnClickListener {
             val requestParams = HashMap<String, String>()
             requestParams["country_code"] = countryCode.value!!
             requestParams["phone"] = mobileNumber.value!!
@@ -189,33 +187,32 @@ class OTPVerifyViewModel(private val baseRepository: BaseRepository) : BaseViewM
 
     private fun setupObservers(requestParams: HashMap<String, String>, verifyOTP: Boolean) {
 
-        apiCalling(requestParams, verifyOTP).observe(mBinding.lifecycleOwner!!, androidx.lifecycle.Observer {
+        apiCalling(requestParams, verifyOTP).observe(mBinding.lifecycleOwner!!, {
             it.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
 
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-                                mActivity.toast(users.message)
-                                val localBroadCast =
-                                        LocalBroadcastManager.getInstance(mActivity)
-                                val intent =
-                                        Intent(AppConstants.ACTION_BROADCAST_UPDATE_PROFILE)
-                                localBroadCast.sendBroadcast(intent)
+
+                            mActivity.toast(users.message)
+                            val localBroadCast = LocalBroadcastManager.getInstance(mActivity)
+                            val intent = Intent(AppConstants.ACTION_BROADCAST_UPDATE_PROFILE)
+                            localBroadCast.sendBroadcast(intent)
+                            if (verifyOTP) {
                                 mActivity.finish()
-                            } else {
-                                IADialog(mActivity, users.message, true)
                             }
                         }
                     }
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        if (it.message!!.isNotEmpty()) {
+                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        }
                     }
 
                     Status.LOADING -> {
-
+                        baseRepository.callback.showProgress()
                     }
                 }
             }

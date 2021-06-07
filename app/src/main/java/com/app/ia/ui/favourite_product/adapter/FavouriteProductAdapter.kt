@@ -6,33 +6,21 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.databinding.FavouriteProductListItemBinding
-import com.app.ia.databinding.ProductListItemBinding
 import com.app.ia.ui.product_detail.ProductDetailActivity
 import com.app.ia.utils.startActivity
 
-class FavouriteProductAdapter :
-    ListAdapter<String, FavouriteProductAdapter.FavouriteProductViewHolder>(
-        OffersListDiffCallback()
-    ) {
+class FavouriteProductAdapter : ListAdapter<String, FavouriteProductAdapter.FavouriteProductViewHolder>(OffersListDiffCallback()) {
 
     class OffersListDiffCallback : DiffUtil.ItemCallback<String>() {
 
-        override fun areItemsTheSame(
-            oldItem: String,
-            newItem: String
-        ): Boolean {
+        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(
-            oldItem: String,
-            newItem: String
-        ): Boolean {
+        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
             return oldItem == newItem
         }
     }
-
-
 
     override fun onBindViewHolder(holder: FavouriteProductViewHolder, position: Int) {
         holder.apply {
@@ -41,13 +29,7 @@ class FavouriteProductAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouriteProductViewHolder {
-        return FavouriteProductViewHolder(
-            FavouriteProductListItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+        return FavouriteProductViewHolder(FavouriteProductListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     inner class FavouriteProductViewHolder(private val mBinding: FavouriteProductListItemBinding) :
@@ -59,7 +41,7 @@ class FavouriteProductAdapter :
                 executePendingBindings()
 
                 itemView.setOnClickListener {
-                    itemView.context.startActivity<ProductDetailActivity> ()
+                    itemView.context.startActivity<ProductDetailActivity>()
                 }
             }
         }

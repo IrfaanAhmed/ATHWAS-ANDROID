@@ -1,7 +1,6 @@
 package com.app.ia.ui.wishlist
 
 import android.app.Activity
-import android.content.Intent
 import android.widget.Toast
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
@@ -10,10 +9,13 @@ import com.app.ia.R
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityWishListBinding
-import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
+import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.model.FavoriteListResponse
+import com.app.ia.utils.CommonUtils
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
+import kotlinx.android.synthetic.main.common_header.view.*
 import kotlinx.coroutines.Dispatchers
 
 class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), LifecycleObserver {
@@ -28,7 +30,6 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
     val currentPage = MutableLiveData(1)
     val isLastPage = MutableLiveData(false)
-    val favPosition = MutableLiveData<Int>()
 
     fun setVariable(mBinding: ActivityWishListBinding) {
         this.mBinding = mBinding
@@ -38,7 +39,6 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
     }
 
     fun setUpObserver() {
-        favoriteListAll.clear()
         val requestParams = HashMap<String, String>()
         requestParams["page_no"] = currentPage.value!!.toString()
         productListingObserver(requestParams)
@@ -60,13 +60,9 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-                                isLastPage.value = (currentPage.value == users.data?.totalpages)
-                                favoriteListAll.addAll(users.data?.docs!!)
-                                favoriteList.value = favoriteListAll
-                            } else {
-                                IADialog(mActivity, users.message, true)
-                            }
+                            isLastPage.value = (currentPage.value == users.data?.totalpages)
+                            favoriteListAll.addAll(users.data?.docs!!)
+                            favoriteList.value = favoriteListAll
                         }
                     }
 
@@ -83,11 +79,11 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
         })
     }
 
-    fun addFavorite(product_id: String) {
+    fun addFavorite(product_id: String, position: Int) {
         val requestParams = HashMap<String, String>()
         requestParams["product_id"] = product_id
         requestParams["status"] = "0"
-        addFavoriteObserver(requestParams)
+        addFavoriteObserver(requestParams, position)
     }
 
     private fun addFavourite(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
@@ -99,24 +95,93 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
         }
     }
 
-    private fun addFavoriteObserver(requestParams: HashMap<String, String>) {
+    private fun addFavoriteObserver(requestParams: HashMap<String, String>, deletedPosition: Int) {
 
         addFavourite(requestParams).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-                                setUpObserver()
-                            } else {
-                                IADialog(mActivity, users.message, true)
-                            }
+                            Toast.makeText(mActivity, users.message, Toast.LENGTH_LONG).show()
+                            favoriteListAll.removeAt(deletedPosition)
+                            favoriteList.value = favoriteListAll
+                            (mActivity as WishListActivity).wishListAdapter?.notifyItemRemoved(deletedPosition)
+                            (mActivity as WishListActivity).wishListAdapter?.notifyItemRangeChanged(deletedPosition, favoriteListAll.size)
                         }
                     }
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                    }
+
+                    Status.LOADING -> {
+                        baseRepository.callback.showProgress()
+                    }
+                }
+            }
+        })
+    }
+
+    /**
+     *  Notify Me Observer
+     */
+    private fun notifyMe(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = baseRepository.notifyMe(requestParams)))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
+    }
+
+    fun notifyMeObserver(requestParams: HashMap<String, String>) {
+
+        notifyMe(requestParams).observe(mBinding.lifecycleOwner!!, {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { users ->
+                            mActivity.toast(users.message)
+                        }
+                    }
+
+                    Status.ERROR -> {
+                        baseRepository.callback.hideProgress()
+                    }
+
+                    Status.LOADING -> {
+                        baseRepository.callback.showProgress()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun addItemToCart(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = baseRepository.addToCart(requestParams)))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
+    }
+
+    fun addItemToCartObserver(requestParams: HashMap<String, String>) {
+
+        addItemToCart(requestParams).observe(mBinding.lifecycleOwner!!, {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { users ->
+                            mActivity.toast(users.message)
+                            AppPreferencesHelper.getInstance().cartItemCount = users.data?.cartCount!!
+                            CommonUtils.showCartItemCount(mBinding.toolbar.bottom_navigation_notification)
+                        }
+                    }
+
+                    Status.ERROR -> {
+                        baseRepository.callback.hideProgress()
                     }
 
                     Status.LOADING -> {

@@ -23,26 +23,26 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:paddingStart="@dimen/_12sdp"
-            android:paddingTop="@dimen/_8sdp"
             android:paddingEnd="@dimen/_12sdp"
-            android:paddingBottom="@dimen/_8sdp">
+            android:paddingBottom="@dimen/_5sdp">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_33sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:background="@drawable/edittext_bg"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_33sdp"
+                    android:layout_height="@dimen/_25sdp"
                     android:layout_weight="1"
                     android:background="@null"
                     android:clickable="true"
                     android:drawableStart="@drawable/ic_search"
-                    android:drawablePadding="@dimen/_8sdp"
+                    android:drawablePadding="@dimen/_5sdp"
                     android:editable="false"
-                    android:focusable="true"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:gravity="center_vertical"
                     android:hint="@string/what_are_you_looking_for"
                     android:onClick="@{() -> viewModel.onSearchProductClick()}"
@@ -54,152 +54,209 @@
                     android:id="@+id/ivMicIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_7sdp"
-                    android:src="@drawable/ic_mike" />
+                    android:padding="@dimen/_6sdp"
+                    android:src="@drawable/ic_mic" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </FrameLayout>
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/mSwipeRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <FrameLayout
-                    android:id="@+id/bannerLayout"
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_120sdp"
-                    android:visibility="@{(viewModel.bannerList  != null &amp;&amp; viewModel.bannerList.size() > 0) ? View.VISIBLE : View.GONE}">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <com.santalu.autoviewpager.AutoViewPager
-                        android:id="@+id/viewPagerBanner"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewCategory"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:avp_autoScroll="true"
-                        app:avp_duration="3000"
-                        app:avp_indeterminate="true" />
-
-                    <com.app.ia.helper.CirclePageIndicator
-                        android:id="@+id/view_pager_indicator"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center|bottom"
-                        android:layout_marginBottom="8dp"
-                        android:padding="10dp"
-                        app:fillColor="@color/colorPrimaryDark"
-                        app:pageColor="@color/light_grey"
-                        app:strokeColor="@color/transparent"
-                        app:strokeWidth="0dp" />
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/home_category_list_item" />
 
-                </FrameLayout>
+                    <FrameLayout
+                        android:id="@+id/bannerLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_120sdp"
+                        android:visibility="@{(viewModel.bannerList  != null &amp;&amp; viewModel.bannerList.size() > 0) ? View.VISIBLE : View.GONE}">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewCategory"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:itemCount="2"
-                    tools:listitem="@layout/home_category_list_item" />
+                        <com.santalu.autoviewpager.AutoViewPager
+                            android:id="@+id/viewPagerBanner"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:avp_autoScroll="true"
+                            app:avp_duration="3000"
+                            app:avp_indeterminate="true" />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_1sdp"
-                    android:background="@color/theme_color"
-                    android:gravity="center_vertical"
-                    android:paddingStart="@dimen/_10sdp"
-                    android:paddingTop="@dimen/_6sdp"
-                    android:paddingEnd="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_6sdp">
+                        <com.app.ia.helper.CirclePageIndicator
+                            android:id="@+id/view_pager_indicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|bottom"
+                            android:layout_marginBottom="8dp"
+                            android:padding="10dp"
+                            app:fillColor="@color/colorPrimaryDark"
+                            app:pageColor="@color/light_grey"
+                            app:strokeColor="@color/transparent"
+                            app:strokeWidth="0dp" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/dealOfTheDayBannerLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_120sdp"
+                        android:visibility="@{(viewModel.dealOfTheDayBannerList  != null &amp;&amp; viewModel.dealOfTheDayBannerList.size() > 0) ? View.VISIBLE : View.GONE}">
+
+                        <com.santalu.autoviewpager.AutoViewPager
+                            android:id="@+id/vpDealOfTheDayBanner"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:avp_autoScroll="false"
+                            app:avp_duration="3000"
+                            app:avp_indeterminate="true" />
+
+                        <com.app.ia.helper.CirclePageIndicator
+                            android:id="@+id/vpDealOfTheDayBannerIndicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|bottom"
+                            android:layout_marginBottom="8dp"
+                            android:padding="10dp"
+                            app:fillColor="@color/colorPrimaryDark"
+                            app:pageColor="@color/light_grey"
+                            app:strokeColor="@color/transparent"
+                            app:strokeWidth="0dp" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/leftArrow"
+                            android:layout_width="@dimen/_24sdp"
+                            android:layout_height="@dimen/_24sdp"
+                            android:rotation="180"
+                            android:visibility="gone"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_gravity="center_vertical|start"
+                            app:srcCompat="@drawable/ic_right_arrow"/>
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/rightArrow"
+                            android:layout_width="@dimen/_24sdp"
+                            android:layout_height="@dimen/_24sdp"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:visibility="gone"
+                            android:layout_gravity="center_vertical|end"
+                            app:srcCompat="@drawable/ic_right_arrow"/>
+
+                    </FrameLayout>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@string/popular_products"
-                        android:textAlignment="viewStart"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_13sdp"
-                        app:fontFamily="@font/linotte_semi_bold" />
+                        android:layout_marginTop="@dimen/_1sdp"
+                        android:background="@color/theme_color"
+                        android:gravity="center_vertical"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:paddingTop="@dimen/_6sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_6sdp"
+                        android:visibility="@{viewModel.popularProductListing.size() > 0 ? View.VISIBLE : View.GONE}">
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_24sdp"
-                        android:background="@drawable/white_rounded_corner"
-                        android:onClick="@{()-> viewModel.onViewAllClick()}"
-                        android:text="@string/view_all"
-                        android:textAllCaps="false"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/_10sdp" />
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@string/popular_products"
+                            android:textAlignment="viewStart"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_13sdp"
+                            app:fontFamily="@font/linotte_semi_bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_24sdp"
+                            android:background="@drawable/white_rounded_corner"
+                            android:onClick="@{()-> viewModel.onViewAllClick(1)}"
+                            android:text="@string/view_all"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/_10sdp" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewProduct"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="3"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/home_product_list_item" />
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@color/theme_color"
+                        android:gravity="center_vertical"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:paddingTop="@dimen/_6sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_6sdp"
+                        android:visibility="@{viewModel.discountedProductListing.size() > 0 ? View.VISIBLE : View.GONE}">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@string/discounted_products"
+                            android:textAlignment="viewStart"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_13sdp"
+                            app:fontFamily="@font/linotte_semi_bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_24sdp"
+                            android:background="@drawable/white_rounded_corner"
+                            android:onClick="@{()-> viewModel.onViewAllClick(2)}"
+                            android:text="@string/view_all"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/_10sdp" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewDiscountProduct"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="3"
+                        tools:itemCount="5"
+                        tools:listitem="@layout/home_product_list_item" />
+
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewProduct"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="3"
-                    tools:itemCount="5"
-                    tools:listitem="@layout/home_product_list_item" />
+            </androidx.core.widget.NestedScrollView>
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@color/theme_color"
-                    android:gravity="center_vertical"
-                    android:paddingStart="@dimen/_10sdp"
-                    android:paddingTop="@dimen/_6sdp"
-                    android:paddingEnd="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_6sdp">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@string/discounted_products"
-                        android:textAlignment="viewStart"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_13sdp"
-                        app:fontFamily="@font/linotte_semi_bold" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_24sdp"
-                        android:background="@drawable/white_rounded_corner"
-                        android:onClick="@{()-> viewModel.onViewAllClick()}"
-                        android:text="@string/view_all"
-                        android:textAllCaps="false"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/_10sdp" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewDiscountProduct"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="3"
-                    tools:itemCount="5"
-                    tools:listitem="@layout/home_product_list_item" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-        </androidx.core.widget.NestedScrollView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

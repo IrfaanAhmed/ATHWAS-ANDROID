@@ -2,19 +2,24 @@ package com.app.ia.ui.webview
 
 import android.app.Activity
 import android.content.Intent
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityWebViewBinding
+import com.app.ia.enums.Status
 import com.app.ia.utils.AppConstants
+import com.app.ia.utils.Resource
+import kotlinx.coroutines.Dispatchers
 
 class WebViewViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
 
     lateinit var mActivity: Activity
     lateinit var mBinding: ActivityWebViewBinding
 
-    var url = MutableLiveData<String>("")
-    var textTitle = MutableLiveData<String>("")
+    var url = MutableLiveData("")
+    var textTitle = MutableLiveData("")
 
     fun setVariable(mBinding: ActivityWebViewBinding) {
         this.mBinding = mBinding
@@ -27,7 +32,7 @@ class WebViewViewModel(private val baseRepository: BaseRepository) : BaseViewMod
         title.set(textTitle.value)
     }
 
-    /*private fun getContentData(requestParams: String) = liveData(Dispatchers.Main) {
+    private fun getContentData(requestParams: String) = liveData(Dispatchers.Main) {
         emit(Resource.loading(data = null))
         try {
             emit(Resource.success(data = baseRepository.getContentData(requestParams)))
@@ -43,11 +48,7 @@ class WebViewViewModel(private val baseRepository: BaseRepository) : BaseViewMod
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-                                mBinding.webview.loadData(users.data?.contentData!!, "text/html", "UTF-8")
-                            } else {
-                                IaDialog(mActivity, users.message, true)
-                            }
+                            mBinding.webview.loadData(users.data?.contentData!!, "text/html", "UTF-8")
                         }
                     }
                     Status.ERROR -> {
@@ -60,6 +61,6 @@ class WebViewViewModel(private val baseRepository: BaseRepository) : BaseViewMod
                 }
             }
         })
-    }*/
+    }
 
 }

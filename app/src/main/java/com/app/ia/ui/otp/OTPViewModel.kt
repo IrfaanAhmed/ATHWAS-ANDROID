@@ -194,22 +194,18 @@ class OTPViewModel(private val baseRepository: BaseRepository) : BaseViewModel()
                     Status.SUCCESS -> {
 
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-                                if (users.data is LoginResponse) {
-                                    mActivity.toast(users.message)
-                                    val response = users.data as LoginResponse
-                                    AppPreferencesHelper.getInstance().userData = response
-                                    mActivity.startActivityWithFinish<LoginActivity> {
-                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    }
-                                } else {
-                                    val response = users.data as ResendOTPResponse
-                                    IADialog(mActivity, "OTP is : " + response.otpNumber, true)
-                                    otp.value = response.otpNumber
-                                    startTimer()
+                            if (users.data is LoginResponse) {
+                                mActivity.toast(users.message)
+                                val response = users.data as LoginResponse
+                                AppPreferencesHelper.getInstance().userData = response
+                                mActivity.startActivityWithFinish<LoginActivity> {
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 }
                             } else {
-                                IADialog(mActivity, users.message, true)
+                                val response = users.data as ResendOTPResponse
+                                IADialog(mActivity, "OTP is : " + response.otpNumber, true)
+                                otp.value = response.otpNumber
+                                startTimer()
                             }
                         }
                     }

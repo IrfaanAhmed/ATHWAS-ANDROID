@@ -9,7 +9,6 @@ import androidx.lifecycle.liveData
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivitySubCategoryBinding
-import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
 import com.app.ia.model.ProductSubCategoryResponse
 import com.app.ia.utils.AppConstants
@@ -23,6 +22,10 @@ class SubCategoryViewModel(private val baseRepository: BaseRepository) : BaseVie
 
     private val titleValue = MutableLiveData("")
     var productSubCategory = MutableLiveData<MutableList<ProductSubCategoryResponse.Docs>>()
+    var isProductSubCategoryAvailable = MutableLiveData(true)
+
+    private var businessCategoryID = MutableLiveData<String>()
+    private var productCategoryID = MutableLiveData<String>()
 
     fun setVariable(mBinding: ActivitySubCategoryBinding) {
         this.mBinding = mBinding
@@ -32,10 +35,9 @@ class SubCategoryViewModel(private val baseRepository: BaseRepository) : BaseVie
     fun setIntent(intent: Intent) {
         titleValue.value = intent.extras!!.getString(AppConstants.EXTRA_PRODUCT_CATEGORY_NAME)
         title.set(titleValue.value!!)
-        val requestParams = HashMap<String, String>()
-        requestParams["business_category_id"] = intent.getStringExtra(AppConstants.EXTRA_BUSINESS_CATEGORY_ID)!!
-        requestParams["category_id"] = intent.getStringExtra(AppConstants.EXTRA_PRODUCT_CATEGORY_ID)!!
-        productCategoryObserver(requestParams)
+        businessCategoryID.value = intent.getStringExtra(AppConstants.EXTRA_BUSINESS_CATEGORY_ID)!!
+        productCategoryID.value = intent.getStringExtra(AppConstants.EXTRA_PRODUCT_CATEGORY_ID)!!
+        productCategoryObserver()
     }
 
     private fun getProductCategory(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
@@ -47,24 +49,27 @@ class SubCategoryViewModel(private val baseRepository: BaseRepository) : BaseVie
         }
     }
 
-    private fun productCategoryObserver(requestParams: HashMap<String, String>) {
+    fun productCategoryObserver() {
+
+        val requestParams = HashMap<String, String>()
+        requestParams["business_category_id"] = businessCategoryID.value!!
+        requestParams["category_id"] = productCategoryID.value!!
 
         getProductCategory(requestParams).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-                                productSubCategory.value = users.data?.docs!!
-                            } else {
-                                IADialog(mActivity, users.message, true)
-                            }
+                            productSubCategory.value = users.data?.docs!!
+                            isProductSubCategoryAvailable.value = users.data?.docs!!.size > 0
                         }
                     }
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        if (!it.message.isNullOrEmpty()) {
+                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        }
                     }
 
                     Status.LOADING -> {

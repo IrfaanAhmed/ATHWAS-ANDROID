@@ -28,8 +28,8 @@
                 android:layout_height="match_parent"
                 android:visibility="@{viewModel.isItemAvailable ? View.VISIBLE : View.GONE}"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="3"
-                tools:listitem="@layout/offer_list_item" />
+                app:spanCount="4"
+                tools:listitem="@layout/offer_item" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -41,8 +41,6 @@
             android:text="@string/no_item_available"
             android:textSize="@dimen/_10sdp"
             android:visibility="@{viewModel.isItemAvailable ? View.GONE : View.VISIBLE}" />
-
-
     </RelativeLayout>
 
 </layout>

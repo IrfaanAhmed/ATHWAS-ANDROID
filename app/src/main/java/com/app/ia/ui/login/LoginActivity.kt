@@ -11,6 +11,7 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityLoginBinding
+import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.utils.AppLogger
 import com.app.ia.utils.AppRequestCode
 import com.app.ia.utils.makeStatusBarTransparent
@@ -61,6 +62,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 }
             }
         })
+
+        currentLocationManager(false)
     }
 
     private fun setViewModel() {
@@ -98,5 +101,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
         }
     }
 
-
+    override fun onCurrentLocation(latitude: Double, longitude: Double) {
+        super.onCurrentLocation(latitude, longitude)
+        if (latitude == 0.0 && longitude == 0.0) {
+            currentLocationManager()
+        } else {
+            AppPreferencesHelper.getInstance().mCurrentLat = latitude
+            AppPreferencesHelper.getInstance().mCurrentLng = longitude
+        }
+    }
 }

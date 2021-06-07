@@ -1,185 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/design_bottom_sheet"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/consHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/top_rounded_corner_primary">
+    <data>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/btnResetFilter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_10sdp"
-            android:text="@string/reset"
-            android:textColor="@color/theme_color"
-            android:textSize="@dimen/_12sdp"
-            app:fontFamily="@font/linotte_semi_bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <import type="android.view.View" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_10sdp"
-            android:text="@string/filters"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_14sdp"
-            app:fontFamily="@font/linotte_semi_bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <variable
+            name="viewModel"
+            type="com.app.ia.dialog.bottom_sheet_dialog.viewmodel.ProductFilterDialogViewModel" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_10sdp"
-            android:text="@string/cancel"
-            android:textColor="@color/theme_color"
-            android:textSize="@dimen/_13sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </data>
 
     <RelativeLayout
-        android:id="@+id/relMain"
+        android:id="@+id/design_bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/consHeader"
-        android:paddingStart="@dimen/_15sdp"
-        android:paddingEnd="@dimen/_15sdp"
-        android:paddingBottom="@dimen/_12sdp">
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/consPrice"
+            android:id="@+id/consHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp">
+            android:background="@drawable/top_rounded_corner_primary">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvPrice"
+                android:id="@+id/btnResetFilter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/price"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_13sdp"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/reset"
+                android:textColor="@color/theme_color"
+                android:textSize="@dimen/_12sdp"
                 app:fontFamily="@font/linotte_semi_bold"
-                app:layout_constraintBottom_toTopOf="@+id/llPriceValue"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/llPriceValue"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_35sdp"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvPrice">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtTextMinPrice"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="@dimen/_12sdp"
-                    android:layout_weight=".5"
-                    android:background="@drawable/edittext_bg"
-                    android:hint="@string/min_price"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:padding="@dimen/_10sdp"
-                    android:textAlignment="center"
-                    android:textSize="@dimen/_10sdp" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/filters"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14sdp"
+                app:fontFamily="@font/linotte_semi_bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtTextMaxPrice"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".5"
-                    android:background="@drawable/edittext_bg"
-                    android:hint="@string/max_price"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:padding="@dimen/_10sdp"
-                    android:textAlignment="center"
-                    android:textSize="@dimen/_10sdp" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/cancel"
+                android:textColor="@color/theme_color"
+                android:textSize="@dimen/_13sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/consRating"
+        <RelativeLayout
+            android:id="@+id/relMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/consPrice"
-            android:layout_marginTop="@dimen/_10sdp">
+            android:layout_below="@+id/consHeader"
+            android:paddingStart="@dimen/_15sdp"
+            android:paddingEnd="@dimen/_15sdp"
+            android:paddingBottom="@dimen/_12sdp">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvCustomerRating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/customer_rating"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_13sdp"
-                app:fontFamily="@font/linotte_semi_bold"
-                app:layout_constraintBottom_toTopOf="@+id/recyclerViewRating"
-                app:layout_constraintStart_toStartOf="parent" />
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewRating"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/consPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvCustomerRating"
-                tools:itemCount="5"
-                tools:listitem="@layout/rating_list_item" />
+                android:layout_marginTop="@dimen/_8sdp">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/price"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_13sdp"
+                    app:fontFamily="@font/linotte_semi_bold"
+                    app:layout_constraintBottom_toTopOf="@+id/llPriceValue"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spinnerCategory"
-            style="@style/spinner_style"
-            android:layout_below="@+id/consRating"
-            android:layout_marginTop="@dimen/_18sdp" />
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llPriceValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPrice">
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spinnerSubCategory"
-            style="@style/spinner_style"
-            android:layout_below="@+id/spinnerCategory"
-            android:layout_marginTop="@dimen/_18sdp" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtTextMinPrice"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        android:layout_weight=".5"
+                        android:background="@drawable/edittext_bg"
+                        android:hint="@string/min_price"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:padding="@dimen/_10sdp"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/_10sdp" />
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spinnerBrand"
-            style="@style/spinner_style"
-            android:layout_below="@+id/spinnerSubCategory"
-            android:layout_marginTop="@dimen/_18sdp" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtTextMaxPrice"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:background="@drawable/edittext_bg"
+                        android:hint="@string/max_price"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:padding="@dimen/_10sdp"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/_10sdp" />
 
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/consRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/consPrice"
+                android:layout_marginTop="@dimen/_10sdp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvCustomerRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/customer_rating"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_13sdp"
+                    app:fontFamily="@font/linotte_semi_bold"
+                    app:layout_constraintBottom_toTopOf="@+id/recyclerViewRating"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCustomerRating"
+                    tools:itemCount="5"
+                    tools:listitem="@layout/rating_list_item" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinnerCategory"
+                style="@style/spinner_style"
+                android:layout_below="@+id/consRating"
+                android:layout_marginTop="@dimen/_18sdp" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinnerSubCategory"
+                style="@style/spinner_style"
+                android:layout_below="@+id/spinnerCategory"
+                android:layout_marginTop="@dimen/_18sdp" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinnerBrand"
+                style="@style/spinner_style"
+                android:layout_below="@+id/spinnerSubCategory"
+                android:layout_marginTop="@dimen/_18sdp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/selectCustomization"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_32sdp"
+                android:layout_below="@+id/spinnerBrand"
+                android:layout_marginTop="@dimen/_18sdp"
+                android:background="@drawable/edittext_bg"
+                android:gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:textAllCaps="false"
+                android:paddingStart="@dimen/_16sdp"
+                android:paddingEnd="@dimen/_16sdp"
+                android:text="Customization" />
+
+        </RelativeLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnApplyFilter"
+            style="@style/AddToCartButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_below="@+id/relMain"
+            android:text="@string/apply_filter" />
     </RelativeLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnApplyFilter"
-        style="@style/AddToCartButton"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_32sdp"
-        android:layout_below="@+id/relMain"
-        android:text="@string/apply_filter" />
-</RelativeLayout>
+</layout>

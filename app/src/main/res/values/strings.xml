@@ -39,8 +39,8 @@
     <string name="verification_code">Verification Code</string>
     <string name="expiring_in">Expiring in %s</string>
     <string name="dashes">----</string>
-    <string name="please_enter_4_digit_otp_msg">Please enter the 4 digits OTP sent \nto %1$s-%2$s</string>
-    <string name="verify">verify</string>
+    <string name="please_enter_4_digit_otp_msg">Please enter the 4 digits OTP sent \nto %s</string>
+    <string name="verify">Verify</string>
     <string name="didn_t_receive_the_otp">Didn\'t receive the OTP?</string>
     <string name="enter_email_mobile_no">Please enter mobile number or email</string>
     <string name="enter_valid_email_mobile_no">Please enter valid mobile number or email</string>
@@ -100,7 +100,7 @@
     <string name="add_new_address">Add New Address</string>
     <string name="search_for_your_location">Search for your location..</string>
     <string name="tag_this_location_for_later">Tag this location for later</string>
-    <string name="floor_apartment_no_house_no">Floor/Apartment No./House No.</string>
+    <string name="floor_apartment_no_house_no">Floor/Apartment No./House No. and Landmark</string>
     <string name="work">Work</string>
     <string name="other">Other</string>
     <string name="add">Add</string>
@@ -142,6 +142,7 @@
     <string name="delivery_date_and_time">Delivery date and time:</string>
     <string name="payment_mode">Payment Mode:</string>
     <string name="payable_amount">Payable Amount:</string>
+    <string name="paid_amount">Paid Amount:</string>
     <string name="my_wallet">My Wallet</string>
     <string name="wallet">Wallet</string>
     <string name="add_money">Add Money</string>
@@ -180,17 +181,18 @@
     <string name="faq">FAQ</string>
     <string name="about_us">About Us</string>
     <string name="contact_us">Contact Us</string>
+    <string name="terms_n_condition">Terms &amp; Condition</string>
     <string name="popularity">Popularity</string>
     <string name="price_low_to_high">Price - Low to High</string>
     <string name="price_high_to_low">Price - High to Low</string>
     <string name="newest_first">Newest First</string>
     <string name="popular_products">Popular Products</string>
     <string name="view_all">View all</string>
-    <string name="discounted_products">Discounted Products Upto - 50 off </string>
+    <string name="discounted_products">Discounted Products</string>
     <string name="shop_by_category">Shop by Category</string>
     <string name="offers">Offers</string>
     <string name="what_are_you_looking_for">What are you looking for?</string>
-    <string name="rewards_points">Rewards Points</string>
+    <string name="rewards_points">Reward Points</string>
     <string name="setting">Settings</string>
     <string name="edit">Edit</string>
     <string name="total_rewards">Total Rewards</string>
@@ -212,9 +214,21 @@
     <string name="promo_code">Promo Code</string>
     <string name="have_a_promo_code">Have a promo code? Enter here</string>
     <string name="apply_code">Apply Code</string>
-    <string name="promo_code_applied">Promo code applied</string>
+    <string name="promo_code_applied">Promo code applied successfully</string>
     <string name="delete">Delete</string>
     <string name="need_login_msg">You need to login to access this feature</string>
     <string name="continues">Continue</string>
+    <string name="apply_filters">Apply Filters</string>
+    <string name="clear_filters">Clear Filters</string>
+    <string name="notify_me">Notify me</string>
+    <string name="inr_price">₹%1$s</string>
+    <string name="track_order">Track Order</string>
+    <string name="please_write_your_review_here">Please write your review</string>
+    <string name="write_a_review">Write a Review</string>
+    <string name="pin_code">Pin code</string>
+    <string name="enable_notification">Enable Notification</string>
+    <string name="download_invoice">Download Invoice</string>
+    <string name="invoice_downloaded_successfully">Invoice Download Successfully.</string>
+    <string name="no_order_invoice_available">No order invoice available.</string>
 
 </resources>

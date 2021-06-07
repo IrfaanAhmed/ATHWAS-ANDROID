@@ -8,7 +8,7 @@ data class AddressListResponse(
 
     @Expose
     @SerializedName("addresslist")
-    var addresslist: MutableList<AddressList>): Serializable {
+    var addresslist: MutableList<AddressList>) : Serializable {
 
     data class AddressList(
         @Expose
@@ -42,6 +42,9 @@ data class AddressListResponse(
         @SerializedName("address_type")
         val addressType: String,
         @Expose
+        @SerializedName("zip_code")
+        val zipCode: String,
+        @Expose
         @SerializedName("flat")
         val flat: String,
         @Expose
@@ -49,7 +52,7 @@ data class AddressListResponse(
         val landmark: String,
         @Expose
         @SerializedName("full_address")
-        val fullAddress: String): Serializable {
+        val fullAddress: String) : Serializable {
 
         data class Geolocation(
             @Expose
@@ -60,7 +63,7 @@ data class AddressListResponse(
             var coordinates: List<Double>,
             @Expose
             @SerializedName("_id")
-            val Id: String): Serializable{
+            val Id: String) : Serializable {
 
         }
     }

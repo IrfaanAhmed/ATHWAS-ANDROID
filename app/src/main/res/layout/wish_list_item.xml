@@ -71,15 +71,20 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:text="@{product.name}"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:text="@{product.name + ` - ` + product.inventoryName}"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp"
                     app:fontFamily="@font/linotte_semi_bold" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/cbFavorite"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:padding="@dimen/_8sdp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:src="@drawable/ic_like" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -88,15 +93,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@{product.subcategory.name}"
+                android:text="@{product.subcategory.name + ` - `+product.category.name}"
                 android:textColor="@color/light_grey"
                 android:textSize="@dimen/_10sdp"
                 app:fontFamily="@font/linotte_regular" />
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/discount_gradient"
+                android:paddingStart="@dimen/_5sdp"
+                android:paddingTop="@dimen/_3sdp"
+                android:paddingEnd="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:paddingBottom="@dimen/_3sdp"
+                android:text="@{product.discountPercent}"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_8sdp"
+                android:visibility="@{product.isDiscount() == 1 ? View.VISIBLE : View.GONE}"
+                app:fontFamily="@font/linotte_semi_bold" />
+
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -110,7 +130,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="@{`₹`+ product.offerPrice}"
+                        android:text="@{product.isDiscount() == 1 ? `₹`+ product.offerPrice : `₹`+ product.price }"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="@dimen/_11sdp" />
 
@@ -120,24 +140,11 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="@dimen/_5sdp"
-                        android:text="@{`₹`+ product.price}"
+                        android:text="@{product.isDiscount() == 1 ? `₹`+ product.price : `` }"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_10sdp"
+                        android:visibility="@{product.isDiscount() == 1 ? View.VISIBLE : View.GONE}"
                         app:fontFamily="@font/linotte_light" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:background="@drawable/discount_gradient"
-                        android:paddingStart="@dimen/_5sdp"
-                        android:paddingTop="@dimen/_3sdp"
-                        android:paddingEnd="@dimen/_5sdp"
-                        android:paddingBottom="@dimen/_3sdp"
-                        android:text="30% Off"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/_8sdp"
-                        app:fontFamily="@font/linotte_semi_bold" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -150,7 +157,7 @@
                     android:layout_gravity="end"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:backgroundTint="@color/colorPrimaryDark"
-                    android:text="@string/add_to_cart" />
+                    android:text="@{(product.quantity &lt; 1) ? @string/notify_me : @string/add_to_cart}" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

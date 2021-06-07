@@ -29,7 +29,7 @@ class CommonSortAdapter : ListAdapter<CommonSortBean, CommonSortAdapter.CommonSo
 
     override fun onBindViewHolder(holder: CommonSortViewHolder, position: Int) {
         holder.apply {
-            onBind(getItem(position))
+            onBind(getItem(position), position)
         }
     }
 
@@ -37,17 +37,16 @@ class CommonSortAdapter : ListAdapter<CommonSortBean, CommonSortAdapter.CommonSo
         return CommonSortViewHolder(CommonSortListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    inner class CommonSortViewHolder(private val mBinding: CommonSortListItemBinding) :
-        RecyclerView.ViewHolder(mBinding.root) {
+    inner class CommonSortViewHolder(private val mBinding: CommonSortListItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun onBind(sortOptionItem: CommonSortBean) {
+        fun onBind(sortOptionItem: CommonSortBean, position: Int) {
             mBinding.apply {
                 sortOption = sortOptionItem
                 executePendingBindings()
 
                 itemView.setOnClickListener {
                     if (onItemSelectListener != null) {
-                        onItemSelectListener?.onItemSelect(adapterPosition)
+                        onItemSelectListener?.onItemSelect(position)
                     }
                 }
             }

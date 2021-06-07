@@ -7,7 +7,7 @@ data class BrandResponse(
 
     @Expose
     @SerializedName("docs")
-    val docs: List<Docs>,
+    val docs: MutableList<Docs>,
     @Expose
     @SerializedName("totalDocs")
     val totalDocs: Int,

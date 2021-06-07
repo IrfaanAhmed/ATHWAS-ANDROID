@@ -43,7 +43,7 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
         set(profilePicUrl) = sharedPreferences.edit().putString(PREF_KEY_USER_IMAGE_URL, profilePicUrl).apply()
 
     override var allowNotification: Int
-        get() = sharedPreferences.getInt(PREF_KEY_ALLOW_NOTIFICATION, 0)
+        get() = sharedPreferences.getInt(PREF_KEY_ALLOW_NOTIFICATION, 1)
         set(allowNotification) = sharedPreferences.edit().putInt(PREF_KEY_ALLOW_NOTIFICATION, allowNotification).apply()
 
     override var phone: String
@@ -72,6 +72,12 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
             sharedPreferences.edit().putString(PREF_KEY_USER_COUNTRY_CODE, value).apply()
         }
 
+    override var walletAmount: String
+        get() = sharedPreferences.getString(PREF_KEY_WALLET_AMOUNT, "0")!!
+        set(value) {
+            sharedPreferences.edit().putString(PREF_KEY_WALLET_AMOUNT, value).apply()
+        }
+
     override var mCurrentLat: Double
         get() = sharedPreferences.getString(PREF_KEY_CURRENT_LAT, "0.0")!!.toDouble()
         set(value) {
@@ -98,6 +104,18 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
 
     fun clearAllPreferences() {
         sharedPreferences.edit().clear().apply()
+    }
+
+    fun getString(KEY_DATA: String): String {
+        return sharedPreferences.getString(KEY_DATA, AppConstants.EMPTY_STRING)!!
+    }
+
+    fun getString(KEY_DATA: String, defaultValue: String): String {
+        return sharedPreferences.getString(KEY_DATA, defaultValue)!!
+    }
+
+    fun setString(KEY: String, data: String) {
+        sharedPreferences.edit().putString(KEY, data).apply()
     }
 
     private fun getLoginData(): LoginResponse {
@@ -131,12 +149,15 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
         private const val PREF_KEY_NOTIFICATION_COUNT = "NOTIFICATION_COUNT"
         private const val PREF_KEY_INTRO_SCREEN = "INTRO_SCREEN"
         private const val PREF_KEY_FIRST_RUN = "IS_FIRST_RUN"
+        private const val PREF_KEY_WALLET_AMOUNT = "WALLET_AMOUNT"
 
         //Location Related
         private const val PREF_KEY_CURRENT_LAT = "CURRENT_LAT"
         private const val PREF_KEY_CURRENT_LNG = "CURRENT_LNG"
 
         private var appPreferencesHelper: AppPreferencesHelper? = null
+
+        const val CATEGORY = "CATEGORY"
 
         fun getInstance(): AppPreferencesHelper {
             if (appPreferencesHelper == null) {

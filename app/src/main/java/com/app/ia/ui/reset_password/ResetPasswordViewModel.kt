@@ -22,7 +22,7 @@ class ResetPasswordViewModel(private val baseRepository: BaseRepository) : BaseV
     private lateinit var mBinding: ActivityResetPasswordBinding
 
     var countryCode = MutableLiveData("")
-    var mobileNumber = MutableLiveData("")
+    var mobileNumber = MutableLiveData("123")
     var otp = MutableLiveData("")
 
     fun setVariable(mBinding: ActivityResetPasswordBinding) {
@@ -84,19 +84,17 @@ class ResetPasswordViewModel(private val baseRepository: BaseRepository) : BaseV
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-                                mActivity.toast(users.message)
-                                mActivity.startActivityWithFinish<LoginActivity> {
-                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                }
-                            } else {
-                                IADialog(mActivity, users.message, true)
+                            mActivity.toast(users.message)
+                            mActivity.startActivityWithFinish<LoginActivity> {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             }
                         }
                     }
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        mActivity.toast(it.message!!)
+                        if (!it.message.isNullOrEmpty()) {
+                            mActivity.toast(it.message)
+                        }
                     }
 
                     Status.LOADING -> {

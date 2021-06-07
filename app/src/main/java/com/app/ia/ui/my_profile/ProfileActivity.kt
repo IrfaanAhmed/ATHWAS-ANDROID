@@ -71,5 +71,4 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileViewModel>()
         val factory = ViewModelFactory(ProfileViewModel(BaseRepository(RetrofitFactory.getInstance(), this)))
         mViewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
     }
-
 }

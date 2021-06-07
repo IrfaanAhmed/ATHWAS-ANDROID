@@ -1,5 +1,6 @@
 package com.app.ia.model
 
+import com.app.ia.utils.CommonUtils
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
@@ -41,7 +42,7 @@ data class WalletHistoryResponse(
         val Id: String,
         @Expose
         @SerializedName("amount")
-        val amount: String,
+        private val amount: String,
         @Expose
         @SerializedName("wallet_amount")
         val walletAmount: String,
@@ -65,7 +66,7 @@ data class WalletHistoryResponse(
         val senderType: Int,
         @Expose
         @SerializedName("payment_type")
-        val paymentType: Int,
+        val paymentType: String,
         @Expose
         @SerializedName("amount_type")
         val amountType: Int,
@@ -102,5 +103,8 @@ data class WalletHistoryResponse(
             return outputDate
         }
 
+        fun getAmount() : String {
+           return CommonUtils.convertToDecimal(amount)
+        }
     }
 }

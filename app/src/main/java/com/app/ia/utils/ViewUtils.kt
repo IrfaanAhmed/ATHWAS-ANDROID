@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.activity_product_category.*
  */
 fun Context?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) = this?.let { Toast.makeText(it, text, duration).show() }
 
-
 /**
  * Extension method to provide quicker access to the [LayoutInflater] from [Context].
  */

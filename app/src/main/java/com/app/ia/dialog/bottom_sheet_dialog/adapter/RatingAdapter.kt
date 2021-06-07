@@ -1,14 +1,11 @@
 package com.app.ia.dialog.bottom_sheet_dialog.adapter
 
-import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.R
-import com.app.ia.databinding.CommonSortListItemBinding
 import com.app.ia.databinding.RatingListItemBinding
 import com.app.ia.model.CommonSortBean
 

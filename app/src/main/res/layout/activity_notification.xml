@@ -45,24 +45,31 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/notificationRecyclerView"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="@dimen/_10sdp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/notification_list_item" />
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/notificationRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="@dimen/_10sdp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/notification_list_item" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/noNotificationAvailableText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/no_notification_available"
+                    android:textSize="@dimen/_13sdp"
+                    app:fontFamily="@font/linotte_semi_bold" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/noNotificationAvailableText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/no_notification_available"
-            android:textSize="@dimen/_13sdp"
-            app:fontFamily="@font/linotte_semi_bold" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

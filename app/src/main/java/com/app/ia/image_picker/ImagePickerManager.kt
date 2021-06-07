@@ -50,7 +50,7 @@ class ImagePickerManager(var onImagePickListener: OnImagePickListener, var mCont
     }
 
     fun askForPermission() {
-        Dexter.withActivity(mContext as Activity).withPermissions(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).withListener(object : MultiplePermissionsListener {
+        Dexter.withContext(mContext as Activity).withPermissions(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).withListener(object : MultiplePermissionsListener {
             override fun onPermissionsChecked(report: MultiplePermissionsReport) {
                 if (report.areAllPermissionsGranted()) {
                     showImageDialog()

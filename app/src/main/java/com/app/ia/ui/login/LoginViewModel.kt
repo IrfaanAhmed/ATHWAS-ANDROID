@@ -9,7 +9,6 @@ import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.util.Patterns
 import android.view.View
-import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.liveData
 import com.app.ia.R
@@ -31,7 +30,8 @@ import com.app.ia.utils.*
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.CredentialsOptions
 import com.google.android.gms.auth.api.credentials.HintRequest
-import com.google.firebase.iid.FirebaseInstanceId
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
@@ -43,6 +43,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
     private lateinit var mActivity: Activity
     private lateinit var mBinding: ActivityLoginBinding
     private lateinit var androidId: String
+    private var messageId = ""
 
     @SuppressLint("HardwareIds")
     fun setVariable(mBinding: ActivityLoginBinding) {
@@ -54,14 +55,23 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
         doNotHaveAccountText()
         storeDeviceToken()
         androidId = Settings.Secure.getString(mActivity.contentResolver, Settings.Secure.ANDROID_ID)
+        val appSignatureHashHelper = AppSignatureHashHelper(mActivity)
+        messageId = appSignatureHashHelper.appSignatures[0]
+        AppLogger.d(messageId)
     }
 
     private fun storeDeviceToken() {
-         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
-             val deviceToken = instanceIdResult.token
-             AppLogger.d("device token : $deviceToken")
-             AppPreferencesHelper.getInstance().deviceToken = deviceToken
-         }
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                AppLogger.w("Fetching FCM registration token failed" + task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val fcmToken = task.result
+            AppLogger.d("device token : $fcmToken")
+            AppPreferencesHelper.getInstance().deviceToken = fcmToken
+        })
     }
 
     fun onLoginClick() {
@@ -109,6 +119,8 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
             requestParams["device_type"] = "1"
             requestParams["device_id"] = androidId
             requestParams["login_through"] = "password"
+            requestParams["latitude"] = AppPreferencesHelper.getInstance().mCurrentLat.toString()
+            requestParams["longitude"] = AppPreferencesHelper.getInstance().mCurrentLng.toString()
             setupObservers(requestParams)
         }
     }
@@ -181,30 +193,29 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
 
-                                if (users.data?.isUserVerified == 0) {
-                                    mActivity.toast(users.message)
-                                    mActivity.startActivity<OTPActivity> {
-                                        putExtra("countryCode", users.data?.countryCode)
-                                        putExtra("mobileNumber", users.data?.phone)
-                                        putExtra("otp", users.data?.otpNumber)
-                                    }
-                                } else {
-                                    AppPreferencesHelper.getInstance().userData = users.data!!
-                                    mActivity.startActivityWithFinish<HomeActivity> {
-                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    }
+                            if (users.data?.isUserVerified == 0) {
+                                mActivity.toast(users.message)
+                                mActivity.startActivity<OTPActivity> {
+                                    putExtra("countryCode", users.data?.countryCode)
+                                    putExtra("mobileNumber", users.data?.phone)
+                                    putExtra("otp", users.data?.otpNumber)
                                 }
                             } else {
-                                IADialog(mActivity, users.message, true)
+                                AppPreferencesHelper.getInstance().userData = users.data!!
+                                mActivity.startActivityWithFinish<HomeActivity> {
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                }
                             }
+
                         }
                     }
+
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        IADialog(mActivity, it.message!!, true)
                     }
+
                     Status.LOADING -> {
                         baseRepository.callback.showProgress()
                     }

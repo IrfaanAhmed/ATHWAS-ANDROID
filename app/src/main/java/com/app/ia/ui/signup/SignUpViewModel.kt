@@ -23,6 +23,9 @@ import com.app.ia.ui.home.HomeActivity
 import com.app.ia.ui.otp.OTPActivity
 import com.app.ia.ui.webview.WebViewActivity
 import com.app.ia.utils.*
+import com.google.i18n.phonenumbers.NumberParseException
+import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.google.i18n.phonenumbers.Phonenumber
 import kotlinx.coroutines.Dispatchers
 
 class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
@@ -59,16 +62,11 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-                                mActivity.toast(users.message)
-                                mActivity.startActivity<OTPActivity> {
-                                    putExtra("countryCode", "+91")
-                                    putExtra("mobileNumber", mBinding.editTextMobile.text.toString())
-                                    putExtra("otp", users.data!!.otpNumber)
-                                }
-
-                            } else {
-                                IADialog(mActivity, users.message, true)
+                            mActivity.toast(users.message)
+                            mActivity.startActivity<OTPActivity> {
+                                putExtra("countryCode", "+91")
+                                putExtra("mobileNumber", mBinding.editTextMobile.text.toString())
+                                putExtra("otp", users.data!!.otpNumber)
                             }
                         }
                     }
@@ -98,7 +96,7 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
             IADialog(mActivity, mActivity.getString(R.string.name_should_be_min_2_char), true)
         } else if (phone.isEmpty()) {
             IADialog(mActivity, mActivity.getString(R.string.enter_your_mobile_no), true)
-        } else if (phone.length < 7 || phone.length > 15) {
+        } else if (!validateNumber(phone)) {
             IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
         } else if (email.isEmpty()) {
             IADialog(mActivity, mActivity.getString(R.string.enter_your_email), true)
@@ -123,6 +121,19 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
             requestParams["device_id"] = androidId
             setupObservers(requestParams)
         }
+    }
+
+    private fun validateNumber(phNumber: String): Boolean {
+        val phoneNumberUtil = PhoneNumberUtil.getInstance()
+        val isoCode = phoneNumberUtil.getRegionCodeForCountryCode(91)
+        var phoneNumber: Phonenumber.PhoneNumber? = null
+        try {
+            phoneNumber = phoneNumberUtil.parse(phNumber, isoCode)
+        } catch (e: NumberParseException) {
+            e.printStackTrace()
+        }
+
+        return phoneNumberUtil.isValidNumber(phoneNumber)
     }
 
     fun onTermOfUseClick() {

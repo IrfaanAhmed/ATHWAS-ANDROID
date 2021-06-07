@@ -13,13 +13,11 @@
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".IAApplication"
-        android:allowBackup="false"
-        android:fullBackupOnly="false"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -27,7 +25,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-
         tools:replace="android:allowBackup">
 
         <meta-data
@@ -116,6 +113,27 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".ui.track_order.TrackOrderActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.offers.OffersListActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.offers.OffersActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".ui.checkout.CheckoutActivity"
             android:configChanges="layoutDirection|locale"
             android:screenOrientation="portrait"
@@ -144,7 +162,42 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".ui.filter.FilterActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.webview.WebViewActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.payment.StatusActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.payment.PaymentActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".ui.wishlist.WishListActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.order_detail.OrderDetailActivity"
             android:configChanges="layoutDirection|locale"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBarMain"
@@ -205,6 +258,39 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBarMain"
             android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.write_review.WriteReviewActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.setting.SettingActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.full_image.FullImageActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.track.TrackOnMapActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain" />
+
+        <activity
+            android:name=".ui.faq.FaqActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain" />
 
         <service
             android:name=".fcm.CleverMessagingService"

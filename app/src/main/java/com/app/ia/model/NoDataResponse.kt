@@ -16,5 +16,13 @@ data class NoDataResponse(
     val wallet: String,
 
     @Expose
+    @SerializedName("cart_count")
+    val cartCount: Int,
+
+    @Expose
+    @SerializedName("path")
+    val path: String,
+
+    @Expose
     @SerializedName("user_role")
     val userRole: String)

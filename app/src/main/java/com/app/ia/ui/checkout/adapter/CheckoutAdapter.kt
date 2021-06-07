@@ -1,28 +1,26 @@
 package com.app.ia.ui.checkout.adapter
 
-import android.graphics.Paint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.app.ia.databinding.CheckoutListItemBinding
-import kotlinx.android.synthetic.main.cart_list_item.view.*
+import com.app.ia.databinding.CheckoutRowBinding
+import com.app.ia.model.CartListResponse
+import com.app.ia.ui.checkout.CheckoutUpdateListener
 
-class CheckoutAdapter : ListAdapter<String, CheckoutAdapter.CheckoutViewHolder>(OffersListDiffCallback()) {
+class CheckoutAdapter(private val checkoutUpdateListener: CheckoutUpdateListener) : ListAdapter<CartListResponse.Docs, CheckoutAdapter.CheckoutViewHolder>(OffersListDiffCallback()) {
 
-    class OffersListDiffCallback : DiffUtil.ItemCallback<String>() {
+    class OffersListDiffCallback : DiffUtil.ItemCallback<CartListResponse.Docs>() {
 
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areItemsTheSame(oldItem: CartListResponse.Docs, newItem: CartListResponse.Docs): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areContentsTheSame(oldItem: CartListResponse.Docs, newItem: CartListResponse.Docs): Boolean {
             return oldItem == newItem
         }
     }
-
 
     override fun onBindViewHolder(holder: CheckoutViewHolder, position: Int) {
         holder.apply {
@@ -31,36 +29,19 @@ class CheckoutAdapter : ListAdapter<String, CheckoutAdapter.CheckoutViewHolder>(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheckoutViewHolder {
-        return CheckoutViewHolder(CheckoutListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return CheckoutViewHolder(CheckoutRowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    inner class CheckoutViewHolder(private val mBinding: CheckoutListItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
+    inner class CheckoutViewHolder(private val mBinding: CheckoutRowBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun onBind(productItem: String, position: Int) {
+        fun onBind(productItem: CartListResponse.Docs, position: Int) {
             mBinding.apply {
-                product = productItem
+                itemCategory = productItem.id.name
+                val adapter = CheckoutListItemAdapter(checkoutUpdateListener)
+                recViewCheckoutItem.adapter = adapter
+                adapter.submitList(productItem.categoryItems)
+                recViewCheckoutItem.isNestedScrollingEnabled = false
                 executePendingBindings()
-                itemView.tvActualPrice.paintFlags = itemView.tvActualPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                var quantity = 1
-                itemView.ivMinus.setOnClickListener {
-                    if (quantity == 1) {
-
-                    } else {
-                        quantity -= 1
-                        itemView.tvQuantity.text = quantity.toString()
-                    }
-                }
-
-                if(position % 2 == 0) {
-                    txtViewHeader.visibility = View.VISIBLE
-                } else {
-                    txtViewHeader.visibility = View.GONE
-                }
-
-                itemView.ivPlus.setOnClickListener {
-                    quantity += 1
-                    itemView.tvQuantity.text = quantity.toString()
-                }
             }
         }
     }

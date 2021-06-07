@@ -7,18 +7,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.databinding.HomeProductListItemBinding
+import com.app.ia.model.HomeProductListingResponse
 import com.app.ia.ui.product_detail.ProductDetailActivity
 import com.app.ia.utils.startActivity
 
-class HomeProductAdapter(private val isDiscountedProduct: Boolean) : ListAdapter<String, HomeProductAdapter.HomeProductViewHolder>(DiffCallback()) {
+class HomeProductAdapter : ListAdapter<HomeProductListingResponse.Docs, HomeProductAdapter.HomeProductViewHolder>(DiffCallback()) {
 
-    class DiffCallback : DiffUtil.ItemCallback<String>() {
+    class DiffCallback : DiffUtil.ItemCallback<HomeProductListingResponse.Docs>() {
 
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areItemsTheSame(oldItem: HomeProductListingResponse.Docs, newItem: HomeProductListingResponse.Docs): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areContentsTheSame(oldItem: HomeProductListingResponse.Docs, newItem: HomeProductListingResponse.Docs): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
         }
     }
@@ -35,17 +36,19 @@ class HomeProductAdapter(private val isDiscountedProduct: Boolean) : ListAdapter
 
     inner class HomeProductViewHolder(private val mBinding: HomeProductListItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun onBind(favourite: String) {
+        fun onBind(favourite: HomeProductListingResponse.Docs) {
 
             mBinding.apply {
-                isDiscounted = isDiscountedProduct
+                product = favourite
 
-                if (isDiscountedProduct) {
+                if (favourite.isDiscount == 1) {
                     txtDiscountPrice.paintFlags = txtDiscountPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 }
 
                 itemView.setOnClickListener {
-                    //itemView.context.startActivity<ProductDetailActivity>()
+                    itemView.context.startActivity<ProductDetailActivity> {
+                        putExtra("product_id", favourite.Id)
+                    }
                 }
                 executePendingBindings()
             }

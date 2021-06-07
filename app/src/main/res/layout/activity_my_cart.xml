@@ -6,7 +6,7 @@
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
@@ -18,8 +18,8 @@
         android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusableInTouchMode="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <FrameLayout
             android:id="@+id/topBackground"
@@ -60,123 +60,117 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            android:background="@color/white">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/mSwipeRefresh"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recViewCart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@+id/llFooter">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recViewCart"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:listitem="@layout/cart_list_item"
-                    tools:itemCount="3"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:visibility="@{viewModel.isItemAvailable ? View.VISIBLE : View.GONE}" />
-
-
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                android:layout_above="@+id/llFooter"
+                android:visibility="@{viewModel.isItemAvailable ? View.VISIBLE : View.GONE}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="1"
+                tools:listitem="@layout/cart_list_row" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_item_available"
-                android:textSize="@dimen/_10sdp"
-                android:fontFamily="@font/linotte_semi_bold"
                 android:layout_centerInParent="true"
-                android:visibility="@{viewModel.isItemAvailable ? View.GONE : View.VISIBLE}"/>
+                android:fontFamily="@font/linotte_semi_bold"
+                android:text="No items in Cart"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14sdp"
+                android:visibility="@{viewModel.isItemAvailable ? View.GONE : View.VISIBLE}" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/llFooter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/_5sdp"
                 android:layout_alignParentBottom="true"
-                android:background="@color/colorLogout">
+                android:background="@color/colorLogout"
+                android:orientation="horizontal"
+                android:padding="@dimen/_5sdp">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="@dimen/_32sdp"
+                        android:layout_height="@dimen/_32sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_shopping_bag"
+                        android:tint="@color/white" />
 
                     <androidx.appcompat.widget.LinearLayoutCompat
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_weight="1"
-                        android:layout_gravity="center">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="@dimen/_32sdp"
-                            android:layout_height="@dimen/_32sdp"
-                            android:src="@drawable/ic_shopping_bag"
-                            android:tint="@color/white"
-                            android:layout_gravity="center"/>
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:orientation="vertical">
 
                         <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/_8sdp">
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="3 items"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/_11sdp"/>
-
-                                <View
-                                    android:layout_width="1px"
-                                    android:layout_height="match_parent"
-                                    android:background="@color/white"
-                                    android:layout_marginStart="@dimen/_5sdp"
-                                    android:layout_marginEnd="@dimen/_5sdp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="₹600"
-                                    android:fontFamily="@font/linotte_semi_bold"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/_11sdp"/>
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
+                            android:orientation="horizontal">
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Save: 300"
+                                android:text="@{viewModel.totalItems +  ` items`}"
                                 android:textColor="@color/white"
-                                android:textSize="@dimen/_11sdp"/>
+                                android:textSize="@dimen/_11sdp" />
+
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:layout_marginEnd="@dimen/_5sdp"
+                                android:background="@color/white" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/linotte_semi_bold"
+                                android:text="@{@string/inr_price(viewModel.totalAmount)}"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_11sdp" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Save: 0"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_11sdp" />
+
                     </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/buttonCheckout"
                     style="@style/AddToCartButton"
                     android:layout_width="@dimen/_70sdp"
                     android:layout_height="@dimen/_22sdp"
-                    android:background="@drawable/checkout_bg"
+                    android:layout_alignParentBottom="true"
                     android:layout_gravity="center"
-                    android:text="@string/checkout"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_alignParentBottom="true"/>
+                    android:background="@drawable/checkout_bg"
+                    android:text="@string/checkout" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </RelativeLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -1,17 +1,23 @@
 package com.app.ia.fcm
 
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import androidx.core.app.TaskStackBuilder
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.app.ia.IAApplication
 import com.app.ia.enums.NotificationType
 import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.ui.home.HomeActivity
+import com.app.ia.ui.order_detail.OrderDetailActivity
+import com.app.ia.ui.track_order.TrackOrderActivity
 import com.app.ia.utils.AppConstants
 import com.app.ia.utils.AppLogger
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.json.JSONException
 import java.util.*
+
 
 class CleverMessagingService : FirebaseMessagingService() {
 
@@ -28,22 +34,41 @@ class CleverMessagingService : FirebaseMessagingService() {
         val notificationCount = AppPreferencesHelper.getInstance().notificationCount
         AppPreferencesHelper.getInstance().notificationCount = (notificationCount + 1)
 
+        val localBroadCast = LocalBroadcastManager.getInstance(this)
+        val intent = Intent(AppConstants.ACTION_BROADCAST_REFRESH_ON_NOTIFICATION)
+        intent.putExtra("refresh", true)
+        localBroadCast.sendBroadcast(intent)
+
+        val currentActivity = (applicationContext as IAApplication).getCurrentActivity()
+
+        val handler = Handler(Looper.getMainLooper())
+
+        handler.post {
+            if (currentActivity != null && currentActivity is OrderDetailActivity) {
+                currentActivity.refresh()
+            } else if (currentActivity != null && currentActivity is TrackOrderActivity) {
+                currentActivity.refresh()
+            }
+        }
+
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
             AppLogger.d("Message Notification Body: ${it.body}")
         }
 
-        remoteMessage.data.isNotEmpty().let {
+        if(AppPreferencesHelper.getInstance().allowNotification == 1) {
+            remoteMessage.data.isNotEmpty().let {
 
-            when (remoteMessage.data["redirection"]) {
+                when (remoteMessage.data["redirection"]) {
 
-                NotificationType.NOTIFICATION_TYPE_POST_LIST.notificationType -> redirectionNotification(remoteMessage)
-                NotificationType.NOTIFICATION_TYPE_ACCOUNT.notificationType -> redirectionNotification(remoteMessage)
-                NotificationType.NOTIFICATION_TYPE_FOLLOWER_LIST.notificationType -> redirectionNotification(remoteMessage)
-                NotificationType.NOTIFICATION_TYPE_FRIEND_LIST.notificationType -> redirectionNotification(remoteMessage)
-                NotificationType.NOTIFICATION_TYPE_FRIEND_REQUEST_LIST.notificationType -> redirectionNotification(remoteMessage)
-                else -> {
-                    onlyNotification(remoteMessage)
+                    NotificationType.NOTIFICATION_TYPE_POST_LIST.notificationType -> redirectionNotification(remoteMessage)
+                    NotificationType.NOTIFICATION_TYPE_ACCOUNT.notificationType -> redirectionNotification(remoteMessage)
+                    NotificationType.NOTIFICATION_TYPE_FOLLOWER_LIST.notificationType -> redirectionNotification(remoteMessage)
+                    NotificationType.NOTIFICATION_TYPE_FRIEND_LIST.notificationType -> redirectionNotification(remoteMessage)
+                    NotificationType.NOTIFICATION_TYPE_FRIEND_REQUEST_LIST.notificationType -> redirectionNotification(remoteMessage)
+                    else -> {
+                        onlyNotification(remoteMessage)
+                    }
                 }
             }
         }

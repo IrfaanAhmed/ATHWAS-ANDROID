@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.contact_us.ContactUsActivity">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.app.ia.ui.contact_us.ContactUsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <FrameLayout
+            android:id="@+id/topBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/_100sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </FrameLayout>
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:paddingStart="@dimen/_5sdp"
+            android:paddingEnd="@dimen/_1sdp"
+            android:theme="?attr/actionBarTheme"
+            app:contentInsetEnd="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <include
+                layout="@layout/common_header"
+                app:viewModel="@{viewModel}" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/_12sdp">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/get_in_touch"
+                        android:textColor="@color/grey"
+                        android:textSize="@dimen/_13sdp"
+                        app:fontFamily="@font/linotte_semi_bold" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_marginEnd="@dimen/_2sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        app:cardCornerRadius="@dimen/_8sdp">
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:padding="@dimen/_12sdp">
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/enter_your_first_name"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edtTextFirstName"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_35sdp"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:background="@drawable/edittext_bg"
+                                android:inputType="textCapSentences"
+                                android:maxLength="15"
+                                android:maxLines="1"
+                                android:padding="@dimen/_10sdp"
+                                android:textAlignment="viewStart"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:text="@string/enter_your_last_name"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edtTextLastName"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_35sdp"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:background="@drawable/edittext_bg"
+                                android:inputType="textCapSentences"
+                                android:maxLength="15"
+                                android:maxLines="1"
+                                android:padding="@dimen/_10sdp"
+                                android:textAlignment="viewStart"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:text="@string/enter_email"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edtTextEmail"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_35sdp"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:background="@drawable/edittext_bg"
+                                android:maxLines="1"
+                                android:padding="@dimen/_10sdp"
+                                android:textAlignment="viewStart"
+                                android:textSize="@dimen/_10sdp" />
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:text="Enter Mobile Number"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edtTextMobile"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_35sdp"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:background="@drawable/edittext_bg"
+                                android:inputType="phone"
+                                android:maxLength="15"
+                                android:maxLines="1"
+                                android:padding="@dimen/_10sdp"
+                                android:textAlignment="viewStart"
+                                android:textSize="@dimen/_10sdp" />
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:text="@string/your_queries"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edtTextQuery"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:background="@drawable/edittext_bg"
+                                android:gravity="top|start"
+                                android:inputType="textMultiLine"
+                                android:lines="8"
+                                android:maxLines="10"
+                                android:minLines="6"
+                                android:padding="@dimen/_10sdp"
+                                android:scrollbars="vertical"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/buttonSubmit"
+                                style="@style/LogoutButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="@dimen/_20sdp"
+                                android:layout_marginBottom="@dimen/_20sdp"
+                                android:onClick="@{()-> viewModel.onQuerySubmit()}"
+                                android:text="@string/submit"
+                                android:textAllCaps="true"
+                                android:textSize="@dimen/_12sdp" />
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

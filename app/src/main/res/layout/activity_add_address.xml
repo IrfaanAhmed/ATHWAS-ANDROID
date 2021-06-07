@@ -14,9 +14,11 @@
 
     </data>
 
-    <RelativeLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
@@ -47,20 +49,105 @@
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/searchLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toolbar"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@drawable/search_bar_bg"
+            android:orientation="horizontal"
+            android:padding="@dimen/_3sdp">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/_6sdp"
+                android:paddingEnd="@dimen/_6sdp">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/edtTextSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/ic_search"
+                    android:drawablePadding="@dimen/_8sdp"
+                    android:gravity="center_vertical|start"
+                    android:hint="@string/search_for_your_location"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:text="@{viewModel.searchedLocationName}"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11sdp" />
+
+                <ProgressBar
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:visibility="@{viewModel.progressVisible ? View.VISIBLE : View.GONE}" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imgViewCross"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:padding="@dimen/_7sdp"
+                    android:visibility="@{viewModel.searchedLocationName.length() > 0 &amp;&amp; viewModel.progressVisible == false ? View.VISIBLE : View.GONE}"
+                    app:srcCompat="@drawable/ic_close"
+                    app:tint="@color/red" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="-25dp"
+                app:srcCompat="@drawable/ic_pin"
+                app:tint="@color/theme_color" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/mapSwitchView"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_gravity="top|end"
+                android:layout_margin="@dimen/_8sdp"
+                android:onClick="@{()-> viewModel.changeMapType()}"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:padding="@dimen/_8sdp">
+                android:padding="@dimen/_5sdp">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/_20sdp"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_pin"
                     app:tint="@color/theme_color" />
@@ -73,15 +160,19 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtTextSelectedAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/edittext_bg"
                         android:gravity="start"
-                        android:maxLines="4"
+                        android:maxLines="3"
+                        android:minLines="2"
+                        android:padding="@dimen/_3sdp"
                         android:text="@{viewModel.currentAddress}"
                         android:textAlignment="viewStart"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/_12sdp" />
+                        android:textSize="@dimen/_11sdp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -90,13 +181,29 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtTextAddress"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_33sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_3sdp"
+                android:background="@drawable/edittext_bg"
+                android:hint="@string/floor_apartment_no_house_no"
+                android:paddingStart="@dimen/_5sdp"
+                android:paddingEnd="@dimen/_5sdp"
+                android:singleLine="true"
+                android:textAlignment="viewStart"
+                android:textSize="@dimen/_11sdp" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtTextPinCode"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:layout_marginBottom="@dimen/_5sdp"
                 android:background="@drawable/edittext_bg"
-                android:hint="@string/floor_apartment_no_house_no"
+                android:hint="@string/pin_code"
+                android:inputType="number"
                 android:paddingStart="@dimen/_5sdp"
                 android:paddingEnd="@dimen/_5sdp"
                 android:singleLine="true"
@@ -114,7 +221,9 @@
             <com.google.android.material.chip.ChipGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
                 app:singleLine="true"
                 app:singleSelection="true">
 
@@ -169,36 +278,6 @@
                 android:textSize="@dimen/_12sdp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <FrameLayout
-            android:id="@+id/frameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/bottom"
-            android:layout_below="@id/toolbar">
 
-            <fragment
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="-25dp"
-                app:srcCompat="@drawable/ic_pin"
-                app:tint="@color/theme_color" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/mapSwitchView"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:layout_gravity="top|end"
-                android:layout_margin="@dimen/_8sdp"
-                android:onClick="@{()-> viewModel.changeMapType()}"
-                android:visibility="gone" />
-
-        </FrameLayout>
-    </RelativeLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

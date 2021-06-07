@@ -1,11 +1,14 @@
 package com.app.ia.ui.add_new_address
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MotionEvent
+import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Filter
@@ -19,6 +22,8 @@ import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityAddAddressBinding
 import com.app.ia.utils.AppLogger
+import com.app.ia.utils.makeStatusBarTransparent
+import com.app.ia.utils.setOnApplyWindowInset
 import com.example.easywaylocation.LocationData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -33,6 +38,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_add_address.*
+import kotlinx.android.synthetic.main.activity_add_address.toolbar
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -54,6 +62,8 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
 
     private var selectedFromAddressBar = false
 
+    private var selectedView : View? = null
+
     override fun getBindingVariable(): Int {
         return BR.viewModel
     }
@@ -66,6 +76,7 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
         return mAddAddressViewModel!!
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         setViewModel()
         super.onCreate(savedInstanceState)
@@ -85,7 +96,7 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
 
         mapFragment.getMapAsync(this)
 
-        /*mPlacesAutoCompleteAdapter = PlacesAutoCompleteAdapter(this, R.layout.layout_autocomlete_list_item)
+        mPlacesAutoCompleteAdapter = PlacesAutoCompleteAdapter(this, R.layout.layout_autocomlete_list_item)
         edtTextSearch.setAdapter(mPlacesAutoCompleteAdapter)
         edtTextSearch.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
 
@@ -109,7 +120,7 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
                 longitude = place.latLng?.longitude!!
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLng!!, 16.0f))
             }
-        }*/
+        }
 
         edtTextAddress.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
@@ -122,7 +133,6 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 mAddAddressViewModel?.enteredAddress!!.set(p0.toString())
             }
-
         })
 
         observeRestaurantListResponse()
@@ -133,13 +143,58 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
                 mAddAddressViewModel?.getAddress(it)
             }
 
-        /*imgViewCross.setOnClickListener {
+        imgViewCross.setOnClickListener {
             mAddAddressViewModel?.searchedLocationName!!.set("")
             edtTextSearch.setText("")
-        }*/
+        }
 
-        //makeStatusBarTransparent()
-        //setOnApplyWindowInset(toolbar, content_container)
+        makeStatusBarTransparent()
+        setOnApplyWindowInset(toolbar, content_container)
+
+
+        edtTextSearch.setOnTouchListener { v, event ->
+            edtTextSearch.isFocusable = true
+            selectedView = edtTextSearch
+            return@setOnTouchListener false
+        }
+
+        edtTextSelectedAddress.setOnTouchListener { v, event ->
+            edtTextSelectedAddress.isFocusable = true
+            selectedView = edtTextSelectedAddress
+            return@setOnTouchListener false
+        }
+
+        edtTextAddress.setOnTouchListener { v, event ->
+            edtTextAddress.isFocusable = true
+            selectedView = edtTextAddress
+            return@setOnTouchListener false
+        }
+
+        edtTextPinCode.setOnTouchListener { v, event ->
+            edtTextPinCode.isFocusable = true
+            selectedView = edtTextPinCode
+            return@setOnTouchListener false
+        }
+
+        KeyboardVisibilityEvent.setEventListener(this, this, object : KeyboardVisibilityEventListener {
+            override fun onVisibilityChanged(isOpen: Boolean) {
+                if (isOpen) {
+                    if(selectedView == edtTextSearch) {
+                        bottom.visibility = View.GONE
+                        searchLayout.visibility = View.VISIBLE
+                        toolbar.visibility = View.VISIBLE
+                    } else {
+                        searchLayout.visibility = View.GONE
+                        toolbar.visibility = View.GONE
+                        bottom.visibility = View.VISIBLE
+                    }
+                } else {
+                    bottom.visibility = View.VISIBLE
+                    searchLayout.visibility = View.VISIBLE
+                    toolbar.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 
     private fun setViewModel() {
@@ -147,11 +202,9 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
         mAddAddressViewModel = ViewModelProvider(this, factory).get(AddAddressViewModel::class.java)
     }
 
-
     override fun onMapReady(googleMap: GoogleMap?) {
 
         this.mMap = googleMap!!
-
         currentLocationManager()
 
         mMap.setOnCameraIdleListener {
@@ -159,7 +212,7 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
                 if (!selectedFromAddressBar) {
                     latitude = it.latitude
                     longitude = it.longitude
-                    mAddAddressViewModel?.cancelApi()
+                    //mAddAddressViewModel?.cancelApi()
                     //mAddAddressViewModel?.getAddressFromLatLng(latitude, longitude)
                     mLocationManager?.getLocationAddress(latitude, longitude)
                     AppLogger.w("Latitude is : $latitude Longitude is$longitude")
@@ -209,7 +262,7 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
                         val filterResults = FilterResults()
 
                         if (constraint != null) {
-                            //mAddAddressViewModel!!.searchedLocationName.set(constraint.toString())
+                            mAddAddressViewModel!!.searchedLocationName.set(constraint.toString())
                             subject.onNext(constraint.toString())
 
                             filterResults.values = resultList

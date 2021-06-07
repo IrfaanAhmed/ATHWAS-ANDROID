@@ -20,13 +20,13 @@
 
         <FrameLayout
             android:id="@+id/circleBg"
-            android:layout_width="@dimen/_60sdp"
-            android:layout_height="@dimen/_60sdp">
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 defaultImage="@{R.mipmap.ic_launcher_round}"
-                android:layout_width="@dimen/_50sdp"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
                 imageUrl="@{category.categoryImageUrl}"
                 android:layout_gravity="center" />
         </FrameLayout>
@@ -34,16 +34,16 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_marginTop="@dimen/_2sdp"
             android:ellipsize="end"
             android:gravity="center"
-            android:maxWidth="@dimen/_80sdp"
+            android:maxWidth="@dimen/_50sdp"
             android:maxLines="2"
             android:text="@{category.name}"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="@dimen/_11sdp"
+            android:textSize="@dimen/_7sdp"
             app:fontFamily="@font/linotte_semi_bold" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

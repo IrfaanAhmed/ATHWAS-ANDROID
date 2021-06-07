@@ -1,66 +1,74 @@
 package com.app.ia.dialog.bottom_sheet_dialog
 
-import android.app.Dialog
-import android.os.Build
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
-import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModelProvider
+import com.app.ia.BR
 import com.app.ia.R
+import com.app.ia.ViewModelFactory
 import com.app.ia.apiclient.RetrofitFactory
+import com.app.ia.base.BaseBottomSheetDialogFragment
+import com.app.ia.base.BaseRepository
+import com.app.ia.databinding.DialogProductFilterBinding
 import com.app.ia.dialog.bottom_sheet_dialog.adapter.CarAdapter
 import com.app.ia.dialog.bottom_sheet_dialog.adapter.RatingAdapter
-import com.app.ia.model.CommonSortBean
-import com.app.ia.model.FilterData
-import com.app.ia.model.FilterDataResponse
+import com.app.ia.dialog.bottom_sheet_dialog.viewmodel.ProductFilterDialogViewModel
+import com.app.ia.local.AppPreferencesHelper
+import com.app.ia.model.*
+import com.app.ia.ui.filter.FilterActivity
+import com.app.ia.utils.AppConstants
+import com.app.ia.utils.mStartActivityForResult
 import com.app.ia.utils.toast
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.dialog_product_filter.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.HttpException
-import java.lang.Exception
 
-class ProductFilterDialogFragment(private val businessCategoryId: String, selectedFilterData: FilterData) : BottomSheetDialogFragment() {
+class ProductFilterDialogFragment(val businessCategoryId: String, selectedFilterData: FilterData) : BaseBottomSheetDialogFragment<DialogProductFilterBinding, ProductFilterDialogViewModel>() {
 
+    private lateinit var mBinding: DialogProductFilterBinding
+    private lateinit var mViewModel: ProductFilterDialogViewModel
     private var onClickListener: OnProductFilterClickListener? = null
     private var filterData = selectedFilterData
+
+    override val bindingVariable: Int
+        get() = BR.viewModel
+
+    override val layoutId: Int
+        get() = R.layout.dialog_product_filter
+
+    override val viewModel: ProductFilterDialogViewModel
+        get() = mViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setViewModel()
+        super.onCreate(savedInstanceState)
+    }
+
+    private fun setViewModel() {
+        val factory = ViewModelFactory(ProductFilterDialogViewModel(BaseRepository(RetrofitFactory.getInstance(), this)))
+        mViewModel = ViewModelProvider(this, factory).get(ProductFilterDialogViewModel::class.java)
+    }
 
     fun setOnItemClickListener(onClickListener: OnProductFilterClickListener) {
         this.onClickListener = onClickListener
     }
 
-    override fun getTheme(): Int {
-        return R.style.BottomSheetDialogTheme
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = BottomSheetDialog(requireContext(), theme)
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dialog!!.setOnShowListener { dialog ->
-            val d = dialog as BottomSheetDialog
-            val bottomSheetInternal = d.findViewById<View>(R.id.design_bottom_sheet)
-            BottomSheetBehavior.from(bottomSheetInternal!!).state = BottomSheetBehavior.STATE_EXPANDED
-        }
-        return inflater.inflate(R.layout.dialog_product_filter, container, false)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mBinding = viewDataBinding!!
+        mBinding.lifecycleOwner = this
+        mViewModel.setActivityNavigator(this)
+        mViewModel.setVariable(mBinding)
         setUp()
     }
 
-    var selectedRating : String = ""
-    var ratingPosition : Int = -1
+    var selectedRating: String = ""
+    var ratingPosition: Int = -1
 
-    @RequiresApi(Build.VERSION_CODES.M)
+    var showSubCategorySelectedFirstTime = true
+
     private fun setUp() {
 
         edtTextMinPrice.setText(filterData.minPrice)
@@ -98,15 +106,58 @@ class ProductFilterDialogFragment(private val businessCategoryId: String, select
             dismiss()
         }
 
+        selectCustomization.setOnClickListener {
+            requireActivity().mStartActivityForResult<FilterActivity>(2000) {
+                putExtra(AppConstants.EXTRA_PRODUCT_CATEGORY_ID, filterData.categoryId)
+                putExtra("filters", filterData.customizationSelectedFilters)
+            }
+        }
+
+        customizationFilterStatus()
+
         /**
          * Call product Category on basis of business Category.
          */
-        callProductCategory()
+        val json: String = AppPreferencesHelper.getInstance().getString(AppPreferencesHelper.CATEGORY)
+        if (json.isEmpty()) {
+            mViewModel.productCategoryObserver()
+            mViewModel.productCategoryResponse.observe(this, {
+                val categoryList = ArrayList<FilterDataResponse>()
+                categoryList.add(FilterDataResponse("-1", "Category"))
+                for ((catPos, product) in it.withIndex()) {
+                    categoryList.add(FilterDataResponse(product._Id, product.name))
+                    if (filterData.categoryPos == 0) {
+                        if (filterData.categoryId == product._Id) {
+                            filterData.categoryPos = catPos + 1
+                        }
+                    }
+                }
+                val categoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, categoryList)
+                spinnerCategory.adapter = categoryAdapter
+                spinnerCategory.post {
+                    spinnerCategory.setSelection(filterData.categoryPos)
+                }
+            })
+        } else {
+            val obj = Gson().fromJson(json, ProductCategoryResponse::class.java)
 
-        val categoryList = ArrayList<FilterDataResponse>()
-        categoryList.add(FilterDataResponse("-1", "Sub-Category"))
-        val categoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, categoryList)
-        spinnerSubCategory.adapter = categoryAdapter
+            val categoryList = ArrayList<FilterDataResponse>()
+            categoryList.add(FilterDataResponse("-1", "Category"))
+            for ((catPos, product) in obj.docs.withIndex()) {
+                categoryList.add(FilterDataResponse(product._Id, product.name))
+                if (filterData.categoryPos == 0) {
+                    if (filterData.categoryId == product._Id) {
+                        filterData.categoryPos = catPos + 1
+                    }
+                }
+            }
+            val categoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, categoryList)
+            spinnerCategory.adapter = categoryAdapter
+            spinnerCategory.post {
+                spinnerCategory.setSelection(filterData.categoryPos)
+            }
+        }
+
 
         spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -115,18 +166,46 @@ class ProductFilterDialogFragment(private val businessCategoryId: String, select
                     if (product.id != "-1") {
                         filterData.categoryId = product.id!!
                         filterData.categoryPos = p2
-                        callProductSubCategory(product.id!!)
+                        mViewModel.productSubCategoryObserver(product.id!!)
                     }
                 } else {
                     filterData.categoryId = "-1"
-                    //filterData.categoryPos = 0
                 }
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-
             }
         }
+
+        mViewModel.productSubcategoryResponse.observe(this, {
+
+            val subCategoryList = ArrayList<FilterDataResponse>()
+            subCategoryList.add(FilterDataResponse("-1", "Sub-Category"))
+            for ((pos, product) in it!!.withIndex()) {
+                subCategoryList.add(FilterDataResponse(product._Id, product.name))
+                if (product._Id == filterData.subCategoryId) {
+                    filterData.subCategoryPos = pos + 1
+                }
+            }
+            val subCategoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, subCategoryList)
+            spinnerSubCategory.adapter = subCategoryAdapter
+
+            spinnerSubCategory.post {
+                try {
+                    if (showSubCategorySelectedFirstTime) {
+                        spinnerSubCategory.setSelection(filterData.subCategoryPos)
+                        showSubCategorySelectedFirstTime = false
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        })
+
+        val subCategoryList = ArrayList<FilterDataResponse>()
+        subCategoryList.add(FilterDataResponse("-1", "Sub-Category"))
+        val subCategoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, subCategoryList)
+        spinnerSubCategory.adapter = subCategoryAdapter
 
         spinnerSubCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -137,14 +216,13 @@ class ProductFilterDialogFragment(private val businessCategoryId: String, select
                         filterData.subCategoryPos = p2
                     }
                 } else {
-                    filterData.subCategoryId = "-1"
+                    //filterData.subCategoryId = "-1"
                     //filterData.subCategoryPos = 0
                 }
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
-
         }
 
         spinnerBrand.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -164,7 +242,21 @@ class ProductFilterDialogFragment(private val businessCategoryId: String, select
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
         }
-        callBrandCategory()
+
+        mViewModel.brandObserver()
+        mViewModel.brandListResponse.observe(this, {
+
+            val brandList = ArrayList<FilterDataResponse>()
+            brandList.add(FilterDataResponse("-1", "Brand"))
+            for (product in it!!) {
+                brandList.add(FilterDataResponse(product._Id, product.name))
+            }
+            val adapter = CarAdapter(requireContext(), R.layout.custom_spinner, brandList)
+            spinnerBrand.adapter = adapter
+            spinnerBrand.post {
+                spinnerBrand.setSelection(filterData.brandPos)
+            }
+        })
 
         btnApplyFilter.setOnClickListener {
 
@@ -194,119 +286,32 @@ class ProductFilterDialogFragment(private val businessCategoryId: String, select
         fun onSubmitClick(filterValue: FilterData)
     }
 
-    private fun callProductCategory() {
-        val requestParams = HashMap<String, String>()
-        requestParams["business_category_id"] = businessCategoryId
-
-        val service = RetrofitFactory.getInstance()
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = service.getProductCategory(requestParams)
-            withContext(Dispatchers.Main) {
-                try {
-                    if (response.isSuccessful) {
-                        //Do something with response e.g show to the UI.
-
-                        val productList = response.body()?.data?.docs
-                        val categoryList = ArrayList<FilterDataResponse>()
-                        categoryList.add(FilterDataResponse("-1", "Category"))
-                        for (product in productList!!) {
-                            categoryList.add(FilterDataResponse(product._Id, product.name))
-                        }
-                        val categoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, categoryList)
-                        spinnerCategory.adapter = categoryAdapter
-                        spinnerCategory.post {
-                            spinnerCategory.setSelection(filterData.categoryPos)
-                        }
-
-                    } else {
-                        requireActivity().toast("Error: ${response.code()}")
-                    }
-                } catch (e: HttpException) {
-                    requireActivity().toast("Exception ${e.message}")
-                } catch (e: Throwable) {
-                    requireActivity().toast("Oops: Something else went wrong")
-                }
-            }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 2000 && resultCode == Activity.RESULT_OK) {
+            val selectedFilter: HashMap<String, MutableList<CustomizationSubTypeResponse.CustomizationSubType>> = data?.getSerializableExtra("filters") as HashMap<String, MutableList<CustomizationSubTypeResponse.CustomizationSubType>>
+            filterData.customizationSelectedFilters = selectedFilter
+            customizationFilterStatus()
         }
     }
 
-    fun callProductSubCategory(category_id: String) {
-        val requestParams = HashMap<String, String>()
-        requestParams["business_category_id"] = businessCategoryId
-        requestParams["category_id"] = category_id
-
-        val service = RetrofitFactory.getInstance()
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = service.getProductSubCategory(requestParams)
-            withContext(Dispatchers.Main) {
-                try {
-                    if (response.isSuccessful) {
-                        //Do something with response e.g show to the UI.
-
-                        val productList = response.body()?.data?.docs
-                        val categoryList = ArrayList<FilterDataResponse>()
-                        categoryList.add(FilterDataResponse("-1", "Sub-Category"))
-                        for (product in productList!!) {
-                            categoryList.add(FilterDataResponse(product._Id, product.name))
-                        }
-                        val categoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, categoryList)
-                        spinnerSubCategory.adapter = categoryAdapter
-
-                        spinnerSubCategory.post {
-                            /*if(categoryList.size > filterData.subCategoryPos ) {
-                                spinnerSubCategory.setSelection(filterData.subCategoryPos)
-                            }*/
-                            try {
-                                spinnerSubCategory.setSelection(filterData.subCategoryPos)
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        }
-                    } else {
-                        requireActivity().toast("Error: ${response.code()}")
-                    }
-                } catch (e: HttpException) {
-                    requireActivity().toast("Exception ${e.message}")
-                } catch (e: Throwable) {
-                    requireActivity().toast("Ooops: Something else went wrong")
+    private fun customizationFilterStatus() {
+        var isAnyFilterSelected = false
+        for (key in filterData.customizationSelectedFilters.keys) {
+            val filters: MutableList<CustomizationSubTypeResponse.CustomizationSubType> = filterData.customizationSelectedFilters[key]!!
+            for (filter in filters) {
+                if (filter.isSelected) {
+                    isAnyFilterSelected = true
+                    break
                 }
             }
         }
-    }
-
-
-    private fun callBrandCategory() {
-        val requestParams = HashMap<String, String>()
-        requestParams["page_no"] = "1"
-
-        val service = RetrofitFactory.getInstance()
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = service.getBrands(requestParams)
-            withContext(Dispatchers.Main) {
-                try {
-                    if (response.isSuccessful) {
-                        //Do something with response e.g show to the UI.
-
-                        val brandList = response.body()?.data?.docs
-                        val categoryList = ArrayList<FilterDataResponse>()
-                        categoryList.add(FilterDataResponse("-1", "Brand"))
-                        for (product in brandList!!) {
-                            categoryList.add(FilterDataResponse(product._Id, product.name))
-                        }
-                        val adapter = CarAdapter(requireContext(), R.layout.custom_spinner, categoryList)
-                        spinnerBrand.adapter = adapter
-                        spinnerBrand.post {
-                            spinnerBrand.setSelection(filterData.brandPos)
-                        }
-                    } else {
-                        requireActivity().toast("Error: ${response.code()}")
-                    }
-                } catch (e: HttpException) {
-                    requireActivity().toast("Exception ${e.message}")
-                } catch (e: Throwable) {
-                    requireActivity().toast("Ooops: Something else went wrong")
-                }
-            }
+        if (isAnyFilterSelected) {
+            selectCustomization.text = "Customization Applied"
+            selectCustomization.setBackgroundResource(R.drawable.edittext_bg)
+        } else {
+            selectCustomization.text = "Customization"
+            selectCustomization.setBackgroundResource(R.drawable.edittext_bg)
         }
     }
 }

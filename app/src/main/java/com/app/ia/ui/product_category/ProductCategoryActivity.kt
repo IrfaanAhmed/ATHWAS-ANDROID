@@ -1,6 +1,7 @@
 package com.app.ia.ui.product_category
 
 import android.os.Bundle
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.app.ia.BR
 import com.app.ia.R
@@ -53,6 +54,13 @@ class ProductCategoryActivity : BaseActivity<ActivityProductCategoryBinding, Pro
         mViewModel?.productCategory?.observe(this, {
             productCategoryAdapter!!.submitList(it)
         })
+
+        mSwipeRefresh.setOnRefreshListener {
+            if (mSwipeRefresh.isRefreshing) {
+                mSwipeRefresh.isRefreshing = false
+            }
+            mViewModel?.productCategoryObserver()
+        }
     }
 
     private fun setViewModel() {

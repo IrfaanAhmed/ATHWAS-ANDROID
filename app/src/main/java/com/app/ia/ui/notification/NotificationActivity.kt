@@ -1,5 +1,6 @@
 package com.app.ia.ui.notification
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.app.ia.BR
@@ -9,6 +10,7 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityNotificationBinding
+import com.app.ia.dialog.IADialog
 import com.app.ia.model.NotificationResponse
 import com.app.ia.ui.notification.adapter.NotificationAdapter
 import com.app.ia.utils.*
@@ -50,7 +52,23 @@ class NotificationActivity : BaseActivity<ActivityNotificationBinding, Notificat
         mViewModel?.setVariable(mActivityBinding!!)
 
         setOnApplyWindowInset1(toolbar, content_container)
-        toolbar.ivEditProfileIcon.gone()
+        toolbar.ivEditProfileIcon.visible()
+        toolbar.ivEditProfileIcon.setImageResource(R.drawable.ic_delete)
+
+        toolbar.ivEditProfileIcon.setOnClickListener {
+
+            val tivoDialog = IADialog(this, "Are you sure you want to delete all notification?", false)
+            tivoDialog.setOnItemClickListener(object  : IADialog.OnClickListener {
+
+                override fun onPositiveClick() {
+                    mViewModel?.setupObservers(null, null, DELETE_ALL_NOTIFICATION, -1)
+                }
+
+                override fun onNegativeClick() {
+
+                }
+            })
+        }
 
         notificationRecyclerView.addItemDecoration(EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.VERTICAL))
 

@@ -11,16 +11,17 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivitySearchBinding
-import com.app.ia.model.ProductListingResponse
-import com.app.ia.ui.product_detail.ProductDetailActivity
-import com.app.ia.ui.product_list.adapter.ProductListAdapter
 import com.app.ia.ui.search.adapter.SearchAdapter
 import com.app.ia.utils.RecyclerViewPaginator
 import com.app.ia.utils.invisible
 import com.app.ia.utils.setOnApplyWindowInset1
-import com.app.ia.utils.startActivity
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.common_header.view.*
+import java.util.concurrent.TimeUnit
 
 class SearchActivity : BaseActivity<ActivitySearchBinding, SearchViewModel>() {
 
@@ -30,6 +31,9 @@ class SearchActivity : BaseActivity<ActivitySearchBinding, SearchViewModel>() {
     private lateinit var recyclerViewPaging: RecyclerViewPaginator
     private var searchAdapter: SearchAdapter? = null
     private var keyword = ""
+
+    val subject = PublishSubject.create<String>()
+    private var disposable: Disposable? = null
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
@@ -97,22 +101,34 @@ class SearchActivity : BaseActivity<ActivitySearchBinding, SearchViewModel>() {
 
         edtSearchText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
             }
 
             override fun onTextChanged(charater: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 keyword = charater.toString()
                 mViewModel?.isSearchTextEntered!!.value = keyword.isNotEmpty()
                 if (keyword.length > 2) {
-                    mViewModel?.setUpObserver(keyword)
+                    subject.onNext(keyword)
+                } else if (keyword.isEmpty()) {
+                    mViewModel?.productListAll?.clear()
+                    mViewModel?.productList?.value = ArrayList()
                 }
             }
 
             override fun afterTextChanged(p0: Editable?) {
 
             }
-
         })
+
+        disposable = subject.debounce(300, TimeUnit.MILLISECONDS)
+            .filter { text ->
+                text.isNotEmpty()
+            }
+            .distinctUntilChanged()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                mViewModel?.setUpObserver(it)
+            }
     }
 
     private fun setViewModel() {

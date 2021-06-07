@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -19,13 +20,18 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextUtils
 import android.util.Base64
+import android.util.DisplayMetrics
 import android.util.Patterns
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.webkit.MimeTypeMap
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.app.ia.IAApplication
@@ -109,6 +115,26 @@ object CommonUtils {
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
+    fun showCartItemCount(countTextView: AppCompatTextView) {
+        val itemCount = AppPreferencesHelper.getInstance().cartItemCount
+        if (itemCount <= 0) {
+            countTextView.visibility = View.INVISIBLE
+        } else {
+            countTextView.visibility = View.VISIBLE
+            countTextView.text = itemCount.toString()
+        }
+    }
+
+    fun showNotificationCount(countTextView: AppCompatTextView) {
+        val notificationCount = AppPreferencesHelper.getInstance().notificationCount
+        if (notificationCount <= 0) {
+            countTextView.visibility = View.INVISIBLE
+        } else {
+            countTextView.visibility = View.VISIBLE
+            countTextView.text = notificationCount.toString()
+        }
+    }
+
     /**
      * Hide the soft input.
      */
@@ -156,7 +182,7 @@ object CommonUtils {
         }
 
         val symbols = DecimalFormatSymbols(Locale.ENGLISH)
-        val df2 = DecimalFormat("#0.00", symbols)
+        val df2 = DecimalFormat("#0.##", symbols)
         return when (value) {
             is Float -> df2.format(value)
             is Double -> df2.format(value)
@@ -291,6 +317,25 @@ object CommonUtils {
     }
 
     /*
+    * Create Custom marker from Drawable
+    * */
+    fun createCustomMarker(context: Context, resource: Int): Bitmap {
+        val marker: View = (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.custom_simple_marker_layout, null)
+        val ivMarker: AppCompatImageView = marker.findViewById(R.id.ivMarker) as AppCompatImageView
+        ivMarker.setImageResource(resource)
+        val displayMetrics = DisplayMetrics()
+        (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        marker.layoutParams = ViewGroup.LayoutParams(70, ViewGroup.LayoutParams.WRAP_CONTENT)
+        marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
+        marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
+        marker.buildDrawingCache()
+        val bitmap = Bitmap.createBitmap(marker.measuredWidth, marker.measuredHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        marker.draw(canvas)
+        return bitmap
+    }
+
+    /*
     * Open Google Map with latitude longitude
     * */
     fun openGoogleMapWithLocation(context: Context, currentLat: String, currentLong: String, desLat: String, desLong: String) {
@@ -350,7 +395,6 @@ object CommonUtils {
     }
 
 
-
     /*
      * Date Picker and set on Edit text
      * */
@@ -369,9 +413,9 @@ object CommonUtils {
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
         val d = DatePickerDialog(context, dpd, year, month, day)
-         /*if (editText.id == R.id.editTextStartDate || editText.id == R.id.editTextEndDate) {
-             d.datePicker.minDate = System.currentTimeMillis()
-         }*//* else if (editText.id == R.id.edtDateCreated) {
+        /*if (editText.id == R.id.editTextStartDate || editText.id == R.id.editTextEndDate) {
+            d.datePicker.minDate = System.currentTimeMillis()
+        }*//* else if (editText.id == R.id.edtDateCreated) {
              d.datePicker.maxDate = System.currentTimeMillis()
          } else if (editText.id == R.id.edtLastUpdated) {
              d.datePicker.maxDate = System.currentTimeMillis()
@@ -397,9 +441,9 @@ object CommonUtils {
                 val inputFormat = SimpleDateFormat(currFormat)
                 inputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
                 val date = inputFormat.parse(value)
-                val formatted= SimpleDateFormat(timeFormat)
+                val formatted = SimpleDateFormat(timeFormat)
                 formatted.setTimeZone(TimeZone.getDefault());
-                val formattedDate =   formatted  .format(date)
+                val formattedDate = formatted.format(date)
                 println(formattedDate) // prints 10-04-2018
                 AppLogger.d(" Date : $value")
                 AppLogger.d("formatted Date : ${formattedDate}")

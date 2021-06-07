@@ -1,24 +1,39 @@
 package com.app.ia.ui.offers.adapter
 
+import android.R.attr.label
+import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.app.ia.R
 import com.app.ia.databinding.OfferListItemBinding
+import com.app.ia.model.OffersResponse
+import com.app.ia.utils.toast
+import kotlinx.android.synthetic.main.offer_list_item.view.*
 
-class OfferListAdapter : ListAdapter<String, OfferListAdapter.OfferViewHolder>(OffersListDiffCallback()) {
 
-    class OffersListDiffCallback : DiffUtil.ItemCallback<String>() {
+class OfferListAdapter : ListAdapter<OffersResponse.Docs, OfferListAdapter.OfferViewHolder>(OffersListDiffCallback()) {
 
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+    private var onItemSelectListener: OnItemSelectListener? = null
+
+    class OffersListDiffCallback : DiffUtil.ItemCallback<OffersResponse.Docs>() {
+
+        override fun areItemsTheSame(oldItem: OffersResponse.Docs, newItem: OffersResponse.Docs): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areContentsTheSame(oldItem: OffersResponse.Docs, newItem: OffersResponse.Docs): Boolean {
             return oldItem == newItem
         }
+    }
+
+    fun setOnItemSelectListener(onItemSelectListener: OnItemSelectListener) {
+        this.onItemSelectListener = onItemSelectListener
     }
 
     override fun onBindViewHolder(holder: OfferViewHolder, position: Int) {
@@ -31,35 +46,32 @@ class OfferListAdapter : ListAdapter<String, OfferListAdapter.OfferViewHolder>(O
         return OfferViewHolder(OfferListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    class OfferViewHolder(private val mBinding: OfferListItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
+    inner class OfferViewHolder(private val mBinding: OfferListItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun onBind(profileItem: String, position: Int) {
+        fun onBind(offer: OffersResponse.Docs, position: Int) {
             mBinding.apply {
+                promoCodes = offer
+                buttonApplyCode.setOnClickListener {
+                    onItemSelectListener!!.onItemSelect(offer)
+                }
 
-                when (position) {
-                    0 -> {
-                        imgView.setImageResource(R.drawable.offer1)
-                        txtView.text = "Promo code offer"
-                    }
-                    1 -> {
-                        imgView.setImageResource(R.drawable.offer2)
-                        txtView.text = "Bundle offer"
-                    }
-                    2 -> {
-                        imgView.setImageResource(R.drawable.offer3)
-                        txtView.text = "Promotional offer"
-                    }
-                    3 -> {
-                        imgView.setImageResource(R.drawable.offer4)
-                        txtView.text = "Bank Offer"
-                    }
-                    4 -> {
-                        imgView.setImageResource(R.drawable.offer3)
-                        txtView.text = "Product Offer"
-                    }
+                itemView.setOnClickListener {
+                    onItemSelectListener!!.onItemSelect(offer)
+                }
+
+                btnCouponCode.setOnClickListener {
+
+                    val clipBoard: ClipboardManager = (itemView.context as Activity).getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clip = ClipData.newPlainText(offer.couponCode, offer.couponCode)
+                    clipBoard.setPrimaryClip(clip)
+                    (itemView.context as Activity).toast("Offer code copied!!")
                 }
                 executePendingBindings()
             }
         }
+    }
+
+    interface OnItemSelectListener {
+        fun onItemSelect(data: OffersResponse.Docs)
     }
 }

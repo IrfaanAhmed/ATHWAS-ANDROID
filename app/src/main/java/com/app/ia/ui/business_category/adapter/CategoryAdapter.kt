@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.databinding.HomeCategoryListItemBinding
+import com.app.ia.databinding.ShopByCategoryListItemBinding
 import com.app.ia.model.BusinessCategoryResponse
 import com.app.ia.ui.product_category.ProductCategoryActivity
 import com.app.ia.utils.AppConstants
@@ -31,10 +32,10 @@ class CategoryAdapter : ListAdapter<BusinessCategoryResponse.Docs, CategoryAdapt
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        return CategoryViewHolder(HomeCategoryListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return CategoryViewHolder(ShopByCategoryListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    class CategoryViewHolder(private val mBinding: HomeCategoryListItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
+    class CategoryViewHolder(private val mBinding: ShopByCategoryListItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
         fun onBind(businessCategory: BusinessCategoryResponse.Docs) {
 

@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.liveData
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.ia.R
@@ -21,7 +20,6 @@ import com.app.ia.ui.change_password.ChangePasswordActivity
 import com.app.ia.ui.otp_verify.OTPVerifyActivity
 import com.app.ia.utils.*
 import com.app.ia.utils.CommonUtils.isEmailValid
-import com.app.ia.utils.CommonUtils.validateNumber
 import kotlinx.coroutines.Dispatchers
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -78,12 +76,12 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
         } else if (mobileNumber.length < 7 || mobileNumber.length > 15) {
             IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
         } else {
+            (mActivity as EditProfileActivity).hideKeyboard()
             oldMobileEmail.value = AppPreferencesHelper.getInstance().phone
             val requestParams = HashMap<String, String>()
             requestParams["field_key"] = "new_phone"
             requestParams["field_value"] = mobileNumber
             setupObservers(true, requestParams)
-            (mActivity as EditProfileActivity).hideKeyboard()
         }
     }
 
@@ -126,15 +124,7 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
         liveData(Dispatchers.Main) {
             emit(Resource.loading(data = null))
             try {
-                emit(
-                    Resource.success(
-                        data = baseRepository.updateProfile(
-                            partData,
-                            file
-                        )
-                    )
-                )
-
+                emit(Resource.success(data = baseRepository.updateProfile(partData, file)))
             } catch (exception: Exception) {
                 emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
             }
@@ -146,18 +136,12 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-                                mActivity.toast(users.message)
-                                val imgBitmap = BitmapFactory.decodeFile(filePath.value)
-                                mBinding.profileImg.setImageBitmap(imgBitmap)
-                                val localBroadCast =
-                                    LocalBroadcastManager.getInstance(mActivity)
-                                val intent =
-                                    Intent(AppConstants.ACTION_BROADCAST_UPDATE_PROFILE)
-                                localBroadCast.sendBroadcast(intent)
-                            } else {
-                                IADialog(mActivity, users.message, true)
-                            }
+                            mActivity.toast(users.message)
+                            val imgBitmap = BitmapFactory.decodeFile(filePath.value)
+                            mBinding.profileImg.setImageBitmap(imgBitmap)
+                            val localBroadCast = LocalBroadcastManager.getInstance(mActivity)
+                            val intent = Intent(AppConstants.ACTION_BROADCAST_UPDATE_PROFILE)
+                            localBroadCast.sendBroadcast(intent)
                         }
                     }
                     Status.ERROR -> {
@@ -174,37 +158,33 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
     }
 
     private fun setupObservers(isVerify: Boolean, requestParams: HashMap<String, String>) {
-        updateProfile(requestParams).observe(mBinding.lifecycleOwner!!, Observer {
+        updateProfile(requestParams).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-                                mActivity.toast(users.message)
-                                if (isVerify) {
-                                    mActivity.startActivity<OTPVerifyActivity> {
-                                        putExtra("countryCode", users.data?.countryCode)
-                                        putExtra("mobileNumber", users.data?.phone)
-                                        putExtra("otp", users.data?.otpNumber)
-                                        putExtra("otpFor", users.data?.otpFor)
-                                    }
-                                } else {
-                                    val localBroadCast =
-                                        LocalBroadcastManager.getInstance(mActivity)
-                                    val intent =
-                                        Intent(AppConstants.ACTION_BROADCAST_UPDATE_PROFILE)
-                                    localBroadCast.sendBroadcast(intent)
-                                    //setupObservers()
+                            mActivity.toast(users.message)
+                            if (isVerify) {
+                                mActivity.startActivity<OTPVerifyActivity> {
+                                    putExtra("countryCode", users.data?.countryCode)
+                                    putExtra("mobileNumber", users.data?.phone)
+                                    putExtra("otp", users.data?.otpNumber)
+                                    putExtra("otpFor", users.data?.otpFor)
                                 }
                             } else {
-                                IADialog(mActivity, users.message, true)
+                                val localBroadCast = LocalBroadcastManager.getInstance(mActivity)
+                                val intent = Intent(AppConstants.ACTION_BROADCAST_UPDATE_PROFILE)
+                                localBroadCast.sendBroadcast(intent)
+                                //setupObservers()
                             }
                         }
                     }
+
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
                     }
+
                     Status.LOADING -> {
                         baseRepository.callback.showProgress()
                     }

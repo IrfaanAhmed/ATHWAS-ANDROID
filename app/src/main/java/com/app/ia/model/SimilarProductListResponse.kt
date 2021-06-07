@@ -1,5 +1,6 @@
 package com.app.ia.model
 
+import com.app.ia.utils.CommonUtils
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -55,49 +56,78 @@ data class SimilarProductListResponse(
         var subcategory: Subcategory,
         @Expose
         @SerializedName("price")
-        var price: String,
+        private var price: String,
         @Expose
         @SerializedName("description")
         val description: String,
         @Expose
         @SerializedName("offer_price")
-        val offerPrice: String,
+        private val offerPrice: String,
         @Expose
         @SerializedName("rating")
-        val rating: String)
+        val rating: String,
+        @Expose
+        @SerializedName("is_discount")
+        val isDiscount: Int,
+        @Expose
+        @SerializedName("discount_type")
+        val discountType: Int,
+        @Expose
+        @SerializedName("discount_value")
+        val discountValue: String) {
 
-    data class Subcategory(
-        @Expose
-        @SerializedName("_id")
-        val Id: String,
-        @Expose
-        @SerializedName("name")
-        val name: String)
+        fun getDiscountPercent(): String {
+            if (isDiscount == 1) {
+                return if (discountType == 1) {
+                    "$discountValue% Off"
+                } else {
+                    "₹ $discountValue Off"
+                }
+            }
+            return ""
+        }
 
-    data class Category(
-        @Expose
-        @SerializedName("_id")
-        val Id: String,
-        @Expose
-        @SerializedName("name")
-        val name: String)
+        fun getPrice() : String {
+            return CommonUtils.convertToDecimal(price)
+        }
 
-    data class BusinessCategory(
-        @Expose
-        @SerializedName("_id")
-        val Id: String,
-        @Expose
-        @SerializedName("name")
-        val name: String)
+        fun getOfferPrice() : String {
+            return CommonUtils.convertToDecimal(offerPrice)
+        }
 
-    data class Images(
-        @Expose
-        @SerializedName("_id")
-        val Id: String,
-        @Expose
-        @SerializedName("product_image_url")
-        val productImageUrl: String,
-        @Expose
-        @SerializedName("product_image_thumb_url")
-        val productImageThumbUrl: String)
+        data class Subcategory(
+            @Expose
+            @SerializedName("_id")
+            val Id: String,
+            @Expose
+            @SerializedName("name")
+            val name: String)
+
+        data class Category(
+            @Expose
+            @SerializedName("_id")
+            val Id: String,
+            @Expose
+            @SerializedName("name")
+            val name: String)
+
+        data class BusinessCategory(
+            @Expose
+            @SerializedName("_id")
+            val Id: String,
+            @Expose
+            @SerializedName("name")
+            val name: String)
+
+        data class Images(
+            @Expose
+            @SerializedName("_id")
+            val Id: String,
+            @Expose
+            @SerializedName("product_image_url")
+            val productImageUrl: String,
+            @Expose
+            @SerializedName("product_image_thumb_url")
+            val productImageThumbUrl: String)
+    }
 }

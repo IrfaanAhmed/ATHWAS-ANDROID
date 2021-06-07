@@ -42,9 +42,8 @@ class OTPVerifyActivity : BaseActivity<ActivityOtpVerifyBinding, OTPVerifyViewMo
         mViewModel?.setVariable(mBinding!!)
         mViewModel?.setIntent(intent)
 
-        //makeStatusBarTransparent()
+//        makeStatusBarTransparent()
         setOnApplyWindowInset(toolbar, content_container)
-        //toolbar.imageViewBack.visible()
     }
 
     private fun setViewModel() {

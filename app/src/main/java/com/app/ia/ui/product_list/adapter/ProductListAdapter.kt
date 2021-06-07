@@ -59,14 +59,17 @@ class ProductListAdapter : ListAdapter<ProductListingResponse.Docs, ProductListA
                     onItemClickListener?.onFavoriteClick(productItem, position)
                 }
 
+                buttonAddToCart.setOnClickListener {
+                    onItemClickListener?.onAddToCartClick(productItem)
+                }
                 executePendingBindings()
             }
         }
     }
 
-
     interface OnItemClickListener {
         fun onItemClick(productItem: ProductListingResponse.Docs)
+        fun onAddToCartClick(productItem: ProductListingResponse.Docs)
         fun onFavoriteClick(productItem: ProductListingResponse.Docs, position: Int)
     }
 }

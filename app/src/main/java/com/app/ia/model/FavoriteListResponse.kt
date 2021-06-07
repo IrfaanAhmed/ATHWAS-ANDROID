@@ -38,14 +38,29 @@ data class FavoriteListResponse(
         @SerializedName("name")
         val name: String,
         @Expose
+        @SerializedName("inventory_name")
+        val inventoryName: String,
+        @Expose
+        @SerializedName("inventory_id")
+        val inventoryId: String,
+        @Expose
         @SerializedName("product_id")
         val productId: String,
         @Expose
         @SerializedName("price")
-        var price: Int,
+        var price: String,
         @Expose
-        @SerializedName("quantity")
+        @SerializedName("available_quantity")
         var quantity: Int,
+        @Expose
+        @SerializedName("is_discount")
+        val isDiscount: Int,
+        @Expose
+        @SerializedName("discount_type")
+        val discountType: Int,
+        @Expose
+        @SerializedName("discount_value")
+        val discountValue: String,
         @Expose
         @SerializedName("product_code")
         val productCode: String,
@@ -63,40 +78,53 @@ data class FavoriteListResponse(
         var subcategory: Subcategory,
         @Expose
         @SerializedName("offer_price")
-        val offerPrice: String)
+        val offerPrice: String) {
 
-    data class Subcategory(
-        @Expose
-        @SerializedName("_id")
-        val Id: String,
-        @Expose
-        @SerializedName("name")
-        val name: String)
+        fun getDiscountPercent(): String {
+            if (isDiscount == 1) {
+                return if (discountType == 1) {
+                    "$discountValue% Off"
+                } else {
+                    "₹ $discountValue Off"
+                }
+            }
+            return ""
+        }
 
-    data class Category(
-        @Expose
-        @SerializedName("_id")
-        val Id: String,
-        @Expose
-        @SerializedName("name")
-        val name: String)
 
-    data class BusinessCategory(
-        @Expose
-        @SerializedName("_id")
-        val Id: String,
-        @Expose
-        @SerializedName("name")
-        val name: String)
+        data class Subcategory(
+            @Expose
+            @SerializedName("_id")
+            val Id: String,
+            @Expose
+            @SerializedName("name")
+            val name: String)
 
-    data class Images(
-        @Expose
-        @SerializedName("_id")
-        val Id: String,
-        @Expose
-        @SerializedName("product_image_url")
-        val productImageUrl: String,
-        @Expose
-        @SerializedName("product_image_thumb_url")
-        val productImageThumbUrl: String)
+        data class Category(
+            @Expose
+            @SerializedName("_id")
+            val Id: String,
+            @Expose
+            @SerializedName("name")
+            val name: String)
+
+        data class BusinessCategory(
+            @Expose
+            @SerializedName("_id")
+            val Id: String,
+            @Expose
+            @SerializedName("name")
+            val name: String)
+
+        data class Images(
+            @Expose
+            @SerializedName("_id")
+            val Id: String,
+            @Expose
+            @SerializedName("product_image_url")
+            val productImageUrl: String,
+            @Expose
+            @SerializedName("product_image_thumb_url")
+            val productImageThumbUrl: String)
+    }
 }

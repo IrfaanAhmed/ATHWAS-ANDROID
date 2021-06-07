@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.app.ia.R" />
+
+        <variable
+            name="name"
+            type="com.app.ia.model.CustomizationTypeResponse.Docs" />
+
+    </data>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtCustomizationName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/_40sdp"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_1sdp"
+        android:text="@{name.name}"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_13sdp"
+        app:fontFamily="@font/linotte_light" />
+
+</layout>

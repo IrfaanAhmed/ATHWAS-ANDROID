@@ -1,6 +1,7 @@
 package com.app.ia.utils
 
 import android.Manifest
+import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -10,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.requestPermissions
 import com.app.ia.R
 import com.app.ia.dialog.IADialog
 import com.example.easywaylocation.EasyWayLocation
@@ -63,7 +65,8 @@ class LocationManager(private var currentLocationListener: CurrentLocationListen
                 getCurrentLocation()
             } else {
 
-                Dexter.withActivity(mContext as Activity).withPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION).withListener(object : MultiplePermissionsListener {
+
+                Dexter.withContext(mContext as Activity).withPermissions(Manifest.permission.ACCESS_FINE_LOCATION).withListener(object : MultiplePermissionsListener {
 
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
 
@@ -89,11 +92,12 @@ class LocationManager(private var currentLocationListener: CurrentLocationListen
                     }
 
                 }).onSameThread().check()
+
             }
 
         } else {
 
-            Dexter.withActivity(mContext as Activity).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(object : PermissionListener {
+            Dexter.withContext(mContext as Activity).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(object : PermissionListener {
                 override fun onPermissionGranted(response: PermissionGrantedResponse?) {
                     mLocationPermissionGranted = true
                     getCurrentLocation()

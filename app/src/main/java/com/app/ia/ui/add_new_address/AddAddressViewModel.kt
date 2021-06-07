@@ -7,6 +7,7 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.app.ia.R
+import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityAddAddressBinding
@@ -21,6 +22,8 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
 
     val enteredAddress: ObservableField<String> = ObservableField("")
     val currentAddress: ObservableField<String> = ObservableField("")
+    val searchedLocationName: ObservableField<String> = ObservableField("")
+    val progressVisible: ObservableField<Boolean> = ObservableField(false)
     val resultList = MutableLiveData<MutableList<MutableMap<String, String>>>()
 
     val selectedChipValue: ObservableField<Int> = ObservableField(-1)
@@ -60,6 +63,11 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
             return
         }
 
+        /*if (mBinding.edtTextPinCode.text.toString().isEmpty()) {
+            IADialog(mActivity, "Please enter pin code", true)
+            return
+        }*/
+
         isAddressAdded = true
         val requestJsonObject = HashMap<String, String>()
         requestJsonObject["full_address"] = currentAddress.get()!!
@@ -78,20 +86,15 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
         requestJsonObject["floor"] = mBinding.edtTextAddress.text.toString()
         requestJsonObject["landmark"] = ""
         requestJsonObject["way"] = ""
+        requestJsonObject["zip_code"] = mBinding.edtTextPinCode.text.toString()
         addAddressObserver(requestJsonObject)
     }
 
-    fun getAddressFromLatLng(latitude: Double, longitude: Double) {
-        //baseRepository.googleAddressAPI("https://maps.googleapis.com/maps/api/geocode/json", latitude, longitude, false)
-    }
-
-    fun cancelApi() {
-        //baseRepository.cancelApiCall("https://maps.googleapis.com/maps/api/geocode/json")
-    }
-
     fun getAddress(input: String) {
-        val urlAddress = "https://maps.googleapis.com/maps/api/place/autocomplete/json"
-        // baseRepository.googleAddressAPI(urlAddress, input, false)
+        val params = HashMap<String, String>()
+        params["key"] = "AIzaSyC4MhJYysKpRFHe9Re--y5S0_PCtxGir9Q"
+        params["input"] = input
+        getAddressObserver(params)
     }
 
     private fun addAddress(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
@@ -110,14 +113,10 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-                                mActivity.toast(users.message)
-                                val intent = Intent()
-                                mActivity.setResult(Activity.RESULT_OK, intent)
-                                mActivity.finish()
-                            } else {
-                                IADialog(mActivity, users.message, true)
-                            }
+                            mActivity.toast(users.message)
+                            val intent = Intent()
+                            mActivity.setResult(Activity.RESULT_OK, intent)
+                            mActivity.finish()
                         }
                     }
 
@@ -128,6 +127,53 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
 
                     Status.LOADING -> {
                         baseRepository.callback.showProgress()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun getAddress(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = RetrofitFactory.getGoogleInstance().getAddressFromInput(requestParams)))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
+    }
+
+    private fun getAddressObserver(requestParams: HashMap<String, String>) {
+
+        getAddress(requestParams).observe(mBinding.lifecycleOwner!!, {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { users ->
+                            progressVisible.set(false)
+                            // Create a JSON object hierarchy from the results
+                            val predsJsonArray = users.body()?.predictions
+
+                            // Extract the Place descriptions from the results
+                            val finalList: MutableList<MutableMap<String, String>> = ArrayList()
+                            for (i in 0 until predsJsonArray?.size!!) {
+                                val map: MutableMap<String, String> = HashMap()
+                                map["address"] = predsJsonArray[i].description
+                                map["place_id"] = predsJsonArray[i].placeId
+                                finalList.add(map)
+                            }
+                            resultList.value = finalList
+                        }
+                    }
+
+                    Status.ERROR -> {
+                        baseRepository.callback.hideProgress()
+                        progressVisible.set(false)
+                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                    }
+
+                    Status.LOADING -> {
+                        progressVisible.set(true)
+                        //baseRepository.callback.showProgress()
                     }
                 }
             }

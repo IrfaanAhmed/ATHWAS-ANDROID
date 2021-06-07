@@ -34,7 +34,7 @@ class SearchAdapter : ListAdapter<ProductListingResponse.Docs, SearchAdapter.Pro
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         holder.apply {
-            onBind(getItem(position), position)
+            onBind(getItem(position))
         }
     }
 
@@ -44,7 +44,7 @@ class SearchAdapter : ListAdapter<ProductListingResponse.Docs, SearchAdapter.Pro
 
     inner class ProductViewHolder(private val mBinding: SearchListItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun onBind(productItem: ProductListingResponse.Docs, position: Int) {
+        fun onBind(productItem: ProductListingResponse.Docs) {
             mBinding.apply {
                 product = productItem
 

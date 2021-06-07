@@ -24,7 +24,7 @@ class WishListActivity : BaseActivity<ActivityWishListBinding, WishListViewModel
     private var mBinding: ActivityWishListBinding? = null
     private var mViewModel: WishListViewModel? = null
     private lateinit var recyclerViewPaging: RecyclerViewPaginator
-    private var wishListAdapter: WishListAdapter? = null
+    var wishListAdapter: WishListAdapter? = null
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
@@ -57,8 +57,7 @@ class WishListActivity : BaseActivity<ActivityWishListBinding, WishListViewModel
         }
 
         toolbar.ivSearchIcon.setOnClickListener {
-            startActivity<SearchActivity> {
-            }
+            startActivity<SearchActivity>()
         }
 
         recViewWishList.addItemDecoration(EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.VERTICAL))
@@ -67,12 +66,25 @@ class WishListActivity : BaseActivity<ActivityWishListBinding, WishListViewModel
         wishListAdapter?.setOnItemClickListener(object : WishListAdapter.OnItemClickListener {
 
             override fun onFavoriteClick(productItem: FavoriteListResponse.Docs, position: Int) {
-                mViewModel?.addFavorite(productItem.productId)
+                mViewModel?.addFavorite(productItem.productId, position)
             }
 
             override fun onItemClick(productItem: FavoriteListResponse.Docs, position: Int) {
                 startActivity<ProductDetailActivity> {
-                    putExtra("product_id", productItem.productId)
+                    putExtra("product_id", productItem.inventoryId)
+                }
+            }
+
+            override fun onAddToCartClick(productItem: FavoriteListResponse.Docs) {
+                val requestParams = HashMap<String, String>()
+                if (productItem.quantity < 1) {
+                    requestParams["product_id"] = productItem.inventoryId
+                    mViewModel?.notifyMeObserver(requestParams)
+                } else {
+                    requestParams["inventory_id"] = productItem.inventoryId
+                    requestParams["product_id"] = productItem.productId
+                    requestParams["business_category_id"] = productItem.businessCategory.Id
+                    mViewModel?.addItemToCartObserver(requestParams)
                 }
             }
         })

@@ -42,4 +42,5 @@ interface PreferencesHelper {
 
     var cartItemCount : Int
 
+    var walletAmount : String
 }

@@ -24,13 +24,6 @@ class ProductCategoryListAdapter : ListAdapter<ProductCategoryResponse.Docs, Pro
         }
     }
 
-   /* private var businessCategoryID = ""
-
-    fun setBusinessCategoryID(businessCategoryID: String) {
-        this.businessCategoryID = businessCategoryID
-    }*/
-
-
     override fun onBindViewHolder(holder: ProductCategoryViewHolder, position: Int) {
         holder.apply {
             onBind(getItem(position))

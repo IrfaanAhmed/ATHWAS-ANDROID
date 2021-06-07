@@ -1,24 +1,23 @@
 package com.app.ia.ui.my_cart.adapter
 
-import android.graphics.Paint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.app.ia.databinding.CartListItemBinding
-import kotlinx.android.synthetic.main.cart_list_item.view.*
+import com.app.ia.databinding.CartListRowBinding
+import com.app.ia.model.CartListResponse
+import com.app.ia.ui.my_cart.CartUpdateListener
 
-class CartListAdapter : ListAdapter<String, CartListAdapter.CartViewHolder>(OffersListDiffCallback()) {
+class CartListAdapter(private val updateListener: CartUpdateListener) : ListAdapter<CartListResponse.Docs, CartListAdapter.CartViewHolder>(OffersListDiffCallback()) {
 
-    class OffersListDiffCallback : DiffUtil.ItemCallback<String>() {
+    class OffersListDiffCallback : DiffUtil.ItemCallback<CartListResponse.Docs>() {
 
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areItemsTheSame(oldItem: CartListResponse.Docs, newItem: CartListResponse.Docs): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areContentsTheSame(oldItem: CartListResponse.Docs, newItem: CartListResponse.Docs): Boolean {
             return oldItem == newItem
         }
     }
@@ -31,36 +30,19 @@ class CartListAdapter : ListAdapter<String, CartListAdapter.CartViewHolder>(Offe
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
-        return CartViewHolder(CartListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return CartViewHolder(CartListRowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    inner class CartViewHolder(private val mBinding: CartListItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
+    inner class CartViewHolder(private val mBinding: CartListRowBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun onBind(productItem: String, position: Int) {
+        fun onBind(productItem: CartListResponse.Docs, position: Int) {
             mBinding.apply {
-                product = productItem
+                itemCategory = productItem.id.name
+                val adapter = CartListItemAdapter(updateListener)
+                recViewCartItem.adapter = adapter
+                adapter.submitList(productItem.categoryItems)
+                recViewCartItem.isNestedScrollingEnabled = false
                 executePendingBindings()
-                itemView.tvActualPrice.paintFlags = itemView.tvActualPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                var quantity = 1
-                itemView.ivMinus.setOnClickListener {
-                    if (quantity == 1) {
-
-                    } else {
-                        quantity -= 1
-                        itemView.tvQuantity.text = quantity.toString()
-                    }
-                }
-
-                if(position % 2 == 0) {
-                    txtViewHeader.visibility = View.VISIBLE
-                } else {
-                    txtViewHeader.visibility = View.GONE
-                }
-
-                itemView.ivPlus.setOnClickListener {
-                    quantity += 1
-                    itemView.tvQuantity.text = quantity.toString()
-                }
             }
         }
     }

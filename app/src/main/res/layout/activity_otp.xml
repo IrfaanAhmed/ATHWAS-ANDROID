@@ -85,7 +85,7 @@
                         android:gravity="center"
                         android:paddingStart="@dimen/_30sdp"
                         android:paddingEnd="@dimen/_30sdp"
-                        android:text="@{String.format(@string/please_enter_4_digit_otp_msg, viewModel.countryCode, viewModel.mobileNumber)}"
+                        android:text="@{String.format(@string/please_enter_4_digit_otp_msg, viewModel.mobileNumber)}"
                         android:textColor="@color/grey"
                         android:textSize="@dimen/_12sdp"
                         app:layout_constraintEnd_toEndOf="parent"

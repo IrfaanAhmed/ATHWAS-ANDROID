@@ -6,16 +6,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.databinding.RewardListItemBinding
+import com.app.ia.model.RedeemPointResponse
 
-class RewardListAdapter : ListAdapter<String, RewardListAdapter.RewardViewHolder>(OffersListDiffCallback()) {
+class RewardListAdapter : ListAdapter<RedeemPointResponse.Docs, RewardListAdapter.RewardViewHolder>(OffersListDiffCallback()) {
 
-    class OffersListDiffCallback : DiffUtil.ItemCallback<String>() {
+    class OffersListDiffCallback : DiffUtil.ItemCallback<RedeemPointResponse.Docs>() {
 
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areItemsTheSame(oldItem: RedeemPointResponse.Docs, newItem: RedeemPointResponse.Docs): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areContentsTheSame(oldItem: RedeemPointResponse.Docs, newItem: RedeemPointResponse.Docs): Boolean {
             return oldItem == newItem
         }
     }
@@ -33,7 +34,7 @@ class RewardListAdapter : ListAdapter<String, RewardListAdapter.RewardViewHolder
 
     inner class RewardViewHolder(private val mBinding: RewardListItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun onBind(item: String) {
+        fun onBind(item: RedeemPointResponse.Docs) {
             mBinding.apply {
                 reward = item
                 executePendingBindings()

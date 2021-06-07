@@ -11,15 +11,19 @@ import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityRewardsBinding
 import com.app.ia.ui.rewards.adapter.RewardListAdapter
 import com.app.ia.utils.EqualSpacingItemDecoration
+import com.app.ia.utils.RecyclerViewPaginator
 import com.app.ia.utils.invisible
 import com.app.ia.utils.setOnApplyWindowInset1
 import kotlinx.android.synthetic.main.activity_rewards.*
+import kotlinx.android.synthetic.main.activity_rewards.content_container
+import kotlinx.android.synthetic.main.activity_rewards.toolbar
 import kotlinx.android.synthetic.main.common_header.view.*
 
 class RewardsActivity : BaseActivity<ActivityRewardsBinding, RewardsViewModel>() {
 
     private var mBinding: ActivityRewardsBinding? = null
     private var mViewModel: RewardsViewModel? = null
+    private lateinit var recyclerViewPaging: RecyclerViewPaginator
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
@@ -47,15 +51,29 @@ class RewardsActivity : BaseActivity<ActivityRewardsBinding, RewardsViewModel>()
         toolbar.imageViewIcon.invisible()
 
         recViewRewards.addItemDecoration(EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.VERTICAL))
-
         val rewardAdapter = RewardListAdapter()
         recViewRewards.adapter = rewardAdapter
-        val categoryList = ArrayList<String>()
-        categoryList.add("")
-        categoryList.add("")
-        categoryList.add("")
-        categoryList.add("")
-        rewardAdapter.submitList(categoryList)
+
+        recyclerViewPaging = object : RecyclerViewPaginator(recViewRewards) {
+            override val isLastPage: Boolean
+                get() = mViewModel!!.isLastPage.value!!
+
+            override fun loadMore(start: Int, count: Int) {
+                mViewModel?.currentPage?.value = start
+                mViewModel?.redeemPointsObserver()
+            }
+        }
+
+        recViewRewards.addOnScrollListener(recyclerViewPaging)
+
+        mViewModel?.promoCodeListData?.observe(this, {
+            if (rewardAdapter.currentList.size == 0) {
+                rewardAdapter.submitList(it)
+            } else {
+                rewardAdapter.notifyDataSetChanged()
+            }
+        })
+
     }
 
     private fun setViewModel() {

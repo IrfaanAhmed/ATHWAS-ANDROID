@@ -1,5 +1,6 @@
 package com.app.ia.ui.product_detail.adapter
 
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -39,8 +40,8 @@ class SimilarProductListAdapter : ListAdapter<SimilarProductListResponse.Docs, S
         fun onBind(categoryItem: SimilarProductListResponse.Docs, position: Int) {
             mBinding.apply {
                 similarProduct = categoryItem
+                cutTextView.paintFlags = cutTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 executePendingBindings()
-
                 itemView.setOnClickListener {
                     if (onSimilarProductClickListener != null) {
                         onSimilarProductClickListener?.onSimilarProductClick(categoryItem, position)

@@ -24,7 +24,6 @@ class SubCategoryListAdapter : ListAdapter<ProductSubCategoryResponse.Docs, SubC
         }
     }
 
-
     override fun onBindViewHolder(holder: SubCategoryViewHolder, position: Int) {
         holder.apply {
             onBind(getItem(position))

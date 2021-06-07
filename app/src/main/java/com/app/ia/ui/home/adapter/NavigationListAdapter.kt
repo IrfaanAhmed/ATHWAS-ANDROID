@@ -65,7 +65,6 @@ class NavigationListAdapter : ListAdapter<String, NavigationListAdapter.Navigati
         }
     }
 
-
     interface OnSideMenuItemClickListener {
         fun onSideMenuClick(position: Int)
     }

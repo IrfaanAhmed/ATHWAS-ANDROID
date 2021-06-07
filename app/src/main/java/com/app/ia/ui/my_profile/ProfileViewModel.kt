@@ -15,6 +15,7 @@ import com.app.ia.ui.delivery_address.DeliveryAddressActivity
 import com.app.ia.ui.edit_profile.EditProfileActivity
 import com.app.ia.ui.home.HomeActivity
 import com.app.ia.ui.rewards.RewardsActivity
+import com.app.ia.ui.setting.SettingActivity
 import com.app.ia.ui.wishlist.WishListActivity
 import com.app.ia.utils.AppConstants
 import com.app.ia.utils.AppConstants.EXTRA_PROFILE_DETAIL
@@ -58,6 +59,10 @@ class ProfileViewModel(private val baseRepository: BaseRepository) : BaseViewMod
         }
     }
 
+    fun onSettingClick() {
+        mActivity.startActivity<SettingActivity>()
+    }
+
     fun onLogOutClick() {
         (mActivity as ProfileActivity).logoutDialog()
     }
@@ -77,11 +82,11 @@ class ProfileViewModel(private val baseRepository: BaseRepository) : BaseViewMod
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
+                            //if (users.status == "success") {
                                 userData.value = users.data
-                            } else {
+                            /*} else {
                                 IADialog(mActivity, users.message, true)
-                            }
+                            }*/
                         }
                     }
                     Status.ERROR -> {

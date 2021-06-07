@@ -5,4 +5,5 @@
     android:background="#fafafa"
     android:padding="@dimen/_10sdp"
     android:textAlignment="viewStart"
-    android:textSize="@dimen/_11sdp" />
+    android:textColor="@color/black"
+    android:textSize="@dimen/_10sdp" />

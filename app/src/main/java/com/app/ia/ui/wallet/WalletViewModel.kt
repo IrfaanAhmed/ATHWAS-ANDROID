@@ -9,12 +9,13 @@ import com.app.ia.R
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.FragmentWalletBinding
-import com.app.ia.dialog.IADialog
 import com.app.ia.dialog.bottom_sheet_dialog.AddMoneyDialogFragment
 import com.app.ia.enums.Status
+import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.model.PaymentOptionBean
 import com.app.ia.model.WalletHistoryResponse
 import com.app.ia.ui.home.HomeActivity
+import com.app.ia.utils.CommonUtils
 import com.app.ia.utils.Resource
 import kotlinx.coroutines.Dispatchers
 
@@ -26,6 +27,10 @@ class WalletViewModel(private val baseRepository: BaseRepository) : BaseViewMode
     val isItemAvailable = MutableLiveData(true)
     var walletBalance = MutableLiveData("0")
     val walletListResponse = MutableLiveData<MutableList<WalletHistoryResponse.Docs>>()
+    val walletListAll = ArrayList<WalletHistoryResponse.Docs>()
+
+    val currentPage = MutableLiveData(1)
+    val isLastPage = MutableLiveData(false)
 
     fun setVariable(mBinding: FragmentWalletBinding) {
         this.mBinding = mBinding
@@ -37,11 +42,14 @@ class WalletViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         val bottomSheetFragment = AddMoneyDialogFragment(getPaymentOptionList())
         bottomSheetFragment.setOnItemClickListener(object : AddMoneyDialogFragment.OnAddMoneyClickListener {
             override fun onAddMoneyClick(data: String) {
-                walletBalance.value = data
+                walletBalance.value = CommonUtils.convertToDecimal(data)
+                AppPreferencesHelper.getInstance().walletAmount = walletBalance.value!!
+                currentPage.value = 1
+                walletListAll.clear()
                 transactionHistoryObserver()
             }
         })
-        bottomSheetFragment.show((mActivity as HomeActivity).supportFragmentManager, bottomSheetFragment.tag)
+        bottomSheetFragment.show((mActivity as HomeActivity).supportFragmentManager, "addMoney")
     }
 
     private fun getPaymentOptionList(): ArrayList<PaymentOptionBean> {
@@ -52,9 +60,10 @@ class WalletViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         return list
     }
 
-    private fun transactionHistoryObserver() {
+    fun transactionHistoryObserver() {
         val requestParams = HashMap<String, String>()
-        requestParams["page_no"] = "1"
+        requestParams["page_no"] = currentPage.value!!.toString()
+        requestParams["limit"] = "20"
         transactionHistoryObserver(requestParams)
     }
 
@@ -74,12 +83,11 @@ class WalletViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-                                walletListResponse.value = users.data?.docs!!
-                                walletBalance.value = users.data?.userWallet!!.toString()
-                            } else {
-                                IADialog(mActivity, users.message, true)
-                            }
+                            isLastPage.value = (currentPage.value == users.data?.totalPages)
+                            walletListAll.addAll(users.data?.docs!!)
+                            walletListResponse.value = walletListAll
+                            walletBalance.value = CommonUtils.convertToDecimal(users.data?.userWallet!!.toString())
+                            AppPreferencesHelper.getInstance().walletAmount = walletBalance.value!!
                         }
                     }
 

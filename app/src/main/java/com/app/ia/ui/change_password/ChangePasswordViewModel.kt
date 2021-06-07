@@ -2,7 +2,6 @@ package com.app.ia.ui.change_password
 
 import android.app.Activity
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.liveData
 import com.app.ia.R
 import com.app.ia.base.BaseRepository
@@ -10,7 +9,6 @@ import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityChangePasswordBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
-import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.utils.Resource
 import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
@@ -26,33 +24,41 @@ class ChangePasswordViewModel(private val baseRepository: BaseRepository) : Base
         title.set(mActivity.getString(R.string.change_password_wo_))
     }
 
-    fun onChangePasswordClick(){
+    fun onChangePasswordClick() {
         val oldPassword = mBinding.edtTextOldPassword.text.toString()
         val newPassword = mBinding.edtTextNewPassword.text.toString()
         val confirmPassword = mBinding.edtTextConfirmPassword.text.toString()
 
-        if(oldPassword.isEmpty()) {
-            IADialog(mActivity, mActivity.getString(R.string.please_enter_old_password), true)
-        } else if (oldPassword.length < 6) {
-            IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
-        } else if(newPassword.isEmpty()) {
-            IADialog(mActivity, mActivity.getString(R.string.please_enter_new_password), true)
-        } else if (newPassword.length < 6) {
-            IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
-        } else if(confirmPassword.isEmpty()) {
-            IADialog(mActivity, mActivity.getString(R.string.please_enter_confirm_password), true)
-        } else if (confirmPassword.length < 6) {
-            IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
-        } else if (confirmPassword != newPassword) {
-            IADialog(mActivity, mActivity.getString(R.string.confirm_password_should_be_same_as_new_password), true)
-        } else {
-            val requestParams = HashMap<String, String>()
-            requestParams["old_password"] = oldPassword
-            requestParams["new_password"] = newPassword
-            changePasswordObserver(requestParams)
+        when {
+            oldPassword.isEmpty() -> {
+                IADialog(mActivity, mActivity.getString(R.string.please_enter_old_password), true)
+            }
+            oldPassword.length < 6 -> {
+                IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+            }
+            newPassword.isEmpty() -> {
+                IADialog(mActivity, mActivity.getString(R.string.please_enter_new_password), true)
+            }
+            newPassword.length < 6 -> {
+                IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+            }
+            confirmPassword.isEmpty() -> {
+                IADialog(mActivity, mActivity.getString(R.string.please_enter_confirm_password), true)
+            }
+            confirmPassword.length < 6 -> {
+                IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+            }
+            confirmPassword != newPassword -> {
+                IADialog(mActivity, mActivity.getString(R.string.confirm_password_should_be_same_as_new_password), true)
+            }
+            else -> {
+                val requestParams = HashMap<String, String>()
+                requestParams["old_password"] = oldPassword
+                requestParams["new_password"] = newPassword
+                changePasswordObserver(requestParams)
+            }
         }
     }
-
 
     private fun changePassword(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
         emit(Resource.loading(data = null))
@@ -69,14 +75,8 @@ class ChangePasswordViewModel(private val baseRepository: BaseRepository) : Base
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-                                mActivity.toast(users.message)
-                                mActivity.finish()
-                                //addressList.removeAt(deletedPosition.value!!)
-                                //addressListResponse.value = addressList
-                            } else {
-                                IADialog(mActivity, users.message, true)
-                            }
+                            mActivity.toast(users.message)
+                            mActivity.finish()
                         }
                     }
 

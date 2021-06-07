@@ -42,15 +42,15 @@ class TopUpValueAdapter(private val topUpDialog: AddMoneyDialogFragment) : ListA
                 topUpValue = value
 
                 if (selectedPosition == position) {
-                    txtViewTopUp.setBackgroundResource(R.drawable.discount_gradient)
-                    txtViewTopUp.setTextColor(ContextCompat.getColor(itemView.context, R.color.colorPrimary))
+                    txtViewTopUp.setBackgroundResource(R.drawable.primary_color_fill_gradient)
+                    txtViewTopUp.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
                 } else {
                     txtViewTopUp.setBackgroundResource(R.drawable.edittext_bg)
                     txtViewTopUp.setTextColor(ContextCompat.getColor(itemView.context, R.color.colorPrimary))
                 }
 
                 txtViewTopUp.setOnClickListener {
-                    topUpDialog.clearAmountValue()
+                    topUpDialog.clearAmountValue(value)
                     selectedPosition = position
                     notifyDataSetChanged()
                 }

@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.business_category.BusinessCategoryActivity">
+    tools:context=".ui.product_category.ProductCategoryActivity">
 
     <data>
 
@@ -45,36 +45,43 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <RelativeLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/mSwipeRefresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recViewProductCategory"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{(viewModel.productCategory.size() > 0) ? View.VISIBLE : View.GONE}"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="3"
-                tools:itemCount="3"
-                tools:listitem="@layout/product_category_list_item" />
+                android:background="@color/white">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/linotte_semi_bold"
-                android:text="@string/no_data_found"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15sdp"
-                android:visibility="@{(viewModel.productCategory.size() > 0) ? View.GONE : View.VISIBLE}" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recViewProductCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="@{viewModel.isProductCategoryAvailable() ? View.VISIBLE : View.GONE}"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="3"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/product_category_list_item" />
 
-        </RelativeLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/linotte_semi_bold"
+                    android:text="@string/no_data_found"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_15sdp"
+                    android:visibility="@{viewModel.isProductCategoryAvailable() ? View.GONE : View.VISIBLE}" />
+
+            </RelativeLayout>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

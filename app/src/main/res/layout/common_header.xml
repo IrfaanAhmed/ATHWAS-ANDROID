@@ -17,11 +17,11 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageViewBack"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/_12sdp"
+            android:padding="@dimen/_6sdp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
@@ -80,7 +80,7 @@
                 app:srcCompat="@drawable/ic_search"
                 app:tint="@color/white" />
 
-            <androidx.appcompat.widget.AppCompatImageView
+           <!-- <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageViewIcon"
                 android:layout_width="@dimen/_16sdp"
                 android:layout_height="@dimen/_16sdp"
@@ -91,7 +91,42 @@
                 android:focusable="true"
                 android:visibility="invisible"
                 app:srcCompat="@drawable/ic_cart"
-                app:tint="@color/white" />
+                app:tint="@color/white" />-->
+
+            <FrameLayout
+                android:id="@+id/imageViewIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:minWidth="@dimen/_40sdp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/bottom_navigation_item_icon"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="7dp"
+                    android:gravity="center"
+                    android:src="@drawable/ic_cart" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/bottom_navigation_notification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginTop="11dp"
+                    android:background="@drawable/red_circle"
+                    android:gravity="center"
+                    android:minWidth="@dimen/_12sdp"
+                    android:minHeight="@dimen/_13sdp"
+                    android:paddingStart="3dp"
+                    android:paddingEnd="3dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_7sdp" />
+
+            </FrameLayout>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivEditProfileIcon"

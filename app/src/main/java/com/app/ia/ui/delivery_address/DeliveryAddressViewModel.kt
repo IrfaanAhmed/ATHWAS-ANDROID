@@ -69,12 +69,12 @@ class DeliveryAddressViewModel(private val baseRepository: BaseRepository) : Bas
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
+                            //if (users.status == "success") {
                                 addressList.addAll(users.data?.addresslist!!)
                                 addressListResponse.value = addressList
-                            } else {
+                            /*} else {
                                 IADialog(mActivity, users.message, true)
-                            }
+                            }*/
                         }
                     }
 
@@ -106,13 +106,13 @@ class DeliveryAddressViewModel(private val baseRepository: BaseRepository) : Bas
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
+                            //if (users.status == "success") {
                                 mActivity.toast(users.message)
                                 addressList.removeAt(deletedPosition.value!!)
                                 addressListResponse.value = addressList
-                            } else {
+                           /* } else {
                                 IADialog(mActivity, users.message, true)
-                            }
+                            }*/
                         }
                     }
 

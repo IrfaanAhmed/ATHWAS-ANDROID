@@ -28,8 +28,8 @@ object AppConstants {
 
     const val SERVER_TIME_STAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
-    const val ACTION_BROADCAST_GOLD_MEMBER_PLAN = "gold_member_plan"
     const val ACTION_BROADCAST_UPDATE_PROFILE = "update_profile"
+    const val ACTION_BROADCAST_REFRESH_ON_NOTIFICATION = "refresh_on_notification"
 
 
     const val EXTRA_IS_PENDING_REQUEST = "is_pending_request"
@@ -58,5 +58,9 @@ object AppConstants {
     const val IOS_PACKAGE_NAME: String = "com.app.wallet.tivo"
     const val DEEP_LINK_DOMAIN_PREFIX: String =  "https://tivowallet.page.link"
 
+    const val PARAMETER_SEP = "&"
+    const val PARAMETER_EQUALS = "="
 
+    const val TRANS_URL = "https://secure.ccavenue.com/transaction/initTrans"
+    //const val TRANS_URL = "https://test.ccavenue.com/transaction/initTrans"
 }

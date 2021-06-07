@@ -96,7 +96,7 @@
                         android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:onClick="@{()-> viewModel.onFavoriteClick()}"
-                        android:src="@{viewModel.productDetail.isFavourite() == 1 ? @drawable/ic_like : @drawable/ic_unlike}"/>
+                        android:src="@{viewModel.productDetail.isFavourite() == 1 ? @drawable/ic_like : @drawable/ic_unlike}" />
 
                 </FrameLayout>
 
@@ -116,13 +116,14 @@
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true"
                             android:background="@drawable/primary_color_fill_gradient"
-                            android:paddingStart="@dimen/_8sdp"
+                            android:paddingStart="@dimen/_5sdp"
                             android:paddingTop="@dimen/_2sdp"
-                            android:paddingEnd="@dimen/_8sdp"
+                            android:paddingEnd="@dimen/_5sdp"
                             android:paddingBottom="@dimen/_2sdp"
-                            android:text="Upto 30% Off"
+                            android:text="@{viewModel.productDetail.discountPercent}"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_8sdp" />
+                            android:textSize="@dimen/_8sdp"
+                            android:visibility="@{viewModel.productDetail.isDiscount() == 1 ? View.VISIBLE : View.GONE}" />
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
@@ -138,7 +139,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:isIndicator="false"
+                                android:isIndicator="true"
                                 android:rating="@{viewModel.productDetail.rating == null ? 0f : Float.parseFloat(viewModel.productDetail.rating)}"
                                 android:scaleX="0.9"
                                 android:scaleY="0.9" />
@@ -147,9 +148,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="@{viewModel.productDetail.rating}"
+                                android:text="@{viewModel.productDetail.ratingCount}"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_9sdp" />
+
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
                     </RelativeLayout>
@@ -159,7 +161,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/linotte_semi_bold"
-                        android:text="@{viewModel.productDetail.name + ` (`+viewModel.productDetail.inventoryName+`)`}"
+                        android:text="@{viewModel.productDetail.name + ` (`+ viewModel.productDetail.inventoryName +`)`}"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12sdp" />
 
@@ -190,7 +192,7 @@
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{`₹`+viewModel.productDetail.offerPrice}"
+                            android:text="@{viewModel.productDetail.isDiscount() == 1 ? @string/inr_price(viewModel.productDetail.offerPrice) : @string/inr_price(viewModel.productDetail.price)}"
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="@dimen/_13sdp"
                             app:fontFamily="@font/linotte_bold"
@@ -227,14 +229,26 @@
                             android:id="@+id/priceTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{`₹`+ viewModel.productDetail.price}"
+                            android:text="@{viewModel.productDetail.isDiscount() == 1 ? @string/inr_price(viewModel.productDetail.price) : `` }"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_10sdp"
+                            android:visibility="@{viewModel.productDetail.isDiscount() == 1 ? View.VISIBLE : View.GONE}"
                             app:fontFamily="@font/linotte_light"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/txtAvailableProduct"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:text="@{(viewModel.productDetail.quantity &lt;= 0) ? `Out of Stock` : `Only ` + viewModel.productDetail.quantity + ` item(s) left in the stock.`}"
+                        android:textColor="@{(viewModel.productDetail.quantity &lt;= 0) ? @color/red : @color/colorLogout}"
+                        android:textSize="@dimen/_10sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                     <View
                         android:layout_width="match_parent"
@@ -248,14 +262,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        tools:listitem="@layout/detail_customization_type"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:itemCount="3" />
+                        tools:itemCount="3"
+                        tools:listitem="@layout/detail_customization_type" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp">
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:onClick="@{()-> viewModel.seeAllOffers()}">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
@@ -311,8 +326,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_8sdp"
-                        android:visibility="@{viewModel.similarProductList.size() > 0 ? View.VISIBLE : View.GONE}"
-                        android:layout_marginBottom="@dimen/_8sdp">
+                        android:layout_marginBottom="@dimen/_8sdp"
+                        android:visibility="@{viewModel.similarProductList.size() > 0 ? View.VISIBLE : View.GONE}">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/tvSimilarProduct"
@@ -330,10 +345,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            tools:listitem="@layout/similar_product_list_item"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tvSimilarProduct" />
+                            app:layout_constraintTop_toBottomOf="@+id/tvSimilarProduct"
+                            tools:listitem="@layout/similar_product_list_item" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -349,7 +364,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_32sdp"
             android:layout_alignParentBottom="true"
-            android:text="@string/add_to_cart" />
+            android:onClick="@{()-> viewModel.addToCart()}"
+            android:text="@{(viewModel.productDetail.quantity &lt; 1) ? @string/notify_me : @string/add_to_cart}" />
 
     </RelativeLayout>
 

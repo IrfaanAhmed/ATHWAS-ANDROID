@@ -9,6 +9,7 @@ import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityNotificationBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
+import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.model.NotificationResponse
 import com.app.ia.utils.Resource
 import com.app.ia.utils.plusAssign
@@ -55,47 +56,48 @@ class NotificationViewModel(private val baseRepository: BaseRepository) : BaseVi
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
+                            //if (users.status == "success") {
 
-                                when (notificationType) {
-                                    NotificationActivity.NOTIFICATION_LIST -> {
-                                        val response = users.data as NotificationResponse
-                                        isLastPage.value = (currentPage.value == response.totalPages)
-                                        notificationListData.plusAssign(response.docs)
-                                        mActivity.mNotificationAdapter.notifyDataSetChanged()
-                                        showHide()
-                                    }
-
-                                    NotificationActivity.DELETE_ALL_NOTIFICATION -> {
-                                        val notificationList = notificationListData.value
-                                        notificationList?.clear()
-                                        notificationListData.value = notificationList
-                                        mActivity.mNotificationAdapter.notifyDataSetChanged()
-                                        showHide()
-                                    }
-
-                                    NotificationActivity.DELETE_NOTIFICATION -> {
-                                        val updatedList = notificationListData.value
-                                        updatedList?.removeAt(deletedPosition)
-                                        notificationListData.value = updatedList
-                                        mActivity.mNotificationAdapter.notifyItemRemoved(deletedPosition)
-                                        mActivity.mNotificationAdapter.notifyItemRangeChanged(deletedPosition, updatedList?.size!!)
-                                        showHide()
-                                    }
-
-                                    else -> {
-                                        IADialog(mActivity, users.message, true)
-                                    }
+                            when (notificationType) {
+                                NotificationActivity.NOTIFICATION_LIST -> {
+                                    val response = users.data as NotificationResponse
+                                    isLastPage.value = (currentPage.value == response.totalPages)
+                                    notificationListData.plusAssign(response.docs)
+                                    mActivity.mNotificationAdapter.notifyDataSetChanged()
+                                    showHide()
+                                    AppPreferencesHelper.getInstance().notificationCount = 0
                                 }
-                            } else {
-                                IADialog(mActivity, users.message, true)
+
+                                NotificationActivity.DELETE_ALL_NOTIFICATION -> {
+                                    val notificationList = notificationListData.value
+                                    notificationList?.clear()
+                                    notificationListData.value = notificationList
+                                    mActivity.mNotificationAdapter.notifyDataSetChanged()
+                                    showHide()
+                                }
+
+                                NotificationActivity.DELETE_NOTIFICATION -> {
+                                    val updatedList = notificationListData.value
+                                    updatedList?.removeAt(deletedPosition)
+                                    notificationListData.value = updatedList
+                                    mActivity.mNotificationAdapter.notifyItemRemoved(deletedPosition)
+                                    mActivity.mNotificationAdapter.notifyItemRangeChanged(deletedPosition, updatedList?.size!!)
+                                    showHide()
+                                }
+
+                                else -> {
+                                    IADialog(mActivity, users.message, true)
+                                }
                             }
+
                         }
                     }
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        mActivity.toast(it.message!!)
+                        if (notificationType != NotificationActivity.NOTIFICATION_LIST) {
+                            mActivity.toast(it.message!!)
+                        }
                     }
 
                     Status.LOADING -> {

@@ -3,18 +3,18 @@ package com.app.ia.ui.splash
 import android.location.Location
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import com.app.ia.R
-import com.app.ia.base.BaseActivity
-import com.app.ia.databinding.ActivitySplashBinding
 import com.app.ia.BR
+import com.app.ia.R
 import com.app.ia.ViewModelFactory
 import com.app.ia.apiclient.RetrofitFactory
+import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
+import com.app.ia.databinding.ActivitySplashBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.utils.AppLogger
-import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.installations.FirebaseInstallations
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 
 class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
 
@@ -42,7 +42,8 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
         mViewModel?.setVariable(mBinding!!)
 
         storeDeviceToken()
-        currentLocationManager(false)
+        //currentLocationManager(false)
+        mViewModel?.callNextActivity()
     }
 
     private fun setViewModel() {
@@ -51,17 +52,17 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
     }
 
     private fun storeDeviceToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                AppLogger.w("Fetching FCM registration token failed" + task.exception)
+                return@OnCompleteListener
+            }
 
-        /*FirebaseInstallations.getInstance().getToken().addOnSuccessListener {
-            val deviceToken = instanceIdResult.token
-            AppLogger.d("device token : $deviceToken")
-            AppPreferencesHelper.getInstance().deviceToken = deviceToken
-        }*/
-        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
-            val deviceToken = instanceIdResult.token
-            AppLogger.d("device token : $deviceToken")
-            AppPreferencesHelper.getInstance().deviceToken = deviceToken
-        }
+            // Get new FCM registration token
+            val fcmToken = task.result
+            AppLogger.d("device token : $fcmToken")
+            AppPreferencesHelper.getInstance().deviceToken = fcmToken
+        })
     }
 
     override fun onCurrentLocation(latitude: Double, longitude: Double) {

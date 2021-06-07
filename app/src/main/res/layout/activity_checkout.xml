@@ -15,6 +15,7 @@
     </data>
 
     <RelativeLayout
+        android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -54,7 +55,6 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-
                 <LinearLayout
                     android:id="@+id/deliveryAddressLayout"
                     android:layout_width="match_parent"
@@ -73,24 +73,34 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/delivery_address"
+                            android:text="Deliver at"
                             android:textAlignment="viewStart"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_12sdp" />
+                            android:textSize="@dimen/_13sdp" />
 
                         <TextView
                             android:id="@+id/txtViewChange"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/change"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="@dimen/_12sdp" />
+                            android:textColor="@color/colorLogout"
+                            android:textSize="@dimen/_13sdp"
+                            app:fontFamily="@font/linotte_semi_bold" />
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txtViewAddressType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.addressType.empty ? `Please select Address`: viewModel.addressType}"
+                        android:textColor="@{viewModel.addressType.empty ? @color/colorPrimary : @color/colorPrimary}"
+                        android:textSize="@dimen/_12sdp" />
 
                     <TextView
                         android:id="@+id/txtViewAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@{viewModel.address}"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_12sdp" />
 
@@ -102,7 +112,7 @@
                     android:layout_height="wrap_content"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:itemCount="1"
-                    tools:listitem="@layout/cart_list_item" />
+                    tools:listitem="@layout/checkout_row" />
 
 
                 <View
@@ -113,28 +123,47 @@
                     android:background="@color/light_grey" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="payment Mode"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_11sdp" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                    <RadioButton
-                        android:id="@+id/radioButtonPayment"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Payment Mode"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_13sdp" />
+
+                        <TextView
+                            android:id="@+id/txtViewPaymentChange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/change"
+                            android:onClick="@{()-> viewModel.onPaymentMethodChange()}"
+                            android:textColor="@color/colorLogout"
+                            android:textSize="@dimen/_13sdp"
+                            app:fontFamily="@font/linotte_semi_bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txtPaymentType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="-5dp"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginTop="5dp"
                         android:checked="true"
                         android:text="Cash On Delivery"
-                        android:textColor="@color/black"
+                        android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_11sdp" />
 
 
@@ -160,7 +189,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/promo_code"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_13sdp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -169,15 +198,15 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/edtTextPromocode"
+                            android:id="@+id/edtTextPromoCode"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="@null"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
                             android:hint="@string/have_a_promo_code"
                             android:inputType="text"
+                            android:clickable="@{(viewModel.promoCodeResponse.id == null || viewModel.promoCodeResponse.id.empty) ? true : false}"
+                            android:enabled="@{(viewModel.promoCodeResponse.id == null || viewModel.promoCodeResponse.id.empty ? true : false)}"
                             android:textAlignment="viewStart"
                             android:textSize="@dimen/_11sdp" />
 
@@ -186,8 +215,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
+                            android:onClick="@{()-> viewModel.onRemovePromoCode()}"
                             android:src="@android:drawable/ic_menu_close_clear_cancel"
-                            app:tint="@color/black" />
+                            android:visibility="@{(viewModel.promoCodeResponse.id == null || viewModel.promoCodeResponse.id.empty) ? View.INVISIBLE : View.VISIBLE}"
+                            app:tint="@color/red" />
 
                         <TextView
                             android:id="@+id/txtViewApplyCode"
@@ -195,14 +226,17 @@
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:text="@string/apply_code"
-                            android:textColor="@color/quantum_orange500"
-                            android:textSize="@dimen/_10sdp" />
+                            android:onClick="@{()-> viewModel.onApplyPromoCode()}"
+                            android:textColor="@color/colorLogout"
+                            android:textSize="@dimen/_12sdp"
+                            app:fontFamily="@font/linotte_semi_bold" />
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/txtPromoApplied"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility="@{(viewModel.promoCodeResponse.id == null || viewModel.promoCodeResponse.id.empty) ? View.GONE : View.VISIBLE}"
                         android:text="@string/promo_code_applied"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_11sdp" />
@@ -230,7 +264,7 @@
                         android:layout_marginEnd="8dp"
                         android:text="Order Summary"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_13sdp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -246,18 +280,18 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Sub Total"
+                            android:text="Cart value"
                             android:textAlignment="viewStart"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_13sdp" />
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_12sdp" />
 
                         <TextView
                             android:id="@+id/txtViewSubTotal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="₹450"
+                            android:text="@{@string/inr_price(viewModel.totalAmountWithoutOfferPrice)}"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_13sdp" />
+                            android:textSize="@dimen/_12sdp" />
 
                     </LinearLayout>
 
@@ -274,16 +308,16 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Offer Discount"
+                            android:text="Total Discount (-)"
                             android:textAlignment="viewStart"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_13sdp" />
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_12sdp" />
 
                         <TextView
                             android:id="@+id/txtViewDiscount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="₹450"
+                            android:text="@{@string/inr_price((viewModel.promoCodeResponse.discountPrice == null ? String.valueOf(viewModel.totalAmountWithOfferPrice) : String.valueOf(viewModel.totalAmountWithOfferPrice + Double.parseDouble(viewModel.promoCodeResponse.discountPrice))))}"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_13sdp" />
 
@@ -302,18 +336,46 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Delivery Fee"
+                            android:text="Total Shipping (+)"
                             android:textAlignment="viewStart"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_13sdp" />
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_12sdp" />
 
                         <TextView
                             android:id="@+id/txtViewDeliveryFee"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="₹450"
+                            android:text="@{@string/inr_price(viewModel.deliveryCharges)}"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_13sdp" />
+                            android:textSize="@dimen/_12sdp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingBottom="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Tax Amount (incl.)"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <TextView
+                            android:id="@+id/txtViewTax"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{@string/inr_price(viewModel.vatAmount)}"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_12sdp" />
 
                     </LinearLayout>
 
@@ -331,16 +393,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginBottom="@dimen/_30sdp"
                     android:layout_marginEnd="8dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Total Amount"
+                        android:text="Grand Total"
                         android:textAlignment="viewStart"
                         android:textAllCaps="true"
-                        android:textColor="@color/black"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_12sdp"
                         app:fontFamily="@font/linotte_bold" />
 
@@ -348,29 +411,25 @@
                         android:id="@+id/textViewTotalAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="₹450"
+                        android:text="@{@string/inr_price(viewModel.netAmount)}"
                         android:textAllCaps="true"
-                        android:textColor="@color/black"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_12sdp"
                         app:fontFamily="@font/linotte_bold" />
                 </LinearLayout>
 
-
             </androidx.appcompat.widget.LinearLayoutCompat>
-
 
         </androidx.core.widget.NestedScrollView>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonPlaceOrder"
-            style="@style/LogoutButton"
+            style="@style/AddToCartButton"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="@dimen/_32sdp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
-            android:background="@drawable/checkout_bg"
             android:text="Place Order" />
-
 
     </RelativeLayout>
 

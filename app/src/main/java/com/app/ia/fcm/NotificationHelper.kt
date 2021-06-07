@@ -79,7 +79,7 @@ class NotificationHelper(private val mContext: Context) {
 
     private fun getNotificationIcon(): Int {
         val useWhiteIcon = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-        return if (useWhiteIcon) R.mipmap.ic_launcher_round else R.mipmap.ic_launcher_round
+        return if (useWhiteIcon) R.drawable.ic_notification_icon else R.mipmap.ic_launcher_round
     }
 
     class BundlePayload(bundleKey: String, bundleValue: String) {
@@ -90,6 +90,6 @@ class NotificationHelper(private val mContext: Context) {
 
     companion object {
         const val NOTIFICATION_CHANNEL_ID = "28957"
-        const val NOTIFICATION_CHANNEL_NAME = "Tivo eWallet"
+        const val NOTIFICATION_CHANNEL_NAME = "Flip eWallet"
     }
 }

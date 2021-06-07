@@ -31,4 +31,6 @@
     <color name="theme_color">#382B91</color>
     <color name="search_bar_bg">#EFF3F6</color>
     <color name="light_black">#171717</color>
+    <color name="logo_selected_color">#382B91</color>
+    <color name="logo_unselected_color">#FFFFFF</color>
 </resources>

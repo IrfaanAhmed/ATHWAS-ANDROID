@@ -43,11 +43,11 @@ class CategoryViewModel(val baseRepository: BaseRepository) : BaseViewModel() {
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
+                            //if (users.status == "success") {
                                 businessCategory.value = users.data?.docs!!
-                            } else {
+                            /*} else {
                                 IADialog(mActivity, users.message, true)
-                            }
+                            }*/
                         }
                     }
 

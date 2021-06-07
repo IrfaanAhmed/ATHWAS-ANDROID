@@ -99,24 +99,22 @@
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
 
-           <!-- <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/mSwipeRefresh"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/cardAddWalletView">-->
+                android:layout_below="@+id/cardAddWalletView">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recViewWallet"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/cardAddWalletView"
                     android:visibility="@{viewModel.isItemAvailable ? View.VISIBLE : View.GONE}"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:itemCount="3"
                     tools:listitem="@layout/wallet_list_item" />
 
-
-           <!-- </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
@@ -127,8 +125,8 @@
                 android:textSize="@dimen/_10sdp"
                 android:visibility="@{viewModel.isItemAvailable ? View.GONE : View.VISIBLE}" />
 
-
         </RelativeLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -11,5 +11,7 @@ data class FilterData(
     var subCategoryId : String = "",
     var subCategoryPos : Int = 0,
     var brandId : String = "",
-    var brandPos : Int = 0
+    var brandPos : Int = 0,
+    var customizationSelectedFilters : HashMap<String, MutableList<CustomizationSubTypeResponse.CustomizationSubType>> = HashMap()
+
 )

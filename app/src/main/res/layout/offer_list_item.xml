@@ -1,45 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.login.LoginActivity">
 
     <data>
 
-        <import type="android.view.View" />
+        <variable
+            name="promoCodes"
+            type="com.app.ia.model.OffersResponse.Docs" />
 
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_5sdp"
-        app:cardCornerRadius="@dimen/_5sdp"
-        app:cardElevation="@dimen/_3sdp">
+        android:layout_marginStart="@dimen/_2sdp"
+        android:layout_marginEnd="@dimen/_2sdp"
+        app:cardCornerRadius="@dimen/_10sdp">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/_5sdp">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/_12sdp">
 
-            <com.app.ia.helper.SquareImageView
-                android:id="@+id/imgView"
+            <com.github.florent37.shapeofview.shapes.RoundRectView
+                android:id="@+id/roundRectView"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                app:shape_roundRect_borderColor="@color/very_light_grey"
+                app:shape_roundRect_borderWidth="@dimen/_1sdp"
+                app:shape_roundRect_bottomLeftRadius="@dimen/_5sdp"
+                app:shape_roundRect_bottomRightRadius="@dimen/_5sdp"
+                app:shape_roundRect_topLeftRadius="@dimen/_5sdp"
+                app:shape_roundRect_topRightRadius="@dimen/_5sdp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    imageUrl="@{(promoCodes.imagePathUrl != null) ? promoCodes.imagePathUrl : `` }"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:scaleType="centerCrop" />
+
+            </com.github.florent37.shapeofview.shapes.RoundRectView>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_60sdp"
-                android:layout_gravity="center"
-                android:src="@drawable/login_logo" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/txtView"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:gravity="center"
-                android:text="Promo Code Offer"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp"
-                app:fontFamily="@font/linotte_semi_bold" />
+                android:layout_marginStart="@dimen/_8sdp"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{promoCodes.title}"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/_11sdp"
+                    app:fontFamily="@font/linotte_semi_bold" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:text="@{promoCodes.description}"
+                    android:textSize="@dimen/_9sdp"
+                    app:fontFamily="@font/linotte_semi_bold" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_4sdp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCouponCode"
+                        style="@style/LogoutButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_23sdp"
+                        android:layout_gravity="start|center_vertical"
+                        android:minWidth="@dimen/_30sdp"
+                        android:text="@{promoCodes.couponCode}"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/_10sdp"
+                        app:backgroundTint="@color/colorPrimary"
+                        app:cornerRadius="@dimen/_5sdp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonApplyCode"
+                        style="@style/LogoutButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_23sdp"
+                        android:layout_gravity="end|center_vertical"
+                        android:minWidth="@dimen/_30sdp"
+                        android:text="@string/apply"
+                        android:textAllCaps="false"
+                        android:visibility="invisible"
+                        android:textSize="@dimen/_10sdp"
+                        app:cornerRadius="@dimen/_5sdp"
+                        app:fontFamily="@font/linotte_semi_bold" />
+
+                </FrameLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

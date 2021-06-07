@@ -1,13 +1,11 @@
 package com.app.ia.apiclient
 
-import android.app.Activity
 import android.content.Intent
 import com.app.ia.IAApplication
 import com.app.ia.callback.GeneralCallback
 import com.app.ia.dialog.IADialog
 import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.ui.login.LoginActivity
-import com.app.ia.utils.AppRequestCode
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
@@ -26,12 +24,16 @@ abstract class ApiRequest(private val generalCallback: GeneralCallback) {
             val error = response.errorBody()?.string()
             error?.let {
                 try {
-                    val errorMsg = JSONObject(it).getString("message")
-                    message.append(errorMsg)
+                    val errorMsg : String? = JSONObject(it).optString("message")
+                    if(!errorMsg.isNullOrEmpty()) {
+                        message.append(errorMsg)
+                    } else {
+                        message.append("Session Expired.")
+                    }
 
-                    if(response.code() == 401) {
-                        val iaDialog = IADialog(IAApplication.getInstance().getCurrentActivity()!!, errorMsg, true)
-                        iaDialog.setOnItemClickListener(object : IADialog.OnClickListener{
+                    if (response.code() == 401 || response.code() == 403) {
+                        val iaDialog = IADialog(IAApplication.getInstance().getCurrentActivity()!!, if(errorMsg.isNullOrEmpty()) "Session expired" else errorMsg, true)
+                        iaDialog.setOnItemClickListener(object : IADialog.OnClickListener {
                             override fun onPositiveClick() {
                                 AppPreferencesHelper.getInstance().clearAllPreferences()
                                 val intent = Intent(IAApplication.getInstance().applicationContext, LoginActivity::class.java)
@@ -43,12 +45,10 @@ abstract class ApiRequest(private val generalCallback: GeneralCallback) {
                             }
                         })
                     }
-                    //{"status":"error","api_name":"/user_service/customer/product/get_product_detail/5f902c69bf0a9a4f8704424b","message":"Login session expired. Please login again to continue.","data":{}}
                 } catch (e: JSONException) {
+                    e.printStackTrace()
                 }
-                message.append("\n")
             }
-            message.append("Error Code: ${response.code()}")
             throw ApiException(message.toString())
         }
     }

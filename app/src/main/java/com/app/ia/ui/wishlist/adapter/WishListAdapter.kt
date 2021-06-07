@@ -56,6 +56,10 @@ class WishListAdapter : ListAdapter<FavoriteListResponse.Docs, WishListAdapter.P
                 itemView.setOnClickListener {
                     onItemClickListener?.onItemClick(productItem, position)
                 }
+
+                buttonAddToCart.setOnClickListener {
+                    onItemClickListener?.onAddToCartClick(productItem)
+                }
                 executePendingBindings()
             }
         }
@@ -65,5 +69,6 @@ class WishListAdapter : ListAdapter<FavoriteListResponse.Docs, WishListAdapter.P
     interface OnItemClickListener {
         fun onFavoriteClick(productItem: FavoriteListResponse.Docs, position: Int)
         fun onItemClick(productItem: FavoriteListResponse.Docs, position: Int)
+        fun onAddToCartClick(productItem: FavoriteListResponse.Docs)
     }
 }

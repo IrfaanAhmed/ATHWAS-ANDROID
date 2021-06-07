@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="listItem"
+            type="com.app.ia.model.FaqResponse.ContentData" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="showBottomText"
+            type="Boolean" />
+
+        <variable
+            name="faqPosition"
+            type="Integer" />
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/_5sdp">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llQuestion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="@dimen/_5sdp"
+                android:text="@{`Q`+ faqPosition + ` : `+ listItem.question}"
+                android:textColor="@color/black"
+                app:fontFamily="@font/linotte_bold"
+                android:textSize="@dimen/_12sdp"
+                tools:text="Question will here" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgViewOpenCollapse"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="@dimen/_10sdp"
+                android:layout_gravity="center|start"
+                android:tint="@color/colorAccent"
+                app:srcCompat="@drawable/ic_top_drop_arrow" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <TextView
+            android:id="@+id/txtViewAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/_5sdp"
+            android:textSize="@dimen/_10sdp"
+            android:text="@{`A`+ faqPosition + ` : `+listItem.answer}"
+            tools:text="Answer will here" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

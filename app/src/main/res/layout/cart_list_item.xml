@@ -8,7 +8,7 @@
 
         <variable
             name="product"
-            type="String" />
+            type="com.app.ia.model.CartListResponse.Docs.CategoryItems" />
 
         <variable
             name="quantity"
@@ -20,24 +20,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtViewHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#f6f6f6"
-            android:padding="8dp"
-            android:textSize="@dimen/_11sdp"
-            android:text="Pantry - Household" />
-
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <RelativeLayout
-                android:layout_width="@dimen/_90sdp"
-                android:layout_height="@dimen/_90sdp"
+                android:layout_width="@dimen/_65sdp"
+                android:layout_height="@dimen/_65sdp"
                 android:layout_gravity="center">
 
                 <com.google.android.material.card.MaterialCardView
@@ -52,10 +42,10 @@
                         android:layout_height="match_parent">
 
                         <androidx.appcompat.widget.AppCompatImageView
+                            imageUrl="@{product.images.size() > 0 ? product.images.get(0).productImageUrl : ``}"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/mobile" />
+                            android:scaleType="centerCrop" />
 
                         <View
                             android:layout_width="match_parent"
@@ -70,14 +60,12 @@
                             android:fontFamily="@font/linotte_semi_bold"
                             android:text="@string/out_of_stock"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_10sdp"
+                            android:textSize="@dimen/_9sdp"
                             android:visibility="gone" />
 
                     </RelativeLayout>
 
-
                 </com.google.android.material.card.MaterialCardView>
-
 
             </RelativeLayout>
 
@@ -97,33 +85,48 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:layout_weight="1"
                         android:fontFamily="@font/linotte_semi_bold"
-                        android:text="Vedaka Raw Penuts, Pink 1KG"
+                        android:text="@{product.name + ` - ` + product.inventoryName}"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/_12sdp" />
+                        android:textSize="@dimen/_10sdp" />
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivDelete"
-                        android:layout_width="@dimen/_15sdp"
-                        android:layout_height="@dimen/_15sdp"
-                        android:src="@drawable/ic_delete"
-                        android:tint="@color/red" />
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:padding="@dimen/_8sdp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:srcCompat="@drawable/ic_delete"
+                        app:tint="@color/red" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:text="@{product.subcategory.name + ` - `+product.category.name}"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/_9sdp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_2sdp"
                     android:background="@drawable/primary_color_fill_gradient"
-                    android:paddingStart="@dimen/_8sdp"
+                    android:paddingStart="@dimen/_5sdp"
                     android:paddingTop="@dimen/_2sdp"
-                    android:paddingEnd="@dimen/_8sdp"
+                    android:paddingEnd="@dimen/_5sdp"
                     android:paddingBottom="@dimen/_2sdp"
-                    android:text="Upto 30% Off"
+                    android:text="@{product.discountPercent}"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_8sdp" />
+                    android:textSize="@dimen/_8sdp"
+                    android:visibility="@{product.isDiscount() == 1 ? View.VISIBLE : View.GONE}" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -137,16 +140,16 @@
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
-
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/tvActualPrice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:fontFamily="@font/linotte_light"
-                            android:text="₹450"
+                            android:text="@{product.isDiscount() == 1 ? @string/inr_price(product.price) : `` }"
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/_9sdp" />
+                            android:textSize="@dimen/_9sdp"
+                            android:visibility="@{product.isDiscount() == 1 ? View.VISIBLE : View.GONE}" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
@@ -154,9 +157,9 @@
                             android:layout_gravity="center"
                             android:layout_marginStart="@dimen/_5sdp"
                             android:fontFamily="@font/linotte_bold"
-                            android:text="₹350"
+                            android:text="@{product.isDiscount() == 1 ? @string/inr_price(product.offerPrice) + ` x `+ product.quantity : @string/inr_price(product.price) + ` x `+ product.quantity}"
                             android:textColor="@color/colorPrimaryDark"
-                            android:textSize="@dimen/_11sdp" />
+                            android:textSize="@dimen/_10sdp" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -168,10 +171,13 @@
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/ivMinus"
-                            android:layout_width="@dimen/_24sdp"
-                            android:layout_height="@dimen/_24sdp"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
                             android:layout_gravity="center"
-                            android:padding="@dimen/_5sdp"
+                            android:padding="@dimen/_8sdp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:src="@drawable/ic_minus_product"
                             android:tint="@color/colorPrimaryDark" />
 
@@ -183,16 +189,19 @@
                             android:layout_marginStart="@dimen/_5sdp"
                             android:layout_marginEnd="@dimen/_5sdp"
                             android:fontFamily="@font/linotte_bold"
-                            android:text="1"
+                            android:text="@{`` + product.quantity}"
                             android:textColor="@color/colorPrimaryDark"
-                            android:textSize="@dimen/_12sdp" />
+                            android:textSize="@dimen/_14sdp" />
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/ivPlus"
-                            android:layout_width="@dimen/_24sdp"
-                            android:layout_height="@dimen/_24sdp"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
                             android:layout_gravity="center"
-                            android:padding="@dimen/_5sdp"
+                            android:padding="@dimen/_8sdp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:src="@drawable/ic_add_product"
                             android:tint="@color/colorPrimaryDark" />
 

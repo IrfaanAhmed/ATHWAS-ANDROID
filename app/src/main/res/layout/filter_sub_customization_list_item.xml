@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.app.ia.R" />
+
+        <variable
+            name="name"
+            type="String" />
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_2sdp">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkboxSubType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/_40sdp"
+            android:padding="@dimen/_5sdp"
+            android:text="@{name}"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_13sdp"
+            app:fontFamily="@font/linotte_light" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

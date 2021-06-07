@@ -3,15 +3,15 @@ package com.app.ia.ui.offers
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import com.app.ia.ViewModelFactory
 import com.app.ia.BR
 import com.app.ia.R
+import com.app.ia.ViewModelFactory
 import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseFragment
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.FragmentOffersBinding
 import com.app.ia.ui.home.HomeActivity
-import com.app.ia.ui.offers.adapter.OfferListAdapter
+import com.app.ia.ui.offers.adapter.OffersAdapter
 import kotlinx.android.synthetic.main.fragment_offers.*
 
 class OffersFragment : BaseFragment<FragmentOffersBinding, OffersViewModel>() {
@@ -38,7 +38,6 @@ class OffersFragment : BaseFragment<FragmentOffersBinding, OffersViewModel>() {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         setViewModel()
         super.onCreate(savedInstanceState)
@@ -51,16 +50,14 @@ class OffersFragment : BaseFragment<FragmentOffersBinding, OffersViewModel>() {
         mFragmentBinding?.lifecycleOwner = this
         mViewModel?.setVariable(mFragmentBinding!!)
 
-        val adapter = OfferListAdapter()
+        val adapter = OffersAdapter("")
         recViewOffer.adapter = adapter
         val categoryList = ArrayList<String>()
-        categoryList.add("Oppo")
-        categoryList.add("Samsung")
-        categoryList.add("Nokia")
-        categoryList.add("Vivo")
-        categoryList.add("Vivo")
+        categoryList.add("Promo Code Offer")
+        categoryList.add("Bundle Offer")
+        categoryList.add("Promotional Offer")
+        categoryList.add("Bank Offer")
         adapter.submitList(categoryList)
-
     }
 
     private fun setViewModel() {

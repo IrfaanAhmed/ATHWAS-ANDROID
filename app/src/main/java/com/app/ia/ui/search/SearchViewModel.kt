@@ -9,11 +9,11 @@ import com.app.ia.R
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivitySearchBinding
-import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
 import com.app.ia.model.ProductListingResponse
 import com.app.ia.utils.AppConstants.EXTRA_VOICE_TEXT
 import com.app.ia.utils.Resource
+import com.google.gson.JsonArray
 import kotlinx.coroutines.Dispatchers
 
 class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
@@ -23,13 +23,13 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
     lateinit var mBinding: ActivitySearchBinding
 
     var productList = MutableLiveData<MutableList<ProductListingResponse.Docs>>()
-    private val productListAll = ArrayList<ProductListingResponse.Docs>()
+    val productListAll = ArrayList<ProductListingResponse.Docs>()
 
     var isSearchTextEntered = MutableLiveData<Boolean>()
     val isItemAvailable = MutableLiveData(true)
     val currentPage = MutableLiveData(1)
     val isLastPage = MutableLiveData(false)
-    var voiceText = MutableLiveData("")
+    private var voiceText = MutableLiveData("")
 
     fun setVariable(mBinding: ActivitySearchBinding) {
         this.mBinding = mBinding
@@ -57,10 +57,11 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
 
 
     fun setUpObserver(keyword: String) {
-        productListAll.clear()
+        //productListAll.clear()
         val requestParams = HashMap<String, String>()
         requestParams["page_no"] = currentPage.value!!.toString()
         requestParams["keyword"] = keyword
+        requestParams["filter"] = JsonArray().toString()
         productListingObserver(requestParams)
     }
 
@@ -80,14 +81,10 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-                                isItemAvailable.value = users.data?.docs!!.size > 0
-                                isLastPage.value = (currentPage.value == users.data?.totalPages)
-                                productListAll.addAll(users.data?.docs!!)
-                                productList.value = productListAll
-                            } else {
-                                IADialog(mActivity, users.message, true)
-                            }
+                            isItemAvailable.value = users.data?.docs!!.size > 0
+                            isLastPage.value = (currentPage.value == users.data?.totalPages)
+                            productListAll.addAll(users.data?.docs!!)
+                            productList.value = productListAll
                         }
                     }
 

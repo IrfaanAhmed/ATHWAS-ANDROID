@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.app.ia.ui.full_image.FullImageViewModel" />
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:onClick="@{()-> viewModel.onBackPressed()}"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:layout_gravity="start"
+            android:padding="@dimen/_2sdp"
+            android:layout_margin="@dimen/_14sdp"
+            app:tint="@color/grey"
+            app:srcCompat="@drawable/ic_close" />
+
+        <com.app.ia.helper.ExtendedViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

@@ -18,9 +18,9 @@
         android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:fitsSystemWindows="true"
         android:focusable="true"
-        android:background="@color/white"
         android:focusableInTouchMode="true">
 
 
@@ -28,9 +28,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
-            android:background="@color/colorPrimary"
             app:contentInsetEnd="0dp"
             app:contentInsetLeft="0dp"
             app:contentInsetRight="0dp"
@@ -45,10 +45,9 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar"
             android:fillViewport="true"
-            android:scrollbars="none"
-            android:layout_below="@+id/toolbar">
-
+            android:scrollbars="none">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -72,19 +71,19 @@
                             android:id="@+id/textViewGoodDay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:fontFamily="@font/linotte_bold"
                             android:text="@string/verification_code"
                             android:textColor="@color/colorAccent"
-                            android:fontFamily="@font/linotte_bold"
-                            android:textSize="@dimen/_14sdp"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_gravity="center"/>
+                            android:textSize="@dimen/_14sdp" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/textViewLoginContinue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_1sdp"
                             android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/_1sdp"
                             android:gravity="center"
                             android:text="@string/otp_sent_on_mobile_or_email"
                             android:textSize="@dimen/_12sdp" />
@@ -99,6 +98,7 @@
                             android:cursorVisible="false"
                             android:hint="@string/dashes"
                             android:inputType="number"
+                            android:text="@{viewModel.otp}"
                             android:textColor="@color/colorAccent"
                             android:textColorHint="@color/light_grey"
                             android:textSize="@dimen/_14sdp"
@@ -106,13 +106,9 @@
                             app:hideLineWhenFilled="false"
                             app:itemCount="4"
                             app:itemHeight="50dp"
-                            android:text="@{viewModel.otp}"
                             app:itemRadius="4dp"
                             app:itemSpacing="10dp"
                             app:itemWidth="45dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textViewOtpMsg"
                             app:lineColor="#ededed"
                             app:lineWidth="1dp"
                             app:viewType="rectangle" />
@@ -121,39 +117,38 @@
                             android:id="@+id/textViewTimer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/_30sdp"
                             android:text="@{String.format(@string/expiring_in, viewModel.expireTime)}"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/pinView" />
+                            android:visibility="@{viewModel.isTimeFinished() ? View.INVISIBLE : View.VISIBLE}" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/buttonSubmit"
                             style="@style/AddToCartButton"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_32sdp"
-                            android:background="@drawable/logout_button_bg"
-                            android:text="@string/verify"
-                            android:onClick="@{()-> viewModel.onVerifyClick()}"
-                            android:layout_gravity="center"
+                            android:layout_below="@+id/llWalletView"
                             android:layout_centerInParent="true"
+                            android:layout_gravity="center"
                             android:layout_marginTop="@dimen/_20sdp"
-                            android:layout_below="@+id/llWalletView"/>
+                            android:background="@drawable/logout_button_bg"
+                            android:onClick="@{()-> viewModel.onVerifyClick()}"
+                            android:text="@string/verify" />
 
                         <TextView
                             android:id="@+id/txtViewResendOTP"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:layout_marginTop="@dimen/_16sdp"
                             android:text="@string/didn_t_receive_the_otp"
                             android:textSize="@dimen/_11sdp"
-                            android:layout_gravity="center"
-                            android:visibility="gone" />
+                            android:visibility="@{viewModel.isTimeFinished() ? View.VISIBLE : View.INVISIBLE}" />
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                 </com.google.android.material.card.MaterialCardView>
+
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </ScrollView>

@@ -11,6 +11,7 @@ import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityForgotPasswordBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
+import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.ui.reset_password.ResetPasswordActivity
 import com.app.ia.utils.CommonUtils.isEmailValid
 import com.app.ia.utils.Resource
@@ -37,7 +38,6 @@ class ForgotPasswordViewModel(private val baseRepository: BaseRepository) : Base
 
         (baseRepository.callback).hideKeyboard()
         val mobileNumber = mBinding.edtTextMobileNumber.text.toString()
-
         val flag: Boolean
 
         if (TextUtils.isEmpty(mobileNumber)) {
@@ -62,6 +62,7 @@ class ForgotPasswordViewModel(private val baseRepository: BaseRepository) : Base
         }
 
         if (flag) {
+            AppPreferencesHelper.getInstance().authToken = ""
             val requestParams = HashMap<String, String>()
             requestParams["country_code"] = "+91"
             requestParams["phone"] = mobileNumber
@@ -107,15 +108,10 @@ class ForgotPasswordViewModel(private val baseRepository: BaseRepository) : Base
                     Status.SUCCESS -> {
 
                         resource.data?.let { users ->
-                            if (users.status == "success") {
-
-                                mActivity.startActivity<ResetPasswordActivity> {
-                                    putExtra("countryCode", users.data?.countryCode)
-                                    putExtra("mobileNumber", users.data?.phone)
-                                    putExtra("otp", users.data?.otpNumber)
-                                }
-                            } else {
-                                IADialog(mActivity, users.message, true)
+                            mActivity.startActivity<ResetPasswordActivity> {
+                                putExtra("countryCode", users.data?.countryCode)
+                                putExtra("mobileNumber", users.data?.phone)
+                                putExtra("otp", users.data?.otpNumber)
                             }
                         }
                     }
@@ -132,5 +128,4 @@ class ForgotPasswordViewModel(private val baseRepository: BaseRepository) : Base
             }
         })
     }
-
 }

@@ -1,23 +1,29 @@
 package com.app.ia.dialog.bottom_sheet_dialog
 
 import android.app.Dialog
-import android.os.Build
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
+import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.app.ia.R
+import com.app.ia.apiclient.Api
 import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.dialog.IADialog
 import com.app.ia.dialog.bottom_sheet_dialog.adapter.PaymentOptionAdapter
 import com.app.ia.dialog.bottom_sheet_dialog.adapter.TopUpValueAdapter
+import com.app.ia.enums.Status
 import com.app.ia.model.PaymentOptionBean
+import com.app.ia.ui.checkout.CheckoutActivity
 import com.app.ia.ui.home.HomeActivity
-import com.app.ia.utils.EqualSpacingItemDecoration
-import com.app.ia.utils.toast
+import com.app.ia.ui.payment.AvenuesParams
+import com.app.ia.ui.payment.PaymentActivity
+import com.app.ia.utils.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -31,6 +37,7 @@ import retrofit2.HttpException
 class AddMoneyDialogFragment(val paymentOptionList: ArrayList<PaymentOptionBean>) : BottomSheetDialogFragment() {
 
     private var onClickListener: OnAddMoneyClickListener? = null
+    var orderIdForOnlinePayment = MutableLiveData("")
 
     fun setOnItemClickListener(onClickListener: OnAddMoneyClickListener) {
         this.onClickListener = onClickListener
@@ -56,7 +63,6 @@ class AddMoneyDialogFragment(val paymentOptionList: ArrayList<PaymentOptionBean>
         return inflater.inflate(R.layout.dialog_add_money, container, false)
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -112,22 +118,37 @@ class AddMoneyDialogFragment(val paymentOptionList: ArrayList<PaymentOptionBean>
 
             if (mTopUpValueAdapter.selectedPosition == -1 && edtTextAmount.text.toString().isEmpty()) {
                 IADialog(requireActivity(), getString(R.string.please_enter_amount), true)
+            } else if (mTopUpValueAdapter.selectedPosition == -1 && edtTextAmount.text.toString().toDouble() <= 0) {
+                IADialog(requireActivity(), "Please enter valid amount", true)
             } else {
                 val amount: String = if (mTopUpValueAdapter.selectedPosition == -1) {
                     edtTextAmount.text.toString()
                 } else {
                     topUpValueList[mTopUpValueAdapter.selectedPosition]
                 }
-                addToMoney(amount)
+
+                orderIdForOnlinePayment.value = ServiceUtility.randInt(0, 9999999).toString()
+                val intent = Intent(requireActivity(), PaymentActivity::class.java)
+                intent.putExtra(AvenuesParams.ACCESS_CODE, ServiceUtility.chkNull("AVTL07ID25BH87LTHB"))
+                intent.putExtra(AvenuesParams.MERCHANT_ID, ServiceUtility.chkNull("376194"))
+                intent.putExtra(AvenuesParams.ORDER_ID, ServiceUtility.chkNull(orderIdForOnlinePayment.value!!))
+                intent.putExtra(AvenuesParams.CURRENCY, ServiceUtility.chkNull("INR"))
+                intent.putExtra(AvenuesParams.AMOUNT, ServiceUtility.chkNull(amount))
+                intent.putExtra(AvenuesParams.REDIRECT_URL, ServiceUtility.chkNull(Api.REDIRECT_URL))
+                intent.putExtra(AvenuesParams.CANCEL_URL, ServiceUtility.chkNull(Api.CANCEL_URL))
+                intent.putExtra(AvenuesParams.RSA_KEY_URL, ServiceUtility.chkNull(Api.RSA_URL))
+                intent.putExtra(AvenuesParams.PAYMENT_FOR, "Wallet")
+                startActivityForResult(intent, AppRequestCode.REQUEST_PAYMENT_CODE)
+                //addToMoney(amount)
             }
         }
     }
 
-    fun clearAmountValue() {
+    fun clearAmountValue(value: String) {
         if (requireActivity() is HomeActivity) {
             (requireActivity() as HomeActivity).hideKeyboard(edtTextAmount)
         }
-        edtTextAmount.setText("")
+        edtTextAmount.setText(value)
     }
 
     interface OnAddMoneyClickListener {
@@ -164,4 +185,36 @@ class AddMoneyDialogFragment(val paymentOptionList: ArrayList<PaymentOptionBean>
         }
     }
 
+
+    private fun checkPaymentStatus() {
+        val requestParams = HashMap<String, String>()
+        requestParams["order_id"] = orderIdForOnlinePayment.value!!
+        requestParams["payment_for"] = "Wallet"
+
+        val service = RetrofitFactory.getInstance()
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = service.checkPaymentStatus(requestParams)
+            withContext(Dispatchers.Main) {
+                try {
+                    if (response.isSuccessful) {
+                        //Do something with response e.g show to the UI.
+                        val paymentStatusResponse = response.body()!!
+
+
+                    } else {
+                        requireActivity().toast("Error: ${response.code()}")
+                    }
+                } catch (e: HttpException) {
+                    requireActivity().toast("Exception ${e.message}")
+                } catch (e: Throwable) {
+                    requireActivity().toast("Oops: Something else went wrong")
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        checkPaymentStatus()
+    }
 }
