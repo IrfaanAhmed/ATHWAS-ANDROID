@@ -1,3 +1,5 @@
+include ':touchview'
+include ':sequencelayout'
 include ':roundkornerlayout'
 include ':app'
 rootProject.name = "IA"
