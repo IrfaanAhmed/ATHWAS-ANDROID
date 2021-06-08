@@ -14,16 +14,20 @@ data class ProductDetailResponse(
         @Expose
         @SerializedName("_id")
         val Id: String,
+
         @Expose
         @SerializedName("name")
         val name: String,
+
         @Expose
         @SerializedName("main_product_id")
         val mainProductId: String,
+
         //inventory_name
         @Expose
         @SerializedName("inventory_name")
         val inventoryName: String,
+
         @Expose
         @SerializedName("price")
         private var price: String,
@@ -39,42 +43,59 @@ data class ProductDetailResponse(
         @Expose
         @SerializedName("quantity")
         var quantity: Int,
+
+        @Expose
+        @SerializedName("min_inventory")
+        var minInventory: Int = 0,
+
         @Expose
         @SerializedName("product_code")
         val productCode: String,
+
         @Expose
         @SerializedName("images")
         var images: List<Images>,
+
         @Expose
         @SerializedName("business_category")
         var businessCategory: BusinessCategory,
+
         @Expose
         @SerializedName("category")
         var category: Category,
+
         @Expose
         @SerializedName("subcategory")
         var subcategory: Subcategory,
+
         @Expose
         @SerializedName("customizations")
         var customizations: List<Customizations>,
+
         @Expose
         @SerializedName("description")
         val description: String,
+
         @Expose
         @SerializedName("is_favourite")
         var isFavourite: Int,
+
         @Expose
         @SerializedName("is_discount")
         val isDiscount: Int,
+
         @Expose
         @SerializedName("brand")
         val brand: Brand,
+
         @Expose
         @SerializedName("offer_price")
         private val offerPrice: String,
+
         @Expose
         @SerializedName("rating")
         val rating: String,
+
         @Expose
         @SerializedName("ratingCount")
         val ratingCount: String) {
@@ -90,11 +111,11 @@ data class ProductDetailResponse(
             return ""
         }
 
-        fun getPrice() : String {
+        fun getPrice(): String {
             return CommonUtils.convertToDecimal(price)
         }
 
-        fun getOfferPrice() : String {
+        fun getOfferPrice(): String {
             return CommonUtils.convertToDecimal(offerPrice)
         }
 

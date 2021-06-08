@@ -247,6 +247,7 @@
                         android:text="@{(viewModel.productDetail.quantity &lt;= 0) ? `Out of Stock` : `Only ` + viewModel.productDetail.quantity + ` item(s) left in the stock.`}"
                         android:textColor="@{(viewModel.productDetail.quantity &lt;= 0) ? @color/red : @color/colorLogout}"
                         android:textSize="@dimen/_10sdp"
+                        android:visibility="@{(viewModel.productDetail.quantity &lt;= viewModel.productDetail.minInventory ? View.VISIBLE : View.GONE)}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
