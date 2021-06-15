@@ -88,7 +88,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/linotte_semi_bold"
-                            android:text="@{viewModel.orderDetailResponse.driver.size() > 0 ? viewModel.orderDetailResponse.driver[0].phone : ``}"
+                            android:text="@{viewModel.orderDetailResponse.driver.size() > 0 ? viewModel.orderDetailResponse.driver[0].getMaskedPhoneNumber() : ``}"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_10sdp" />
 

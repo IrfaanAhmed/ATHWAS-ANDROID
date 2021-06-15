@@ -76,15 +76,49 @@
                 tools:itemCount="1"
                 tools:listitem="@layout/cart_list_row" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/linotte_semi_bold"
-                android:text="No items in Cart"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_14sdp"
-                android:visibility="@{viewModel.isItemAvailable ? View.GONE : View.VISIBLE}" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="@{viewModel.isItemAvailable ? View.GONE : View.VISIBLE}">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_100sdp"
+                    android:minWidth="@dimen/_100sdp"
+                    app:srcCompat="@mipmap/ic_launcher" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:text="@string/empty_cart"
+                    android:textColor="@color/theme_color"
+                    android:textSize="@dimen/_13sdp"
+                    android:visibility="@{viewModel.isItemAvailable ? View.GONE : View.VISIBLE}"
+                    app:fontFamily="@font/linotte_semi_bold" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/primary_color_fill_gradient"
+                    android:onClick="@{()-> viewModel.moveToHomePage()}"
+                    android:paddingStart="@dimen/_8sdp"
+                    android:paddingTop="@dimen/_6sdp"
+                    android:paddingEnd="@dimen/_8sdp"
+                    android:paddingBottom="@dimen/_6sdp"
+                    android:text="@string/back_to_browse"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    app:fontFamily="@font/proximanova_bold" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/llFooter"
@@ -93,7 +127,8 @@
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorLogout"
                 android:orientation="horizontal"
-                android:padding="@dimen/_5sdp">
+                android:padding="@dimen/_5sdp"
+                android:visibility="@{viewModel.isItemAvailable ? View.VISIBLE : View.GONE}">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="0dp"

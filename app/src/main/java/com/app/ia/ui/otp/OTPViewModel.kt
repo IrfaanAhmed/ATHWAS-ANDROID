@@ -23,12 +23,9 @@ import com.app.ia.spanly.clickable
 import com.app.ia.spanly.color
 import com.app.ia.spanly.font
 import com.app.ia.ui.login.LoginActivity
-import com.app.ia.utils.Resource
-import com.app.ia.utils.getColorCompat
-import com.app.ia.utils.startActivityWithFinish
-import com.app.ia.utils.toast
 import com.app.wallet.tivo.model.ResendOTPResponse
-import com.app.wallet.tivo.receiver.SMSReceiver
+import com.app.ia.receiver.SMSReceiver
+import com.app.ia.utils.*
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.Dispatchers
@@ -50,6 +47,7 @@ class OTPViewModel(private val baseRepository: BaseRepository) : BaseViewModel()
     var otp = MutableLiveData("")
 
     private var smsReceiver: SMSReceiver? = null
+    private var messageId = ""
 
     fun setVariable(mBinding: ActivityOtpBinding) {
         this.mBinding = mBinding
@@ -58,6 +56,9 @@ class OTPViewModel(private val baseRepository: BaseRepository) : BaseViewModel()
         startTimer()
         didNotReceiveOtpText()
         startSMSListener()
+        val appSignatureHashHelper = AppSignatureHashHelper(mActivity)
+        messageId = appSignatureHashHelper.appSignatures[0]
+        AppLogger.d(messageId)
     }
 
     fun setIntent(intent: Intent) {
@@ -142,6 +143,7 @@ class OTPViewModel(private val baseRepository: BaseRepository) : BaseViewModel()
             val requestParams = HashMap<String, String>()
             requestParams["country_code"] = countryCode.value!!
             requestParams["phone"] = mobileNumber.value!!
+            requestParams["message_id"] = messageId
             requestParams["otp_for"] = "register"
             setupObservers(requestParams, false)
         }))

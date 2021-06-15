@@ -50,7 +50,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
     private val totalItems = MutableLiveData(0)
     val totalAmount = MutableLiveData(0.0)
     val netAmount = MutableLiveData(0.0)
-    val deliveryCharges = MutableLiveData("0.0")
+    val deliveryCharges = MutableLiveData(0.0)
     private var walletAmount = MutableLiveData("0.0")
     var vatAmount = MutableLiveData("0.0")
     var warehouseId = MutableLiveData("")
@@ -87,7 +87,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
     fun onRemovePromoCode() {
         promoCodeResponse.value = PromoCodeResponse()
-        netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!!.toDouble() + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
+        netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!! + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
     }
 
     fun onPaymentMethodChange() {
@@ -150,7 +150,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                                 }
                             }
 
-                            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!!.toDouble() + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
+                            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!! + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
 
                             if (cartListAll.size <= 0) {
                                 isCartChanged = true
@@ -281,7 +281,9 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                         resource.data?.let { users ->
 
                             isDeliverableArea.value = true
-                            deliveryCharges.value = users.data?.deliveryFee!!
+                            if (users.data?.deliveryFee!!.isNotEmpty()) {
+                                deliveryCharges.value = CommonUtils.convertToDecimal(users.data?.deliveryFee!!).toDouble()
+                            }
                             walletAmount.value = users.data?.wallet!!
                             warehouseId.value = users.data?.warehouse!!
                             if (users.data?.vatAmount == "null" || users.data?.vatAmount == null) {
@@ -290,7 +292,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                                 vatAmount.value = users.data?.vatAmount
                             }
                             AppPreferencesHelper.getInstance().walletAmount = walletAmount.value!!
-                            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!!.toDouble() + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
+                            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!! + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
                         }
                     }
 

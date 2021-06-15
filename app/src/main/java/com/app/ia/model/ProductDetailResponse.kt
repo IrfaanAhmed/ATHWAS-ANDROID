@@ -119,6 +119,14 @@ data class ProductDetailResponse(
             return CommonUtils.convertToDecimal(offerPrice)
         }
 
+        fun getRemainingQuantity() : Int {
+            return if(quantity < minInventory) {
+                quantity
+            } else {
+                minInventory
+            }
+        }
+
         data class Customizations(
             @Expose
             @SerializedName("_id")

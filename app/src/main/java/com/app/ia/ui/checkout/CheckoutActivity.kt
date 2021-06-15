@@ -139,7 +139,7 @@ class CheckoutActivity : BaseActivity<ActivityCheckoutBinding, CheckoutViewModel
         }
         requestParams["delivery_address"] = mViewModel?.addressId?.value!!
         requestParams["warehouse_id"] = mViewModel?.warehouseId?.value!!
-        requestParams["delivery_fee"] = mViewModel?.deliveryCharges?.value!!
+        requestParams["delivery_fee"] = mViewModel?.deliveryCharges?.value!!.toString()
         requestParams["vat_amount"] = mViewModel?.vatAmount?.value!!
         requestParams["offers"] = JSONArray().toString()
         mViewModel?.placeOrderObserver(requestParams)

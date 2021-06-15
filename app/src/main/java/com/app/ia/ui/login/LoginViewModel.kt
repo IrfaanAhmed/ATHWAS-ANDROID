@@ -119,6 +119,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
             requestParams["device_type"] = "1"
             requestParams["device_id"] = androidId
             requestParams["login_through"] = "password"
+            requestParams["message_id"] = messageId
             requestParams["latitude"] = AppPreferencesHelper.getInstance().mCurrentLat.toString()
             requestParams["longitude"] = AppPreferencesHelper.getInstance().mCurrentLng.toString()
             setupObservers(requestParams)

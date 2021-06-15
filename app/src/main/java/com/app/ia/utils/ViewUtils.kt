@@ -150,3 +150,14 @@ inline fun <reified T : Activity> Activity.mStartActivityForResult(requestCode: 
     startActivityForResult(intent, requestCode)
 }
 
+fun String.redact(numDigits: Int = 7): String {
+    val charArray = toCharArray()
+
+    charArray.withIndex()
+        .filter { (_, char) -> Character.isDigit(char) }
+        .take(numDigits)
+        .forEach { (index, _) -> charArray[index] = 'x' }
+
+    return String(charArray)
+}
+

@@ -13,6 +13,8 @@ import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
 import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.ui.reset_password.ResetPasswordActivity
+import com.app.ia.utils.AppLogger
+import com.app.ia.utils.AppSignatureHashHelper
 import com.app.ia.utils.CommonUtils.isEmailValid
 import com.app.ia.utils.Resource
 import com.app.ia.utils.startActivity
@@ -27,11 +29,15 @@ class ForgotPasswordViewModel(private val baseRepository: BaseRepository) : Base
 
     private lateinit var mActivity: Activity
     private lateinit var mBinding: ActivityForgotPasswordBinding
+    private var messageId = ""
 
     fun setVariable(mBinding: ActivityForgotPasswordBinding) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
         title.set(mActivity.getString(R.string.forgot_password_title))
+        val appSignatureHashHelper = AppSignatureHashHelper(mActivity)
+        messageId = appSignatureHashHelper.appSignatures[0]
+        AppLogger.d(messageId)
     }
 
     fun onSendClick() {
@@ -66,6 +72,7 @@ class ForgotPasswordViewModel(private val baseRepository: BaseRepository) : Base
             val requestParams = HashMap<String, String>()
             requestParams["country_code"] = "+91"
             requestParams["phone"] = mobileNumber
+            requestParams["message_id"] = messageId
             requestParams["otp_for"] = "forgot_password"
             setupObservers(requestParams)
         }

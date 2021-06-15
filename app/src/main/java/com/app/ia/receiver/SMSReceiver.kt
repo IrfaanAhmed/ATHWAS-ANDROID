@@ -1,4 +1,4 @@
-package com.app.wallet.tivo.receiver
+package com.app.ia.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context

@@ -33,6 +33,7 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
     lateinit var mActivity: Activity
     lateinit var mBinding: ActivitySignUpBinding
     private lateinit var androidId: String
+    private var messageId = ""
 
     @SuppressLint("HardwareIds")
     fun setVariable(mBinding: ActivitySignUpBinding) {
@@ -41,6 +42,9 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         title.set(mActivity.getString(R.string.sign_up))
         alreadyHaveAccountText()
         androidId = Settings.Secure.getString(mActivity.contentResolver, Settings.Secure.ANDROID_ID)
+        val appSignatureHashHelper = AppSignatureHashHelper(mActivity)
+        messageId = appSignatureHashHelper.appSignatures[0]
+        AppLogger.d(messageId)
     }
 
     fun skipForNow() {
@@ -116,6 +120,7 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
             requestParams["phone"] = phone
             requestParams["email"] = email
             requestParams["password"] = password
+            requestParams["message_id"] = messageId
             requestParams["device_token"] = AppPreferencesHelper.getInstance().deviceToken
             requestParams["device_type"] = "1"
             requestParams["device_id"] = androidId

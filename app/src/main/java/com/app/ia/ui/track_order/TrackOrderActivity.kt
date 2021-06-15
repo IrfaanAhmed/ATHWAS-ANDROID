@@ -13,7 +13,9 @@ import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityTrackOrderBinding
 import com.app.ia.utils.invisible
+import com.app.ia.utils.redact
 import com.app.ia.utils.setOnApplyWindowInset1
+import com.app.ia.utils.toast
 import com.transferwise.sequencelayout.SequenceStep
 import kotlinx.android.synthetic.main.activity_track_order.*
 import kotlinx.android.synthetic.main.common_header.view.*

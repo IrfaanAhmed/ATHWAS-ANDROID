@@ -1,6 +1,7 @@
 package com.app.ia.ui.my_cart
 
 import android.app.Activity
+import android.content.Intent
 import android.widget.Toast
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
@@ -12,8 +13,10 @@ import com.app.ia.databinding.ActivityMyCartBinding
 import com.app.ia.enums.Status
 import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.model.CartListResponse
+import com.app.ia.ui.home.HomeActivity
 import com.app.ia.utils.CommonUtils
 import com.app.ia.utils.Resource
+import com.app.ia.utils.startActivityWithFinish
 import kotlinx.coroutines.Dispatchers
 
 class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), LifecycleObserver {
@@ -28,6 +31,13 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
 
     val totalItems = MutableLiveData(0)
     val totalAmount = MutableLiveData(0.0)
+
+
+    fun moveToHomePage() {
+        mActivity.startActivityWithFinish<HomeActivity> {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+    }
 
     fun setVariable(mBinding: ActivityMyCartBinding) {
         this.mBinding = mBinding

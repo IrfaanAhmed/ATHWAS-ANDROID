@@ -2,6 +2,7 @@ package com.app.ia.ui.reset_password
 
 import android.app.Activity
 import android.content.Intent
+import android.content.IntentFilter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.app.ia.R
@@ -10,13 +11,17 @@ import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityResetPasswordBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
+import com.app.ia.receiver.SMSReceiver
 import com.app.ia.ui.login.LoginActivity
 import com.app.ia.utils.Resource
 import com.app.ia.utils.startActivityWithFinish
 import com.app.ia.utils.toast
+import com.google.android.gms.auth.api.phone.SmsRetriever
+import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.Dispatchers
+import java.util.*
 
-class ResetPasswordViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
+class ResetPasswordViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), SMSReceiver.OTPReceiveListener {
 
     private lateinit var mActivity: Activity
     private lateinit var mBinding: ActivityResetPasswordBinding
@@ -25,10 +30,13 @@ class ResetPasswordViewModel(private val baseRepository: BaseRepository) : BaseV
     var mobileNumber = MutableLiveData("123")
     var otp = MutableLiveData("")
 
+    private var smsReceiver: SMSReceiver? = null
+
     fun setVariable(mBinding: ActivityResetPasswordBinding) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
         title.set(mActivity.getString(R.string.reset_password))
+        startSMSListener()
     }
 
     fun setIntent(intent: Intent) {
@@ -104,4 +112,44 @@ class ResetPasswordViewModel(private val baseRepository: BaseRepository) : BaseV
             }
         })
     }
+
+    private fun startSMSListener() {
+        try {
+            smsReceiver = SMSReceiver()
+            smsReceiver?.setOTPListener(this)
+            val intentFilter = IntentFilter()
+            intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
+            mActivity.registerReceiver(smsReceiver, intentFilter)
+            val client = SmsRetriever.getClient(mActivity)
+            val task: Task<Void> = client.startSmsRetriever()
+            task.addOnSuccessListener {
+                // API successfully started
+            }
+            task.addOnFailureListener {
+                // Fail to start API
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        if (smsReceiver != null) {
+            smsReceiver?.let { mActivity.unregisterReceiver(it) }
+        }
+    }
+
+    override fun onOTPReceived(otp: String?) {
+        mBinding.pinView.setText(otp)
+    }
+
+    override fun onOTPTimeOut() {
+
+    }
+
+    override fun onOTPReceivedError(error: String?) {
+
+    }
+
 }

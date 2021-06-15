@@ -1,6 +1,7 @@
 package com.app.ia.model
 
 import com.app.ia.utils.CommonUtils
+import com.app.ia.utils.redact
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
@@ -105,8 +106,7 @@ data class OrderDetailResponse(
 
     fun getOrderStartDate(): String {
         val serverDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        val outputDate: String
-        outputDate = try {
+        val outputDate: String = try {
             val formatter = SimpleDateFormat(serverDateFormat, Locale.ENGLISH)
             formatter.timeZone = TimeZone.getTimeZone("UTC")
             val value: Date = formatter.parse(expectedStartDate!!)!!
@@ -126,8 +126,7 @@ data class OrderDetailResponse(
 
     private fun getDeliveryDate(): String {
         val serverDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        val outputDate: String
-        outputDate = try {
+        val outputDate: String = try {
             val formatter = SimpleDateFormat(serverDateFormat, Locale.ENGLISH)
             formatter.timeZone = TimeZone.getTimeZone("UTC")
             val value: Date = formatter.parse(expectedEndDate!!)!!
@@ -151,8 +150,7 @@ data class OrderDetailResponse(
             return getDeliveryDate()
         } else {
             val serverDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-            val outputDate: String
-            outputDate = try {
+            return try {
                 val formatter = SimpleDateFormat(serverDateFormat, Locale.ENGLISH)
                 formatter.timeZone = TimeZone.getTimeZone("UTC")
                 val value: Date = formatter.parse(deliveredDate)!!
@@ -167,7 +165,6 @@ data class OrderDetailResponse(
                     deliveredDate
                 }
             }
-            return outputDate
         }
     }
 
@@ -177,6 +174,9 @@ data class OrderDetailResponse(
     }
 
     fun getTotalAmount(): String {
+        if (totalAmount == null) {
+            totalAmount = "0"
+        }
         return CommonUtils.convertToDecimal(totalAmount)
     }
 
@@ -185,6 +185,9 @@ data class OrderDetailResponse(
     }
 
     fun getDiscount(): String {
+        if (discount == null) {
+            discount = "0"
+        }
         return CommonUtils.convertToDecimal(discount)
     }
 
@@ -332,6 +335,14 @@ data class OrderDetailResponse(
         val phone: String) {
 
         constructor() : this("", "", "")
+
+        fun getMaskedPhoneNumber(): String {
+            var number = phone
+            if (phone.isNotEmpty()) {
+                number = phone.redact()
+            }
+            return number
+        }
     }
 
     data class Category(

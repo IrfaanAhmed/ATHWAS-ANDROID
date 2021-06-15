@@ -22,10 +22,7 @@ import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
 import com.app.ia.model.OrderDetailResponse
 import com.app.ia.ui.track_order.TrackOrderActivity
-import com.app.ia.utils.AppLogger
-import com.app.ia.utils.AppRequestCode
-import com.app.ia.utils.Resource
-import com.app.ia.utils.mStartActivityForResult
+import com.app.ia.utils.*
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -89,6 +86,9 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
         }
     }
 
+    val totalAmount = MutableLiveData(0.0)
+    var offerAmount = MutableLiveData(0.0)
+
     fun orderDetailObserver(requestParams: String) {
 
         orderDetail(requestParams).observe(mBinding.lifecycleOwner!!, {
@@ -96,7 +96,21 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
+
                             orderDetailResponse.value = users.data!!
+
+                            totalAmount.value = 0.0
+                            offerAmount.value = 0.0
+
+                            for (cartItem in orderDetailResponse.value!!.category) {
+                                val products = cartItem.products
+                                for (item in products) {
+                                    totalAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + (item.getPrice().toDouble() * item.quantity)).toDouble()
+                                }
+                            }
+
+                            offerAmount.value = (totalAmount.value!! - orderDetailResponse.value!!.getTotalAmount().toDouble()) + orderDetailResponse.value!!.getDiscount().toDouble()
+
                             Handler(Looper.myLooper()!!).postDelayed({
                                 (mActivity as OrderDetailActivity).onReturnClicked = false
                             }, 5000)

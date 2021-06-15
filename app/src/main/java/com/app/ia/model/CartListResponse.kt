@@ -65,6 +65,9 @@ data class CartListResponse(
             @SerializedName("available_quantity")
             var availableQuantity: Int,
             @Expose
+            @SerializedName("min_inventory")
+            var minInventory: Int = 0,
+            @Expose
             @SerializedName("name")
             val name: String,
             @Expose
@@ -113,6 +116,14 @@ data class CartListResponse(
                     }
                 }
                 return ""
+            }
+
+            fun getRemainingQuantity() : Int {
+                return if(availableQuantity < minInventory) {
+                    availableQuantity
+                } else {
+                    minInventory
+                }
             }
 
             fun getPrice() : String {

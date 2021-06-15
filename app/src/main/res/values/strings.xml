@@ -141,9 +141,10 @@
     <string name="order_date_and_time">Order date and time:</string>
     <string name="delivery_date_and_time">Delivery date and time:</string>
     <string name="payment_mode">Payment Mode:</string>
+    <string name="payment_mode_wc">Payment Mode</string>
     <string name="payable_amount">Payable Amount:</string>
     <string name="paid_amount">Paid Amount:</string>
-    <string name="my_wallet">My Wallet</string>
+    <string name="my_wallet">Athwas Pay</string>
     <string name="wallet">Wallet</string>
     <string name="add_money">Add Money</string>
     <string name="enter_amount">Enter Amount</string>
@@ -230,5 +231,16 @@
     <string name="download_invoice">Download Invoice</string>
     <string name="invoice_downloaded_successfully">Invoice Download Successfully.</string>
     <string name="no_order_invoice_available">No order invoice available.</string>
+    <string name="empty_cart">Empty cart?</string>
+    <string name="back_to_browse">Back to Browse</string>
+    <string name="total_shipping">Total Shipping (+)</string>
+    <string name="total_discount">Total Discount (-)</string>
+    <string name="cart_value">Cart value</string>
+    <string name="order_summary">Order Summary</string>
+    <string name="tax_amount_incl">Tax Amount (incl.)</string>
+    <string name="grand_total">Grand Total</string>
+    <string name="place_order">Place Order</string>
+    <string name="cash_on_delivery">Cash On Delivery</string>
+    <string name="deliver_at">Deliver at</string>
 
 </resources>

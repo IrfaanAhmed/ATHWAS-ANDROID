@@ -140,22 +140,27 @@
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/leftArrow"
-                            android:layout_width="@dimen/_24sdp"
-                            android:layout_height="@dimen/_24sdp"
-                            android:rotation="180"
-                            android:visibility="gone"
-                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
                             android:layout_gravity="center_vertical|start"
-                            app:srcCompat="@drawable/ic_right_arrow"/>
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:rotation="90"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/ic_top_drop_arrow"
+                            app:tint="@color/theme_color"
+                            tools:visibility="visible" />
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/rightArrow"
-                            android:layout_width="@dimen/_24sdp"
-                            android:layout_height="@dimen/_24sdp"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:visibility="gone"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
                             android:layout_gravity="center_vertical|end"
-                            app:srcCompat="@drawable/ic_right_arrow"/>
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:rotation="270"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/ic_top_drop_arrow"
+                            app:tint="@color/theme_color"
+                            tools:visibility="visible" />
 
                     </FrameLayout>
 

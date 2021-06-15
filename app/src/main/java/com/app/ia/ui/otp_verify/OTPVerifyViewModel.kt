@@ -27,7 +27,7 @@ import com.app.ia.utils.AppConstants
 import com.app.ia.utils.Resource
 import com.app.ia.utils.getColorCompat
 import com.app.ia.utils.toast
-import com.app.wallet.tivo.receiver.SMSReceiver
+import com.app.ia.receiver.SMSReceiver
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.Dispatchers

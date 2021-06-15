@@ -1,5 +1,6 @@
 package com.app.ia.ui.add_new_address
 
+import android.R.attr.password
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -7,12 +8,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.TextView.OnEditorActionListener
 import androidx.lifecycle.ViewModelProvider
 import com.app.ia.BR
 import com.app.ia.R
@@ -38,12 +40,12 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_add_address.*
-import kotlinx.android.synthetic.main.activity_add_address.toolbar
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
+
 
 class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressViewModel>(), OnMapReadyCallback {
 
@@ -62,7 +64,7 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
 
     private var selectedFromAddressBar = false
 
-    private var selectedView : View? = null
+    private var selectedView: View? = null
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
@@ -122,7 +124,29 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
             }
         }
 
-        edtTextAddress.addTextChangedListener(object : TextWatcher {
+
+        edtTextSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboard()
+                true
+            } else false
+        }
+
+        edtTextAddress.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboard()
+                true
+            } else false
+        }
+
+        edtTextSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboard()
+                true
+            } else false
+        }
+
+        edtTextPinCode.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
 
             }
@@ -138,10 +162,10 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
         observeRestaurantListResponse()
 
         disposable = subject.debounce(300, TimeUnit.MILLISECONDS).filter { text ->
-                text.isNotEmpty()
-            }.distinctUntilChanged().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
-                mAddAddressViewModel?.getAddress(it)
-            }
+            text.isNotEmpty()
+        }.distinctUntilChanged().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
+            mAddAddressViewModel?.getAddress(it)
+        }
 
         imgViewCross.setOnClickListener {
             mAddAddressViewModel?.searchedLocationName!!.set("")
@@ -179,7 +203,7 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
         KeyboardVisibilityEvent.setEventListener(this, this, object : KeyboardVisibilityEventListener {
             override fun onVisibilityChanged(isOpen: Boolean) {
                 if (isOpen) {
-                    if(selectedView == edtTextSearch) {
+                    if (selectedView == edtTextSearch) {
                         bottom.visibility = View.GONE
                         searchLayout.visibility = View.VISIBLE
                         toolbar.visibility = View.VISIBLE

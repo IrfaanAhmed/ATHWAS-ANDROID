@@ -285,7 +285,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Cart value"
+                            android:text="@string/cart_value"
                             android:textAlignment="viewStart"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_12sdp" />
@@ -294,9 +294,47 @@
                             android:id="@+id/txtViewSubTotal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.orderDetailResponse.totalAmount != null ? @string/inr_price(viewModel.orderDetailResponse.totalAmount) : @string/inr_price(`0`)}"
+                            android:text="@{@string/inr_price(viewModel.totalAmount)}"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_12sdp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingBottom="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/total_discount"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_3sdp"
+                            android:text="@{`(` + viewModel.orderDetailResponse.promoCode + `)`}"
+                            android:textAlignment="viewStart"
+                            android:textSize="@dimen/_11sdp"
+                            android:visibility="@{(viewModel.orderDetailResponse.promoCode != null &amp;&amp; !viewModel.orderDetailResponse.promoCode.empty) ? View.VISIBLE : View.GONE}" />
+
+                        <TextView
+                            android:id="@+id/txtViewDiscount"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="@{@string/inr_price(viewModel.offerAmount)}"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_13sdp" />
 
                     </LinearLayout>
 
@@ -313,7 +351,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Delivery Charges"
+                            android:text="@string/total_shipping"
                             android:textAlignment="viewStart"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_12sdp" />
@@ -338,49 +376,10 @@
                         android:paddingBottom="5dp">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Discount"
-                            android:textAlignment="viewStart"
-                            android:textColor="@color/dark_grey"
-                            android:textSize="@dimen/_12sdp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_3sdp"
-                            android:text="@{`(` + viewModel.orderDetailResponse.promoCode + `)`}"
-                            android:textAlignment="viewStart"
-                            android:textSize="@dimen/_11sdp"
-                            android:visibility="@{(viewModel.orderDetailResponse.promoCode != null &amp;&amp; !viewModel.orderDetailResponse.promoCode.empty) ? View.VISIBLE : View.GONE}" />
-
-                        <TextView
-                            android:id="@+id/txtViewDiscount"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="end"
-                            android:text="@{viewModel.orderDetailResponse.discount != null ? @string/inr_price(viewModel.orderDetailResponse.discount) : @string/inr_price(`0`)}"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_13sdp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingBottom="5dp"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="VAT"
+                            android:text="@string/tax_amount_incl"
                             android:textAlignment="viewStart"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_12sdp" />
@@ -495,11 +494,10 @@
                     style="@style/LogoutButton"
                     android:layout_width="@dimen/_200sdp"
                     android:layout_height="@dimen/_32sdp"
-                    android:layout_marginBottom="@dimen/_25sdp"
                     android:layout_alignParentBottom="true"
-                    android:onClick="@{()-> viewModel.onDownloadInvoice()}"
                     android:layout_gravity="center"
-                    android:visibility="gone"
+                    android:layout_marginBottom="@dimen/_25sdp"
+                    android:onClick="@{()-> viewModel.onDownloadInvoice()}"
                     android:text="@string/download_invoice" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
