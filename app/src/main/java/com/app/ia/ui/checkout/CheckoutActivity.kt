@@ -124,7 +124,7 @@ class CheckoutActivity : BaseActivity<ActivityCheckoutBinding, CheckoutViewModel
         val requestParams = HashMap<String, String>()
         requestParams["payment_mode"] = mViewModel?.selectedPaymentMethod!!
 
-        if(mViewModel?.orderIdForOnlinePayment?.value!!.isNotEmpty()) {
+        if (mViewModel?.orderIdForOnlinePayment?.value!!.isNotEmpty()) {
             requestParams["order_id"] = mViewModel?.orderIdForOnlinePayment?.value!!
         }
 
@@ -141,6 +141,7 @@ class CheckoutActivity : BaseActivity<ActivityCheckoutBinding, CheckoutViewModel
         requestParams["warehouse_id"] = mViewModel?.warehouseId?.value!!
         requestParams["delivery_fee"] = mViewModel?.deliveryCharges?.value!!.toString()
         requestParams["vat_amount"] = mViewModel?.vatAmount?.value!!
+        requestParams["redeem_points"] = mViewModel?.applicableRewardPoint()!!
         requestParams["offers"] = JSONArray().toString()
         mViewModel?.placeOrderObserver(requestParams)
     }

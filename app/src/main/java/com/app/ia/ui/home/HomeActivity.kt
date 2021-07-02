@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Gravity
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.fragment.app.Fragment
@@ -24,6 +22,8 @@ import com.app.ia.databinding.ActivityHomeBinding
 import com.app.ia.helper.CardDrawerLayout
 import com.app.ia.model.AddressListResponse
 import com.app.ia.ui.my_order.MyOrdersFragment
+import com.app.ia.ui.order_detail.OrderDetailActivity
+import com.app.ia.ui.product_detail.ProductDetailActivity
 import com.app.ia.ui.wallet.WalletFragment
 import com.app.ia.utils.*
 import com.app.ia.utils.CommonUtils.getAddressFromLocation
@@ -91,12 +91,50 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
             }, 100)
         }*/
 
-        replaceFragment(HomeFragment.newInstance())
+        val extras = intent!!.extras
+        if (extras != null) {
+            if (extras.containsKey(KEY_REDIRECTION)) {
+
+                val where = extras.getString(KEY_REDIRECTION, "")
+                val id = extras.getString(KEY_REDIRECTION_ID, "")
+                val postIntent: Intent
+                when (where.trim()) {
+
+                    "2" -> {
+                        replaceFragment(HomeFragment.newInstance())
+                        postIntent = Intent(this, ProductDetailActivity::class.java)
+                        postIntent.putExtra("product_id", id)
+                        startActivity(postIntent)
+                    }
+
+                    "3" -> {
+                        replaceFragment(HomeFragment.newInstance())
+                        postIntent = Intent(this, OrderDetailActivity::class.java)
+                        postIntent.putExtra("order_id", id)
+                        startActivity(postIntent)
+                    }
+
+                    "4" -> {
+                        replaceFragment(MyOrdersFragment.newInstance())
+                    }
+
+                    else -> {
+                        replaceFragment(HomeFragment.newInstance())
+                    }
+                }
+            }
+        } else {
+            replaceFragment(HomeFragment.newInstance())
+        }
 
         val localBroadcastReceiver = LocalBroadcastManager.getInstance(this@HomeActivity)
         val intentFilter = IntentFilter()
         intentFilter.addAction(AppConstants.ACTION_BROADCAST_REFRESH_ON_NOTIFICATION)
         localBroadcastReceiver.registerReceiver(refreshListener, intentFilter)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
     }
 
     private fun setViewModel() {

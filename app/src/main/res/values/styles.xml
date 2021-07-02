@@ -80,10 +80,10 @@
         <item name="fontFamily">@font/linotte_semi_bold</item>
     </style>
 
-    <!--<style name="MyCheckBoxStyle" parent="Base.Widget.AppCompat.CompoundButton.CheckBox">
+    <style name="MyCheckBoxStyle" parent="Base.Widget.AppCompat.CompoundButton.CheckBox">
         <item name="buttonTint">@drawable/checkbox_selector</item>
         <item name="android:textColor">@drawable/checkbox_text_selector</item>
-    </style>-->
+    </style>
 
     <!--<style name="MyRadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
         <item name="buttonTint">@drawable/my_compound_button_color_selector</item>

@@ -82,7 +82,8 @@ object Api {
 
     const val REDIRECT_URL = "http://3.7.83.168:3060" + COMMON_PATH + "payment/complete_payment"//"http://122.182.6.216/merchant/ccavResponseHandler.jsp"
     const val CANCEL_URL = "http://3.7.83.168:3060" + COMMON_PATH + "payment/complete_payment"//"http://122.182.6.216/merchant/ccavResponseHandler.jsp"
-    const val RSA_URL =  "https://secure.ccavenue.com/transaction/getRSAKey"//"https://test.ccavenue.com/transaction/getRSAKey"
+    //const val RSA_URL =  "https://secure.ccavenue.com/transaction/getRSAKey"
+    const val RSA_URL =  "https://test.ccavenue.com/transaction/getRSAKey"
 
     const val GENERATE_ORDER = COMMON_PATH + "order/genrate_online_order"
     const val CHECK_PAYMENT_STATUS = COMMON_PATH + "payment/check_status"

@@ -240,7 +240,7 @@
     <string name="tax_amount_incl">Tax Amount (incl.)</string>
     <string name="grand_total">Grand Total</string>
     <string name="place_order">Place Order</string>
-    <string name="cash_on_delivery">Cash On Delivery</string>
+    <string name="cash_on_delivery">Pay on Delivery</string>
     <string name="deliver_at">Deliver at</string>
 
 </resources>

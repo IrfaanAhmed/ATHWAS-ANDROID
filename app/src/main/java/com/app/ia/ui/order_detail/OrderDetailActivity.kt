@@ -55,7 +55,9 @@ class OrderDetailActivity : BaseActivity<ActivityOrderDetailBinding, OrderDetail
         mViewModel?.setActivityNavigator(this)
         mViewModel?.setVariable(mBinding!!, intent)
 
-        lastOrderTrackingStatus = intent.getStringExtra("orderStatus")!!
+        if(intent.getStringExtra("orderStatus") != null) {
+            lastOrderTrackingStatus = intent.getStringExtra("orderStatus")!!
+        }
 
         setOnApplyWindowInset1(toolbar, content_container)
         toolbar.imageViewIcon.invisible()
@@ -86,7 +88,7 @@ class OrderDetailActivity : BaseActivity<ActivityOrderDetailBinding, OrderDetail
                 }
             }
 
-            if (it?.orderStatus!! >= 2) {
+            if (it?.orderStatus!! == 1 || it.orderStatus == 2) {
                 buttonDownloadInvoice.visibility = View.VISIBLE
             } else {
                 buttonDownloadInvoice.visibility = View.GONE

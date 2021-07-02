@@ -176,6 +176,13 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".ui.order_detail.PdfPreviewActivity"
+            android:configChanges="layoutDirection|locale"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarMain"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".ui.payment.StatusActivity"
             android:configChanges="layoutDirection|locale"
             android:screenOrientation="portrait"

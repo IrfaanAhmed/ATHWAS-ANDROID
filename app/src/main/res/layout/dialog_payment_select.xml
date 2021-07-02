@@ -59,7 +59,7 @@
                 android:button="@drawable/custom_radio_button"
                 android:minHeight="@dimen/_37sdp"
                 android:padding="@dimen/_8sdp"
-                android:text="Cash on Delivery"
+                android:text="Pay on Delivery"
                 android:textAlignment="viewStart"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11sdp" />
@@ -74,12 +74,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:background="@null"
                 android:button="@drawable/custom_radio_button"
                 android:paddingStart="@dimen/_8sdp"
                 android:paddingEnd="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:text="Wallet"
+                android:text="Athwas Pay"
                 android:textAlignment="viewStart"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11sdp" />
@@ -110,7 +110,7 @@
                 android:button="@drawable/custom_radio_button"
                 android:minHeight="@dimen/_37sdp"
                 android:padding="@dimen/_8sdp"
-                android:text="Credit/Debit Card"
+                android:text="Credit/Debit Card/UPI"
                 android:textAlignment="viewStart"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11sdp" />

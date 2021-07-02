@@ -2,10 +2,8 @@ package com.app.ia.enums
 
 enum class NotificationType(var notificationType: String) {
 
-    NOTIFICATION_TYPE_POST_LIST("post_list"),
-    NOTIFICATION_TYPE_FOLLOWER_LIST("followers_list"),
-    NOTIFICATION_TYPE_FRIEND_LIST("friends_list"),
-    NOTIFICATION_TYPE_FRIEND_REQUEST_LIST("friend_requests_list"),
-    NOTIFICATION_TYPE_ACCOUNT("account")
-
+    NOTIFICATION_TYPE_ADMIN("1"),
+    NOTIFICATION_TYPE_PRODUCT("2"),
+    NOTIFICATION_TYPE_ORDER_DETAIL("3"),
+    NOTIFICATION_TYPE_ORDER_LIST("4")
 }

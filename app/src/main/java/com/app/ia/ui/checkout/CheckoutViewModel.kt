@@ -54,9 +54,12 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
     private var walletAmount = MutableLiveData("0.0")
     var vatAmount = MutableLiveData("0.0")
     var warehouseId = MutableLiveData("")
+    var redeemPoint = MutableLiveData(0.0)
 
     val totalAmountWithoutOfferPrice = MutableLiveData(0.0)
     val totalAmountWithOfferPrice = MutableLiveData(0.0)
+
+    var addedRedeemPointToDiscount = MutableLiveData(0.0)
 
     fun setVariable(mBinding: ActivityCheckoutBinding) {
         this.mBinding = mBinding
@@ -70,6 +73,15 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
         requestParams["page_no"] = "1"
         requestParams["limit"] = "30"
         cartListingObserver(requestParams)
+
+        mBinding.rewardCheckBox.setOnClickListener {
+            setNetAmount()
+        }
+
+        mBinding.rewardPointsLayout.setOnClickListener {
+            mBinding.rewardCheckBox.isChecked = !mBinding.rewardCheckBox.isChecked
+            setNetAmount()
+        }
     }
 
     fun onApplyPromoCode() {
@@ -85,9 +97,30 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
         }
     }
 
+    fun applicableRewardPoint(): String {
+        return if (netAmount.value!! >= redeemPoint.value!!) {
+            redeemPoint.value.toString()
+        } else {
+            (redeemPoint.value!! - netAmount.value!!).toString()
+        }
+    }
+
     fun onRemovePromoCode() {
         promoCodeResponse.value = PromoCodeResponse()
-        netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!! + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
+        setNetAmount()
+    }
+
+    fun setNetAmount() {
+        if (mBinding.rewardCheckBox.isChecked) {
+            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!! + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble() - redeemPoint.value!!).toDouble()
+            addedRedeemPointToDiscount.value = redeemPoint.value
+            if (netAmount.value!! < 0) {
+                netAmount.value = 0.0
+            }
+        } else {
+            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!! + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
+            addedRedeemPointToDiscount.value = 0.0
+        }
     }
 
     fun onPaymentMethodChange() {
@@ -99,13 +132,13 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
                 when (selectedPaymentMethod) {
                     "Cash" -> {
-                        mBinding.txtPaymentType.text = "Cash On Delivery"
+                        mBinding.txtPaymentType.text = "Pay on Delivery"
                     }
                     "Wallet" -> {
-                        mBinding.txtPaymentType.text = "Wallet"
+                        mBinding.txtPaymentType.text = "Athwas Pay"
                     }
                     "Credit" -> {
-                        mBinding.txtPaymentType.text = "Credit/Debit Card"
+                        mBinding.txtPaymentType.text = "Credit/Debit Card/UPI"
                     }
                 }
             }
@@ -149,8 +182,8 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                                     }
                                 }
                             }
-
-                            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!! + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
+                            setNetAmount()
+                            //netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!! + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
 
                             if (cartListAll.size <= 0) {
                                 isCartChanged = true
@@ -286,13 +319,15 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                             }
                             walletAmount.value = users.data?.wallet!!
                             warehouseId.value = users.data?.warehouse!!
+                            redeemPoint.value = users.data?.getRedeemPoint()!!
                             if (users.data?.vatAmount == "null" || users.data?.vatAmount == null) {
                                 vatAmount.value = "0.0"
                             } else {
                                 vatAmount.value = users.data?.vatAmount
                             }
                             AppPreferencesHelper.getInstance().walletAmount = walletAmount.value!!
-                            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!! + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
+                            setNetAmount()
+                            //netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!! + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
                         }
                     }
 
@@ -332,7 +367,8 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             promoCodeResponse.value = users.data!!
-                            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!!.toDouble() + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
+                            setNetAmount()
+                            //netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!!.toDouble() + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
                         }
                     }
 
@@ -379,8 +415,8 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
                             val intent = Intent(mActivity, PaymentActivity::class.java)
                             // test
-                            //intent.putExtra(AvenuesParams.ACCESS_CODE, ServiceUtility.chkNull("AVTL07ID25BH87LTHB"))
-                            //intent.putExtra(AvenuesParams.MERCHANT_ID, ServiceUtility.chkNull("376194"))
+//                            intent.putExtra(AvenuesParams.ACCESS_CODE, ServiceUtility.chkNull("AVTL07ID25BH87LTHB"))
+//                            intent.putExtra(AvenuesParams.MERCHANT_ID, ServiceUtility.chkNull("376194"))
                             //live
                             intent.putExtra(AvenuesParams.ACCESS_CODE, ServiceUtility.chkNull("AVTL07ID25BH87LTHB"))
                             intent.putExtra(AvenuesParams.MERCHANT_ID, ServiceUtility.chkNull("376194"))
@@ -432,12 +468,12 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                         resource.data?.let { users ->
                             paymentStatusResponse.value = users.data!!
 
-                            if (paymentStatusResponse.value!!.requestType == 7) {
+                            if (paymentStatusResponse.value!!.requestType == 2) {
+                                (mActivity as CheckoutActivity).placeOrder()
+                            } else {
                                 mActivity.startActivity<StatusActivity> {
                                     putExtra("status", paymentStatusResponse.value)
                                 }
-                            } else {
-                                (mActivity as CheckoutActivity).placeOrder()
                             }
                         }
                     }

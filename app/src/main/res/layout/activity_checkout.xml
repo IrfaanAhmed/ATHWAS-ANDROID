@@ -148,8 +148,8 @@
                             android:id="@+id/txtViewPaymentChange"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/change"
                             android:onClick="@{()-> viewModel.onPaymentMethodChange()}"
+                            android:text="@string/change"
                             android:textColor="@color/colorLogout"
                             android:textSize="@dimen/_13sdp"
                             app:fontFamily="@font/linotte_semi_bold" />
@@ -203,10 +203,10 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="@null"
-                            android:hint="@string/have_a_promo_code"
-                            android:inputType="text"
                             android:clickable="@{(viewModel.promoCodeResponse.id == null || viewModel.promoCodeResponse.id.empty) ? true : false}"
                             android:enabled="@{(viewModel.promoCodeResponse.id == null || viewModel.promoCodeResponse.id.empty ? true : false)}"
+                            android:hint="@string/have_a_promo_code"
+                            android:inputType="text"
                             android:textAlignment="viewStart"
                             android:textSize="@dimen/_11sdp" />
 
@@ -214,8 +214,8 @@
                             android:id="@+id/imgViewCross"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="8dp"
                             android:onClick="@{()-> viewModel.onRemovePromoCode()}"
+                            android:padding="8dp"
                             android:src="@android:drawable/ic_menu_close_clear_cancel"
                             android:visibility="@{(viewModel.promoCodeResponse.id == null || viewModel.promoCodeResponse.id.empty) ? View.INVISIBLE : View.VISIBLE}"
                             app:tint="@color/red" />
@@ -225,8 +225,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:text="@string/apply_code"
                             android:onClick="@{()-> viewModel.onApplyPromoCode()}"
+                            android:text="@string/apply_code"
                             android:textColor="@color/colorLogout"
                             android:textSize="@dimen/_12sdp"
                             app:fontFamily="@font/linotte_semi_bold" />
@@ -236,10 +236,10 @@
                         android:id="@+id/txtPromoApplied"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="@{(viewModel.promoCodeResponse.id == null || viewModel.promoCodeResponse.id.empty) ? View.GONE : View.VISIBLE}"
                         android:text="@string/promo_code_applied"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_11sdp"
+                        android:visibility="@{(viewModel.promoCodeResponse.id == null || viewModel.promoCodeResponse.id.empty) ? View.GONE : View.VISIBLE}" />
 
                 </LinearLayout>
 
@@ -250,6 +250,55 @@
                     android:layout_marginBottom="8dp"
                     android:alpha="0.4"
                     android:background="@color/light_grey" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/rewardPointsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:orientation="horizontal"
+                    android:visibility="@{viewModel.redeemPoint > 0 ? View.VISIBLE : View.GONE}">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Use Rewards Points"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_13sdp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{`Reward Points: ` + viewModel.redeemPoint +``}"
+                            android:textColor="@color/colorLogout"
+                            android:textSize="@dimen/_11sdp" />
+                    </LinearLayout>
+
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/rewardCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:alpha="0.4"
+                    android:background="@color/light_grey"
+                    android:visibility="@{viewModel.redeemPoint > 0 ? View.VISIBLE : View.GONE}" />
 
                 <LinearLayout
                     android:id="@+id/linearBottomLayout"
@@ -317,7 +366,7 @@
                             android:id="@+id/txtViewDiscount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{@string/inr_price((viewModel.promoCodeResponse.discountPrice == null ? String.valueOf(viewModel.totalAmountWithOfferPrice) : String.valueOf(viewModel.totalAmountWithOfferPrice + Double.parseDouble(viewModel.promoCodeResponse.discountPrice))))}"
+                            android:text="@{@string/inr_price((viewModel.promoCodeResponse.discountPrice == null ? String.valueOf(viewModel.totalAmountWithOfferPrice) : String.valueOf(viewModel.totalAmountWithOfferPrice + Double.parseDouble(viewModel.promoCodeResponse.discountPrice) + viewModel.addedRedeemPointToDiscount)))}"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_13sdp" />
 
@@ -393,8 +442,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginBottom="@dimen/_30sdp"
-                    android:layout_marginEnd="8dp">
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="@dimen/_30sdp">
 
                     <TextView
                         android:layout_width="0dp"

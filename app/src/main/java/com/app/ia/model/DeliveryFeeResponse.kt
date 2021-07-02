@@ -18,9 +18,22 @@ data class DeliveryFeeResponse(
     val wallet: String,
 
     @Expose
+    @SerializedName("redeem_point")
+    private val redeemPoint: String?,
+
+    @Expose
     @SerializedName("vat")
     val vat: String,
 
     @Expose
     @SerializedName("vat_amount")
-    val vatAmount: String)
+    val vatAmount: String) {
+
+    fun getRedeemPoint(): Double {
+        return if (redeemPoint.isNullOrEmpty()) {
+            0.0
+        } else {
+            redeemPoint.toDouble()
+        }
+    }
+}

@@ -25,6 +25,9 @@ data class OrderDetailResponse(
     @SerializedName("order_id")
     var orderId: String,
     @Expose
+    @SerializedName("redeem_points")
+    private var redeemPoints: String?,
+    @Expose
     @SerializedName("userData")
     var userdata: Userdata,
     @Expose
@@ -85,7 +88,7 @@ data class OrderDetailResponse(
     @SerializedName("order_return_time")
     val orderReturnTime: String) {
 
-    constructor() : this("", ArrayList(), "", "", Userdata(), ArrayList<WareHouseData>(), ArrayList<Driver>(), "", 1, TrackingStatus(), ArrayList(), "", "0", "0", "0", "0", "0", DeliveryAddress(), "", "", "", "", "", "")
+    constructor() : this("", ArrayList(), "", "", "", Userdata(), ArrayList<WareHouseData>(), ArrayList<Driver>(), "", 1, TrackingStatus(), ArrayList(), "", "0", "0", "0", "0", "0", DeliveryAddress(), "", "", "", "", "", "")
 
     fun getOrderDate1(): String {
         val serverDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
@@ -168,6 +171,17 @@ data class OrderDetailResponse(
         }
     }
 
+    fun getRedeemPoints() : String {
+        return if(redeemPoints.isNullOrEmpty()) {
+            "0"
+        } else {
+            if(redeemPoints!!.toDouble() > 0) {
+                redeemPoints!!
+            } else {
+                "0"
+            }
+        }
+    }
 
     fun getNetAmount(): String {
         return CommonUtils.convertToDecimal(netAmount)

@@ -29,8 +29,7 @@
                 imageUrl="@{similarProduct.images.size() > 0 ? similarProduct.images.get(0).productImageUrl : ``}"
                 android:layout_width="@dimen/_80sdp"
                 android:layout_height="@dimen/_90sdp"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop" />
+                android:layout_gravity="center"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"

@@ -2,15 +2,14 @@ package com.app.ia.ui.order_detail
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.DownloadManager
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.net.Uri
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
@@ -31,8 +30,8 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.coroutines.Dispatchers
 import java.io.File
 
-class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
 
+class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
 
     lateinit var mActivity: Activity
     lateinit var mBinding: ActivityOrderDetailBinding
@@ -57,9 +56,14 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
         Dexter.withContext(mActivity).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).withListener(object : MultiplePermissionsListener {
             override fun onPermissionsChecked(report: MultiplePermissionsReport) {
                 if (report.areAllPermissionsGranted()) {
-                    val params = HashMap<String, String>()
-                    params["order_id"] = order_id.value!!
-                    downloadInvoiceObserver(params)
+                    if (invoicePath.value.isNullOrEmpty()) {
+                        val params = HashMap<String, String>()
+                        params["order_id"] = order_id.value!!
+                        downloadInvoiceObserver(params)
+                    } else {
+                        //pdfOption()
+                        downloadImage()
+                    }
                 }
             }
 
@@ -204,6 +208,7 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             invoicePath.value = users.data?.path
+                            //pdfOption()
                             downloadImage()
                         }
                     }
@@ -221,6 +226,32 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
                 }
             }
         })
+    }
+
+    fun pdfOption() {
+        // setup the alert builder
+        val builder = AlertDialog.Builder(mActivity)
+        builder.setTitle("Choose an option")
+
+        // add a list
+        val animals = arrayOf("Preview Invoice", "Download Invoice")
+        builder.setItems(animals) { dialog, which ->
+            when (which) {
+                0 -> {
+                    val intent = Intent(mActivity, PdfPreviewActivity::class.java)
+                    intent.putExtra("fileName", invoicePath.value)
+                    mActivity.startActivity(intent)
+                }
+
+                1 -> {
+                    downloadImage()
+                }
+            }
+        }
+
+        // create and show the alert dialog
+        val dialog = builder.create()
+        dialog.show()
     }
 
     private var invoicePath = MutableLiveData<String>()

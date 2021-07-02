@@ -59,13 +59,12 @@ class CleverMessagingService : FirebaseMessagingService() {
         if(AppPreferencesHelper.getInstance().allowNotification == 1) {
             remoteMessage.data.isNotEmpty().let {
 
-                when (remoteMessage.data["redirection"]) {
+                when (remoteMessage.data["custom_message_type"]) {
 
-                    NotificationType.NOTIFICATION_TYPE_POST_LIST.notificationType -> redirectionNotification(remoteMessage)
-                    NotificationType.NOTIFICATION_TYPE_ACCOUNT.notificationType -> redirectionNotification(remoteMessage)
-                    NotificationType.NOTIFICATION_TYPE_FOLLOWER_LIST.notificationType -> redirectionNotification(remoteMessage)
-                    NotificationType.NOTIFICATION_TYPE_FRIEND_LIST.notificationType -> redirectionNotification(remoteMessage)
-                    NotificationType.NOTIFICATION_TYPE_FRIEND_REQUEST_LIST.notificationType -> redirectionNotification(remoteMessage)
+                    NotificationType.NOTIFICATION_TYPE_ADMIN.notificationType -> redirectionNotification(remoteMessage)
+                    NotificationType.NOTIFICATION_TYPE_ORDER_DETAIL.notificationType -> redirectionNotification(remoteMessage)
+                    NotificationType.NOTIFICATION_TYPE_PRODUCT.notificationType -> redirectionNotification(remoteMessage)
+                    NotificationType.NOTIFICATION_TYPE_ORDER_LIST.notificationType -> redirectionNotification(remoteMessage)
                     else -> {
                         onlyNotification(remoteMessage)
                     }
@@ -96,8 +95,8 @@ class CleverMessagingService : FirebaseMessagingService() {
 
         try {
 
-            val redirectionId = if (remoteMessage.data["redirection_id"] != null) remoteMessage.data["redirection_id"] else ""
-            val redirection = remoteMessage.data["redirection"]
+            val redirectionId = if (remoteMessage.data["id"] != null) remoteMessage.data["id"] else ""
+            val redirection = remoteMessage.data["custom_message_type"]
             val notificationIntent = Intent(this, HomeActivity::class.java)
 
             val stackBuilder = TaskStackBuilder.create(this)
