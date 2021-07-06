@@ -31,6 +31,8 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
 
     val totalItems = MutableLiveData(0)
     val totalAmount = MutableLiveData(0.0)
+    val totalAmountWithoutOffer = MutableLiveData(0.0)
+    val totalSavedAmount = MutableLiveData(0.0)
 
 
     fun moveToHomePage() {
@@ -74,6 +76,7 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                             for (cartItem in cartListAll) {
                                 totalItems.value = totalItems.value!! + cartItem.categoryItems.size
                                 for (item in cartItem.categoryItems) {
+                                    totalAmountWithoutOffer.value = CommonUtils.convertToDecimal(totalAmount.value!! + (item.getPrice().toDouble() * item.quantity)).toDouble()
                                     if (item.isDiscount == 1) {
                                         totalAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + (item.getOfferPrice().toDouble() * item.quantity)).toDouble()
                                     } else {
@@ -81,6 +84,8 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                                     }
                                 }
                             }
+
+                            totalSavedAmount.value = totalAmountWithoutOffer.value!! - totalAmount.value!!
                         }
                     }
 

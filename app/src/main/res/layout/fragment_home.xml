@@ -118,13 +118,10 @@
                         android:layout_height="@dimen/_120sdp"
                         android:visibility="@{(viewModel.dealOfTheDayBannerList  != null &amp;&amp; viewModel.dealOfTheDayBannerList.size() > 0) ? View.VISIBLE : View.GONE}">
 
-                        <com.santalu.autoviewpager.AutoViewPager
+                        <androidx.viewpager.widget.ViewPager
                             android:id="@+id/vpDealOfTheDayBanner"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:avp_autoScroll="false"
-                            app:avp_duration="3000"
-                            app:avp_indeterminate="true" />
+                            android:layout_height="match_parent" />
 
                         <com.app.ia.helper.CirclePageIndicator
                             android:id="@+id/vpDealOfTheDayBannerIndicator"

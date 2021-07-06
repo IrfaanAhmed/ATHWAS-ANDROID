@@ -1,5 +1,6 @@
 package com.app.ia.model
 
+import android.annotation.SuppressLint
 import com.app.ia.utils.CommonUtils
 import com.app.ia.utils.redact
 import com.google.gson.annotations.Expose
@@ -90,10 +91,10 @@ data class OrderDetailResponse(
 
     constructor() : this("", ArrayList(), "", "", "", Userdata(), ArrayList<WareHouseData>(), ArrayList<Driver>(), "", 1, TrackingStatus(), ArrayList(), "", "0", "0", "0", "0", "0", DeliveryAddress(), "", "", "", "", "", "")
 
+    @SuppressLint("NewApi", "WeekBasedYear")
     fun getOrderDate1(): String {
         val serverDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        val outputDate: String
-        outputDate = try {
+        return try {
             val formatter = SimpleDateFormat(serverDateFormat, Locale.ENGLISH)
             formatter.timeZone = TimeZone.getTimeZone("UTC")
             val value: Date = formatter.parse(orderDate)!!
@@ -104,12 +105,12 @@ data class OrderDetailResponse(
         } catch (e: Exception) {
             getOrderStartDate()
         }
-        return outputDate
     }
 
+    @SuppressLint("NewApi", "WeekBasedYear")
     fun getOrderStartDate(): String {
         val serverDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        val outputDate: String = try {
+        return try {
             val formatter = SimpleDateFormat(serverDateFormat, Locale.ENGLISH)
             formatter.timeZone = TimeZone.getTimeZone("UTC")
             val value: Date = formatter.parse(expectedStartDate!!)!!
@@ -124,17 +125,17 @@ data class OrderDetailResponse(
                 expectedStartDate
             }
         }
-        return outputDate
     }
 
+    @SuppressLint("NewApi", "WeekBasedYear")
     private fun getDeliveryDate(): String {
         val serverDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        val outputDate: String = try {
+        return try {
             val formatter = SimpleDateFormat(serverDateFormat, Locale.ENGLISH)
             formatter.timeZone = TimeZone.getTimeZone("UTC")
             val value: Date = formatter.parse(expectedEndDate!!)!!
             val timeZone = TimeZone.getDefault()
-            val dateFormatter = SimpleDateFormat("dd MMMM YYYY, h:mm a", Locale.ENGLISH) //this format changeable
+            val dateFormatter = SimpleDateFormat("dd MMMM YYYY", Locale.ENGLISH) //this format changeable
             dateFormatter.timeZone = timeZone
             dateFormatter.format(value)
         } catch (e: Exception) {
@@ -144,10 +145,10 @@ data class OrderDetailResponse(
                 expectedEndDate
             }
         }
-        return outputDate
     }
 
 
+    @SuppressLint("NewApi", "WeekBasedYear")
     fun getFinalDeliveryDate(): String {
         if (deliveredDate == null) {
             return getDeliveryDate()
@@ -171,11 +172,11 @@ data class OrderDetailResponse(
         }
     }
 
-    fun getRedeemPoints() : String {
-        return if(redeemPoints.isNullOrEmpty()) {
+    fun getRedeemPoints(): String {
+        return if (redeemPoints.isNullOrEmpty()) {
             "0"
         } else {
-            if(redeemPoints!!.toDouble() > 0) {
+            if (redeemPoints!!.toDouble() > 0) {
                 redeemPoints!!
             } else {
                 "0"

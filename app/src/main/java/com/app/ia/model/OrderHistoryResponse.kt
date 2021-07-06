@@ -1,5 +1,6 @@
 package com.app.ia.model
 
+import android.annotation.SuppressLint
 import com.app.ia.utils.CommonUtils
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -95,10 +96,10 @@ data class OrderHistoryResponse(
         @SerializedName("id")
         val _id: String) {
 
+        @SuppressLint("NewApi", "WeekBasedYear")
         fun getCreatedAt(): String {
             val serverDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-            val outputDate: String
-            outputDate = try {
+            return try {
                 val formatter = SimpleDateFormat(serverDateFormat, Locale.ENGLISH)
                 formatter.timeZone = TimeZone.getTimeZone("UTC")
                 val value: Date = formatter.parse(createdAt)!!
@@ -113,18 +114,17 @@ data class OrderHistoryResponse(
                     createdAt
                 }
             }
-            return outputDate
         }
 
+        @SuppressLint("NewApi", "WeekBasedYear")
         private fun getDeliveryDate(): String {
             val serverDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-            val outputDate: String
-            outputDate = try {
+            return try {
                 val formatter = SimpleDateFormat(serverDateFormat, Locale.ENGLISH)
                 formatter.timeZone = TimeZone.getTimeZone("UTC")
                 val value: Date = formatter.parse(expectedEndDate!!)!!
                 val timeZone = TimeZone.getDefault()
-                val dateFormatter = SimpleDateFormat("dd MMMM YYYY, h:mm a", Locale.ENGLISH) //this format changeable
+                val dateFormatter = SimpleDateFormat("dd MMMM YYYY", Locale.ENGLISH) //this format changeable
                 dateFormatter.timeZone = timeZone
                 dateFormatter.format(value)
             } catch (e: Exception) {
@@ -134,16 +134,15 @@ data class OrderHistoryResponse(
                     expectedEndDate
                 }
             }
-            return outputDate
         }
 
+        @SuppressLint("NewApi", "WeekBasedYear")
         fun getDeliveredDate(): String {
             if (deliveredDate == null) {
                 return getDeliveryDate()
             } else {
                 val serverDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-                val outputDate: String
-                outputDate = try {
+                return try {
                     val formatter = SimpleDateFormat(serverDateFormat, Locale.ENGLISH)
                     formatter.timeZone = TimeZone.getTimeZone("UTC")
                     val value: Date = formatter.parse(deliveredDate)!!
@@ -158,7 +157,6 @@ data class OrderHistoryResponse(
                         deliveredDate
                     }
                 }
-                return outputDate
             }
         }
 
