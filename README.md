@@ -1,5 +1,3 @@
-# Grocery-Andrid
+# Athwas App
 
-Email:- athwas@iakashmir.com
-Password:- iamvpl@123
-
+Athwas App
