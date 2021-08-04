@@ -31,6 +31,8 @@ class DeliveryAddressViewModel(private val baseRepository: BaseRepository) : Bas
     private val addressList = ArrayList<AddressListResponse.AddressList>()
     val addressListResponse = MutableLiveData<MutableList<AddressListResponse.AddressList>>()
     var deletedPosition = MutableLiveData(-1)
+    var previousSelectAddressId = MutableLiveData("")
+    var deletedAddressIds = ArrayList<String>()
 
     fun setVariable(mBinding: ActivityDeliveryAddressBinding) {
         this.mBinding = mBinding
@@ -43,11 +45,16 @@ class DeliveryAddressViewModel(private val baseRepository: BaseRepository) : Bas
 
     fun setIntent(intent: Intent) {
         isFromHomeScreen.value = intent.getBooleanExtra(EXTRA_IS_HOME_SCREEN, false)
+        if(intent.getStringExtra("selectAddressId") != null) {
+            previousSelectAddressId.value = intent.getStringExtra("selectAddressId")
+        }
     }
 
     fun onAddAddressClick() {
         if (AppPreferencesHelper.getInstance().authToken.isNotEmpty()) {
-            mActivity.mStartActivityForResult<AddAddressActivity>(AppRequestCode.REQUEST_ADD_ADDRESS)
+            mActivity.mStartActivityForResult<AddAddressActivity>(AppRequestCode.REQUEST_ADD_ADDRESS) {
+                putExtra("addressCount", addressList.size)
+            }
         } else {
             (mActivity as DeliveryAddressActivity).loginDialog()
         }
@@ -69,18 +76,26 @@ class DeliveryAddressViewModel(private val baseRepository: BaseRepository) : Bas
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            //if (users.status == "success") {
-                                addressList.addAll(users.data?.addresslist!!)
-                                addressListResponse.value = addressList
-                            /*} else {
-                                IADialog(mActivity, users.message, true)
-                            }*/
+                            addressList.addAll(users.data?.addresslist!!)
+                            addressListResponse.value = addressList
+
+                            var isDefaultAddressExist = false
+                            for (defaultAddress in addressList) {
+                                if (defaultAddress.defaultAddress == 1) {
+                                    isDefaultAddressExist = true
+                                    AppPreferencesHelper.getInstance().defaultAddress = defaultAddress
+                                }
+                            }
+
+                            if (!isDefaultAddressExist) {
+                                AppPreferencesHelper.getInstance().defaultAddress = AddressListResponse.AddressList()
+                            }
                         }
                     }
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {
@@ -106,19 +121,54 @@ class DeliveryAddressViewModel(private val baseRepository: BaseRepository) : Bas
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            //if (users.status == "success") {
-                                mActivity.toast(users.message)
-                                addressList.removeAt(deletedPosition.value!!)
-                                addressListResponse.value = addressList
-                           /* } else {
-                                IADialog(mActivity, users.message, true)
-                            }*/
+                            mActivity.toast(users.message)
+
+                            val addressId = addressList[deletedPosition.value!!].Id
+                            if (addressList[deletedPosition.value!!].defaultAddress == 1) {
+                                AppPreferencesHelper.getInstance().defaultAddress = AddressListResponse.AddressList()
+                            }
+                            deletedAddressIds.add(addressId)
+                            addressList.removeAt(deletedPosition.value!!)
+                            addressListResponse.value = addressList
                         }
                     }
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
+                    }
+
+                    Status.LOADING -> {
+                        baseRepository.callback.showProgress()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun setDefaultAddress(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = baseRepository.setDefaultAddress(requestParams)))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
+    }
+
+    fun setDefaultAddressObserver(requestParams: HashMap<String, String>) {
+        setDefaultAddress(requestParams).observe(mBinding.lifecycleOwner!!, {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { _ ->
+                            //mActivity.toast(users.message)
+                            getAddressesObserver(HashMap())
+                        }
+                    }
+
+                    Status.ERROR -> {
+                        baseRepository.callback.hideProgress()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {

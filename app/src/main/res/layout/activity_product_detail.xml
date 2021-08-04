@@ -68,13 +68,11 @@
                     android:layout_height="@dimen/_220sdp"
                     android:fitsSystemWindows="true">
 
-                    <com.santalu.autoviewpager.AutoViewPager
+                    <com.kenilt.loopingviewpager.widget.LoopingViewPager
                         android:id="@+id/viewPagerBanner"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_195sdp"
-                        app:avp_autoScroll="true"
-                        app:avp_duration="3000"
-                        app:avp_indeterminate="true" />
+                        android:overScrollMode="never" />
 
                     <com.app.ia.helper.CirclePageIndicator
                         android:id="@+id/viewPagerIndicator"
@@ -312,13 +310,22 @@
                             app:layout_constraintBottom_toTopOf="@+id/tvAboutProductValue"
                             app:layout_constraintStart_toStartOf="parent" />
 
+                        <WebView
+                            android:id="@+id/productDetailWebView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="-5dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvAboutProductTitle"
+                            tools:ignore="WebViewLayout" />
+
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/tvAboutProductValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.productDetail.description}"
                             android:textColor="@color/light_grey"
                             android:textSize="@dimen/_10sdp"
+                            android:visibility="gone"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvAboutProductTitle" />
                     </androidx.constraintlayout.widget.ConstraintLayout>

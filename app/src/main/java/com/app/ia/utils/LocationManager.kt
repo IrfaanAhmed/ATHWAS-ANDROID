@@ -46,7 +46,7 @@ class LocationManager(private var currentLocationListener: CurrentLocationListen
         locationRequest.priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
         locationRequest.interval = UPDATE_INTERVAL
         locationRequest.smallestDisplacement = SMALLEST_DISPLACEMENT
-        easyWayLocation = EasyWayLocation(mContext, locationRequest, requireLastLocation, this)
+        easyWayLocation = EasyWayLocation(mContext, locationRequest, requireLastLocation, false, this)
     }
 
     fun checkPermission() {

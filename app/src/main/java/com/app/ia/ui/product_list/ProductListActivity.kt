@@ -73,14 +73,20 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
             if (mSwipeRefresh.isRefreshing) {
                 mSwipeRefresh.isRefreshing = false
             }
+            resetPaginationOnFilterSet()
             mViewModel?.currentPage?.value = 1
             mViewModel?.productListAll?.clear()
-            if (mViewModel?.type == 0) {
-                mViewModel?.setUpObserver()
-            } else if (mViewModel?.type == 3) {
-                mViewModel?.dealOfTheDayBannerProductObserver(mViewModel?.bannerId?.value!!)
-            } else {
-                mViewModel?.popularDiscountedProductObserver()
+
+            when (mViewModel?.type) {
+                0 -> {
+                    mViewModel?.setUpObserver()
+                }
+                3 -> {
+                    mViewModel?.dealOfTheDayBannerProductObserver(mViewModel?.bannerId?.value!!)
+                }
+                else -> {
+                    mViewModel?.popularDiscountedProductObserver()
+                }
             }
         }
 
@@ -125,21 +131,7 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
 
         recViewProduct.adapter = productAdapter
 
-        recyclerViewPaging = object : RecyclerViewPaginator(recViewProduct) {
-            override val isLastPage: Boolean
-                get() = mViewModel!!.isLastPage.value!!
-
-            override fun loadMore(start: Int, count: Int) {
-                mViewModel?.currentPage?.value = start
-                if (mViewModel?.type == 0) {
-                    mViewModel?.setUpObserver()
-                } else {
-                    mViewModel?.popularDiscountedProductObserver()
-                }
-            }
-        }
-
-        recViewProduct.addOnScrollListener(recyclerViewPaging)
+        resetPaginationOnFilterSet()
 
         mViewModel?.productList?.observe(this, {
 
@@ -184,5 +176,25 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
         }
     }
 
+
+    fun resetPaginationOnFilterSet() {
+
+        recyclerViewPaging = object : RecyclerViewPaginator(recViewProduct) {
+            override val isLastPage: Boolean
+                get() = mViewModel!!.isLastPage.value!!
+
+            override fun loadMore(start: Int, count: Int) {
+                if(mViewModel?.currentPage?.value!! == start) return
+
+                mViewModel?.currentPage?.value = start
+                if (mViewModel?.type == 0) {
+                    mViewModel?.setUpObserver()
+                } else {
+                    mViewModel?.popularDiscountedProductObserver()
+                }
+            }
+        }
+        recViewProduct.addOnScrollListener(recyclerViewPaging)
+    }
 
 }

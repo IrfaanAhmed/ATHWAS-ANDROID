@@ -20,10 +20,7 @@ import com.app.ia.databinding.ActivityPaymentBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
 import com.app.ia.local.AppPreferencesHelper
-import com.app.ia.utils.AppConstants
-import com.app.ia.utils.RSAUtility
-import com.app.ia.utils.Resource
-import com.app.ia.utils.ServiceUtility
+import com.app.ia.utils.*
 import kotlinx.coroutines.Dispatchers
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
@@ -91,7 +88,7 @@ class PaymentViewModel(private val baseRepository: BaseRepository) : BaseViewMod
                     }
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
                     Status.LOADING -> {
                         baseRepository.callback.showProgress()
@@ -116,7 +113,6 @@ class PaymentViewModel(private val baseRepository: BaseRepository) : BaseViewMod
                 } else {
                     "Status Not Known!"
                 }
-                //Toast.makeText(getApplicationContext(), status, Toast.LENGTH_SHORT).show();
                 /* val intent = Intent(getApplicationContext(), StatusActivity::class.java)
                  intent.putExtra("transStatus", status)
                  startActivity(intent)*/

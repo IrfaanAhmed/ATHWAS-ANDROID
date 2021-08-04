@@ -12,6 +12,7 @@ import com.app.ia.enums.Status
 import com.app.ia.model.FaqResponse
 import com.app.ia.utils.AppConstants
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
 
 
@@ -66,7 +67,7 @@ class FaqViewModel(val baseRepository: BaseRepository) : BaseViewModel() {
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {

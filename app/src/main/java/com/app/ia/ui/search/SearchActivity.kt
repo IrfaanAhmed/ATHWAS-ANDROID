@@ -30,7 +30,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding, SearchViewModel>() {
 
     private lateinit var recyclerViewPaging: RecyclerViewPaginator
     private var searchAdapter: SearchAdapter? = null
-    private var keyword = ""
+    var keyword = ""
 
     val subject = PublishSubject.create<String>()
     private var disposable: Disposable? = null
@@ -127,6 +127,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding, SearchViewModel>() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
+                mViewModel?.productListAll?.clear()
                 mViewModel?.setUpObserver(it)
             }
     }

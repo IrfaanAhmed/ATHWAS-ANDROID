@@ -147,7 +147,7 @@ data class OrderHistoryResponse(
                     formatter.timeZone = TimeZone.getTimeZone("UTC")
                     val value: Date = formatter.parse(deliveredDate)!!
                     val timeZone = TimeZone.getDefault()
-                    val dateFormatter = SimpleDateFormat("dd MMMM YYYY, h:mm a", Locale.ENGLISH) //this format changeable
+                    val dateFormatter = SimpleDateFormat("dd MMMM YYYY", Locale.ENGLISH) //this format changeable
                     dateFormatter.timeZone = timeZone
                     dateFormatter.format(value)
                 } catch (e: Exception) {

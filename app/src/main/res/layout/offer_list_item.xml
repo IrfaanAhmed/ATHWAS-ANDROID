@@ -40,8 +40,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     imageUrl="@{(promoCodes.imagePathUrl != null) ? promoCodes.imagePathUrl : `` }"
                     android:layout_width="@dimen/_50sdp"
-                    android:layout_height="@dimen/_50sdp"
-                    android:scaleType="centerCrop" />
+                    android:layout_height="@dimen/_50sdp" />
 
             </com.github.florent37.shapeofview.shapes.RoundRectView>
 
@@ -94,8 +93,8 @@
                         android:minWidth="@dimen/_30sdp"
                         android:text="@string/apply"
                         android:textAllCaps="false"
-                        android:visibility="invisible"
                         android:textSize="@dimen/_10sdp"
+                        android:visibility="invisible"
                         app:cornerRadius="@dimen/_5sdp"
                         app:fontFamily="@font/linotte_semi_bold" />
 

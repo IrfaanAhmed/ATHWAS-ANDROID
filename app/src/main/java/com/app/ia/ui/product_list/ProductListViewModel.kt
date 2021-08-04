@@ -71,24 +71,28 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
 
         type = intent.getIntExtra("isPopularOrDiscounted", 0)
 
-        if (type == 0) {
-            mBinding.llFilterView.visibility = View.VISIBLE
-            constCategoryId = intent.getStringExtra(AppConstants.EXTRA_PRODUCT_CATEGORY_ID)!!
-            constSubCategoryId = intent.getStringExtra(AppConstants.EXTRA_PRODUCT_SUB_CATEGORY_ID)!!
-            businessCategoryId.value = intent.getStringExtra(AppConstants.EXTRA_BUSINESS_CATEGORY_ID)!!
+        when (type) {
+            0 -> {
+                mBinding.llFilterView.visibility = View.VISIBLE
+                constCategoryId = intent.getStringExtra(AppConstants.EXTRA_PRODUCT_CATEGORY_ID)!!
+                constSubCategoryId = intent.getStringExtra(AppConstants.EXTRA_PRODUCT_SUB_CATEGORY_ID)!!
+                businessCategoryId.value = intent.getStringExtra(AppConstants.EXTRA_BUSINESS_CATEGORY_ID)!!
 
-            categoryId.value = constCategoryId
-            subCategoryId.value = constSubCategoryId
-            filterData.categoryId = constCategoryId
-            filterData.subCategoryId = constSubCategoryId
-            setUpObserver()
-        } else if (type == 3) {
-            bannerId.value = intent.getStringExtra("banner_id")!!
-            mBinding.llFilterView.visibility = View.GONE
-            dealOfTheDayBannerProductObserver(bannerId.value!!)
-        } else {
-            mBinding.llFilterView.visibility = View.GONE
-            popularDiscountedProductObserver()
+                categoryId.value = constCategoryId
+                subCategoryId.value = constSubCategoryId
+                filterData.categoryId = constCategoryId
+                filterData.subCategoryId = constSubCategoryId
+                setUpObserver()
+            }
+            3 -> {
+                bannerId.value = intent.getStringExtra("banner_id")!!
+                mBinding.llFilterView.visibility = View.GONE
+                dealOfTheDayBannerProductObserver(bannerId.value!!)
+            }
+            else -> {
+                mBinding.llFilterView.visibility = View.GONE
+                popularDiscountedProductObserver()
+            }
         }
     }
 
@@ -162,6 +166,9 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                 } else {
                     subCategoryId.value = filterValue.subCategoryId
                 }
+
+                (mActivity as ProductListActivity).resetPaginationOnFilterSet()
+                currentPage.value = 1
                 productListAll.clear()
                 setUpObserver()
             }
@@ -179,6 +186,8 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
             override fun onSortOptionClick(sortValue: String, sortPosition: Int) {
                 sortParamValue.value = sortValue
                 sortFilterPosition.value = sortPosition
+                (mActivity as ProductListActivity).resetPaginationOnFilterSet()
+                currentPage.value = 1
                 productListAll.clear()
                 setUpObserver()
             }
@@ -220,7 +229,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -265,7 +274,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -302,7 +311,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -340,7 +349,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -389,7 +398,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -435,7 +444,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 

@@ -69,7 +69,7 @@ class WriteReviewViewModel(private val baseRepository: BaseRepository) : BaseVie
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { _ ->
-                            Toast.makeText(mActivity, "Rating submitted successfully", Toast.LENGTH_LONG).show()
+                            mActivity.toast("Rating submitted successfully")
                             mActivity.finish()
                         }
                     }
@@ -77,7 +77,7 @@ class WriteReviewViewModel(private val baseRepository: BaseRepository) : BaseVie
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 

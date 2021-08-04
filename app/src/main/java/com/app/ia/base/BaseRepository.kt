@@ -111,6 +111,10 @@ open class BaseRepository(private val myApi: ApiService, generalCallback: Genera
         return apiRequest { myApi.deleteAddresses(params) }
     }
 
+    suspend fun setDefaultAddress(params: Map<String, String>): BaseResponse<NoDataResponse> {
+        return apiRequest { myApi.setDefaultAddress(params) }
+    }
+
     suspend fun changePassword(params: Map<String, String>): BaseResponse<NoDataResponse> {
         return apiRequest { myApi.changePassword(params) }
     }

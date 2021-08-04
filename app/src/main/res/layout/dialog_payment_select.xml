@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/design_bottom_sheet"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_weight="1"
-            android:text="Select Payment Option"
+            android:text="@string/select_payment_option"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp"
             app:fontFamily="@font/linotte_bold" />
@@ -117,17 +117,19 @@
 
         </RadioGroup>
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonApply"
-            style="@style/AddToCartButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_35sdp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_8sdp"
+            android:background="@color/colorPrimary"
             android:text="@string/apply"
             android:textAllCaps="true"
+            android:textColor="@color/white"
             android:textSize="@dimen/_12sdp"
+            app:background="@color/colorPrimary"
             app:cornerRadius="0dp"
             app:fontFamily="@font/linotte_bold" />
 

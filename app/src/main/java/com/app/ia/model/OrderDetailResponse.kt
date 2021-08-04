@@ -1,6 +1,8 @@
 package com.app.ia.model
 
 import android.annotation.SuppressLint
+import android.text.Html
+import android.text.SpannableString
 import com.app.ia.utils.CommonUtils
 import com.app.ia.utils.redact
 import com.google.gson.annotations.Expose
@@ -22,6 +24,12 @@ data class OrderDetailResponse(
     @Expose
     @SerializedName("current_tracking_status")
     val currentTrackingStatus: String,
+    @Expose
+    @SerializedName("customer_phone")
+    val customerPhone: String,
+    @Expose
+    @SerializedName("customer_name")
+    val customerName: String,
     @Expose
     @SerializedName("order_id")
     var orderId: String,
@@ -89,7 +97,7 @@ data class OrderDetailResponse(
     @SerializedName("order_return_time")
     val orderReturnTime: String) {
 
-    constructor() : this("", ArrayList(), "", "", "", Userdata(), ArrayList<WareHouseData>(), ArrayList<Driver>(), "", 1, TrackingStatus(), ArrayList(), "", "0", "0", "0", "0", "0", DeliveryAddress(), "", "", "", "", "", "")
+    constructor() : this("", ArrayList(), "", "", "", "", "", Userdata(), ArrayList<WareHouseData>(), ArrayList<Driver>(), "", 1, TrackingStatus(), ArrayList(), "", "0", "0", "0", "0", "0", DeliveryAddress(), "", "", "", "", "", "")
 
     @SuppressLint("NewApi", "WeekBasedYear")
     fun getOrderDate1(): String {
@@ -159,7 +167,7 @@ data class OrderDetailResponse(
                 formatter.timeZone = TimeZone.getTimeZone("UTC")
                 val value: Date = formatter.parse(deliveredDate)!!
                 val timeZone = TimeZone.getDefault()
-                val dateFormatter = SimpleDateFormat("dd MMMM YYYY, h:mm a", Locale.ENGLISH) //this format changeable
+                val dateFormatter = SimpleDateFormat("dd MMMM YYYY", Locale.ENGLISH) //this format changeable
                 dateFormatter.timeZone = timeZone
                 dateFormatter.format(value)
             } catch (e: Exception) {
@@ -416,7 +424,7 @@ data class OrderDetailResponse(
             val subCategoryId: String,
             @Expose
             @SerializedName("description")
-            val description: String,
+            private val description: String,
             @Expose
             @SerializedName("createdAt")
             val createdAt: String,
@@ -440,7 +448,13 @@ data class OrderDetailResponse(
             val isDiscount: Int,
             @Expose
             @SerializedName("order_status")
-            var orderStatus: Int) : Serializable {
+            var orderStatus: Int,
+            @Expose
+            @SerializedName("CategoryData")
+            val categoryData: CategoryData,
+            @Expose
+            @SerializedName("SubCategoryData")
+            val subCategoryData: CategoryData) : Serializable {
 
             fun getPrice(): String {
                 return CommonUtils.convertToDecimal(price)
@@ -449,6 +463,20 @@ data class OrderDetailResponse(
             fun getOfferPrice(): String {
                 return CommonUtils.convertToDecimal(offerPrice)
             }
+
+            fun getDescription(): String {
+                val contentText = SpannableString(description)
+                return Html.fromHtml(Html.toHtml(contentText)).toString()
+            }
+
+            data class CategoryData(
+                @Expose
+                @SerializedName("_id")
+                val Id: String,
+                @Expose
+                @SerializedName("name")
+                val name: String
+            ) : Serializable
 
             data class Images(
                 @Expose

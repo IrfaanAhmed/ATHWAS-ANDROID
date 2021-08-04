@@ -66,7 +66,7 @@ class WishListActivity : BaseActivity<ActivityWishListBinding, WishListViewModel
         wishListAdapter?.setOnItemClickListener(object : WishListAdapter.OnItemClickListener {
 
             override fun onFavoriteClick(productItem: FavoriteListResponse.Docs, position: Int) {
-                mViewModel?.addFavorite(productItem.productId, position)
+                mViewModel?.addFavorite(productItem.inventoryId, position)
             }
 
             override fun onItemClick(productItem: FavoriteListResponse.Docs, position: Int) {

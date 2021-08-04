@@ -55,7 +55,7 @@ class OrderDetailActivity : BaseActivity<ActivityOrderDetailBinding, OrderDetail
         mViewModel?.setActivityNavigator(this)
         mViewModel?.setVariable(mBinding!!, intent)
 
-        if(intent.getStringExtra("orderStatus") != null) {
+        if (intent.getStringExtra("orderStatus") != null) {
             lastOrderTrackingStatus = intent.getStringExtra("orderStatus")!!
         }
 

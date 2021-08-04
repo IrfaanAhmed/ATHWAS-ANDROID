@@ -11,6 +11,7 @@ import com.app.ia.databinding.ActivityWebViewBinding
 import com.app.ia.enums.Status
 import com.app.ia.utils.AppConstants
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
 
 class WebViewViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
@@ -20,6 +21,7 @@ class WebViewViewModel(private val baseRepository: BaseRepository) : BaseViewMod
 
     var url = MutableLiveData("")
     var textTitle = MutableLiveData("")
+    var webContent = MutableLiveData("")
 
     fun setVariable(mBinding: ActivityWebViewBinding) {
         this.mBinding = mBinding
@@ -48,13 +50,19 @@ class WebViewViewModel(private val baseRepository: BaseRepository) : BaseViewMod
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            mBinding.webview.loadData(users.data?.contentData!!, "text/html", "UTF-8")
+                            webContent.value = users.data?.contentData!!
+
+                            val head1 = "<head><style>@font-face {font-family: 'arial';src: url('file:///android_asset/fonts/linotte_regular.otf');}body {font-family: 'verdana';}</style></head>"
+                            val text = "<html>$head1<body style=font-family:arial>${webContent.value}</body></html>"
+                            mBinding.webview.loadDataWithBaseURL("", text, "text/html", "utf-8", "")
                         }
                     }
+
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
+
                     Status.LOADING -> {
 
                     }
@@ -62,5 +70,6 @@ class WebViewViewModel(private val baseRepository: BaseRepository) : BaseViewMod
             }
         })
     }
+
 
 }

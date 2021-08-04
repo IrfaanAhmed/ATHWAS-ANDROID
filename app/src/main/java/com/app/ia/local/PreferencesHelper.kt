@@ -1,5 +1,6 @@
 package com.app.ia.local
 
+import com.app.ia.model.AddressListResponse
 import com.app.ia.model.LoginResponse
 
 /**
@@ -43,4 +44,6 @@ interface PreferencesHelper {
     var cartItemCount : Int
 
     var walletAmount : String
+
+    var defaultAddress : AddressListResponse.AddressList
 }

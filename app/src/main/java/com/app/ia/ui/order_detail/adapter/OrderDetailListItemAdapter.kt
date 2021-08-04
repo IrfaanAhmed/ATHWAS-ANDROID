@@ -2,6 +2,7 @@ package com.app.ia.ui.order_detail.adapter
 
 import android.app.Activity
 import android.graphics.Paint
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

@@ -30,6 +30,8 @@ class CleverMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
         AppLogger.d("From : ${remoteMessage.from}")
+        AppLogger.d("Data : ${remoteMessage.data}")
+        AppLogger.d("Msg : ${remoteMessage.notification}")
 
         val notificationCount = AppPreferencesHelper.getInstance().notificationCount
         AppPreferencesHelper.getInstance().notificationCount = (notificationCount + 1)
@@ -52,9 +54,9 @@ class CleverMessagingService : FirebaseMessagingService() {
         }
 
         // Check if message contains a notification payload.
-        remoteMessage.notification?.let {
+        /*remoteMessage.notification?.let {
             AppLogger.d("Message Notification Body: ${it.body}")
-        }
+        }*/
 
         if(AppPreferencesHelper.getInstance().allowNotification == 1) {
             remoteMessage.data.isNotEmpty().let {
@@ -97,6 +99,8 @@ class CleverMessagingService : FirebaseMessagingService() {
 
             val redirectionId = if (remoteMessage.data["id"] != null) remoteMessage.data["id"] else ""
             val redirection = remoteMessage.data["custom_message_type"]
+            val title = remoteMessage.data["title"]
+            val body = remoteMessage.data["body"]
             val notificationIntent = Intent(this, HomeActivity::class.java)
 
             val stackBuilder = TaskStackBuilder.create(this)
@@ -108,7 +112,7 @@ class CleverMessagingService : FirebaseMessagingService() {
             bundlePayloads.add(NotificationHelper.BundlePayload(HomeActivity.KEY_REDIRECTION_ID, redirectionId!!))
 
             val notificationHelper = NotificationHelper(this)
-            notificationHelper.createNotification(remoteMessage.notification?.title!!, remoteMessage.notification?.body!!, HomeActivity::class.java, bundlePayloads)
+            notificationHelper.createNotification(title!!, body!!, HomeActivity::class.java, bundlePayloads)
 
         } catch (e: JSONException) {
             e.printStackTrace()
@@ -120,13 +124,15 @@ class CleverMessagingService : FirebaseMessagingService() {
 
         try {
 
+            val title = remoteMessage.data["title"]
+            val body = remoteMessage.data["body"]
             val notificationIntent = Intent(this, HomeActivity::class.java)
             val stackBuilder = TaskStackBuilder.create(this)
             stackBuilder.addParentStack(HomeActivity::class.java)
             stackBuilder.addNextIntent(notificationIntent)
 
             val notificationHelper = NotificationHelper(this)
-            notificationHelper.createNotification(remoteMessage.notification?.title!!, remoteMessage.notification?.body!!, HomeActivity::class.java, null)
+            notificationHelper.createNotification(title!!, body!!, HomeActivity::class.java, null)
 
         } catch (e: JSONException) {
             e.printStackTrace()

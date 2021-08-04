@@ -12,6 +12,7 @@ import com.app.ia.databinding.FragmentMyOrderBinding
 import com.app.ia.enums.Status
 import com.app.ia.model.OrderHistoryResponse
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
 
 class MyOrdersViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), LifecycleObserver {
@@ -75,7 +76,7 @@ class MyOrdersViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 

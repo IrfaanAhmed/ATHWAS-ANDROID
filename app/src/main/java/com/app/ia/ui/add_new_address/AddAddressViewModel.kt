@@ -24,6 +24,7 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
     val currentAddress: ObservableField<String> = ObservableField("")
     val searchedLocationName: ObservableField<String> = ObservableField("")
     val progressVisible: ObservableField<Boolean> = ObservableField(false)
+    val previousAddedAddress: ObservableField<Int> = ObservableField(0)
     val resultList = MutableLiveData<MutableList<MutableMap<String, String>>>()
 
     val selectedChipValue: ObservableField<Int> = ObservableField(-1)
@@ -33,10 +34,11 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
     private lateinit var mActivity: Activity
     private lateinit var mBinding: ActivityAddAddressBinding
 
-    fun setVariable(mBinding: ActivityAddAddressBinding) {
+    fun setVariable(mBinding: ActivityAddAddressBinding, intent: Intent) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
         title.set(mActivity.getString(R.string.add_new_address))
+        previousAddedAddress.set(intent.getIntExtra("addressCount", 0))
     }
 
     fun chipHomeClick() {
@@ -63,14 +65,19 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
             return
         }
 
-        /*if (mBinding.edtTextPinCode.text.toString().isEmpty()) {
+        val pinCode = mBinding.edtTextPinCode.text.toString()
+
+        if (pinCode.isEmpty()) {
             IADialog(mActivity, "Please enter pin code", true)
             return
-        }*/
+        } else if(pinCode.trim().length < 6 || pinCode.trim().length > 10) {
+            IADialog(mActivity, "Pin code can be from 6 to 10 digits only", true)
+            return
+        }
 
         isAddressAdded = true
         val requestJsonObject = HashMap<String, String>()
-        requestJsonObject["full_address"] = currentAddress.get()!!
+        requestJsonObject["full_address"] = mBinding.edtTextSelectedAddress.text.toString()
         requestJsonObject["latitude"] = (mActivity as AddAddressActivity).latitude.toString()
         requestJsonObject["longitude"] = (mActivity as AddAddressActivity).longitude.toString()
         when {
@@ -87,6 +94,7 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
         requestJsonObject["landmark"] = ""
         requestJsonObject["way"] = ""
         requestJsonObject["zip_code"] = mBinding.edtTextPinCode.text.toString()
+        requestJsonObject["default_address"] = if(previousAddedAddress.get()!! > 0) "0" else "1"
         addAddressObserver(requestJsonObject)
     }
 
@@ -122,7 +130,7 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {
@@ -168,7 +176,7 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         progressVisible.set(false)
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {

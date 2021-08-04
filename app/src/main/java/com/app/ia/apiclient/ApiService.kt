@@ -103,6 +103,10 @@ interface ApiService {
     @FormUrlEncoded
     suspend fun deleteAddresses(@FieldMap params: Map<String, String>): Response<BaseResponse<NoDataResponse>>
 
+    @POST(Api.SET_DEFAULT_ADDRESS)
+    @FormUrlEncoded
+    suspend fun setDefaultAddress(@FieldMap params: Map<String, String>): Response<BaseResponse<NoDataResponse>>
+
     @POST(Api.CHANGE_PASSWORD_URL)
     @FormUrlEncoded
     suspend fun changePassword(@FieldMap params: Map<String, String>): Response<BaseResponse<NoDataResponse>>

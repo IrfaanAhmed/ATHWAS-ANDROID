@@ -207,7 +207,7 @@ class OTPVerifyViewModel(private val baseRepository: BaseRepository) : BaseViewM
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (it.message!!.isNotEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 

@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/recViewAddress"
-                android:gravity="end"
+                android:gravity="start"
                 android:orientation="horizontal"
                 android:padding="@dimen/_10sdp">
 
@@ -67,12 +67,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:drawablePadding="@dimen/_2sdp"
+                    android:background="@drawable/ia_add_address_gradient"
                     android:fontFamily="@font/linotte_bold"
                     android:onClick="@{() -> viewModel.onAddAddressClick()}"
+                    android:paddingStart="10dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="6dp"
                     android:text="@string/add_new_address"
-                    android:textColor="@color/colorLogout"
-                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11sdp"
                     app:drawableTint="@color/colorLogout" />
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -81,7 +85,8 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_2sdp"
                     android:src="@drawable/ic_right_arrow"
-                    android:tint="@color/colorLogout" />
+                    android:tint="@color/colorLogout"
+                    android:visibility="gone" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <View

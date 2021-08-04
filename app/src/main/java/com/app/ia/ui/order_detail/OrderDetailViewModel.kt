@@ -61,8 +61,8 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
                         params["order_id"] = order_id.value!!
                         downloadInvoiceObserver(params)
                     } else {
-                        //pdfOption()
-                        downloadImage()
+                        pdfOption()
+                        //downloadImage()
                     }
                 }
             }
@@ -124,7 +124,7 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -175,7 +175,7 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -208,15 +208,15 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             invoicePath.value = users.data?.path
-                            //pdfOption()
-                            downloadImage()
+                            pdfOption()
+                            //downloadImage()
                         }
                     }
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -235,7 +235,7 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
 
         // add a list
         val animals = arrayOf("Preview Invoice", "Download Invoice")
-        builder.setItems(animals) { dialog, which ->
+        builder.setItems(animals) { _, which ->
             when (which) {
                 0 -> {
                     val intent = Intent(mActivity, PdfPreviewActivity::class.java)

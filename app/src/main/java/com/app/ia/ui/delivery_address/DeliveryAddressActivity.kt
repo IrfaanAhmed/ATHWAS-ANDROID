@@ -18,7 +18,6 @@ import com.app.ia.model.AddressListResponse
 import com.app.ia.ui.delivery_address.adapter.DeliveryAddressAdapter
 import com.app.ia.utils.AppConstants.EXTRA_SELECTED_ADDRESS
 import com.app.ia.utils.AppRequestCode
-import com.app.ia.utils.EqualSpacingItemDecoration
 import com.app.ia.utils.invisible
 import com.app.ia.utils.setOnApplyWindowInset1
 import kotlinx.android.synthetic.main.activity_delivery_address.*
@@ -58,15 +57,19 @@ class DeliveryAddressActivity : BaseActivity<ActivityDeliveryAddressBinding, Del
         toolbar.imageViewIcon.invisible()
         toolbar.ivSearchIcon.invisible()
 
-        recViewAddress.addItemDecoration(EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.VERTICAL))
+        //recViewAddress.addItemDecoration(EqualSpacingItemDecoration(0, EqualSpacingItemDecoration.VERTICAL))
         recViewAddress.addItemDecoration(DividerItemDecoration(this@DeliveryAddressActivity, LinearLayout.VERTICAL))
-        addressAdapter = DeliveryAddressAdapter()
+        addressAdapter = DeliveryAddressAdapter(mViewModel?.previousSelectAddressId?.value!!)
         recViewAddress.adapter = addressAdapter
         mViewModel?.addressListResponse?.observe(this, {
-            if (addressAdapter!!.currentList.size == 0) {
-                addressAdapter?.submitList(it!!)
-            } else {
+            if (it.size <= 0) {
                 addressAdapter?.notifyDataSetChanged()
+            } else {
+                if (addressAdapter?.currentList?.size!! == 0) {
+                    addressAdapter?.submitList(it)
+                } else {
+                    addressAdapter?.notifyDataSetChanged()
+                }
             }
         })
 
@@ -75,6 +78,7 @@ class DeliveryAddressActivity : BaseActivity<ActivityDeliveryAddressBinding, Del
                 if (mViewModel?.isFromHomeScreen!!.value!!) {
                     val intent = Intent()
                     intent.putExtra(EXTRA_SELECTED_ADDRESS, item)
+                    intent.putExtra("deletedAddresses", mViewModel?.deletedAddressIds)
                     setResult(Activity.RESULT_OK, intent)
                     finish()
                 }
@@ -95,7 +99,12 @@ class DeliveryAddressActivity : BaseActivity<ActivityDeliveryAddressBinding, Del
                     }
 
                 })
+            }
 
+            override fun onSetDefaultAddress(item: AddressListResponse.AddressList, position: Int) {
+                val requestParams = HashMap<String, String>()
+                requestParams["address_id"] = item.Id
+                mViewModel?.setDefaultAddressObserver(requestParams)
             }
         })
     }
@@ -110,5 +119,14 @@ class DeliveryAddressActivity : BaseActivity<ActivityDeliveryAddressBinding, Del
         if (requestCode == AppRequestCode.REQUEST_ADD_ADDRESS && resultCode == RESULT_OK) {
             mViewModel?.getAddressesObserver(HashMap())
         }
+    }
+
+    override fun onBackPressed() {
+        if (mViewModel?.isFromHomeScreen!!.value!!) {
+            val intent = Intent()
+            intent.putExtra("deletedAddresses", mViewModel?.deletedAddressIds)
+            setResult(Activity.RESULT_CANCELED, intent)
+        }
+        finish()
     }
 }

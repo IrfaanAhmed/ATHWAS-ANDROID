@@ -36,7 +36,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
     var isDeliverableArea = MutableLiveData(true)
 
     val isItemAvailable = MutableLiveData(true)
-    val titleValue = MutableLiveData("")
+    val slidingText = MutableLiveData("Swipe to place order")
     var isCartChanged = false
     var selectedPaymentMethod = "Cash"
 
@@ -69,9 +69,11 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
         promoCodeResponse.value = PromoCodeResponse()
         walletAmount.value = AppPreferencesHelper.getInstance().walletAmount
 
+        mBinding.edtTextName.filters = arrayOf(CommonUtils.getLettersEditTextFilter())
+
         val requestParams = HashMap<String, String>()
         requestParams["page_no"] = "1"
-        requestParams["limit"] = "30"
+        requestParams["limit"] = "40"
         cartListingObserver(requestParams)
 
         mBinding.rewardCheckBox.setOnClickListener {
@@ -98,11 +100,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
     }
 
     fun applicableRewardPoint(): String {
-        return if (netAmount.value!! >= redeemPoint.value!!) {
-            redeemPoint.value.toString()
-        } else {
-            (redeemPoint.value!! - netAmount.value!!).toString()
-        }
+        return addedRedeemPointToDiscount.value!!.toString()
     }
 
     fun onRemovePromoCode() {
@@ -110,10 +108,18 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
         setNetAmount()
     }
 
-    fun setNetAmount() {
+    private fun setNetAmount() {
         if (mBinding.rewardCheckBox.isChecked) {
-            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!! + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble() - redeemPoint.value!!).toDouble()
-            addedRedeemPointToDiscount.value = redeemPoint.value
+            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!! + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
+
+            if (redeemPoint.value!! > netAmount.value!!) {
+                addedRedeemPointToDiscount.value = netAmount.value
+                netAmount.value = 0.0
+            } else {
+                netAmount.value = CommonUtils.convertToDecimal(netAmount.value!! - redeemPoint.value!!).toDouble()
+                addedRedeemPointToDiscount.value = redeemPoint.value
+            }
+
             if (netAmount.value!! < 0) {
                 netAmount.value = 0.0
             }
@@ -192,13 +198,25 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                                 mActivity.setResult(Activity.RESULT_OK, intent)
                                 mActivity.finish()
                             }
+
+                            val selectedAddress = AppPreferencesHelper.getInstance().defaultAddress
+                            if (selectedAddress.Id.isNotEmpty() && selectedAddress.Id != null) {
+                                addressType.value = selectedAddress.addressType
+                                address.value = selectedAddress.floor + " " + selectedAddress.fullAddress
+                                addressId.value = selectedAddress.Id
+                                val addressParams = HashMap<String, String>()
+                                addressParams["delivery_address_id"] = addressId.value!!
+                                addressParams["order_amount"] = totalAmount.value.toString()
+                                getDeliveryFeeObserver(addressParams)
+                            }
+
                         }
                     }
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -239,7 +257,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -273,7 +291,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                                     putExtra("status", paymentStatusResponse.value)
                                 }
                             } else {
-                                Toast.makeText(mActivity, users.message, Toast.LENGTH_LONG).show()
+                                mActivity.toast(users.message)
                                 mActivity.startActivityWithFinish<HomeActivity> {
                                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 }
@@ -284,8 +302,9 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
+                        (mActivity as CheckoutActivity).changeSwipeButtonStatus()
                     }
 
                     Status.LOADING -> {
@@ -335,7 +354,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
                             isDeliverableArea.value = false
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -375,7 +394,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -435,8 +454,9 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
+                        (mActivity as CheckoutActivity).changeSwipeButtonStatus()
                     }
 
                     Status.LOADING -> {
@@ -481,8 +501,9 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
+                        (mActivity as CheckoutActivity).changeSwipeButtonStatus()
                     }
 
                     Status.LOADING -> {

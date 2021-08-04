@@ -13,58 +13,59 @@ data class AddressListResponse(
     data class AddressList(
         @Expose
         @SerializedName("type")
-        val type: String,
+        val type: String = "",
         @Expose
         @SerializedName("geoLocation")
-        var geolocation: Geolocation,
+        var geolocation: Geolocation = Geolocation(),
         @Expose
         @SerializedName("_id")
-        val Id: String,
+        val Id: String  = "",
         @Expose
         @SerializedName("user_id")
-        val userId: String,
+        val userId: String = "",
         @Expose
         @SerializedName("location_name")
-        val locationName: String,
+        val locationName: String = "",
         @Expose
         @SerializedName("mobile")
-        val mobile: String,
+        val mobile: String = "",
         @Expose
         @SerializedName("floor")
-        val floor: String,
+        val floor: String = "",
         @Expose
         @SerializedName("way")
-        val way: String,
+        val way: String = "",
         @Expose
         @SerializedName("building")
-        val building: String,
+        val building: String = "",
         @Expose
         @SerializedName("address_type")
-        val addressType: String,
+        val addressType: String = "",
         @Expose
         @SerializedName("zip_code")
-        val zipCode: String,
+        val zipCode: String = "",
         @Expose
         @SerializedName("flat")
-        val flat: String,
+        val flat: String = "",
         @Expose
         @SerializedName("landmark")
-        val landmark: String,
+        val landmark: String = "",
+        @Expose
+        @SerializedName("default_address")
+        val defaultAddress: Int = 0,
         @Expose
         @SerializedName("full_address")
-        val fullAddress: String) : Serializable {
+        val fullAddress: String = "") : Serializable {
 
         data class Geolocation(
             @Expose
             @SerializedName("type")
-            val type: String,
+            val type: String = "",
             @Expose
             @SerializedName("coordinates")
-            var coordinates: List<Double>,
+            var coordinates: List<Double> = ArrayList(),
             @Expose
             @SerializedName("_id")
-            val Id: String) : Serializable {
-
-        }
+            val Id: String = "") : Serializable
     }
 }

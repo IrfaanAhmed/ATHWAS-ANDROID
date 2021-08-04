@@ -37,6 +37,7 @@ object Api {
 
     const val ADD_ADDRESS = COMMON_PATH + "address/create_address"
     const val DELETE_ADDRESS = COMMON_PATH + "address/delete_address"
+    const val SET_DEFAULT_ADDRESS = COMMON_PATH + "address/set_default_address"
     const val ADDRESS_LIST = COMMON_PATH + "address/get_addresses"
 
     const val GET_PROFILE_URL = COMMON_PATH + "profile/get_profile"

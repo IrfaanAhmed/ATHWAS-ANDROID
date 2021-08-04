@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 // Apply the Crashlytics Gradle plugin
 apply plugin: 'com.google.firebase.crashlytics'
 
@@ -38,14 +38,18 @@ android {
     buildFeatures {
         dataBinding = true
     }
+
+    packagingOptions {
+        exclude 'META-INF/loopingviewpager_release.kotlin_module'
+    }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
@@ -62,7 +66,7 @@ dependencies {
     implementation 'androidx.exifinterface:exifinterface:1.3.2'
 
     // parser
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.7'
 
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
@@ -75,14 +79,14 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.9.0'
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+
     implementation project(path: ':roundkornerlayout')
     implementation project(path: ':sequencelayout')
     implementation project(path: ':touchview')
-    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation project(path: ':slidingbutton')
 
     implementation 'com.github.florent37:shapeofview:1.4.7'
-
-    implementation 'com.github.santalu:auto-viewpager:1.0.8'
 
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC2'
 
@@ -99,23 +103,26 @@ dependencies {
     implementation 'com.karumi:dexter:6.2.2'
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.google.android.libraries.places:places:2.4.0'
     implementation 'com.google.maps.android:android-maps-utils:1.0.2'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
-    implementation 'com.github.prabhat1707:EasyWayLocation:2.0'
+    implementation 'com.github.prabhat1707:EasyWayLocation:2.2'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.15'
     //firebase
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
     //realtime tracking
     implementation 'com.firebase:geofire-android:3.0.0'
     implementation 'com.google.firebase:firebase-auth:21.0.1'
-    implementation 'com.google.firebase:firebase-database:20.0.0'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.1.0'
+    implementation 'com.google.firebase:firebase-database:20.0.1'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.0'
 
     //Swipe Delete
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
+
+    implementation 'com.cheekiat:slideview:1.6'
+    implementation 'com.kenilt.loopingviewpager:loopingviewpager:0.2.0'
 
     //Image Picker
     implementation 'com.github.jkwiecien:EasyImage:3.0.4'

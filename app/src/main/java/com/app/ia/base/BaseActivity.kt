@@ -1,13 +1,11 @@
 package com.app.ia.base
 
-import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -100,10 +98,6 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
         runOnUiThread {
             progressBar?.visibility = View.GONE
         }
-    }
-
-    fun Context.showToast(text: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
-        Toast.makeText(this, text, duration).show()
     }
 
     fun currentLocationManager(requireLastLocation: Boolean = true) {

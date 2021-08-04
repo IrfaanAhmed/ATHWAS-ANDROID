@@ -513,6 +513,35 @@ object CommonUtils {
         }
     }
 
+    fun getLettersEditTextFilter(): InputFilter? {
+        return object : InputFilter {
+            override fun filter(source: CharSequence, start: Int, end: Int, dest: Spanned, dstart: Int, dend: Int): CharSequence? {
+                var keepOriginal = true
+                val sb = java.lang.StringBuilder(end - start)
+                for (i in start until end) {
+                    val c = source[i]
+                    if (isCharAllowed(c)) // put your condition here
+                        sb.append(c) else keepOriginal = false
+                }
+                return if (keepOriginal) null else {
+                    if (source is Spanned) {
+                        val sp = SpannableString(sb)
+                        TextUtils.copySpansFrom(source, start, sb.length, null, sp, 0)
+                        sp
+                    } else {
+                        sb
+                    }
+                }
+            }
+
+            private fun isCharAllowed(c: Char): Boolean {
+                val ps = Pattern.compile("^[a-zA-Z ]+$")
+                val ms = ps.matcher(c.toString())
+                return ms.matches()
+            }
+        }
+    }
+
     /*fun shareApp(mContext: Context) {
         FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse(Api.BASE_URL))

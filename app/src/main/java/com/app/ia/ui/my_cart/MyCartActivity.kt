@@ -19,6 +19,7 @@ import com.app.ia.ui.my_cart.adapter.CartListAdapter
 import com.app.ia.utils.gone
 import com.app.ia.utils.mStartActivityForResult
 import com.app.ia.utils.setMarginTop
+import com.app.ia.utils.toast
 import kotlinx.android.synthetic.main.activity_my_cart.*
 import kotlinx.android.synthetic.main.common_header.view.*
 
@@ -80,7 +81,7 @@ class MyCartActivity : BaseActivity<ActivityMyCartBinding, MyCartViewModel>(), C
             if (mViewModel?.cartList?.value?.size!! > 0) {
                 mStartActivityForResult<CheckoutActivity>(2009)
             } else {
-                Toast.makeText(this, "There is no item in the cart", Toast.LENGTH_LONG).show()
+                toast("There is no item in the cart")
             }
 
         }

@@ -68,7 +68,7 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {
@@ -102,7 +102,7 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            Toast.makeText(mActivity, users.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(users.message)
                             favoriteListAll.removeAt(deletedPosition)
                             favoriteList.value = favoriteListAll
                             (mActivity as WishListActivity).wishListAdapter?.notifyItemRemoved(deletedPosition)
@@ -112,7 +112,7 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {

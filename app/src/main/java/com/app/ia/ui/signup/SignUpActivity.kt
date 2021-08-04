@@ -12,6 +12,7 @@ import com.app.ia.databinding.ActivitySignUpBinding
 import com.app.ia.utils.makeStatusBarTransparent
 import com.app.ia.utils.setOnApplyWindowInset
 import com.app.ia.BR
+import com.app.ia.utils.CommonUtils
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
@@ -56,6 +57,8 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding, SignUpViewModel>() {
             }
 
         })
+
+        mActivitySignUpBinding!!.editTextName.filters  = arrayOf(CommonUtils.getLettersEditTextFilter())
     }
 
     private fun setViewModel() {

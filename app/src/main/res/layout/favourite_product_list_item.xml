@@ -17,147 +17,143 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-            <RelativeLayout
-                android:layout_width="@dimen/_90sdp"
-                android:layout_height="@dimen/_90sdp"
-                android:layout_gravity="center">
+        <RelativeLayout
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_90sdp"
+            android:layout_gravity="center">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/materialCardView"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_5sdp"
+                app:cardCornerRadius="@dimen/_5sdp">
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/_5sdp"
-                    app:cardCornerRadius="@dimen/_5sdp">
+                    android:layout_height="match_parent">
 
-                    <RelativeLayout
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent" />
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/mobile"
-                            android:scaleType="centerCrop" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/out_of_stock_trans"
+                        android:visibility="gone" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:visibility="gone"
-                            android:background="@color/out_of_stock_trans" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/linotte_semi_bold"
+                        android:text="@string/out_of_stock"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/out_of_stock"
-                            android:layout_centerInParent="true"
-                            android:visibility="gone"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_10sdp"
-                            android:fontFamily="@font/linotte_semi_bold"/>
-
-                    </RelativeLayout>
+                </RelativeLayout>
 
 
-
-                </com.google.android.material.card.MaterialCardView>
-
+            </com.google.android.material.card.MaterialCardView>
 
 
-            </RelativeLayout>
+        </RelativeLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/_8sdp">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/_8sdp"
-                android:layout_gravity="center">
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:text="Vedaka Raw Penuts, Pink 1KG"
-                        android:fontFamily="@font/linotte_semi_bold"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_12sdp"/>
-
-                    <androidx.appcompat.widget.AppCompatCheckBox
-                        android:id="@+id/cbFavorite"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:button="@drawable/selector_favorite_checkbox" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Pantry Cookies Essentials"
-                    android:fontFamily="@font/linotte_regular"
-                    android:textColor="@color/light_grey"
-                    android:textSize="@dimen/_10sdp"/>
+                    android:layout_weight="1"
+                    android:fontFamily="@font/linotte_semi_bold"
+                    android:text="Vedaka Raw Penuts, Pink 1KG"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp" />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/cbFavorite"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/_5sdp">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="₹350"
-                        android:fontFamily="@font/linotte_bold"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="@dimen/_11sdp"/>
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="₹450"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:fontFamily="@font/linotte_bold"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_11sdp"/>
-
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="@dimen/_8sdp"
-                        android:paddingEnd="@dimen/_8sdp"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:background="@drawable/discount_gradient"
-                        android:text="Upto 30% Off"
-                        android:textSize="@dimen/_8sdp"
-                        android:textColor="@color/colorPrimary"
-                        android:paddingTop="@dimen/_2sdp"
-                        android:paddingBottom="@dimen/_2sdp"/>
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/buttonAddToCart"
-                    style="@style/LogoutButton"
-                    android:backgroundTint="@color/colorPrimaryDark"
-                    android:layout_width="@dimen/_70sdp"
-                    android:layout_height="@dimen/_22sdp"
-                    android:layout_gravity="end"
-                    android:text="@string/add_to_cart"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_alignParentBottom="true"/>
+                    android:button="@drawable/selector_favorite_checkbox"
+                    android:checked="true" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/linotte_regular"
+                android:text="Pantry Cookies Essentials"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/_10sdp" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/linotte_bold"
+                    android:text="₹350"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/_11sdp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:fontFamily="@font/linotte_bold"
+                    android:text="₹450"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11sdp" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:background="@drawable/discount_gradient"
+                    android:paddingStart="@dimen/_8sdp"
+                    android:paddingTop="@dimen/_2sdp"
+                    android:paddingEnd="@dimen/_8sdp"
+                    android:paddingBottom="@dimen/_2sdp"
+                    android:text="Upto 30% Off"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_8sdp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonAddToCart"
+                style="@style/LogoutButton"
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="@dimen/_22sdp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:text="@string/add_to_cart" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>

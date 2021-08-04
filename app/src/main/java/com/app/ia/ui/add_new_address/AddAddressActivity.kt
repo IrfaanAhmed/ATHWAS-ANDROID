@@ -1,6 +1,5 @@
 package com.app.ia.ui.add_new_address
 
-import android.R.attr.password
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -14,7 +13,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.TextView.OnEditorActionListener
 import androidx.lifecycle.ViewModelProvider
 import com.app.ia.BR
 import com.app.ia.R
@@ -85,7 +83,7 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
         mActivityAddressBinding = getViewDataBinding()
         mActivityAddressBinding?.lifecycleOwner = this
         mAddAddressViewModel?.setActivityNavigator(this)
-        mAddAddressViewModel?.setVariable(mActivityAddressBinding!!)
+        mAddAddressViewModel?.setVariable(mActivityAddressBinding!!, intent)
 
         setSupportActionBar(toolbar)
         // Now get the support action bar
@@ -176,25 +174,25 @@ class AddAddressActivity : BaseActivity<ActivityAddAddressBinding, AddAddressVie
         setOnApplyWindowInset(toolbar, content_container)
 
 
-        edtTextSearch.setOnTouchListener { v, event ->
+        edtTextSearch.setOnTouchListener { _, _ ->
             edtTextSearch.isFocusable = true
             selectedView = edtTextSearch
             return@setOnTouchListener false
         }
 
-        edtTextSelectedAddress.setOnTouchListener { v, event ->
+        edtTextSelectedAddress.setOnTouchListener { _, _ ->
             edtTextSelectedAddress.isFocusable = true
             selectedView = edtTextSelectedAddress
             return@setOnTouchListener false
         }
 
-        edtTextAddress.setOnTouchListener { v, event ->
+        edtTextAddress.setOnTouchListener { _, _ ->
             edtTextAddress.isFocusable = true
             selectedView = edtTextAddress
             return@setOnTouchListener false
         }
 
-        edtTextPinCode.setOnTouchListener { v, event ->
+        edtTextPinCode.setOnTouchListener { _, _ ->
             edtTextPinCode.isFocusable = true
             selectedView = edtTextPinCode
             return@setOnTouchListener false

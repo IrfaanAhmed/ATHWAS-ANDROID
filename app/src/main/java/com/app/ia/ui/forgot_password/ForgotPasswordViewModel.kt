@@ -13,11 +13,8 @@ import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
 import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.ui.reset_password.ResetPasswordActivity
-import com.app.ia.utils.AppLogger
-import com.app.ia.utils.AppSignatureHashHelper
+import com.app.ia.utils.*
 import com.app.ia.utils.CommonUtils.isEmailValid
-import com.app.ia.utils.Resource
-import com.app.ia.utils.startActivity
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
@@ -125,7 +122,7 @@ class ForgotPasswordViewModel(private val baseRepository: BaseRepository) : Base
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {

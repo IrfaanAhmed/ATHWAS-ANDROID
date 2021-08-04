@@ -11,6 +11,7 @@ import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
 import com.app.ia.model.BusinessCategoryResponse
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
 
 class CategoryViewModel(val baseRepository: BaseRepository) : BaseViewModel() {
@@ -53,7 +54,7 @@ class CategoryViewModel(val baseRepository: BaseRepository) : BaseViewModel() {
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {

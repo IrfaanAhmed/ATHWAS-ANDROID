@@ -3,3 +3,5 @@ include ':sequencelayout'
 include ':roundkornerlayout'
 include ':app'
 rootProject.name = "IA"
+
+include ':slidingbutton'

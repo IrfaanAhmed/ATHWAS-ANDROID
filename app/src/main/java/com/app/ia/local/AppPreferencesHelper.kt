@@ -3,8 +3,10 @@ package com.app.ia.local
 import android.content.Context
 import android.content.SharedPreferences
 import com.app.ia.IAApplication
+import com.app.ia.model.AddressListResponse
 import com.app.ia.model.LoginResponse
 import com.app.ia.utils.AppConstants
+import com.google.gson.Gson
 
 /**
  * Created by umeshk on 07/07/19.
@@ -77,6 +79,11 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
         set(value) {
             sharedPreferences.edit().putString(PREF_KEY_WALLET_AMOUNT, value).apply()
         }
+    override var defaultAddress: AddressListResponse.AddressList
+        get() = retrieveDefaultAddress()
+        set(value) {
+            sharedPreferences.edit().putString(PREF_KEY_DEFAULT_ADDRESS, saveDefaultAddress(value)).apply()
+        }
 
     override var mCurrentLat: Double
         get() = sharedPreferences.getString(PREF_KEY_CURRENT_LAT, "0.0")!!.toDouble()
@@ -100,6 +107,7 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
             email = value.email
             userID = value._Id
             countryCode = value.countryCode
+            defaultAddress = getDefaultAddressFromAddressList(value.addressList)
         }
 
     fun clearAllPreferences() {
@@ -116,6 +124,35 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
 
     fun setString(KEY: String, data: String) {
         sharedPreferences.edit().putString(KEY, data).apply()
+    }
+
+    private fun getDefaultAddressFromAddressList(addressList: MutableList<AddressListResponse.AddressList>): AddressListResponse.AddressList {
+
+        var returnAddress = AddressListResponse.AddressList()
+        if (addressList != null && addressList.size > 0) {
+            for (address in addressList) {
+                if (address.defaultAddress == 1) {
+                    returnAddress =  address
+                    break
+                }
+            }
+        }
+        return returnAddress
+    }
+
+    private fun saveDefaultAddress(address: AddressListResponse.AddressList): String {
+        val gson = Gson()
+        return gson.toJson(address)
+    }
+
+    private fun retrieveDefaultAddress(): AddressListResponse.AddressList {
+        val gson = Gson()
+        val address = sharedPreferences.getString(PREF_KEY_DEFAULT_ADDRESS, null)
+        return if (address == null) {
+            AddressListResponse.AddressList()
+        } else {
+            gson.fromJson(address, AddressListResponse.AddressList::class.java)
+        }
     }
 
     private fun getLoginData(): LoginResponse {
@@ -154,6 +191,8 @@ class AppPreferencesHelper internal constructor() : PreferencesHelper {
         //Location Related
         private const val PREF_KEY_CURRENT_LAT = "CURRENT_LAT"
         private const val PREF_KEY_CURRENT_LNG = "CURRENT_LNG"
+
+        private const val PREF_KEY_DEFAULT_ADDRESS = "DEFAULT_ADDRESS"
 
         private var appPreferencesHelper: AppPreferencesHelper? = null
 

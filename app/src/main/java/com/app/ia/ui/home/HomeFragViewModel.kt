@@ -16,6 +16,7 @@ import com.app.ia.ui.product_list.ProductListActivity
 import com.app.ia.ui.search.SearchActivity
 import com.app.ia.utils.Resource
 import com.app.ia.utils.startActivity
+import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
 
 class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
@@ -76,7 +77,7 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -110,7 +111,7 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -144,7 +145,7 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -179,7 +180,7 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -216,7 +217,7 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 

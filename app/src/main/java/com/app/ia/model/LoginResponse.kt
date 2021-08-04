@@ -50,4 +50,7 @@ data class LoginResponse(
     var id: String = "",
     @Expose
     @SerializedName("otp_number")
-    var otpNumber: String = "")
+    var otpNumber: String = "",
+    @Expose
+    @SerializedName("delivery_address")
+    var addressList: MutableList<AddressListResponse.AddressList> = ArrayList())

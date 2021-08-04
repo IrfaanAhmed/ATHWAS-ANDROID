@@ -14,6 +14,7 @@ import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.model.ProductCategoryResponse
 import com.app.ia.utils.AppConstants
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 
@@ -71,7 +72,7 @@ class ProductCategoryViewModel(private val baseRepository: BaseRepository) : Bas
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if(!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 

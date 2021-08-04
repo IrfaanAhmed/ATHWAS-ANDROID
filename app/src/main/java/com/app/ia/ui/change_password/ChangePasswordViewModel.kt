@@ -82,7 +82,7 @@ class ChangePasswordViewModel(private val baseRepository: BaseRepository) : Base
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {

@@ -13,6 +13,7 @@ import com.app.ia.enums.Status
 import com.app.ia.model.ProductSubCategoryResponse
 import com.app.ia.utils.AppConstants
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
 
 class SubCategoryViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), LifecycleObserver {
@@ -68,7 +69,7 @@ class SubCategoryViewModel(private val baseRepository: BaseRepository) : BaseVie
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 

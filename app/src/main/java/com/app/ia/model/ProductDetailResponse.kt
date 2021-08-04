@@ -1,8 +1,12 @@
 package com.app.ia.model
 
+import android.text.Html
 import com.app.ia.utils.CommonUtils
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+
 
 data class ProductDetailResponse(
 
@@ -74,7 +78,7 @@ data class ProductDetailResponse(
 
         @Expose
         @SerializedName("description")
-        val description: String,
+        private val description: String,
 
         @Expose
         @SerializedName("is_favourite")
@@ -125,6 +129,11 @@ data class ProductDetailResponse(
             } else {
                 minInventory
             }
+        }
+
+        fun getDescription() : String {
+            val contentText  = SpannableString(description)
+            return description//Html.fromHtml(Html.toHtml(contentText)).toString()
         }
 
         data class Customizations(

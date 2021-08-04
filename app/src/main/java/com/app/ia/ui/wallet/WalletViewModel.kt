@@ -17,6 +17,7 @@ import com.app.ia.model.WalletHistoryResponse
 import com.app.ia.ui.home.HomeActivity
 import com.app.ia.utils.CommonUtils
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
 
 class WalletViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), LifecycleObserver {
@@ -93,7 +94,7 @@ class WalletViewModel(private val baseRepository: BaseRepository) : BaseViewMode
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {

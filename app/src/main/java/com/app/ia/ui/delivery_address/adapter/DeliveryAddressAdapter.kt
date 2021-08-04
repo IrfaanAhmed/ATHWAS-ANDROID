@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.databinding.AddressListItemBinding
 import com.app.ia.model.AddressListResponse
 
-class DeliveryAddressAdapter : ListAdapter<AddressListResponse.AddressList, DeliveryAddressAdapter.DeliveryAddressViewHolder>(OffersListDiffCallback()) {
+class DeliveryAddressAdapter(private val previousAddressId: String) : ListAdapter<AddressListResponse.AddressList, DeliveryAddressAdapter.DeliveryAddressViewHolder>(OffersListDiffCallback()) {
 
     class OffersListDiffCallback : DiffUtil.ItemCallback<AddressListResponse.AddressList>() {
 
@@ -21,9 +21,9 @@ class DeliveryAddressAdapter : ListAdapter<AddressListResponse.AddressList, Deli
         }
     }
 
-    private var onAddressClickListener : OnAddressClickListener? = null
+    private var onAddressClickListener: OnAddressClickListener? = null
 
-    fun setOnAddressClickListener(onAddressClickListener : OnAddressClickListener) {
+    fun setOnAddressClickListener(onAddressClickListener: OnAddressClickListener) {
         this.onAddressClickListener = onAddressClickListener
     }
 
@@ -43,16 +43,23 @@ class DeliveryAddressAdapter : ListAdapter<AddressListResponse.AddressList, Deli
         fun onBind(item: AddressListResponse.AddressList, position: Int) {
             mBinding.apply {
                 address = item
+                isDefaultAddress = if (previousAddressId.isEmpty()) item.defaultAddress == 1 else previousAddressId == item.Id
 
                 itemView.setOnClickListener {
-                    if(onAddressClickListener != null) {
+                    if (onAddressClickListener != null) {
                         onAddressClickListener?.onAddressSelect(item, position)
                     }
                 }
 
                 imgViewDelete.setOnClickListener {
-                    if(onAddressClickListener != null) {
+                    if (onAddressClickListener != null) {
                         onAddressClickListener?.onAddressDelete(item, position)
+                    }
+                }
+
+                textSetDefaultAddress.setOnClickListener {
+                    if (onAddressClickListener != null) {
+                        onAddressClickListener?.onSetDefaultAddress(item, position)
                     }
                 }
                 executePendingBindings()
@@ -64,6 +71,7 @@ class DeliveryAddressAdapter : ListAdapter<AddressListResponse.AddressList, Deli
 
         fun onAddressSelect(item: AddressListResponse.AddressList, position: Int)
         fun onAddressDelete(item: AddressListResponse.AddressList, position: Int)
+        fun onSetDefaultAddress(item: AddressListResponse.AddressList, position: Int)
     }
 
 }

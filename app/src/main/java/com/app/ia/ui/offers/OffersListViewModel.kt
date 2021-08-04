@@ -12,6 +12,7 @@ import com.app.ia.databinding.ActivityOfferListBinding
 import com.app.ia.enums.Status
 import com.app.ia.model.OffersResponse
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
 
 class OffersListViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
@@ -75,7 +76,7 @@ class OffersListViewModel(private val baseRepository: BaseRepository) : BaseView
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 

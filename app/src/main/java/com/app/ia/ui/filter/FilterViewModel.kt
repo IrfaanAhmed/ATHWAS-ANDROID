@@ -16,6 +16,7 @@ import com.app.ia.model.ProductCategoryResponse
 import com.app.ia.model.ProductListingResponse
 import com.app.ia.utils.AppConstants
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 
@@ -55,7 +56,7 @@ class FilterViewModel (private val baseRepository: BaseRepository) : BaseViewMod
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {
@@ -93,7 +94,7 @@ class FilterViewModel (private val baseRepository: BaseRepository) : BaseViewMod
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {

@@ -79,8 +79,8 @@
                     android:drawablePadding="@dimen/_8sdp"
                     android:gravity="center_vertical|start"
                     android:hint="@string/search_for_your_location"
-                    android:inputType="text"
                     android:imeOptions="actionDone"
+                    android:inputType="text"
                     android:singleLine="true"
                     android:text="@{viewModel.searchedLocationName}"
                     android:textAlignment="viewStart"
@@ -186,10 +186,10 @@
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:layout_marginBottom="@dimen/_3sdp"
-                android:inputType="text"
-                android:imeOptions="actionDone"
                 android:background="@drawable/edittext_bg"
                 android:hint="@string/floor_apartment_no_house_no"
+                android:imeOptions="actionDone"
+                android:inputType="text"
                 android:paddingStart="@dimen/_5sdp"
                 android:paddingEnd="@dimen/_5sdp"
                 android:singleLine="true"
@@ -204,9 +204,10 @@
                 android:layout_marginTop="@dimen/_2sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:layout_marginBottom="@dimen/_5sdp"
-                android:imeOptions="actionDone"
                 android:background="@drawable/edittext_bg"
                 android:hint="@string/pin_code"
+                android:maxLength="10"
+                android:imeOptions="actionDone"
                 android:inputType="number"
                 android:paddingStart="@dimen/_5sdp"
                 android:paddingEnd="@dimen/_5sdp"
@@ -222,49 +223,65 @@
                 android:textAlignment="viewStart"
                 android:textSize="@dimen/_10sdp" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:layout_width="wrap_content"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_1sdp"
-                android:layout_marginEnd="@dimen/_8sdp"
-                app:singleLine="true"
-                app:singleSelection="true">
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal">
 
-                <com.google.android.material.chip.Chip
+                <com.google.android.material.chip.ChipGroup
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:layout_weight="1"
+                    app:singleLine="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{()-> viewModel.chipHomeClick()}"
+                        android:text="@string/home"
+                        android:textColor="@{viewModel.selectedChipValue == 1 ? @color/white : @color/light_grey}"
+                        app:chipBackgroundColor="@{viewModel.selectedChipValue == 1 ? @color/colorPrimary : @color/white}"
+                        app:chipCornerRadius="@dimen/_2sdp"
+                        app:chipStrokeColor="@{viewModel.selectedChipValue == 1 ? @color/colorPrimary : @color/light_grey}"
+                        app:chipStrokeWidth="1dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{()-> viewModel.chipWorkClick()}"
+                        android:text="@string/work"
+                        android:textColor="@{viewModel.selectedChipValue == 2 ? @color/white : @color/light_grey}"
+                        app:chipBackgroundColor="@{viewModel.selectedChipValue == 2 ? @color/colorPrimary : @color/white}"
+                        app:chipCornerRadius="@dimen/_2sdp"
+                        app:chipStrokeColor="@{viewModel.selectedChipValue == 2 ? @color/colorPrimary : @color/light_grey}"
+                        app:chipStrokeWidth="1dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{()-> viewModel.chipOtherClick()}"
+                        android:text="@string/other"
+                        android:textColor="@{viewModel.selectedChipValue == 3 ? @color/white : @color/light_grey}"
+                        app:chipBackgroundColor="@{viewModel.selectedChipValue == 3 ? @color/colorPrimary : @color/white}"
+                        app:chipCornerRadius="@dimen/_2sdp"
+                        app:chipStrokeColor="@{viewModel.selectedChipValue == 3 ? @color/colorPrimary : @color/light_grey}"
+                        app:chipStrokeWidth="1dp" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/checkBoxMarkAsDefault"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()-> viewModel.chipHomeClick()}"
-                    android:text="@string/home"
-                    android:textColor="@{viewModel.selectedChipValue == 1 ? @color/white : @color/light_grey}"
-                    app:chipBackgroundColor="@{viewModel.selectedChipValue == 1 ? @color/colorPrimary : @color/white}"
-                    app:chipCornerRadius="@dimen/_2sdp"
-                    app:chipStrokeColor="@{viewModel.selectedChipValue == 1 ? @color/colorPrimary : @color/light_grey}"
-                    app:chipStrokeWidth="1dp" />
+                    android:text="Mark as Default"
+                    android:visibility="gone" />
 
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{()-> viewModel.chipWorkClick()}"
-                    android:text="@string/work"
-                    android:textColor="@{viewModel.selectedChipValue == 2 ? @color/white : @color/light_grey}"
-                    app:chipBackgroundColor="@{viewModel.selectedChipValue == 2 ? @color/colorPrimary : @color/white}"
-                    app:chipCornerRadius="@dimen/_2sdp"
-                    app:chipStrokeColor="@{viewModel.selectedChipValue == 2 ? @color/colorPrimary : @color/light_grey}"
-                    app:chipStrokeWidth="1dp" />
-
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{()-> viewModel.chipOtherClick()}"
-                    android:text="@string/other"
-                    android:textColor="@{viewModel.selectedChipValue == 3 ? @color/white : @color/light_grey}"
-                    app:chipBackgroundColor="@{viewModel.selectedChipValue == 3 ? @color/colorPrimary : @color/white}"
-                    app:chipCornerRadius="@dimen/_2sdp"
-                    app:chipStrokeColor="@{viewModel.selectedChipValue == 3 ? @color/colorPrimary : @color/light_grey}"
-                    app:chipStrokeWidth="1dp" />
-
-            </com.google.android.material.chip.ChipGroup>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAddAddress"

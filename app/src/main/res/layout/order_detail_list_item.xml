@@ -70,8 +70,7 @@
                             <androidx.appcompat.widget.AppCompatImageView
                                 imageUrl="@{product.images.size() > 0 ? product.images.get(0).productImageUrl : ``}"
                                 android:layout_width="@dimen/_65sdp"
-                                android:layout_height="@dimen/_65sdp"
-                                android:scaleType="centerCrop" />
+                                android:layout_height="@dimen/_65sdp" />
 
                             <View
                                 android:layout_width="match_parent"
@@ -141,13 +140,14 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/productDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/_2sdp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text="@{product.description}"
+                    android:text="@{product.categoryData.name + ` - `+product.subCategoryData.name}"
                     android:textColor="@color/light_grey"
                     android:textSize="@dimen/_10sdp" />
 

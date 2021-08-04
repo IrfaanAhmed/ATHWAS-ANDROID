@@ -143,7 +143,7 @@ class ProductDetailViewModel(private val baseRepository: BaseRepository) : BaseV
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {
@@ -180,7 +180,6 @@ class ProductDetailViewModel(private val baseRepository: BaseRepository) : BaseV
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        //Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
                     }
 
                     Status.LOADING -> {
@@ -234,7 +233,6 @@ class ProductDetailViewModel(private val baseRepository: BaseRepository) : BaseV
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        //Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
                     }
 
                     Status.LOADING -> {

@@ -21,6 +21,7 @@ import com.app.ia.utils.AppConstants
 import com.app.ia.utils.AppConstants.EXTRA_PROFILE_DETAIL
 import com.app.ia.utils.Resource
 import com.app.ia.utils.startActivity
+import com.app.ia.utils.toast
 import kotlinx.android.synthetic.main.common_header.view.*
 import kotlinx.coroutines.Dispatchers
 
@@ -91,7 +92,7 @@ class ProfileViewModel(private val baseRepository: BaseRepository) : BaseViewMod
                     }
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
                     Status.LOADING -> {
                         baseRepository.callback.showProgress()

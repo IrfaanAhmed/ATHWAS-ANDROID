@@ -214,7 +214,7 @@ class OTPViewModel(private val baseRepository: BaseRepository) : BaseViewModel()
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {

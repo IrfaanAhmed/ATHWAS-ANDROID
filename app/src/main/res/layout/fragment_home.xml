@@ -90,13 +90,19 @@
                         android:layout_height="@dimen/_120sdp"
                         android:visibility="@{(viewModel.bannerList  != null &amp;&amp; viewModel.bannerList.size() > 0) ? View.VISIBLE : View.GONE}">
 
-                        <com.santalu.autoviewpager.AutoViewPager
+                        <!-- <com.santalu.autoviewpager.AutoViewPager
+                             android:id="@+id/viewPagerBanner"
+                             android:layout_width="match_parent"
+                             android:layout_height="match_parent"
+                             app:avp_autoScroll="true"
+                             app:avp_duration="3000"
+                             app:avp_indeterminate="true" />-->
+
+                        <com.kenilt.loopingviewpager.widget.LoopingViewPager
                             android:id="@+id/viewPagerBanner"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:avp_autoScroll="true"
-                            app:avp_duration="3000"
-                            app:avp_indeterminate="true" />
+                            android:overScrollMode="never" />
 
                         <com.app.ia.helper.CirclePageIndicator
                             android:id="@+id/view_pager_indicator"

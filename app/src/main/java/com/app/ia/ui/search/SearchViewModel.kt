@@ -13,6 +13,7 @@ import com.app.ia.enums.Status
 import com.app.ia.model.ProductListingResponse
 import com.app.ia.utils.AppConstants.EXTRA_VOICE_TEXT
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
 import com.google.gson.JsonArray
 import kotlinx.coroutines.Dispatchers
 
@@ -46,6 +47,7 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         voiceText.value = intent.getStringExtra(EXTRA_VOICE_TEXT)
 
         if (voiceText.value != null) {
+            (mActivity as SearchActivity).keyword = voiceText.value!!
             mBinding.edtSearchText.setText(voiceText.value)
             setUpObserver(voiceText.value!!)
         }
@@ -90,7 +92,7 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
 
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
-                        Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                        mActivity.toast(it.message!!)
                     }
 
                     Status.LOADING -> {

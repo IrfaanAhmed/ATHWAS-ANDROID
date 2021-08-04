@@ -97,6 +97,7 @@
                         android:layout_height="@dimen/_16sdp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="@dimen/_5sdp"
+                        android:onClick="@{()-> viewModel.onSelectAddressClick()}"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
                         android:focusable="true"
@@ -149,6 +150,7 @@
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
                                 android:focusable="true"
+                                android:onClick="@{()-> viewModel.onSelectAddressClick()}"
                                 app:srcCompat="@drawable/ic_top_drop_arrow" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>

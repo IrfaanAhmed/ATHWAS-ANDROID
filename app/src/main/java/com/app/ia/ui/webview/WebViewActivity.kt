@@ -16,7 +16,6 @@ import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityWebViewBinding
 import com.app.ia.dialog.IADialog
-import com.app.ia.utils.AppConstants
 import com.app.ia.utils.invisible
 import com.app.ia.utils.setOnApplyWindowInset
 import kotlinx.android.synthetic.main.activity_web_view.*
@@ -53,33 +52,11 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding, WebViewViewModel>()
         setOnApplyWindowInset(toolbar, content_container)
         toolbar.imageViewIcon.invisible()
 
-        webview.webViewClient = webViewClient
+        webview.webViewClient = customWebViewClient
         webview.settings.javaScriptEnabled = true
-        //webview.loadUrl("http://www.google.com")
-        /*if(intent.getStringExtra(AppConstants.EXTRA_WEBVIEW_TITLE) == getString(R.string.terms_n_condition)) {
-            var content = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
-                    "<html><head>" +
-                    "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />" +
-                    "</head><body>"
-
-            content += getTermsNCondition() + "</body></html>"
-
-            webview.loadData(content, "text/html; charset=UTF-8", null)
-        } else {
-            mViewModel?.setupObservers(mViewModel?.url!!.value!!)
-        }*/
 
         mViewModel?.setupObservers(mViewModel?.url!!.value!!)
 
-    }
-
-    private fun getTermsNCondition() : String {
-        return "<div class=\"text_desc bottom_div\">\n" +
-                "            <h4>Terms and Conditions</h4>\n" +
-                "                    <p>User is responsible for the account privacy of their account.</p>\n" +
-                "<p>If you find that your account details have become known to anyone else and can be misused, you should inform us immediately so as we can resolve the matter on priority basis.</p>\n" +
-                "<p>Users are requested to provide a valid and in-service mobile number in order to reach them seamlessly.</p>\n" +
-                "<p>Operating system requirements: Android 4.2 or higher, iOS</p>\n"
     }
 
     private fun setViewModel() {
@@ -119,6 +96,16 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding, WebViewViewModel>()
                 }
 
             })
+        }
+    }
+
+    private var customWebViewClient = object : WebViewClient() {
+
+        override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+            return false
+        }
+
+        override fun onPageFinished(view: WebView, url: String) {
         }
     }
 }

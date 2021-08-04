@@ -13,6 +13,7 @@ import com.app.ia.model.BrandResponse
 import com.app.ia.model.ProductCategoryResponse
 import com.app.ia.model.ProductSubCategoryResponse
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
 
 class ProductFilterDialogViewModel(private val baseRepository: BaseRepository) : BaseDialogViewModel() {
@@ -54,7 +55,7 @@ class ProductFilterDialogViewModel(private val baseRepository: BaseRepository) :
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity.context, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.context.toast(it.message)
                         }
                     }
 
@@ -94,7 +95,7 @@ class ProductFilterDialogViewModel(private val baseRepository: BaseRepository) :
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity.context, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.context.toast(it.message)
                         }
                     }
 
@@ -131,7 +132,7 @@ class ProductFilterDialogViewModel(private val baseRepository: BaseRepository) :
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity.context, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.context.toast(it.message!!)
                         }
                     }
 

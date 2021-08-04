@@ -13,6 +13,7 @@ import com.app.ia.enums.Status
 import com.app.ia.model.OffersResponse
 import com.app.ia.model.RedeemPointResponse
 import com.app.ia.utils.Resource
+import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
 
 class RewardsViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), LifecycleObserver {
@@ -62,7 +63,7 @@ class RewardsViewModel(private val baseRepository: BaseRepository) : BaseViewMod
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 

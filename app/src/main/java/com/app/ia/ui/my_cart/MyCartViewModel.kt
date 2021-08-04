@@ -17,6 +17,7 @@ import com.app.ia.ui.home.HomeActivity
 import com.app.ia.utils.CommonUtils
 import com.app.ia.utils.Resource
 import com.app.ia.utils.startActivityWithFinish
+import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
 
 class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewModel(), LifecycleObserver {
@@ -31,7 +32,7 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
 
     val totalItems = MutableLiveData(0)
     val totalAmount = MutableLiveData(0.0)
-    val totalAmountWithoutOffer = MutableLiveData(0.0)
+    private val totalAmountWithoutOffer = MutableLiveData(0.0)
     val totalSavedAmount = MutableLiveData(0.0)
 
 
@@ -73,10 +74,11 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                             isItemAvailable.value = cartListAll.size > 0
                             totalItems.value = 0
                             totalAmount.value = 0.0
+                            totalAmountWithoutOffer.value = 0.0
                             for (cartItem in cartListAll) {
                                 totalItems.value = totalItems.value!! + cartItem.categoryItems.size
                                 for (item in cartItem.categoryItems) {
-                                    totalAmountWithoutOffer.value = CommonUtils.convertToDecimal(totalAmount.value!! + (item.getPrice().toDouble() * item.quantity)).toDouble()
+                                    totalAmountWithoutOffer.value = CommonUtils.convertToDecimal(totalAmountWithoutOffer.value!! + (item.getPrice().toDouble() * item.quantity)).toDouble()
                                     if (item.isDiscount == 1) {
                                         totalAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + (item.getOfferPrice().toDouble() * item.quantity)).toDouble()
                                     } else {
@@ -85,6 +87,8 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                                 }
                             }
 
+
+
                             totalSavedAmount.value = totalAmountWithoutOffer.value!! - totalAmount.value!!
                         }
                     }
@@ -92,7 +96,7 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -132,7 +136,7 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 
@@ -172,7 +176,7 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                     Status.ERROR -> {
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
-                            Toast.makeText(mActivity, it.message, Toast.LENGTH_LONG).show()
+                            mActivity.toast(it.message)
                         }
                     }
 

@@ -46,6 +46,9 @@ class FullImageActivity : BaseActivity<ActivityFullImageBinding, FullImageViewMo
 
         val images = intent?.getStringArrayListExtra("imageArray")!!
         view_pager.adapter = TouchImageAdapter(images)
+        view_pager.post {
+            view_pager.setCurrentItem(intent?.getIntExtra("SelectedPos", 0)!!, false)
+        }
     }
 
     private fun setViewModel() {

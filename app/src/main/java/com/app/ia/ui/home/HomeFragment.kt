@@ -28,6 +28,8 @@ import com.app.ia.utils.AppConstants.EXTRA_VOICE_TEXT
 import com.app.ia.utils.AppRequestCode
 import com.app.ia.utils.EqualSpacingItemDecoration
 import com.app.ia.utils.startActivity
+import com.kenilt.loopingviewpager.scroller.AutoScroller
+import com.kenilt.loopingviewpager.scroller.ScrollerCycle
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
@@ -82,6 +84,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
             val bannerPagerAdapter = SlidingImageAdapter(requireContext(), it!!)
             viewPagerBanner.adapter = bannerPagerAdapter
             view_pager_indicator.setViewPager(viewPagerBanner)
+            val autoScroller = AutoScroller(viewPagerBanner, lifecycle, 3000)
+            autoScroller.isAutoScroll = true
             bannerPagerAdapter.setOnImageClickListener(object : SlidingImageAdapter.OnImageClickListener {
                 override fun onImageClick(view: View, image: BannerResponse.Docs) {
                     AppPreferencesHelper.getInstance().setString(AppPreferencesHelper.CATEGORY, "")

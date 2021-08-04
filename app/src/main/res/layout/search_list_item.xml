@@ -32,8 +32,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     imageUrl="@{product.images.size() > 0 ? product.images.get(0).productImageUrl : ``}"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop" />
+                    android:layout_height="match_parent" />
             </RelativeLayout>
 
         </com.google.android.material.card.MaterialCardView>

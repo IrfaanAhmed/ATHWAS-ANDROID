@@ -33,4 +33,5 @@
     <color name="light_black">#171717</color>
     <color name="logo_selected_color">#382B91</color>
     <color name="logo_unselected_color">#FFFFFF</color>
+    <color name="slide_color">#7DFFFFFF</color>
 </resources>
