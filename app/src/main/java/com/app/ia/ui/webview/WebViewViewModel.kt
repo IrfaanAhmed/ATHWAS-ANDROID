@@ -51,10 +51,14 @@ class WebViewViewModel(private val baseRepository: BaseRepository) : BaseViewMod
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             webContent.value = users.data?.contentData!!
+                            val style1 = "<style>@font-face {font-family: 'arial';src: url('fonts/linotte_regular.otf');}body {font-family: 'verdana';}</style>"
+                            val style2 = "<link rel=\"stylesheet\" type=\"text/css\" href=\"webview-style.css\">"
 
-                            val head1 = "<head><style>@font-face {font-family: 'arial';src: url('file:///android_asset/fonts/linotte_regular.otf');}body {font-family: 'verdana';}</style></head>"
-                            val text = "<html>$head1<body style=font-family:arial>${webContent.value}</body></html>"
-                            mBinding.webview.loadDataWithBaseURL("", text, "text/html", "utf-8", "")
+                            val head1 = "<head>$style1 \n $style2</head>"
+                            val text = "<html>$head1<body style=font-family:arial><div class=\"ql-viewer\">${webContent.value}</div></body></html>"
+                            /*val head1 = "<head><style>@font-face {font-family: 'arial';src: url('file:///android_asset/fonts/linotte_regular.otf');}body {font-family: 'verdana';}</style></head>"
+                            val text = "<html>$head1<body style=font-family:arial>${webContent.value}</body></html>"*/
+                            mBinding.webview.loadDataWithBaseURL("file:///android_asset/", text, "text/html", "utf-8", "")
                         }
                     }
 
