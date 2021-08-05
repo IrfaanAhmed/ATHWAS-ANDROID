@@ -108,7 +108,7 @@ object Api {
             }
 
             ENVIRONMENT.TESTING.ordinal -> {
-                "http://3.7.83.168:3063/"
+                "http://192.168.1.69:3050/"
             }
 
             ENVIRONMENT.LIVE.ordinal -> {

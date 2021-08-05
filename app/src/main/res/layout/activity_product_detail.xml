@@ -304,9 +304,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/linotte_bold"
+                            android:layout_marginTop="10dp"
                             android:text="@string/about_product"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_11sdp"
+                            android:textStyle="bold"
                             app:layout_constraintBottom_toTopOf="@+id/tvAboutProductValue"
                             app:layout_constraintStart_toStartOf="parent" />
 

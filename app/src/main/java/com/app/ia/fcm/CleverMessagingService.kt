@@ -31,7 +31,7 @@ class CleverMessagingService : FirebaseMessagingService() {
 
         AppLogger.d("From : ${remoteMessage.from}")
         AppLogger.d("Data : ${remoteMessage.data}")
-        AppLogger.d("Msg : ${remoteMessage.notification}")
+        //AppLogger.d("Msg : ${remoteMessage.notification}")
 
         val notificationCount = AppPreferencesHelper.getInstance().notificationCount
         AppPreferencesHelper.getInstance().notificationCount = (notificationCount + 1)
@@ -99,8 +99,8 @@ class CleverMessagingService : FirebaseMessagingService() {
 
             val redirectionId = if (remoteMessage.data["id"] != null) remoteMessage.data["id"] else ""
             val redirection = remoteMessage.data["custom_message_type"]
-            val title = remoteMessage.data["title"]
-            val body = remoteMessage.data["body"]
+            val title = if (remoteMessage.data["title"] != null) remoteMessage.data["title"] else ""
+            val body = if (remoteMessage.data["body"] != null) remoteMessage.data["body"] else ""
             val notificationIntent = Intent(this, HomeActivity::class.java)
 
             val stackBuilder = TaskStackBuilder.create(this)
@@ -113,6 +113,8 @@ class CleverMessagingService : FirebaseMessagingService() {
 
             val notificationHelper = NotificationHelper(this)
             notificationHelper.createNotification(title!!, body!!, HomeActivity::class.java, bundlePayloads)
+
+
 
         } catch (e: JSONException) {
             e.printStackTrace()

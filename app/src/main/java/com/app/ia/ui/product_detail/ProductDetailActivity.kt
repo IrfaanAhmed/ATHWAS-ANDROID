@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.activity_product_detail.content_container
 import kotlinx.android.synthetic.main.activity_product_detail.toolbar
 import kotlinx.android.synthetic.main.common_header.view.*
 import java.lang.StringBuilder
+import java.util.logging.Logger
 
 class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding, ProductDetailViewModel>() {
 
@@ -79,10 +80,14 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding, Product
             productDetailWebView.webViewClient = webViewClient
             productDetailWebView.settings.javaScriptEnabled = true
 
-            val head1 = "<head><style>@font-face {font-family: 'arial';src: url('file:///android_asset/fonts/linotte_regular.otf');}body {font-family: 'verdana';}</style></head>"
-            val text = "<html>$head1<body style=font-family:arial>${it.getDescription()}</body></html>"
-            productDetailWebView.loadDataWithBaseURL("", text, "text/html", "utf-8", "")
+            val style1 = "<style>@font-face {font-family: 'arial';src: url('fonts/linotte_regular.otf');}body {font-family: 'verdana';}</style>"
+            val style2 = "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">"
+
+            val head1 = "<head>$style1 \n $style2</head>"
+            val text = "<html>$head1<body style=font-family:arial><div class=\"ql-viewer\">${it.getDescription()}</div></body></html>"
+            productDetailWebView.loadDataWithBaseURL("file:///android_asset/", text, "text/html", "utf-8", null)
             //productDetailWebView.loadData(it.getDescription(), "text/html; charset=utf-8", "UTF-8")
+            AppLogger.d("$text")
 
             val bannerPagerAdapter = ProductImageAdapter(this@ProductDetailActivity, it?.images)
             viewPagerBanner.adapter = bannerPagerAdapter
