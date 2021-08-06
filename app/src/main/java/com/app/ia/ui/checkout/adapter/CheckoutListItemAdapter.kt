@@ -2,6 +2,7 @@ package com.app.ia.ui.checkout.adapter
 
 import android.graphics.Paint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -52,6 +53,22 @@ class CheckoutListItemAdapter(private val checkoutUpdateListener: CheckoutUpdate
                     itemView.context.startActivity<ProductDetailActivity> {
                         putExtra("product_id", productItem.inventoryId)
                     }
+                }
+
+                if(productItem.isAvailable == 0){
+                    textStatus.text = "Not available"
+                    layoutNotAvailable.visibility = View.VISIBLE
+                    layoutQuantity.visibility = View.GONE
+                }
+                else if(productItem.availableQuantity <= 0){
+                    textStatus.text = "Out of stock"
+                    layoutNotAvailable.visibility = View.VISIBLE
+                    layoutQuantity.visibility = View.GONE
+                }
+                else{
+                    textStatus.text = ""
+                    layoutNotAvailable.visibility = View.GONE
+                    layoutQuantity.visibility = View.GONE
                 }
             }
         }

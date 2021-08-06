@@ -23,6 +23,7 @@
     <color name="separator">#dfdfdf</color>
     <color name="button_disable">#ACDCC3</color>
     <color name="red">#D50000</color>
+    <color name="dark_red">#C61717</color>
     <color name="pink">#F84770</color>
     <color name="dark_green">#508415</color>
     <color name="unselect_tab_text">#5B92D4</color>

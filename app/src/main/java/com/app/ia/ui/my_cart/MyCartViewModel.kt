@@ -188,4 +188,16 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         })
     }
 
+    fun isCartHaveNotAvailableProduct() : Boolean{
+        var has = false
+        cartList.value?.forEach {
+            it.categoryItems?.forEach {
+                if(it.isAvailable == 0 || it.availableQuantity <= 0){
+                    has = true
+                }
+            }
+        }
+        return has
+    }
+
 }

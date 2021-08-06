@@ -78,14 +78,19 @@ class MyCartActivity : BaseActivity<ActivityMyCartBinding, MyCartViewModel>(), C
         })
 
         buttonCheckout.setOnClickListener {
-            if (mViewModel?.cartList?.value?.size!! > 0) {
-                mStartActivityForResult<CheckoutActivity>(2009)
-            } else {
+            if(mViewModel?.cartList?.value?.size!! <= 0){
                 toast("There is no item in the cart")
+            }
+            else if (mViewModel?.isCartHaveNotAvailableProduct()!!) {
+                toast("Please remove out of stock & not available product")
+            } else {
+                mStartActivityForResult<CheckoutActivity>(2009)
             }
 
         }
     }
+
+
 
     private fun setViewModel() {
         val factory = ViewModelFactory(MyCartViewModel(BaseRepository(RetrofitFactory.getInstance(), this)))

@@ -118,7 +118,13 @@ class CheckoutActivity : BaseActivity<ActivityCheckoutBinding, CheckoutViewModel
             override fun onChange(active: Boolean) {
                 Timber.d("Status : $active")
                 if (active) {
-                    if (mViewModel?.addressId?.value!!.isEmpty()) {
+                    if(mViewModel?.cartList?.value?.size!! <= 0){
+                        toast("There is no item in the cart")
+                    }
+                    else if (mViewModel?.isCartHaveNotAvailableProduct()!!) {
+                        toast("Please remove out of stock & not available product")
+                    }
+                    else if (mViewModel?.addressId?.value!!.isEmpty()) {
                         toast("Please select Address")
                         changeSwipeButtonStatus()
                     } else if (!mViewModel?.isDeliverableArea?.value!!) {

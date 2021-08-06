@@ -12,6 +12,7 @@
     <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="fontFamily">@font/linotte_regular</item>
         <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">true</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimary</item>
         <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
@@ -20,6 +21,7 @@
     <style name="AppTheme.NoActionBarMain" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="fontFamily">@font/linotte_regular</item>
         <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">true</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimaryDark</item>
         <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
@@ -33,6 +35,7 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+        <item name="fontFamily">@font/linotte_regular</item>
     </style>
 
     <style name="CustomTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -83,6 +86,7 @@
     <style name="MyCheckBoxStyle" parent="Base.Widget.AppCompat.CompoundButton.CheckBox">
         <item name="buttonTint">@drawable/checkbox_selector</item>
         <item name="android:textColor">@drawable/checkbox_text_selector</item>
+        <item name="fontFamily">@font/linotte_regular</item>
     </style>
 
     <!--<style name="MyRadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
@@ -139,6 +143,7 @@
     <!-- set the rounded drawable as background to your bottom sheet -->
     <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/top_rounded_corner</item>
+        <item name="fontFamily">@font/linotte_regular</item>
     </style>
 
     <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
@@ -176,11 +181,13 @@
         <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">true</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">@color/white</item>
         <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+        <item name="fontFamily">@font/linotte_regular</item>
     </style>
 
     <style name="RatingReview" parent="Theme.AppCompat">
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="fontFamily">@font/linotte_regular</item>
     </style>
 
 </resources>

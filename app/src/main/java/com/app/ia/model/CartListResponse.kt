@@ -105,7 +105,10 @@ data class CartListResponse(
             private val offerPrice: String,
             @Expose
             @SerializedName("rating")
-            val rating: String) {
+            val rating: String,
+            @Expose
+            @SerializedName("availble")
+            var isAvailable: Int) {
 
             fun getDiscountPercent(): String {
                 if (isDiscount == 1) {

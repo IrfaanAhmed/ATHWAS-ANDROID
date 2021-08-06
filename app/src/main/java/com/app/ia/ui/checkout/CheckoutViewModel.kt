@@ -331,7 +331,6 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-
                             isDeliverableArea.value = true
                             if (users.data?.deliveryFee!!.isNotEmpty()) {
                                 deliveryCharges.value = CommonUtils.convertToDecimal(users.data?.deliveryFee!!).toDouble()
@@ -512,5 +511,17 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                 }
             }
         })
+    }
+
+    fun isCartHaveNotAvailableProduct() : Boolean{
+        var has = false
+        cartList.value?.forEach {
+            it.categoryItems?.forEach {
+                if(it.isAvailable == 0 || it.availableQuantity <= 0){
+                    has = true
+                }
+            }
+        }
+        return has
     }
 }

@@ -3,6 +3,7 @@ package com.app.ia.ui.my_cart.adapter
 import android.app.Activity
 import android.graphics.Paint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -74,6 +75,22 @@ class CartListItemAdapter(private val updateListener: CartUpdateListener) : List
                     itemView.context.startActivity<ProductDetailActivity> {
                         putExtra("product_id", productItem.inventoryId)
                     }
+                }
+
+                if(productItem.isAvailable == 0){
+                    textStatus.text = "Not available"
+                    layoutNotAvailable.visibility = View.VISIBLE
+                    layoutQuantity.visibility = View.GONE
+                }
+                else if(productItem.availableQuantity <= 0){
+                    textStatus.text = "Out of stock"
+                    layoutNotAvailable.visibility = View.VISIBLE
+                    layoutQuantity.visibility = View.GONE
+                }
+                else{
+                    textStatus.text = ""
+                    layoutNotAvailable.visibility = View.GONE
+                    layoutQuantity.visibility = View.VISIBLE
                 }
             }
         }

@@ -53,7 +53,8 @@ class ProductImageAdapter(context: Context, images: List<ProductDetailResponse.P
             intent.putStringArrayListExtra("imageArray", newImageList)
             intent.putExtra("SelectedPos", position)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(mContext as Activity, imageLayout, "menu")
-            ActivityCompat.startActivity(mContext, intent, options.toBundle())
+            ActivityCompat.startActivity(mContext, intent, null)
+            //ActivityCompat.startActivity(mContext, intent, options.toBundle())
         }
 
         return imageLayout

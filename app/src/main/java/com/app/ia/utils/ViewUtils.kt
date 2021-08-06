@@ -16,12 +16,27 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.MutableLiveData
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_product_category.*
+
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
+
+import android.widget.TextView
+
+
+
 
 /**
  * Extension method to show toast for Context.
  */
-fun Context?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) = this?.let { Toast.makeText(it, text, duration).show() }
+fun Context?.toast(text: CharSequence, duration: Int = Toast.LENGTH_SHORT) = this?.let {
+    //Toast.makeText(it, text, duration).show()
+    val typeface = Typeface.createFromAsset(assets, "linotte_regular.otf")
+    val spannableString = SpannableString(text)
+    spannableString.setSpan(StyleSpan(typeface.style),0, text.toString().length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    Toast.makeText(it, spannableString, duration).show()
+}
 
 /**
  * Extension method to provide quicker access to the [LayoutInflater] from [Context].

@@ -15,7 +15,7 @@
             type="String" />
     </data>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -168,41 +168,67 @@
                         android:layout_gravity="center"
                         android:orientation="horizontal">
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/ivMinus"
-                            android:layout_width="@dimen/_30sdp"
-                            android:layout_height="@dimen/_30sdp"
-                            android:layout_gravity="center"
-                            android:padding="@dimen/_8sdp"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:src="@drawable/ic_minus_product"
-                            android:tint="@color/colorPrimaryDark" />
+                        <LinearLayout
+                            android:id="@+id/layoutNotAvailable"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/textStatus"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginEnd="@dimen/_5sdp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/linotte_semi_bold"
+                                android:text="Not Available"
+                                android:gravity="center"
+                                android:textColor="@color/dark_red"
+                                android:textSize="@dimen/_10sdp" />
+                        </LinearLayout>
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/tvQuantity"
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/layoutQuantity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:layout_marginEnd="@dimen/_5sdp"
-                            android:fontFamily="@font/linotte_bold"
-                            android:text="@{`` + product.quantity}"
-                            android:textColor="@color/colorPrimaryDark"
-                            android:textSize="@dimen/_14sdp" />
+                            android:orientation="horizontal">
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/ivPlus"
-                            android:layout_width="@dimen/_30sdp"
-                            android:layout_height="@dimen/_30sdp"
-                            android:layout_gravity="center"
-                            android:padding="@dimen/_8sdp"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:src="@drawable/ic_add_product"
-                            android:tint="@color/colorPrimaryDark" />
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/ivMinus"
+                                android:layout_width="@dimen/_30sdp"
+                                android:layout_height="@dimen/_30sdp"
+                                android:layout_gravity="center"
+                                android:padding="@dimen/_8sdp"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:src="@drawable/ic_minus_product"
+                                android:tint="@color/colorPrimaryDark" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvQuantity"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:layout_marginEnd="@dimen/_5sdp"
+                                android:fontFamily="@font/linotte_bold"
+                                android:text="@{`` + product.quantity}"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="@dimen/_14sdp" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/ivPlus"
+                                android:layout_width="@dimen/_30sdp"
+                                android:layout_height="@dimen/_30sdp"
+                                android:layout_gravity="center"
+                                android:padding="@dimen/_8sdp"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:src="@drawable/ic_add_product"
+                                android:tint="@color/colorPrimaryDark" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -211,7 +237,6 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </FrameLayout>
 
 </layout>
