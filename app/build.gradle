@@ -39,9 +39,22 @@ android {
         dataBinding = true
     }
 
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName =
+                    "Athwas_Customer_${variant.buildType.name}_${getDate()}_v${variant.versionName}(v${variant.versionCode}).apk"
+        }
+    }
+
     packagingOptions {
         exclude 'META-INF/loopingviewpager_release.kotlin_module'
     }
+}
+
+static def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy_MM_dd')
+    return formattedDate
 }
 
 dependencies {

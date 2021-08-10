@@ -64,6 +64,8 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
 
     var type = 0
 
+    var isLoading = true
+
     fun setVariable(mBinding: ActivityProductListBinding, intent: Intent) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
@@ -167,9 +169,10 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                     subCategoryId.value = filterValue.subCategoryId
                 }
 
-                (mActivity as ProductListActivity).resetPaginationOnFilterSet()
+                //(mActivity as ProductListActivity).resetPaginationOnFilterSet()
                 currentPage.value = 1
                 productListAll.clear()
+                //(mActivity as ProductListActivity).recyclerViewPaging.reset()
                 setUpObserver()
             }
         })
@@ -186,7 +189,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
             override fun onSortOptionClick(sortValue: String, sortPosition: Int) {
                 sortParamValue.value = sortValue
                 sortFilterPosition.value = sortPosition
-                (mActivity as ProductListActivity).resetPaginationOnFilterSet()
+                //(mActivity as ProductListActivity).resetPaginationOnFilterSet()
                 currentPage.value = 1
                 productListAll.clear()
                 setUpObserver()
@@ -214,10 +217,14 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
 
     private fun productListingObserver(requestParams: HashMap<String, String>) {
 
+
+        isLoading = true
+
         getProductListing(requestParams).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
+                        isLoading = false
                         resource.data?.let { users ->
                             isLastPage.value = (currentPage.value == users.data?.totalPages)
                             productListAll.addAll(users.data?.docs!!)
@@ -227,6 +234,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                     }
 
                     Status.ERROR -> {
+                        isLoading = false
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
                             mActivity.toast(it.message)
@@ -383,10 +391,13 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
         params["page_no"] = currentPage.value!!.toString()
         params["limit"] = "10"
 
+        isLoading = true
+
         getPopularOrDiscountedProductListing(params).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
+                        isLoading = false
                         resource.data?.let { users ->
                             isLastPage.value = (currentPage.value == users.data?.totalPages)
                             productListAll.addAll(users.data?.docs!!)
@@ -396,6 +407,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                     }
 
                     Status.ERROR -> {
+                        isLoading = false
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
                             mActivity.toast(it.message)
@@ -429,10 +441,12 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
         params["page_no"] = currentPage.value!!.toString()
         params["limit"] = "10"
 
+        isLoading = true
         getDealOfTheDayBannerProductListing(params, banner_id).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
+                        isLoading = false
                         resource.data?.let { users ->
                             isLastPage.value = true
                             productListAll.addAll(users.data?.productInventoriesData!!)
@@ -442,6 +456,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                     }
 
                     Status.ERROR -> {
+                        isLoading = false
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
                             mActivity.toast(it.message)

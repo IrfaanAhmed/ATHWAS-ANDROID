@@ -2,10 +2,14 @@ package com.app.ia.ui.product_list
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.LinearLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.BR
 import com.app.ia.R
 import com.app.ia.ViewModelFactory
@@ -26,9 +30,9 @@ import kotlinx.android.synthetic.main.common_header.view.*
 
 class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductListViewModel>() {
 
-    private var mBinding: ActivityProductListBinding? = null
-    private var mViewModel: ProductListViewModel? = null
-    private lateinit var recyclerViewPaging: RecyclerViewPaginator
+    lateinit var mBinding: ActivityProductListBinding
+    lateinit var mViewModel: ProductListViewModel
+    //lateinit var recyclerViewPaging: RecyclerViewPaginator
     private var productAdapter: ProductListAdapter? = null
 
     override fun getBindingVariable(): Int {
@@ -73,9 +77,10 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
             if (mSwipeRefresh.isRefreshing) {
                 mSwipeRefresh.isRefreshing = false
             }
-            resetPaginationOnFilterSet()
             mViewModel?.currentPage?.value = 1
             mViewModel?.productListAll?.clear()
+            //recyclerViewPaging.reset()
+            //resetPaginationOnFilterSet()
 
             when (mViewModel?.type) {
                 0 -> {
@@ -131,7 +136,30 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
 
         recViewProduct.adapter = productAdapter
 
-        resetPaginationOnFilterSet()
+        //resetPaginationOnFilterSet()
+
+
+        mBinding?.recViewProduct?.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                //super.onScrolled(recyclerView, dx, dy)
+                Log.d("Scrolled", "Scrolled")
+                val totalItemCount = (mBinding.recViewProduct.layoutManager as LinearLayoutManager).itemCount
+                val lastVisibleItem = (mBinding.recViewProduct.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                Log.d("Scrolled", "Scrolled ${totalItemCount} $lastVisibleItem")
+                if (!mViewModel?.isLoading && mViewModel.isLastPage.value == false && totalItemCount == (lastVisibleItem + 1)) {
+                    mViewModel.isLoading = true
+                    mViewModel?.currentPage?.value = mViewModel?.currentPage?.value!! + 1
+                    //page++
+                    if (mViewModel?.type == 0) {
+                        mViewModel?.setUpObserver()
+                    } else {
+                        mViewModel?.popularDiscountedProductObserver()
+                    }
+                }
+            }
+        })
+
+
 
         mViewModel?.productList?.observe(this, {
 
@@ -179,14 +207,14 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
 
     fun resetPaginationOnFilterSet() {
 
-        recyclerViewPaging = object : RecyclerViewPaginator(recViewProduct) {
+        /*recyclerViewPaging = object : RecyclerViewPaginator(recViewProduct) {
             override val isLastPage: Boolean
                 get() = mViewModel!!.isLastPage.value!!
 
             override fun loadMore(start: Int, count: Int) {
                 if(mViewModel?.currentPage?.value!! == start) return
 
-                mViewModel?.currentPage?.value = start
+                mViewModel?.currentPage?.value = mViewModel?.currentPage?.value!! + 1
                 if (mViewModel?.type == 0) {
                     mViewModel?.setUpObserver()
                 } else {
@@ -194,7 +222,7 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
                 }
             }
         }
-        recViewProduct.addOnScrollListener(recyclerViewPaging)
+        recViewProduct.addOnScrollListener(recyclerViewPaging)*/
     }
 
 }
