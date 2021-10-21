@@ -146,6 +146,10 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
             putExtra(AppConstants.EXTRA_WEBVIEW_TITLE, mActivity.getString(R.string.terms_of_use))
             putExtra(AppConstants.EXTRA_WEBVIEW_URL, ContentType.TERMS_OF_USE.contentType)
         }
+        /*mActivity.startActivity<WebViewActivity> {
+            putExtra(AppConstants.EXTRA_WEBVIEW_TITLE, mActivity.getString(R.string.terms_of_use))
+            putExtra(AppConstants.EXTRA_WEBVIEW_URL, ContentType.TERMS_OF_USE.contentType)
+        }*/
     }
 
     private fun alreadyHaveAccountText() {

@@ -1,7 +1,10 @@
 package com.app.ia.ui.rewards
 
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.BR
 import com.app.ia.R
 import com.app.ia.ViewModelFactory
@@ -21,9 +24,9 @@ import kotlinx.android.synthetic.main.common_header.view.*
 
 class RewardsActivity : BaseActivity<ActivityRewardsBinding, RewardsViewModel>() {
 
-    private var mBinding: ActivityRewardsBinding? = null
-    private var mViewModel: RewardsViewModel? = null
-    private lateinit var recyclerViewPaging: RecyclerViewPaginator
+    lateinit var mBinding: ActivityRewardsBinding
+    lateinit var mViewModel: RewardsViewModel
+    //private lateinit var recyclerViewPaging: RecyclerViewPaginator
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
@@ -54,7 +57,7 @@ class RewardsActivity : BaseActivity<ActivityRewardsBinding, RewardsViewModel>()
         val rewardAdapter = RewardListAdapter()
         recViewRewards.adapter = rewardAdapter
 
-        recyclerViewPaging = object : RecyclerViewPaginator(recViewRewards) {
+        /*recyclerViewPaging = object : RecyclerViewPaginator(recViewRewards) {
             override val isLastPage: Boolean
                 get() = mViewModel!!.isLastPage.value!!
 
@@ -64,7 +67,23 @@ class RewardsActivity : BaseActivity<ActivityRewardsBinding, RewardsViewModel>()
             }
         }
 
-        recViewRewards.addOnScrollListener(recyclerViewPaging)
+        recViewRewards.addOnScrollListener(recyclerViewPaging)*/
+
+        mBinding?.recViewRewards?.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                //super.onScrolled(recyclerView, dx, dy)
+                Log.d("Scrolled", "Scrolled")
+                val totalItemCount = (mBinding?.recViewRewards.layoutManager as LinearLayoutManager).itemCount
+                val lastVisibleItem = (mBinding?.recViewRewards.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                Log.d("Scrolled", "Scrolled ${totalItemCount} $lastVisibleItem")
+                if (!mViewModel?.isLoading && mViewModel.isLastPage.value == false && totalItemCount == (lastVisibleItem + 1)) {
+                    mViewModel.isLoading = true
+                    mViewModel?.currentPage?.value = mViewModel?.currentPage?.value!! + 1
+                    //page++
+                    mViewModel?.redeemPointsObserver()
+                }
+            }
+        })
 
         mViewModel?.promoCodeListData?.observe(this, {
             if (rewardAdapter.currentList.size == 0) {

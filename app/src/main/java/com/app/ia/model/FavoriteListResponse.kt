@@ -1,5 +1,6 @@
 package com.app.ia.model
 
+import com.app.ia.utils.CommonUtils
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -48,7 +49,7 @@ data class FavoriteListResponse(
         val productId: String,
         @Expose
         @SerializedName("price")
-        var price: String,
+        private val price: String,
         @Expose
         @SerializedName("available_quantity")
         var quantity: Int,
@@ -78,7 +79,7 @@ data class FavoriteListResponse(
         var subcategory: Subcategory,
         @Expose
         @SerializedName("offer_price")
-        val offerPrice: String) {
+        private val offerPrice: String) {
 
         fun getDiscountPercent(): String {
             if (isDiscount == 1) {
@@ -89,6 +90,14 @@ data class FavoriteListResponse(
                 }
             }
             return ""
+        }
+
+        fun getPrice(): String {
+            return CommonUtils.convertToDecimal(price)
+        }
+
+        fun getOfferPrice(): String {
+            return CommonUtils.convertToDecimal(offerPrice)
         }
 
 

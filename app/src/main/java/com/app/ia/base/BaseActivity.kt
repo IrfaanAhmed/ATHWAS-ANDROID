@@ -168,7 +168,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
 
     fun logoutDialog() {
         val activity = this
-        val cleverDialog = IADialog(activity, "", getString(R.string.logout_msg), getString(R.string.ok), getString(R.string.cancel), false)
+        val cleverDialog = IADialog(activity, "", getString(R.string.logout_msg), getString(R.string.yes), getString(R.string.no), false)
         cleverDialog.setOnItemClickListener(object : IADialog.OnClickListener {
             override fun onPositiveClick() {
                 AppPreferencesHelper.getInstance().clearAllPreferences()

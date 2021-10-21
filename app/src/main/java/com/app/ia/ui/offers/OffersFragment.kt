@@ -53,10 +53,10 @@ class OffersFragment : BaseFragment<FragmentOffersBinding, OffersViewModel>() {
         val adapter = OffersAdapter("")
         recViewOffer.adapter = adapter
         val categoryList = ArrayList<String>()
-        categoryList.add("Promo Code Offer")
-        categoryList.add("Bundle Offer")
-        categoryList.add("Promotional Offer")
-        categoryList.add("Bank Offer")
+        categoryList.add("Promo Code Offers")
+        categoryList.add("Bundle Offers")
+        categoryList.add("Promotional Offers")
+        categoryList.add("Bank Offers")
         adapter.submitList(categoryList)
     }
 

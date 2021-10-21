@@ -1,5 +1,7 @@
 package com.app.ia.ui.payment
 
+import android.content.Intent
+import android.net.Uri
 import android.net.http.SslError
 import android.os.Bundle
 import android.webkit.SslErrorHandler
@@ -62,7 +64,13 @@ class PaymentActivity  : BaseActivity<ActivityPaymentBinding, PaymentViewModel>(
     private var webViewClient = object : WebViewClient() {
 
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-            return false
+            if (request?.url.toString().contains("upi://pay?pa")) {
+                val intent = Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(request?.url.toString()));
+                startActivity(intent);
+                return true
+            }
+            return super.shouldOverrideUrlLoading(view, request)
         }
 
         override fun onPageFinished(view: WebView, url: String) {

@@ -79,12 +79,12 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
         (baseRepository.callback).hideKeyboard()
         val mobileNumber = mBinding.edtTextMobileNumber.text.toString()
         val password = mBinding.edtTextPassword.text.toString()
-        val flag: Boolean
+        val flag: Boolean = true
 
         if (TextUtils.isEmpty(mobileNumber)) {
             IADialog(mActivity, mActivity.getString(R.string.enter_email_mobile_no), true)
             return
-        } else {
+        }/* else {
             flag = if (Pattern.matches("[0-9]+", mobileNumber)) {
                 if (mobileNumber.length < 7 || mobileNumber.length > 15) {
                     IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
@@ -100,15 +100,15 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
                     true
                 }
             }
-        }
+        }*/
 
         if (password.isEmpty()) {
             IADialog(mActivity, mActivity.getString(R.string.enter_your_password), true)
             return
-        } else if (password.length < 6) {
+        }/* else if (password.length < 6) {
             IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
             return
-        }
+        }*/
 
         if (!TextUtils.isEmpty(password) && flag) {
             val requestParams = HashMap<String, String>()
@@ -196,12 +196,20 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
                         resource.data?.let { users ->
 
                             if (users.data?.isUserVerified == 0) {
-                                mActivity.toast(users.message)
-                                mActivity.startActivity<OTPActivity> {
-                                    putExtra("countryCode", users.data?.countryCode)
-                                    putExtra("mobileNumber", users.data?.phone)
-                                    putExtra("otp", users.data?.otpNumber)
-                                }
+                                val dialog = IADialog(mActivity, "", users.message, true)
+                                dialog.setOnItemClickListener(object: IADialog.OnClickListener{
+                                    override fun onPositiveClick() {
+                                        mActivity.startActivity<OTPActivity> {
+                                            putExtra("countryCode", users.data?.countryCode)
+                                            putExtra("mobileNumber", users.data?.phone)
+                                            putExtra("otp", users.data?.otpNumber)
+                                        }
+                                    }
+                                    override fun onNegativeClick() {
+
+                                    }
+                                })
+
                             } else {
                                 AppPreferencesHelper.getInstance().userData = users.data!!
                                 mActivity.startActivityWithFinish<HomeActivity> {

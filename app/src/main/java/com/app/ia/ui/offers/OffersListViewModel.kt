@@ -29,6 +29,9 @@ class OffersListViewModel(private val baseRepository: BaseRepository) : BaseView
     var promoCodeListData = MutableLiveData<MutableList<OffersResponse.Docs>>()
     var promoCodeList = ArrayList<OffersResponse.Docs>()
 
+
+    var isLoading = true
+
     fun setVariable(mBinding: ActivityOfferListBinding, intent: Intent) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
@@ -54,10 +57,12 @@ class OffersListViewModel(private val baseRepository: BaseRepository) : BaseView
         params["offer_type"] = offerType.value!!
         params["product_id"] = productId.value!!
 
+        var isLoading = true
         offerList(params).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
+                        var isLoading = false
                         resource.data?.let { users ->
                             isLastPage.value = (currentPage.value == users.data?.totalPages)
                             promoCodeList.addAll(users.data?.docs!!)
@@ -74,6 +79,7 @@ class OffersListViewModel(private val baseRepository: BaseRepository) : BaseView
                     }
 
                     Status.ERROR -> {
+                        var isLoading = false
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
                             mActivity.toast(it.message)

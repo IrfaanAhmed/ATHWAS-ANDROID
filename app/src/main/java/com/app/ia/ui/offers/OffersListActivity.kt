@@ -3,7 +3,10 @@ package com.app.ia.ui.offers
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.BR
 import com.app.ia.R
 import com.app.ia.ViewModelFactory
@@ -25,9 +28,9 @@ import java.util.concurrent.TimeUnit
 
 class OffersListActivity : BaseActivity<ActivityOfferListBinding, OffersListViewModel>() {
 
-    private var mActivityOffersBinding: ActivityOfferListBinding? = null
-    private var mOffersViewModel: OffersListViewModel? = null
-    private lateinit var recyclerViewPaging: RecyclerViewPaginator
+    lateinit var mActivityOffersBinding: ActivityOfferListBinding
+    lateinit var mOffersViewModel: OffersListViewModel
+    //private lateinit var recyclerViewPaging: RecyclerViewPaginator
     val subject = PublishSubject.create<String>()
     private var disposable: Disposable? = null
 
@@ -69,7 +72,7 @@ class OffersListActivity : BaseActivity<ActivityOfferListBinding, OffersListView
             }
         })
 
-        recyclerViewPaging = object : RecyclerViewPaginator(recyclerViewOffers) {
+        /*recyclerViewPaging = object : RecyclerViewPaginator(recyclerViewOffers) {
             override val isLastPage: Boolean
                 get() = mOffersViewModel!!.isLastPage.value!!
 
@@ -79,7 +82,23 @@ class OffersListActivity : BaseActivity<ActivityOfferListBinding, OffersListView
             }
         }
 
-        recyclerViewOffers.addOnScrollListener(recyclerViewPaging)
+        recyclerViewOffers.addOnScrollListener(recyclerViewPaging)*/
+
+        mActivityOffersBinding?.recyclerViewOffers?.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                //super.onScrolled(recyclerView, dx, dy)
+                Log.d("Scrolled", "Scrolled")
+                val totalItemCount = (mActivityOffersBinding?.recyclerViewOffers.layoutManager as LinearLayoutManager).itemCount
+                val lastVisibleItem = (mActivityOffersBinding?.recyclerViewOffers.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                Log.d("Scrolled", "Scrolled ${totalItemCount} $lastVisibleItem")
+                if (!mOffersViewModel?.isLoading && mOffersViewModel.isLastPage.value == false && totalItemCount == (lastVisibleItem + 1)) {
+                    mOffersViewModel.isLoading = true
+                    mOffersViewModel?.currentPage?.value = mOffersViewModel?.currentPage?.value!! + 1
+                    //page++
+                    mOffersViewModel?.offerListObserver("")
+                }
+            }
+        })
 
         mOffersViewModel?.promoCodeListData?.observe(this, {
             if (promoCodeAdapter.currentList.size == 0) {

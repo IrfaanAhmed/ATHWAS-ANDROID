@@ -202,10 +202,10 @@ class AddMoneyDialogFragment(val paymentOptionList: ArrayList<PaymentOptionBean>
 
 
                     } else {
-                        requireActivity().toast("Error: ${response.code()}")
+                        //requireActivity().toast("Error: ${response.code()}")
                     }
                 } catch (e: HttpException) {
-                    requireActivity().toast("Exception ${e.message}")
+                    //requireActivity().toast("Exception ${e.message}")
                 } catch (e: Throwable) {
                     requireActivity().toast("Oops: Something else went wrong")
                 }

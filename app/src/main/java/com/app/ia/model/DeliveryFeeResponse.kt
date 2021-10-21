@@ -31,7 +31,7 @@ data class DeliveryFeeResponse(
 
     fun getRedeemPoint(): Double {
         return if (redeemPoint.isNullOrEmpty()) {
-            0.0
+            0.00
         } else {
             redeemPoint.toDouble()
         }

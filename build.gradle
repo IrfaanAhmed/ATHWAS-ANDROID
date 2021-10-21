@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0'
+        classpath 'com.android.tools.build:gradle:7.0.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21"
         classpath 'com.google.gms:google-services:4.3.8'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
@@ -23,6 +23,9 @@ allprojects {
         //noinspection JcenterRepositoryObsolete
         jcenter()
         maven { url "https://jitpack.io" }
+        flatDir {
+            dirs 'src/main/libs'
+        }
     }
 }
 

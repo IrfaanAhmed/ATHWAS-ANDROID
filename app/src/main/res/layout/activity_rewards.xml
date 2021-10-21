@@ -70,12 +70,12 @@
                 android:id="@+id/tvRewards"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0 points"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/_16sdp"
+                android:fontFamily="@font/linotte_bold"
+                android:text="@{viewModel.totalPoints}"
                 android:textColor="@color/colorLogout"
-                android:textSize="@dimen/_14sdp"
-                android:fontFamily="@font/linotte_bold"/>
+                android:textSize="@dimen/_14sdp" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvTotalRewards"

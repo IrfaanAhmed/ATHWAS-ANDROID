@@ -18,14 +18,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <!--<androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivProfile"
             defaultImage="@{R.drawable.login_logo}"
             imageUrl="@{viewModel.userData.userImageUrl}"
             android:layout_width="@dimen/_75sdp"
             android:layout_height="@dimen/_75sdp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/_35sdp" />
+            android:layout_marginTop="@dimen/_35sdp" />-->
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivProfile"
+            defaultImage="@{R.drawable.logo_placeholder}"
+            imageUrl="@{viewModel.userImage}"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_70sdp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_35sdp"
+            android:scaleType="centerCrop"
+            app:civ_border_color="@color/colorAccent"
+            app:civ_border_width="@dimen/_1sdp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvUserName"

@@ -77,7 +77,10 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
 
         isAddressAdded = true
         val requestJsonObject = HashMap<String, String>()
-        requestJsonObject["full_address"] = mBinding.edtTextSelectedAddress.text.toString()
+        if(mBinding.edtTextAddress.text.toString().isNullOrBlank())
+            requestJsonObject["full_address"] = mBinding.edtTextSelectedAddress.text.toString()
+        else
+            requestJsonObject["full_address"] = mBinding.edtTextAddress.text.toString()+ " " +mBinding.edtTextSelectedAddress.text.toString()
         requestJsonObject["latitude"] = (mActivity as AddAddressActivity).latitude.toString()
         requestJsonObject["longitude"] = (mActivity as AddAddressActivity).longitude.toString()
         when {
@@ -90,7 +93,7 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
         requestJsonObject["flat"] = ""
         requestJsonObject["location_name"] = ""
         requestJsonObject["building"] = ""
-        requestJsonObject["floor"] = mBinding.edtTextAddress.text.toString()
+        requestJsonObject["floor"] = ""//mBinding.edtTextAddress.text.toString()
         requestJsonObject["landmark"] = ""
         requestJsonObject["way"] = ""
         requestJsonObject["zip_code"] = mBinding.edtTextPinCode.text.toString()

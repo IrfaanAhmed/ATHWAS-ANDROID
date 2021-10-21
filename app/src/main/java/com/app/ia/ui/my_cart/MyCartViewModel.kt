@@ -25,7 +25,8 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
     lateinit var mActivity: Activity
     lateinit var mBinding: ActivityMyCartBinding
 
-    val isItemAvailable = MutableLiveData(true)
+    val isItemAvailable = MutableLiveData(false)
+    val isItemNotAvailable = MutableLiveData(false)
 
     var cartList = MutableLiveData<MutableList<CartListResponse.Docs>>()
     val cartListAll = ArrayList<CartListResponse.Docs>()
@@ -72,6 +73,7 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                             cartListAll.addAll(users.data?.docs!!)
                             cartList.value = cartListAll
                             isItemAvailable.value = cartListAll.size > 0
+                            isItemNotAvailable.value = cartListAll.size <= 0
                             totalItems.value = 0
                             totalAmount.value = 0.0
                             totalAmountWithoutOffer.value = 0.0
@@ -88,8 +90,9 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                             }
 
 
+                            val savedAmount = totalAmountWithoutOffer.value!! - totalAmount.value!!
 
-                            totalSavedAmount.value = totalAmountWithoutOffer.value!! - totalAmount.value!!
+                            totalSavedAmount.value = CommonUtils.convertToDecimal(savedAmount).toDouble()
                         }
                     }
 

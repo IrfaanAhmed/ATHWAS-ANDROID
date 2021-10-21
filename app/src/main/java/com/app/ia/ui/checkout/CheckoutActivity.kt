@@ -25,13 +25,15 @@ import kotlinx.android.synthetic.main.common_header.view.*
 import org.json.JSONArray
 
 import android.graphics.Typeface
+import android.util.Log
 import androidx.core.content.res.ResourcesCompat
 import com.app.ia.R
+import com.ccavenue.indiasdk.AvenuesTransactionCallback
 import timber.log.Timber
 import java.util.logging.Logger
 
 
-class CheckoutActivity : BaseActivity<ActivityCheckoutBinding, CheckoutViewModel>(), CheckoutUpdateListener {
+class CheckoutActivity : BaseActivity<ActivityCheckoutBinding, CheckoutViewModel>(), CheckoutUpdateListener, AvenuesTransactionCallback {
 
     private var mBinding: ActivityCheckoutBinding? = null
     private var mViewModel: CheckoutViewModel? = null
@@ -56,7 +58,7 @@ class CheckoutActivity : BaseActivity<ActivityCheckoutBinding, CheckoutViewModel
         mBinding = getViewDataBinding()
         mBinding?.lifecycleOwner = this
         mViewModel?.setActivityNavigator(this)
-        mViewModel?.setVariable(mBinding!!)
+        mViewModel?.setVariable(mBinding!!, this)
 
         //makeStatusBarTransparent()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.content_container)) { _, insets ->
@@ -122,7 +124,7 @@ class CheckoutActivity : BaseActivity<ActivityCheckoutBinding, CheckoutViewModel
                         toast("There is no item in the cart")
                     }
                     else if (mViewModel?.isCartHaveNotAvailableProduct()!!) {
-                        toast("Please remove out of stock & not available product")
+                        toast("Some items are out of stock, kindly remove them from the cart")
                     }
                     else if (mViewModel?.addressId?.value!!.isEmpty()) {
                         toast("Please select Address")
@@ -153,7 +155,7 @@ class CheckoutActivity : BaseActivity<ActivityCheckoutBinding, CheckoutViewModel
 
                         if (mViewModel?.selectedPaymentMethod == "Wallet") {
                             val walletAmount = AppPreferencesHelper.getInstance().walletAmount.toDouble()
-                            if (walletAmount < mViewModel?.netAmount?.value!!) {
+                            if (walletAmount < mViewModel?.netAmount?.value!!.toDouble()) {
                                 changeSwipeButtonStatus()
                                 IADialog(this@CheckoutActivity, "Wallet amount is low. Please add amount.", true)
                                 return
@@ -286,6 +288,18 @@ class CheckoutActivity : BaseActivity<ActivityCheckoutBinding, CheckoutViewModel
         intent.putExtra("cartChanged", mViewModel?.isCartChanged)
         setResult(Activity.RESULT_OK, intent)
         finish()
+    }
+
+    override fun onTransactionResponse(p0: Bundle?) {
+        Log.d("Payment", "Resp $p0")
+    }
+
+    override fun onErrorOccurred(p0: String?) {
+        Log.d("Payment", "Error $p0")
+    }
+
+    override fun onCancelTransaction() {
+        Log.d("Payment", "Canceled")
     }
 
 }

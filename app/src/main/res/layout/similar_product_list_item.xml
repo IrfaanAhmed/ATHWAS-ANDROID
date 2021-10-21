@@ -45,12 +45,12 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvProductName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_22sdp"
                 android:layout_below="@+id/ivProductImage"
                 android:layout_marginTop="@dimen/_5sdp"
+                android:maxLines="2"
                 android:ellipsize="end"
                 android:fontFamily="@font/linotte_semi_bold"
-                android:maxLines="1"
                 android:text="@{similarProduct.name}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_10sdp" />

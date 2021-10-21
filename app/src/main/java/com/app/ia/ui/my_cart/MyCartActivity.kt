@@ -2,6 +2,7 @@ package com.app.ia.ui.my_cart
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModelProvider
@@ -51,6 +52,8 @@ class MyCartActivity : BaseActivity<ActivityMyCartBinding, MyCartViewModel>(), C
         mViewModel?.setActivityNavigator(this)
         mViewModel?.setVariable(mBinding!!)
 
+        //mViewModel?.isItemAvailable?.value = false
+
         //makeStatusBarTransparent()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.content_container)) { _, insets ->
             //so on for left and right insets
@@ -82,7 +85,7 @@ class MyCartActivity : BaseActivity<ActivityMyCartBinding, MyCartViewModel>(), C
                 toast("There is no item in the cart")
             }
             else if (mViewModel?.isCartHaveNotAvailableProduct()!!) {
-                toast("Please remove out of stock & not available product")
+                toast("Some items are out of stock, kindly remove them from the cart")
             } else {
                 mStartActivityForResult<CheckoutActivity>(2009)
             }

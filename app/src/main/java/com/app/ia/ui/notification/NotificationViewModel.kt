@@ -20,6 +20,7 @@ class NotificationViewModel(private val baseRepository: BaseRepository) : BaseVi
 
     val currentPage = MutableLiveData(1)
     val isLastPage = MutableLiveData(false)
+    var isLoading = true
     var notificationListData = MutableLiveData<MutableList<NotificationResponse.Docs>>()
     lateinit var mActivity: NotificationActivity
     lateinit var mBinding: ActivityNotificationBinding
@@ -50,11 +51,12 @@ class NotificationViewModel(private val baseRepository: BaseRepository) : BaseVi
     }
 
     fun setupObservers(notification_id: String?, requestParams: HashMap<String, String>?, notificationType: Int, deletedPosition: Int) {
-
+        isLoading = true
         getNotifications(notification_id, requestParams, notificationType).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
+                        isLoading = false
                         resource.data?.let { users ->
                             //if (users.status == "success") {
 
@@ -71,7 +73,7 @@ class NotificationViewModel(private val baseRepository: BaseRepository) : BaseVi
                                 NotificationActivity.DELETE_ALL_NOTIFICATION -> {
                                     val notificationList = notificationListData.value
                                     notificationList?.clear()
-                                    notificationListData.value = notificationList
+                                    notificationListData.value = notificationList!!
                                     mActivity.mNotificationAdapter.notifyDataSetChanged()
                                     showHide()
                                 }
@@ -79,7 +81,7 @@ class NotificationViewModel(private val baseRepository: BaseRepository) : BaseVi
                                 NotificationActivity.DELETE_NOTIFICATION -> {
                                     val updatedList = notificationListData.value
                                     updatedList?.removeAt(deletedPosition)
-                                    notificationListData.value = updatedList
+                                    notificationListData.value = updatedList!!
                                     mActivity.mNotificationAdapter.notifyItemRemoved(deletedPosition)
                                     mActivity.mNotificationAdapter.notifyItemRangeChanged(deletedPosition, updatedList?.size!!)
                                     showHide()
@@ -94,6 +96,7 @@ class NotificationViewModel(private val baseRepository: BaseRepository) : BaseVi
                     }
 
                     Status.ERROR -> {
+                        isLoading = false
                         baseRepository.callback.hideProgress()
                         if (notificationType != NotificationActivity.NOTIFICATION_LIST) {
                             mActivity.toast(it.message!!)

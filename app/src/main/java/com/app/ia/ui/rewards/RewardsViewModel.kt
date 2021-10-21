@@ -24,9 +24,11 @@ class RewardsViewModel(private val baseRepository: BaseRepository) : BaseViewMod
     val isItemAvailable = MutableLiveData(true)
     val currentPage = MutableLiveData(1)
     val isLastPage = MutableLiveData(false)
+    val totalPoints = MutableLiveData("")
     var promoCodeListData = MutableLiveData<MutableList<RedeemPointResponse.Docs>>()
     var promoCodeList = ArrayList<RedeemPointResponse.Docs>()
 
+    var isLoading = true
     fun setVariable(mBinding: ActivityRewardsBinding) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
@@ -48,12 +50,15 @@ class RewardsViewModel(private val baseRepository: BaseRepository) : BaseViewMod
         val params = HashMap<String, String>()
         params["page_no"] = currentPage.value!!.toString()
 
+        isLoading = true
         redeemPoints(params).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
+                        isLoading = false
                         resource.data?.let { users ->
                             isLastPage.value = (currentPage.value == users.data?.totalPages)
+                            totalPoints.value = "${users.data?.earnedpoints} Points"
                             promoCodeList.addAll(users.data?.docs!!)
                             promoCodeListData.value = promoCodeList
                             isItemAvailable.value = promoCodeList.size > 0
@@ -61,6 +66,7 @@ class RewardsViewModel(private val baseRepository: BaseRepository) : BaseViewMod
                     }
 
                     Status.ERROR -> {
+                        isLoading = false
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
                             mActivity.toast(it.message)

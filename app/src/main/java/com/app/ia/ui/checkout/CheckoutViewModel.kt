@@ -2,12 +2,14 @@ package com.app.ia.ui.checkout
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.app.ia.R
 import com.app.ia.apiclient.Api
+import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityCheckoutBinding
@@ -23,11 +25,16 @@ import com.app.ia.ui.payment.AvenuesParams
 import com.app.ia.ui.payment.PaymentActivity
 import com.app.ia.ui.payment.StatusActivity
 import com.app.ia.utils.*
+import com.ccavenue.indiasdk.AvenueOrder
+import com.ccavenue.indiasdk.AvenuesApplication
 import kotlinx.coroutines.Dispatchers
+import java.math.BigInteger
+import java.security.MessageDigest
 
 class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
 
     lateinit var mActivity: Activity
+    lateinit var checkoutActivity: CheckoutActivity
     lateinit var mBinding: ActivityCheckoutBinding
 
     var address = MutableLiveData("")
@@ -47,21 +54,25 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
     private val cartListAll = ArrayList<CartListResponse.Docs>()
     val promoCodeResponse = MutableLiveData<PromoCodeResponse>()
 
-    private val totalItems = MutableLiveData(0)
-    val totalAmount = MutableLiveData(0.0)
-    val netAmount = MutableLiveData(0.0)
-    val deliveryCharges = MutableLiveData(0.0)
-    private var walletAmount = MutableLiveData("0.0")
-    var vatAmount = MutableLiveData("0.0")
+    private val totalItems = MutableLiveData("0.00")
+    val totalAmount = MutableLiveData("0.00")
+    val netAmount = MutableLiveData("0.00")
+    val deliveryCharges = MutableLiveData("0.00")
+    private var walletAmount = MutableLiveData("0.00")
+    var vatAmount = MutableLiveData("0.00")
     var warehouseId = MutableLiveData("")
-    var redeemPoint = MutableLiveData(0.0)
+    var redeemPoint = MutableLiveData("0.00")
 
-    val totalAmountWithoutOfferPrice = MutableLiveData(0.0)
-    val totalAmountWithOfferPrice = MutableLiveData(0.0)
+    val totalAmountWithoutOfferPrice = MutableLiveData("0.00")
+    val totalAmountWithOfferPrice = MutableLiveData("0.00")
 
-    var addedRedeemPointToDiscount = MutableLiveData(0.0)
+    var addedRedeemPointToDiscount = MutableLiveData("0.00")
 
-    fun setVariable(mBinding: ActivityCheckoutBinding) {
+    var encVal = MutableLiveData("")
+    var vResponse = MutableLiveData("")
+
+    fun setVariable(mBinding: ActivityCheckoutBinding, checkoutActivity: CheckoutActivity) {
+        this.checkoutActivity = checkoutActivity
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
         title.set(mActivity.getString(R.string.checkout))
@@ -81,8 +92,10 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
         }
 
         mBinding.rewardPointsLayout.setOnClickListener {
-            mBinding.rewardCheckBox.isChecked = !mBinding.rewardCheckBox.isChecked
-            setNetAmount()
+            if(mBinding.rewardCheckBox.isEnabled){
+                mBinding.rewardCheckBox.isChecked = !mBinding.rewardCheckBox.isChecked
+                setNetAmount()
+            }
         }
     }
 
@@ -110,22 +123,22 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
     private fun setNetAmount() {
         if (mBinding.rewardCheckBox.isChecked) {
-            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!! + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
+            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!!.toDouble() + deliveryCharges.value!!.toDouble() + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble())
 
             if (redeemPoint.value!! > netAmount.value!!) {
                 addedRedeemPointToDiscount.value = netAmount.value
-                netAmount.value = 0.0
+                netAmount.value = "0.00"
             } else {
-                netAmount.value = CommonUtils.convertToDecimal(netAmount.value!! - redeemPoint.value!!).toDouble()
+                netAmount.value = CommonUtils.convertToDecimal(netAmount.value!!.toDouble() - redeemPoint.value!!.toDouble())
                 addedRedeemPointToDiscount.value = redeemPoint.value
             }
 
-            if (netAmount.value!! < 0) {
-                netAmount.value = 0.0
+            if (netAmount.value!!.toDouble() < 0) {
+                netAmount.value = "0.00"
             }
         } else {
-            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + deliveryCharges.value!! + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble()).toDouble()
-            addedRedeemPointToDiscount.value = 0.0
+            netAmount.value = CommonUtils.convertToDecimal(totalAmount.value!!.toDouble() + deliveryCharges.value!!.toDouble() + vatAmount.value!!.toDouble() - promoCodeResponse.value?.discountPrice!!.toDouble())
+            addedRedeemPointToDiscount.value = "0.00"
         }
     }
 
@@ -170,21 +183,21 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                         resource.data?.let { users ->
                             cartListAll.addAll(users.data?.docs!!)
                             cartList.value = cartListAll
-                            totalItems.value = 0
-                            totalAmount.value = 0.0
+                            totalItems.value = "0.00"
+                            totalAmount.value = "0.00"
                             //Newly added
-                            totalAmountWithOfferPrice.value = 0.0
-                            totalAmountWithoutOfferPrice.value = 0.0
+                            totalAmountWithOfferPrice.value = "0.00"
+                            totalAmountWithoutOfferPrice.value = "0.00"
 
                             for (cartItem in cartListAll) {
                                 totalItems.value = totalItems.value!! + cartItem.categoryItems.size
                                 for (item in cartItem.categoryItems) {
-                                    totalAmountWithoutOfferPrice.value = CommonUtils.convertToDecimal(totalAmountWithoutOfferPrice.value!! + (item.getPrice().toDouble() * item.quantity)).toDouble()
+                                    totalAmountWithoutOfferPrice.value = CommonUtils.convertToDecimal(totalAmountWithoutOfferPrice.value!!.toDouble() + (item.getPrice().toDouble() * item.quantity))
                                     if (item.isDiscount == 1) {
-                                        totalAmountWithOfferPrice.value = CommonUtils.convertToDecimal(totalAmountWithOfferPrice.value!! + (item.getPrice().toDouble() - item.getOfferPrice().toDouble()) * item.quantity).toDouble()
-                                        totalAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + (item.getOfferPrice().toDouble() * item.quantity)).toDouble()
+                                        totalAmountWithOfferPrice.value = CommonUtils.convertToDecimal(totalAmountWithOfferPrice.value!!.toDouble() + (item.getPrice().toDouble() - item.getOfferPrice().toDouble()) * item.quantity)
+                                        totalAmount.value = CommonUtils.convertToDecimal(totalAmount.value!!.toDouble() + (item.getOfferPrice().toDouble() * item.quantity))
                                     } else {
-                                        totalAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + (item.getPrice().toDouble() * item.quantity)).toDouble()
+                                        totalAmount.value = CommonUtils.convertToDecimal(totalAmount.value!!.toDouble() + (item.getPrice().toDouble() * item.quantity))
                                     }
                                 }
                             }
@@ -202,7 +215,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                             val selectedAddress = AppPreferencesHelper.getInstance().defaultAddress
                             if (selectedAddress.Id.isNotEmpty() && selectedAddress.Id != null) {
                                 addressType.value = selectedAddress.addressType
-                                address.value = selectedAddress.floor + " " + selectedAddress.fullAddress
+                                address.value = selectedAddress.fullAddress
                                 addressId.value = selectedAddress.Id
                                 val addressParams = HashMap<String, String>()
                                 addressParams["delivery_address_id"] = addressId.value!!
@@ -291,10 +304,18 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                                     putExtra("status", paymentStatusResponse.value)
                                 }
                             } else {
-                                mActivity.toast(users.message)
-                                mActivity.startActivityWithFinish<HomeActivity> {
-                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                }
+                                val dialog = IADialog(mActivity, "", users.message, true)
+                                dialog.setOnItemClickListener(object: IADialog.OnClickListener{
+                                    override fun onPositiveClick() {
+                                        mActivity.startActivityWithFinish<HomeActivity> {
+                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        }
+                                    }
+                                    override fun onNegativeClick() {
+
+                                    }
+                                })
+
                             }
                         }
                     }
@@ -333,15 +354,15 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                         resource.data?.let { users ->
                             isDeliverableArea.value = true
                             if (users.data?.deliveryFee!!.isNotEmpty()) {
-                                deliveryCharges.value = CommonUtils.convertToDecimal(users.data?.deliveryFee!!).toDouble()
+                                deliveryCharges.value = CommonUtils.convertToDecimal(users.data?.deliveryFee!!)
                             }
-                            walletAmount.value = users.data?.wallet!!
+                            walletAmount.value = CommonUtils.convertToDecimal(users.data?.wallet!!)
                             warehouseId.value = users.data?.warehouse!!
-                            redeemPoint.value = users.data?.getRedeemPoint()!!
+                            redeemPoint.value = CommonUtils.convertToDecimal(users.data?.getRedeemPoint()!!)
                             if (users.data?.vatAmount == "null" || users.data?.vatAmount == null) {
-                                vatAmount.value = "0.0"
+                                vatAmount.value = "0.00"
                             } else {
-                                vatAmount.value = users.data?.vatAmount
+                                vatAmount.value = CommonUtils.convertToDecimal(users.data?.vatAmount)
                             }
                             AppPreferencesHelper.getInstance().walletAmount = walletAmount.value!!
                             setNetAmount()
@@ -447,6 +468,53 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                             intent.putExtra(AvenuesParams.RSA_KEY_URL, ServiceUtility.chkNull(Api.RSA_URL))
                             intent.putExtra(AvenuesParams.PAYMENT_FOR, "Order")
                             mActivity.startActivityForResult(intent, AppRequestCode.REQUEST_PAYMENT_CODE)
+
+                            val str = "${orderIdForOnlinePayment.value}INR${netAmount.value!!.toString()}AVTL07ID25BH87LTHB376194"
+                            Log.d("Payment", "Sha512 Str:  $str")
+                            val requestHash = getSHA512(str)
+                            Log.d("Payment", "Sha512 $requestHash")
+
+                           /* val orderDetails= AvenueOrder()
+                            orderDetails.setOrderId(orderIdForOnlinePayment.value)
+                            orderDetails.setResponseHash(requestHash);
+                            orderDetails.setRsaKeyUrl(ServiceUtility.chkNull(Api.RSA_URL));
+                            orderDetails.setRedirectUrl(ServiceUtility.chkNull(Api.REDIRECT_URL));
+                            orderDetails.setCancelUrl(ServiceUtility.chkNull(Api.CANCEL_URL));
+                            orderDetails.setAccessCode(ServiceUtility.chkNull("AVTL07ID25BH87LTHB"));
+                            orderDetails.setMerchantId(ServiceUtility.chkNull("376194"));
+                            orderDetails.setCurrency(ServiceUtility.chkNull("INR"));
+                            orderDetails.setAmount(ServiceUtility.chkNull(netAmount.value!!.toString()));
+                            orderDetails.setCustomerId(ServiceUtility.chkNull(AppPreferencesHelper.getInstance().userID));
+                            orderDetails.setPaymentType("[creditcard,debitcard,netbanking,wallet,upi]");
+                            orderDetails.setMerchantLogo("login_logo.png");
+                            orderDetails.setBillingName("Manoj");
+                            orderDetails.setBillingAddress("Test");
+                            orderDetails.setBillingCountry("India");
+                            orderDetails.setBillingState("Rajasthan");
+                            orderDetails.setBillingCity("Jaipur");
+                            orderDetails.setBillingZip("302019");
+                            orderDetails.setBillingTel("9549063358");
+                            orderDetails.setBillingEmail(ServiceUtility.chkNull(AppPreferencesHelper.getInstance().email));
+                            orderDetails.setDeliveryName(ServiceUtility.chkNull(AppPreferencesHelper.getInstance().userName));
+                            orderDetails.setDeliveryAddress("Jaipur");
+                            orderDetails.setDeliveryCountry("India");
+                            orderDetails.setDeliveryState("Rajasthan");
+                            orderDetails.setDeliveryCity("Jaipur");
+                            orderDetails.setDeliveryZip("302019");
+                            orderDetails.setDeliveryTel("9549063358");
+                            orderDetails.setMerchant_param1("test"); //total 5 parameters
+                            orderDetails.setMobileNo("9549063358")
+                            orderDetails.setPaymentEnviroment("app_staging")
+
+                            AvenuesApplication.startTransaction(checkoutActivity, orderDetails);
+                            Log.d("Payment", "Init")*/
+
+                            val params = java.util.HashMap<String, String>()
+                            params["accessCode"] = ServiceUtility.chkNull("AVTL07ID25BH87LTHB")
+                            params["requestId"] = orderIdForOnlinePayment.value!!
+                            params["requestHash"] = ServiceUtility.chkNull("$requestHash")
+                            //getRSAKeyObservers(params)
+
                         }
                     }
 
@@ -464,6 +532,99 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                 }
             }
         })
+    }
+
+    private fun getRSAKey(requestParams: java.util.HashMap<String, String>) = liveData(Dispatchers.Main) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = RetrofitFactory.getPaymentInstance().getRSAKey(requestParams)))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
+    }
+
+    fun getRSAKeyObservers(requestParams: java.util.HashMap<String, String>) {
+
+        getRSAKey(requestParams).observe(mBinding.lifecycleOwner!!, {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { users ->
+                            vResponse.value = users.body()!!.string()
+                            Log.d("Payment", "KeyResp: ${vResponse.value}")
+                            val vEncVal = StringBuffer()
+                            vEncVal.append(ServiceUtility.addToPostParams(AvenuesParams.AMOUNT, ServiceUtility.chkNull(netAmount.value!!.toString())))
+                            vEncVal.append(ServiceUtility.addToPostParams(AvenuesParams.CURRENCY, ServiceUtility.chkNull("INR")))
+                            encVal.value = getSHA512(vResponse.value!!)//RSAUtility.encrypt(vEncVal.substring(0, vEncVal.length - 1), vResponse.value!!)
+                            //callPaymentURl()
+
+                            val orderDetails= AvenueOrder()
+                            orderDetails.setOrderId(orderIdForOnlinePayment.value)
+                            orderDetails.setResponseHash(encVal.value);
+                            orderDetails.setRsaKeyUrl(ServiceUtility.chkNull(Api.RSA_URL));
+                            orderDetails.setRedirectUrl(ServiceUtility.chkNull(Api.REDIRECT_URL));
+                            orderDetails.setCancelUrl(ServiceUtility.chkNull(Api.CANCEL_URL));
+                            orderDetails.setAccessCode(ServiceUtility.chkNull("AVTL07ID25BH87LTHB"));
+                            orderDetails.setMerchantId(ServiceUtility.chkNull("376194"));
+                            orderDetails.setCurrency(ServiceUtility.chkNull("INR"));
+                            orderDetails.setAmount(ServiceUtility.chkNull(netAmount.value!!.toString()));
+                            orderDetails.setCustomerId(ServiceUtility.chkNull(AppPreferencesHelper.getInstance().userID));
+                            orderDetails.setPaymentType("[creditcard,debitcard,netbanking,wallet,upi]");
+                            orderDetails.setMerchantLogo("login_logo.png");
+                            orderDetails.setBillingName("Manoj");
+                            orderDetails.setBillingAddress("Test");
+                            orderDetails.setBillingCountry("India");
+                            orderDetails.setBillingState("Rajasthan");
+                            orderDetails.setBillingCity("Jaipur");
+                            orderDetails.setBillingZip("302019");
+                            orderDetails.setBillingTel("9549063358");
+                            orderDetails.setBillingEmail(ServiceUtility.chkNull(AppPreferencesHelper.getInstance().email));
+                            orderDetails.setDeliveryName(ServiceUtility.chkNull(AppPreferencesHelper.getInstance().userName));
+                            orderDetails.setDeliveryAddress("Jaipur");
+                            orderDetails.setDeliveryCountry("India");
+                            orderDetails.setDeliveryState("Rajasthan");
+                            orderDetails.setDeliveryCity("Jaipur");
+                            orderDetails.setDeliveryZip("302019");
+                            orderDetails.setDeliveryTel("9549063358");
+                            orderDetails.setMerchant_param1("test"); //total 5 parameters
+                            orderDetails.setMobileNo("9549063358")
+                            orderDetails.setPaymentEnviroment("app_staging")
+
+                            AvenuesApplication.startTransaction(checkoutActivity, orderDetails);
+                            Log.d("Payment", "Init")
+                        }
+                    }
+                    Status.ERROR -> {
+                        baseRepository.callback.hideProgress()
+                        mActivity.toast(it.message!!)
+                    }
+                    Status.LOADING -> {
+                        baseRepository.callback.showProgress()
+                    }
+                }
+            }
+        })
+    }
+
+    fun getSHA512(input:String):String{
+        val md: MessageDigest = MessageDigest.getInstance("SHA-512")
+        val messageDigest = md.digest(input.toByteArray())
+
+        // Convert byte array into signum representation
+        val no = BigInteger(1, messageDigest)
+
+        // Convert message digest into hex value
+        var hashtext: String = no.toString(16)
+
+        // Add preceding 0s to make it 128 chars long
+        while (hashtext.length < 128) {
+            hashtext = "0$hashtext"
+        }
+
+
+
+        // return the HashText
+        return hashtext
     }
 
     /*

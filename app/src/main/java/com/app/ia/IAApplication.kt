@@ -2,11 +2,12 @@ package com.app.ia
 
 import android.app.Activity
 import android.app.Application
+import androidx.multidex.MultiDexApplication
 import com.app.ia.utils.AppLogger
 import com.google.firebase.FirebaseApp
 
 
-class IAApplication : Application() {
+class IAApplication : MultiDexApplication() {
 
     private var mCurrentActivity: Activity? = null
 

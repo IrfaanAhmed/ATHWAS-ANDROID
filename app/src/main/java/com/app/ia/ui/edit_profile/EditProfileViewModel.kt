@@ -58,6 +58,9 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
             name.length < 2 -> {
                 IADialog(mActivity, mActivity.getString(R.string.name_should_be_min_2_char), true)
             }
+            ValidationUtils.isHaveLettersOnly(name) ->{
+                IADialog(mActivity, mActivity.getString(R.string.name_should_be_characters_only), true)
+            }
             else -> {
                 val requestParams = HashMap<String, String>()
                 requestParams["field_key"] = "username"
@@ -75,7 +78,11 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
             IADialog(mActivity, mActivity.getString(R.string.enter_your_mobile_no), true)
         } else if (mobileNumber.length < 7 || mobileNumber.length > 15) {
             IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
-        } else {
+        }
+        else if(!ValidationUtils.isValidPhone(mobileNumber)){
+            IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
+        }
+        else{
             (mActivity as EditProfileActivity).hideKeyboard()
             oldMobileEmail.value = AppPreferencesHelper.getInstance().phone
             val requestParams = HashMap<String, String>()

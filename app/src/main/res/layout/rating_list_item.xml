@@ -13,15 +13,15 @@
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:background="@drawable/edittext_bg"
-        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_margin="5dp"
         android:gravity="center"
         android:paddingStart="@dimen/_8sdp"
         android:paddingEnd="@dimen/_8sdp"
-        android:paddingTop="@dimen/_4sdp"
-        android:paddingBottom="@dimen/_4sdp">
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_8sdp">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgViewStar"

@@ -5,11 +5,16 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.DownloadManager
 import android.content.*
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
@@ -113,7 +118,7 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
                                 }
                             }
 
-                            offerAmount.value = (totalAmount.value!! - orderDetailResponse.value!!.getTotalAmount().toDouble()) + orderDetailResponse.value!!.getDiscount().toDouble()
+                            offerAmount.value = CommonUtils.convertToDecimal((totalAmount.value!! - orderDetailResponse.value!!.getTotalAmount().toDouble()) + orderDetailResponse.value!!.getDiscount().toDouble()).toDouble()
 
                             Handler(Looper.myLooper()!!).postDelayed({
                                 (mActivity as OrderDetailActivity).onReturnClicked = false
@@ -230,9 +235,8 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
 
     fun pdfOption() {
         // setup the alert builder
-        val builder = AlertDialog.Builder(mActivity)
+        val builder = AlertDialog.Builder(mActivity, R.style.MyAlertDialogTheme)
         builder.setTitle("Choose an option")
-
         // add a list
         val animals = arrayOf("Preview Invoice", "Download Invoice")
         builder.setItems(animals) { _, which ->
@@ -251,6 +255,7 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
 
         // create and show the alert dialog
         val dialog = builder.create()
+
         dialog.show()
     }
 

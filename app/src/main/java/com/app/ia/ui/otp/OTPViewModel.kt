@@ -25,6 +25,7 @@ import com.app.ia.spanly.font
 import com.app.ia.ui.login.LoginActivity
 import com.app.wallet.tivo.model.ResendOTPResponse
 import com.app.ia.receiver.SMSReceiver
+import com.app.ia.ui.home.HomeActivity
 import com.app.ia.utils.*
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.tasks.Task
@@ -197,12 +198,21 @@ class OTPViewModel(private val baseRepository: BaseRepository) : BaseViewModel()
 
                         resource.data?.let { users ->
                             if (users.data is LoginResponse) {
-                                mActivity.toast(users.message)
+                                //mActivity.toast(users.message)
                                 val response = users.data as LoginResponse
                                 AppPreferencesHelper.getInstance().userData = response
-                                mActivity.startActivityWithFinish<LoginActivity> {
-                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                }
+                                val dialog = IADialog(mActivity, "", users.message, true)
+                                dialog.setOnItemClickListener(object: IADialog.OnClickListener{
+                                    override fun onPositiveClick() {
+                                        mActivity.startActivityWithFinish<LoginActivity> {
+                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        }
+                                    }
+                                    override fun onNegativeClick() {
+
+                                    }
+                                })
+
                             } else {
                                 val response = users.data as ResendOTPResponse
                                 IADialog(mActivity, "OTP is : " + response.otpNumber, true)

@@ -11,8 +11,8 @@ import com.google.android.gms.maps.model.Marker
 
 object MarkerAnimation {
 
-    fun animateMarkerToGB(marker: Marker, finalPosition: LatLng, latLngInterpolator: LatLngInterpolator) {
-
+    fun animateMarkerToGB(marker: Marker, finalPosition: LatLng, latLngInterpolator: LatLngInterpolator, rotation: Float) {
+        marker.rotation = rotation
         val startPosition = marker.position
         val start = SystemClock.uptimeMillis()
         val handler = Handler(Looper.myLooper()!!)

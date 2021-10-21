@@ -2,6 +2,7 @@ package com.app.ia.ui.product_detail
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
@@ -31,6 +32,8 @@ class ProductDetailViewModel(private val baseRepository: BaseRepository) : BaseV
     lateinit var mBinding: ActivityProductDetailBinding
 
     val isItemAvailable = MutableLiveData(true)
+    val isItemLoaded = MutableLiveData(false)
+    val isBelowButtonVisible = MutableLiveData(false)
     val favouriteChangedList = HashMap<String, Boolean>()
 
     val productDetail = MutableLiveData<ProductDetailResponse.Product>()
@@ -112,11 +115,12 @@ class ProductDetailViewModel(private val baseRepository: BaseRepository) : BaseV
         bottomSheetFragment.setOnItemClickListener(object : CustomisationDialogFragment.OnCustomizationSelectListener {
 
             override fun onCustomizationSelect(id: String, pos: Int) {
-
-                selectedCustomizationPos = pos
-                val requestParams = HashMap<String, String>()
-                requestParams["product_id"] = id
-                productDetailObserver(requestParams)
+                if(!id.isNullOrEmpty()){
+                    selectedCustomizationPos = pos
+                    val requestParams = HashMap<String, String>()
+                    requestParams["product_id"] = id
+                    productDetailObserver(requestParams)
+                }
             }
         })
     }
@@ -138,6 +142,9 @@ class ProductDetailViewModel(private val baseRepository: BaseRepository) : BaseV
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             productDetail.value = users.data?.product!!
+                            isItemLoaded.value = true
+                            isBelowButtonVisible.value = productDetail.value?.isAvailable == 1
+
                         }
                     }
 

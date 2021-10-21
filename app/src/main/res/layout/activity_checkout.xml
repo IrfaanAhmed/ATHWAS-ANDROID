@@ -8,6 +8,8 @@
 
         <import type="android.view.View" />
 
+        <import type="com.app.ia.utils.Converter" />
+
         <variable
             name="viewModel"
             type="com.app.ia.ui.checkout.CheckoutViewModel" />
@@ -268,7 +270,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Use Rewards Points"
+                            android:text="Use Reward Points"
                             android:textAlignment="viewStart"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_13sdp" />
@@ -286,7 +288,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:enabled="@{viewModel.redeemPoint > 0}" />
+                        android:enabled="@{Converter.convertStringToDouble(viewModel.redeemPoint) > 0}" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -414,7 +416,7 @@
                             android:id="@+id/txtViewDiscount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{@string/inr_price((viewModel.promoCodeResponse.discountPrice == null ? String.valueOf(viewModel.totalAmountWithOfferPrice) : String.valueOf(viewModel.totalAmountWithOfferPrice + Double.parseDouble(viewModel.promoCodeResponse.discountPrice) + viewModel.addedRedeemPointToDiscount)))}"
+                            android:text="@{@string/inr_price((viewModel.promoCodeResponse.discountPrice == null ? String.valueOf(viewModel.totalAmountWithOfferPrice) : Converter.convertToDecimalFormat(Converter.convertStringToDouble(viewModel.totalAmountWithOfferPrice) + Converter.convertStringToDouble(viewModel.promoCodeResponse.getDiscountPriceInFormat()) + Converter.convertStringToDouble(viewModel.addedRedeemPointToDiscount))))}"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_13sdp" />
 

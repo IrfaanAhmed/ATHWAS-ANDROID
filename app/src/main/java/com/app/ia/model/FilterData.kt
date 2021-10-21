@@ -5,7 +5,7 @@ data class FilterData(
     var minPrice: String = "",
     var maxPrice: String = "",
     var rating : String = "",
-    var ratingPosition : Int = -1,
+    var ratingPosition : Int = 0,
     var categoryId : String = "",
     var categoryPos : Int = 0,
     var subCategoryId : String = "",

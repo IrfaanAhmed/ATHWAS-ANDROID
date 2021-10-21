@@ -38,9 +38,9 @@ class WriteReviewViewModel(private val baseRepository: BaseRepository) : BaseVie
             rating <= 0 -> {
                 mActivity.toast("Please enter rating")
             }
-            review.isEmpty() -> {
+            /*review.isEmpty() -> {
                 mActivity.toast("Please enter review")
-            }
+            }*/
             else -> {
                 val params = HashMap<String, String>()
                 params["product_id"] = productDetail.value?.Id!!

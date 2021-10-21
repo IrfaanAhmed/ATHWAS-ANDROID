@@ -227,4 +227,15 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
             }
         }
     }
+
+    override fun onBackPressed() {
+
+        if(getVisibleFragment() is HomeFragment){
+            super.onBackPressed()
+        }
+        else{
+            replaceFragment(HomeFragment.newInstance())
+        }
+
+    }
 }

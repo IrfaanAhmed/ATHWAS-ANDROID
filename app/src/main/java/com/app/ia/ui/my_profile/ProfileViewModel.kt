@@ -10,6 +10,7 @@ import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityProfileBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
+import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.model.ProfileResponse
 import com.app.ia.ui.delivery_address.DeliveryAddressActivity
 import com.app.ia.ui.edit_profile.EditProfileActivity
@@ -85,6 +86,7 @@ class ProfileViewModel(private val baseRepository: BaseRepository) : BaseViewMod
                         resource.data?.let { users ->
                             //if (users.status == "success") {
                                 userData.value = users.data
+                            AppPreferencesHelper.getInstance().userImage = users.data?.userImageThumbUrl.toString()
                             /*} else {
                                 IADialog(mActivity, users.message, true)
                             }*/

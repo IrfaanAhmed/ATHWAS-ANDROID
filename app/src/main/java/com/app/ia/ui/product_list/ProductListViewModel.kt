@@ -154,7 +154,7 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                 filterData = filterValue
                 minPrice.value = filterValue.minPrice
                 maxPrice.value = filterValue.maxPrice
-                rating.value = filterValue.rating
+                rating.value = filterValue.ratingPosition.toString()
                 if (filterValue.categoryId.isEmpty() || filterValue.categoryId == "-1") {
                     categoryId.value = constCategoryId
                 } else {
@@ -344,7 +344,6 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
     }
 
     fun notifyMeObserver(requestParams: HashMap<String, String>) {
-
         notifyMe(requestParams).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {

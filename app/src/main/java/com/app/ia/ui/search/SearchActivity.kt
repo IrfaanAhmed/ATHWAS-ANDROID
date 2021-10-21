@@ -3,7 +3,10 @@ package com.app.ia.ui.search
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.BR
 import com.app.ia.R
 import com.app.ia.ViewModelFactory
@@ -25,10 +28,10 @@ import java.util.concurrent.TimeUnit
 
 class SearchActivity : BaseActivity<ActivitySearchBinding, SearchViewModel>() {
 
-    private var mBinding: ActivitySearchBinding? = null
-    private var mViewModel: SearchViewModel? = null
+    lateinit var mBinding: ActivitySearchBinding
+    lateinit var mViewModel: SearchViewModel
 
-    private lateinit var recyclerViewPaging: RecyclerViewPaginator
+    //private lateinit var recyclerViewPaging: RecyclerViewPaginator
     private var searchAdapter: SearchAdapter? = null
     var keyword = ""
 
@@ -74,7 +77,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding, SearchViewModel>() {
 
         recViewSearchProduct.adapter = searchAdapter
 
-        recyclerViewPaging = object : RecyclerViewPaginator(recViewSearchProduct) {
+       /* recyclerViewPaging = object : RecyclerViewPaginator(recViewSearchProduct) {
             override val isLastPage: Boolean
                 get() = mViewModel!!.isLastPage.value!!
 
@@ -84,7 +87,23 @@ class SearchActivity : BaseActivity<ActivitySearchBinding, SearchViewModel>() {
             }
         }
 
-        recViewSearchProduct.addOnScrollListener(recyclerViewPaging)
+        recViewSearchProduct.addOnScrollListener(recyclerViewPaging)*/
+
+        mBinding?.recViewSearchProduct?.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                //super.onScrolled(recyclerView, dx, dy)
+                Log.d("Scrolled", "Scrolled")
+                val totalItemCount = (mBinding?.recViewSearchProduct.layoutManager as LinearLayoutManager).itemCount
+                val lastVisibleItem = (mBinding?.recViewSearchProduct.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                Log.d("Scrolled", "Scrolled ${totalItemCount} $lastVisibleItem")
+                if (!mViewModel?.isLoading && mViewModel.isLastPage.value == false && totalItemCount == (lastVisibleItem + 1)) {
+                    mViewModel.isLoading = true
+                    mViewModel?.currentPage?.value = mViewModel?.currentPage?.value!! + 1
+                    //page++
+                    mViewModel?.setUpObserver(keyword)
+                }
+            }
+        })
 
         mViewModel?.productList?.observe(this, {
 

@@ -159,8 +159,9 @@
                         android:background="@null"
                         android:hint="@string/mobile_number"
                         android:text="@{viewModel.userData.phone}"
-                        android:inputType="phone"
+                        android:inputType="numberSigned|none"
                         android:maxLines="1"
+                        android:maxLength="10"
                         android:padding="@dimen/_10sdp"
                         android:textAlignment="viewStart"
                         android:textSize="@dimen/_10sdp" />
@@ -171,6 +172,7 @@
                         android:layout_gravity="center_vertical|end"
                         android:layout_marginEnd="@dimen/_5sdp"
                         android:text="@string/update"
+                        android:maxLength="50"
                         android:onClick="@{() -> viewModel.updateMobileNumber()}"
                         android:textColor="@color/colorLogout"
                         android:textSize="@dimen/_12sdp"

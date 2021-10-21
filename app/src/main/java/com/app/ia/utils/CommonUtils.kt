@@ -182,7 +182,7 @@ object CommonUtils {
         }
 
         val symbols = DecimalFormatSymbols(Locale.ENGLISH)
-        val df2 = DecimalFormat("#0.##", symbols)
+        val df2 = DecimalFormat("#0.00", symbols)
         return when (value) {
             is Float -> df2.format(value)
             is Double -> df2.format(value)

@@ -5,8 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.app.ActivityCompat
+import androidx.core.text.HtmlCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.app.ia.BR
 import com.app.ia.R
 import com.app.ia.ViewModelFactory
@@ -20,8 +22,8 @@ import kotlinx.android.synthetic.main.activity_full_image.*
 
 class FullImageActivity : BaseActivity<ActivityFullImageBinding, FullImageViewModel>() {
 
-    private var mActivityFullImageBinding: ActivityFullImageBinding? = null
-    private var mFullImageViewModel: FullImageViewModel? = null
+    lateinit var mActivityFullImageBinding: ActivityFullImageBinding
+    lateinit var mFullImageViewModel: FullImageViewModel
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
@@ -47,8 +49,27 @@ class FullImageActivity : BaseActivity<ActivityFullImageBinding, FullImageViewMo
         val images = intent?.getStringArrayListExtra("imageArray")!!
         view_pager.adapter = TouchImageAdapter(images)
         view_pager.post {
+            val position = intent?.getIntExtra("SelectedPos", 0)
             view_pager.setCurrentItem(intent?.getIntExtra("SelectedPos", 0)!!, false)
+            position?.let {
+                mActivityFullImageBinding.textPagerPosition.text = HtmlCompat.fromHtml("${position+1}/${images.size}", HtmlCompat.FROM_HTML_MODE_LEGACY)
+            }
+
         }
+
+        mActivityFullImageBinding.viewPager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+            }
+
+            override fun onPageSelected(position: Int) {
+                mActivityFullImageBinding.textPagerPosition.text = HtmlCompat.fromHtml("${position+1}/${images.size}", HtmlCompat.FROM_HTML_MODE_LEGACY)
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+        })
     }
 
     private fun setViewModel() {

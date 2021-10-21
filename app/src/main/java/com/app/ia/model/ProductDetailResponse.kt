@@ -89,6 +89,10 @@ data class ProductDetailResponse(
         val isDiscount: Int,
 
         @Expose
+        @SerializedName("availble")
+        val isAvailable: Int,
+
+        @Expose
         @SerializedName("brand")
         val brand: Brand,
 

@@ -64,7 +64,7 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{`₹` + customSize.offerPrice}"
+                android:text="@{customSize.isDiscount() == 1 ? @string/inr_price(customSize.offerPrice) : @string/inr_price(customSize.price)}"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="@dimen/_10sdp" />
 
@@ -73,7 +73,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
-                android:text="@{`₹` + customSize.price}"
+                android:text="@{customSize.isDiscount() == 1 ? @string/inr_price(customSize.price) : `` }"
+                android:visibility="@{customSize.isDiscount() == 1 ? View.VISIBLE : View.GONE}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_10sdp" />
 

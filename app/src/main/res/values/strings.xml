@@ -16,6 +16,8 @@
 
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
 
     <string name="login">Login</string>
     <string name="please_login_to_continue">Please Login to Continue</string>
@@ -54,6 +56,7 @@
     <string name="terms_of_use">Terms of Use</string>
     <string name="and">and</string>
     <string name="privacy_policy">Privacy Policy.</string>
+    <string name="privacy_policy2">Privacy Policy</string>
     <string name="privacy_policy_wd">Privacy Policy</string>
     <string name="forgot_your_password">Forgot Your Password?</string>
     <string name="enter_your_registered_mobile_number_to_n_reset_your_password">Enter your registered mobile number to \nreset your password</string>
@@ -85,7 +88,7 @@
     <string name="confirm_password_should_be_same_as_new_password">Confirm Password should be same as new password.</string>
     <string name="you_can_not_request_yourself">You can\'t request to yourself.</string>
     <string name="no_deals_available">No Deals available</string>
-    <string name="no_offer_available">No Offer Available</string>
+    <string name="no_offer_available">No Offers Available</string>
     <string name="no_reward_available">No Reward Available</string>
     <string name="enter_your_first_name">Enter Your First Name</string>
     <string name="enter_your_last_name">Enter Your Last Name</string>
@@ -183,7 +186,8 @@
     <string name="faq">FAQ</string>
     <string name="about_us">About Us</string>
     <string name="contact_us">Contact Us</string>
-    <string name="terms_n_condition">Terms &amp; Condition</string>
+    <string name="terms_of_use1">Terms Of Use</string>
+    <string name="terms_n_condition">Terms &amp; Conditions</string>
     <string name="popularity">Popularity</string>
     <string name="price_low_to_high">Price - Low to High</string>
     <string name="price_high_to_low">Price - High to Low</string>
@@ -204,6 +208,7 @@
     <string name="search_product">Search Product</string>
     <string name="logout_msg">Are you sure you want to logout?</string>
     <string name="name_should_be_min_2_char">Name should be at least 2 characters</string>
+    <string name="name_should_be_characters_only">Name should be characters only</string>
     <string name="please_enter_amount">Please enter amount</string>
     <string name="please_enter_otp">Please enter otp</string>
 
@@ -225,7 +230,7 @@
     <string name="notify_me">Notify me</string>
     <string name="inr_price">₹%1$s</string>
     <string name="track_order">Track Order</string>
-    <string name="please_write_your_review_here">Please write your review</string>
+    <string name="please_write_your_review_here">Please write your review (Optional)</string>
     <string name="write_a_review">Write a Review</string>
     <string name="pin_code">Pin code</string>
     <string name="enable_notification">Enable Notification</string>

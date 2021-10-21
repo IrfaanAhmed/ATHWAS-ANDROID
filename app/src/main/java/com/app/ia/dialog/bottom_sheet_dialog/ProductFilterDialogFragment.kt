@@ -64,8 +64,8 @@ class ProductFilterDialogFragment(val businessCategoryId: String, selectedFilter
         setUp()
     }
 
-    var selectedRating: String = ""
-    var ratingPosition: Int = -1
+    var selectedRating: String = "All"
+    var ratingPosition: Int = 0
 
     var showSubCategorySelectedFirstTime = true
 
@@ -77,11 +77,12 @@ class ProductFilterDialogFragment(val businessCategoryId: String, selectedFilter
         ratingPosition = filterData.ratingPosition
 
         val list = ArrayList<CommonSortBean>()
-        list.add(CommonSortBean("1.0", ratingPosition == 0))
-        list.add(CommonSortBean("2.0", ratingPosition == 1))
-        list.add(CommonSortBean("3.0", ratingPosition == 2))
-        list.add(CommonSortBean("4.0", ratingPosition == 3))
-        list.add(CommonSortBean("5.0", ratingPosition == 4))
+        list.add(CommonSortBean("All", ratingPosition == 0))
+        list.add(CommonSortBean("1 & above", ratingPosition == 1))
+        list.add(CommonSortBean("2 & above", ratingPosition == 2))
+        list.add(CommonSortBean("3 & above", ratingPosition == 3))
+        list.add(CommonSortBean("4 & above", ratingPosition == 4))
+        //list.add(CommonSortBean("5 & up", ratingPosition == 5))
 
         val ratingAdapter = RatingAdapter()
         recyclerViewRating.adapter = ratingAdapter

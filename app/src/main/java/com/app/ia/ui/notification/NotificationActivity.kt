@@ -2,7 +2,10 @@ package com.app.ia.ui.notification
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.app.ia.BR
 import com.app.ia.R
 import com.app.ia.ViewModelFactory
@@ -19,8 +22,8 @@ import kotlinx.android.synthetic.main.common_header.view.*
 
 class NotificationActivity : BaseActivity<ActivityNotificationBinding, NotificationViewModel>() {
 
-    private var mActivityBinding: ActivityNotificationBinding? = null
-    private var mViewModel: NotificationViewModel? = null
+    lateinit var mActivityBinding: ActivityNotificationBinding
+    lateinit var mViewModel: NotificationViewModel
     lateinit var mNotificationAdapter: NotificationAdapter
     lateinit var recyclerViewPaging: RecyclerViewPaginator
 
@@ -84,6 +87,23 @@ class NotificationActivity : BaseActivity<ActivityNotificationBinding, Notificat
             resetNotification()
         }
 
+        mActivityBinding?.notificationRecyclerView?.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                //super.onScrolled(recyclerView, dx, dy)
+                //Log.d("Scrolled", "Scrolled")
+                val totalItemCount = (mActivityBinding.notificationRecyclerView.layoutManager as LinearLayoutManager).itemCount
+                val lastVisibleItem = (mActivityBinding.notificationRecyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                //Log.d("Scrolled", "Scrolled ${totalItemCount} $lastVisibleItem")
+                if (!mViewModel?.isLoading && mViewModel.isLastPage.value == false && totalItemCount == (lastVisibleItem + 1)) {
+                    mViewModel.isLoading = true
+                    mViewModel?.currentPage?.value = mViewModel?.currentPage?.value!! + 1
+                    val requestParams = HashMap<String, String>()
+                    requestParams["page_no"] = mViewModel?.currentPage?.value.toString()
+                    mViewModel?.setupObservers(null, requestParams, NOTIFICATION_LIST, -1)
+                }
+            }
+        })
+
     }
 
     private fun setViewModel() {
@@ -104,7 +124,7 @@ class NotificationActivity : BaseActivity<ActivityNotificationBinding, Notificat
             mSwipeRefresh.isRefreshing = false
         }
 
-        if (::recyclerViewPaging.isInitialized) {
+        /*if (::recyclerViewPaging.isInitialized) {
             recyclerViewPaging.reset()
         }
 
@@ -120,7 +140,7 @@ class NotificationActivity : BaseActivity<ActivityNotificationBinding, Notificat
             }
         }
 
-        notificationRecyclerView.addOnScrollListener(recyclerViewPaging)
+        notificationRecyclerView.addOnScrollListener(recyclerViewPaging)*/
 
         mViewModel?.notificationListData?.observe(this, {
             mNotificationAdapter.submitList(it)

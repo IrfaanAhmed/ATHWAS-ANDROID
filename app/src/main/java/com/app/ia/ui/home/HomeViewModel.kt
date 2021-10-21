@@ -40,6 +40,7 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
     lateinit var mActivity: Activity
     lateinit var mBinding: ActivityHomeBinding
     val userData = MutableLiveData<LoginResponse>()
+    var userImage = MutableLiveData<String>()
 
     var addressTitle = MutableLiveData("Current Location")
     var address = MutableLiveData("Select Address")
@@ -49,6 +50,7 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
         this.mActivity = getActivityNavigator()!!
 
         userData.value = AppPreferencesHelper.getInstance().userData
+        userImage.value = AppPreferencesHelper.getInstance().userImage
 
         (mActivity as HomeActivity).recViewNavigation.addItemDecoration(EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.VERTICAL))
         (mActivity as HomeActivity).recViewNavigation.addItemDecoration(DividerItemDecoration(mActivity, LinearLayout.VERTICAL))
@@ -67,6 +69,8 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
         menuList.add(mActivity.getString(R.string.faq))
         menuList.add(mActivity.getString(R.string.about_us))
         menuList.add(mActivity.getString(R.string.contact_us))
+        menuList.add(mActivity.getString(R.string.terms_of_use))
+        menuList.add(mActivity.getString(R.string.privacy_policy2))
         menuList.add(mActivity.getString(R.string.terms_n_condition))
         if (TextUtils.isEmpty(AppPreferencesHelper.getInstance().authToken)) {
             menuList.add(mActivity.getString(R.string.login))
@@ -148,18 +152,32 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
                 5 -> {
                     (mActivity as HomeActivity).startActivity<WebViewActivity> {
                         putExtra(AppConstants.EXTRA_WEBVIEW_TITLE, mActivity.getString(R.string.contact_us))
-                        putExtra(AppConstants.EXTRA_WEBVIEW_URL, ContentType.ABOUT_US.contentType)
+                        putExtra(AppConstants.EXTRA_WEBVIEW_URL, ContentType.CONTACT_US.contentType)
                     }
                 }
 
                 6 -> {
+                    (mActivity as HomeActivity).startActivity<WebViewActivity> {
+                        putExtra(AppConstants.EXTRA_WEBVIEW_TITLE, mActivity.getString(R.string.terms_of_use))
+                        putExtra(AppConstants.EXTRA_WEBVIEW_URL, ContentType.TERMS_OF_USE.contentType)
+                    }
+                }
+
+                7 -> {
+                    (mActivity as HomeActivity).startActivity<WebViewActivity> {
+                        putExtra(AppConstants.EXTRA_WEBVIEW_TITLE, mActivity.getString(R.string.privacy_policy2))
+                        putExtra(AppConstants.EXTRA_WEBVIEW_URL, ContentType.PRIVACY_POLICY.contentType)
+                    }
+                }
+
+                8 -> {
                     (mActivity as HomeActivity).startActivity<WebViewActivity> {
                         putExtra(AppConstants.EXTRA_WEBVIEW_TITLE, mActivity.getString(R.string.terms_n_condition))
                         putExtra(AppConstants.EXTRA_WEBVIEW_URL, ContentType.TERMS_N_CONDITION.contentType)
                     }
                 }
 
-                7 -> {
+                9 -> {
                     mActivity.startActivity<LoginActivity> {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     }
@@ -209,18 +227,32 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
                 8 -> {
                     (mActivity as HomeActivity).startActivity<WebViewActivity> {
                         putExtra(AppConstants.EXTRA_WEBVIEW_TITLE, mActivity.getString(R.string.contact_us))
-                        putExtra(AppConstants.EXTRA_WEBVIEW_URL, ContentType.ABOUT_US.contentType)
+                        putExtra(AppConstants.EXTRA_WEBVIEW_URL, ContentType.CONTACT_US.contentType)
                     }
                 }
 
                 9 -> {
+                    (mActivity as HomeActivity).startActivity<WebViewActivity> {
+                        putExtra(AppConstants.EXTRA_WEBVIEW_TITLE, mActivity.getString(R.string.terms_of_use))
+                        putExtra(AppConstants.EXTRA_WEBVIEW_URL, ContentType.TERMS_OF_USE.contentType)
+                    }
+                }
+
+                10 -> {
+                    (mActivity as HomeActivity).startActivity<WebViewActivity> {
+                        putExtra(AppConstants.EXTRA_WEBVIEW_TITLE, mActivity.getString(R.string.privacy_policy2))
+                        putExtra(AppConstants.EXTRA_WEBVIEW_URL, ContentType.PRIVACY_POLICY.contentType)
+                    }
+                }
+
+                11 -> {
                     (mActivity as HomeActivity).startActivity<WebViewActivity> {
                         putExtra(AppConstants.EXTRA_WEBVIEW_TITLE, mActivity.getString(R.string.terms_n_condition))
                         putExtra(AppConstants.EXTRA_WEBVIEW_URL, ContentType.TERMS_N_CONDITION.contentType)
                     }
                 }
 
-                10 -> {
+                12 -> {
                     (mActivity as HomeActivity).logoutDialog()
                 }
             }

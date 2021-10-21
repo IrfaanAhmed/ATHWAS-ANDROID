@@ -86,6 +86,8 @@
                         android:layout_gravity="center"
                         android:layout_marginEnd="@dimen/_5sdp"
                         android:layout_weight="1"
+                        android:maxLines="2"
+                        android:ellipsize="end"
                         android:fontFamily="@font/linotte_semi_bold"
                         android:text="@{product.name + ` - ` + product.inventoryName}"
                         android:textColor="@color/black"

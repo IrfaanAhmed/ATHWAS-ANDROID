@@ -61,6 +61,6 @@ object AppConstants {
     const val PARAMETER_SEP = "&"
     const val PARAMETER_EQUALS = "="
 
-    //const val TRANS_URL = "https://secure.ccavenue.com/transaction/initTrans"
-    const val TRANS_URL = "https://test.ccavenue.com/transaction/initTrans"
+    const val TRANS_URL = "https://secure.ccavenue.com/transaction/initTrans"
+    //const val TRANS_URL = "https://test.ccavenue.com/transaction/initTrans"
 }

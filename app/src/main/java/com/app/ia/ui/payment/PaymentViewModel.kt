@@ -3,11 +3,10 @@ package com.app.ia.ui.payment
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.net.http.SslError
-import android.webkit.JavascriptInterface
-import android.webkit.SslErrorHandler
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.util.Log
+import android.webkit.*
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
@@ -59,6 +58,7 @@ class PaymentViewModel(private val baseRepository: BaseRepository) : BaseViewMod
         params[AvenuesParams.ACCESS_CODE] = accessCode.value!!
         params[AvenuesParams.ORDER_ID] = orderId.value!!
         getRSAKeyObservers(params)
+
     }
 
 
@@ -122,6 +122,28 @@ class PaymentViewModel(private val baseRepository: BaseRepository) : BaseViewMod
         mBinding.paymentWebView.addJavascriptInterface(MyJavaScriptInterface(), "HTMLOUT")
 
         mBinding.paymentWebView.webViewClient = object : WebViewClient() {
+
+            override fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {
+                Log.d("Payment Url", ""+url?.toString())
+                if (url.toString().contains("upi://pay?pa")) {
+                    val intent = Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(url.toString()));
+                    mActivity.startActivity(intent)
+                    return null
+                }
+                return super.shouldInterceptRequest(view, url)
+            }
+
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                Log.d("Payment Url", ""+request?.url?.toString())
+                if (request?.url.toString().contains("upi://pay?pa")) {
+                    val intent = Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(request?.url.toString()));
+                    mActivity.startActivity(intent)
+                    return true
+                }
+                return super.shouldOverrideUrlLoading(view, request)
+            }
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)

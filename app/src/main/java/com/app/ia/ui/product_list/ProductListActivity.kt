@@ -73,6 +73,8 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
             startActivity<SearchActivity>()
         }
 
+        mSwipeRefresh.isEnabled = false
+
         mSwipeRefresh.setOnRefreshListener {
             if (mSwipeRefresh.isRefreshing) {
                 mSwipeRefresh.isRefreshing = false

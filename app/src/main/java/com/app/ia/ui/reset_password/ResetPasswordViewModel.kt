@@ -12,6 +12,7 @@ import com.app.ia.databinding.ActivityResetPasswordBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
 import com.app.ia.receiver.SMSReceiver
+import com.app.ia.ui.home.HomeActivity
 import com.app.ia.ui.login.LoginActivity
 import com.app.ia.utils.Resource
 import com.app.ia.utils.startActivityWithFinish
@@ -92,10 +93,19 @@ class ResetPasswordViewModel(private val baseRepository: BaseRepository) : BaseV
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            mActivity.toast(users.message)
-                            mActivity.startActivityWithFinish<LoginActivity> {
-                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            }
+                            //mActivity.toast(users.message)
+                            val dialog = IADialog(mActivity, "", users.message, true)
+                            dialog.setOnItemClickListener(object: IADialog.OnClickListener{
+                                override fun onPositiveClick() {
+                                    mActivity.startActivityWithFinish<LoginActivity> {
+                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    }
+                                }
+                                override fun onNegativeClick() {
+
+                                }
+                            })
+
                         }
                     }
                     Status.ERROR -> {

@@ -169,7 +169,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
         val homeProductAdapter = HomeProductAdapter()
         val itemDecoration1 = EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.GRID)
         recyclerViewProduct.adapter = homeProductAdapter
-        recyclerViewProduct.addItemDecoration(itemDecoration1)
+        //recyclerViewProduct.addItemDecoration(itemDecoration1)
         recyclerViewProduct.isNestedScrollingEnabled = false
 
         mHomeViewModel?.popularProductListing?.observe(viewLifecycleOwner, {
@@ -180,7 +180,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
         val homeDiscountProductAdapter = HomeProductAdapter()
         val itemDecoration2 = EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.GRID)
         recyclerViewDiscountProduct.adapter = homeDiscountProductAdapter
-        recyclerViewDiscountProduct.addItemDecoration(itemDecoration2)
+        //recyclerViewDiscountProduct.addItemDecoration(itemDecoration2)
         recyclerViewDiscountProduct.isNestedScrollingEnabled = false
 
         mHomeViewModel?.discountedProductListing?.observe(viewLifecycleOwner, {

@@ -29,6 +29,8 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
     var popularProductListing = MutableLiveData<MutableList<HomeProductListingResponse.Docs>>()
     var discountedProductListing = MutableLiveData<MutableList<HomeProductListingResponse.Docs>>()
 
+    val isItemLoaded = MutableLiveData(true)
+
     fun setVariable(mBinding: FragmentHomeBinding) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
@@ -39,8 +41,8 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
         val params = HashMap<String, String>()
         params["page_no"] = "1"
         params["limit"] = "6"
-        discountedProductObserver(params)
         popularProductObserver(params)
+        discountedProductObserver(params)
     }
 
     fun onViewAllClick(type: Int) {
@@ -139,6 +141,7 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             popularProductListing.value = users.data?.docs!!
+
                         }
                     }
 
@@ -172,12 +175,14 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
+                        isItemLoaded.value = true
                         resource.data?.let { users ->
                             discountedProductListing.value = users.data?.docs!!
                         }
                     }
 
                     Status.ERROR -> {
+                        isItemLoaded.value = true
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
                             mActivity.toast(it.message)

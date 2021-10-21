@@ -23,8 +23,7 @@ import android.text.SpannableString
 import android.text.style.StyleSpan
 
 import android.widget.TextView
-
-
+import androidx.fragment.app.Fragment
 
 
 /**
@@ -33,9 +32,22 @@ import android.widget.TextView
 fun Context?.toast(text: CharSequence, duration: Int = Toast.LENGTH_SHORT) = this?.let {
     //Toast.makeText(it, text, duration).show()
     val typeface = Typeface.createFromAsset(assets, "linotte_regular.otf")
+    //val typeface2 = Typeface.createFromAsset(assets, "tt.ttf")
     val spannableString = SpannableString(text)
-    spannableString.setSpan(StyleSpan(typeface.style),0, text.toString().length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    Toast.makeText(it, spannableString, duration).show()
+    spannableString.setSpan(StyleSpan(typeface.style),0, text.toString().length-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    //Toast.makeText(it, spannableString, duration).show()
+
+    if(it is Activity){
+        Snackbar.make((it as Activity).window.decorView.findViewById(android.R.id.content),
+            spannableString, Snackbar.LENGTH_SHORT).show()
+    }
+    else if (it is Fragment){
+        Snackbar.make((it as Fragment).requireActivity().window.decorView.findViewById(android.R.id.content),
+            spannableString, Snackbar.LENGTH_SHORT).show()
+    }
+    else{
+        Toast.makeText(it, spannableString, duration).show()
+    }
 }
 
 /**

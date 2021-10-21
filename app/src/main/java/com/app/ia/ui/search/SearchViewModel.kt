@@ -32,6 +32,8 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
     val isLastPage = MutableLiveData(false)
     private var voiceText = MutableLiveData("")
 
+    var isLoading = true
+
     fun setVariable(mBinding: ActivitySearchBinding) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
@@ -77,11 +79,12 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
     }
 
     private fun productListingObserver(requestParams: HashMap<String, String>) {
-
+        isLoading = true
         getProductListing(requestParams).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
+                        isLoading = false
                         resource.data?.let { users ->
                             isItemAvailable.value = users.data?.docs!!.size > 0
                             isLastPage.value = (currentPage.value == users.data?.totalPages)
@@ -91,6 +94,7 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                     }
 
                     Status.ERROR -> {
+                        isLoading = false
                         baseRepository.callback.hideProgress()
                         mActivity.toast(it.message!!)
                     }
