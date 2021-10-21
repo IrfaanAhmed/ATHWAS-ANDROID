@@ -34,6 +34,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.databinding.InverseMethod
 import com.app.ia.IAApplication
 import com.app.ia.R
 import com.app.ia.local.AppPreferencesHelper
@@ -176,9 +177,10 @@ object CommonUtils {
     /*
      * Method to convert number into 2 points after decimal.
      * */
-    fun convertToDecimal(value: Any?): String {
+    @InverseMethod("convertToDecimal")
+    @JvmStatic fun convertToDecimal(value: Any?): String {
         if (value == null) {
-            return "0"
+            return "00"
         }
 
         val symbols = DecimalFormatSymbols(Locale.ENGLISH)
@@ -188,7 +190,7 @@ object CommonUtils {
             is Double -> df2.format(value)
             is String -> df2.format(value.toDouble())
             is Int -> df2.format((value.toString()).toDouble())
-            else -> "0"
+            else -> "00"
         }
     }
 

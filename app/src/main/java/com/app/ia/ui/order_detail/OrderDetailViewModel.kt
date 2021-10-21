@@ -118,7 +118,7 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
                                 }
                             }
 
-                            offerAmount.value = CommonUtils.convertToDecimal((totalAmount.value!! - orderDetailResponse.value!!.getTotalAmount().toDouble()) + orderDetailResponse.value!!.getDiscount().toDouble()).toDouble()
+                            offerAmount.value = CommonUtils.convertToDecimal(/*(totalAmount.value!! - orderDetailResponse.value!!.getTotalAmount().toDouble()) + */orderDetailResponse.value!!.getDiscount().toDouble()).toDouble()
 
                             Handler(Looper.myLooper()!!).postDelayed({
                                 (mActivity as OrderDetailActivity).onReturnClicked = false

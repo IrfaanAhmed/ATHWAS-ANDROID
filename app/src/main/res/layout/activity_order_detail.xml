@@ -6,6 +6,7 @@
     <data>
 
         <import type="android.view.View" />
+        <import type="com.app.ia.utils.CommonUtils" />
 
         <variable
             name="viewModel"
@@ -294,7 +295,7 @@
                             android:id="@+id/txtViewSubTotal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{@string/inr_price(viewModel.totalAmount)}"
+                            android:text="@{@string/inr_price(CommonUtils.convertToDecimal(viewModel.totalAmount))}"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_12sdp" />
 
@@ -332,7 +333,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="end"
-                            android:text="@{@string/inr_price(viewModel.offerAmount)}"
+                            android:text="@{@string/inr_price(CommonUtils.convertToDecimal(viewModel.offerAmount))}"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_13sdp" />
 
@@ -388,7 +389,7 @@
                             android:id="@+id/txtViewTax"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.orderDetailResponse.getVatAmount() != null ? @string/inr_price(viewModel.orderDetailResponse.getVatAmount()) : @string/inr_price(`0`)}"
+                            android:text="@{viewModel.orderDetailResponse.getVatAmount() != null ? @string/inr_price(viewModel.orderDetailResponse.getVatAmount()) : @string/inr_price(`0.00`)}"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_12sdp" />
 
@@ -452,7 +453,7 @@
                             android:id="@+id/textViewTotalAmount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.orderDetailResponse.netAmount != null ? @string/inr_price(viewModel.orderDetailResponse.netAmount) : @string/inr_price(`0`)}"
+                            android:text="@{viewModel.orderDetailResponse.netAmount != null ? @string/inr_price(viewModel.orderDetailResponse.netAmount) : @string/inr_price(`0.00`)}"
                             android:textAllCaps="true"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/_12sdp"

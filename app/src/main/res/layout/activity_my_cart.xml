@@ -7,6 +7,7 @@
     <data>
 
         <import type="android.view.View" />
+        <import type="com.app.ia.utils.CommonUtils" />
 
         <variable
             name="viewModel"
@@ -174,7 +175,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/linotte_semi_bold"
-                                android:text="@{@string/inr_price(viewModel.totalAmount)}"
+                                android:text="@{@string/inr_price(CommonUtils.convertToDecimal(viewModel.totalAmount))}"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_11sdp" />
 
@@ -183,7 +184,7 @@
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{`Saved: `+ @string/inr_price(viewModel.totalSavedAmount)}"
+                            android:text="@{`Saved: `+ @string/inr_price(CommonUtils.convertToDecimal(viewModel.totalSavedAmount))}"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_11sdp" />
 

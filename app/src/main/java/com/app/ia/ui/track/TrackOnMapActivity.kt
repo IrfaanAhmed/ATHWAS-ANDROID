@@ -39,13 +39,6 @@ import org.json.JSONObject
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 
-
-
-
-
-
-
-
 class TrackOnMapActivity : BaseActivity<ActivityTrackOnMapBinding, TrackOnMapViewModel>(), OnMapReadyCallback {
 
     var mBinding: ActivityTrackOnMapBinding? = null
