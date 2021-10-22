@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/linotte_semi_bold"
-                    android:text="@string/no_data_found"
+                    android:text="No Products"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/_15sdp"
                     android:visibility="@{viewModel.isProductCategoryAvailable() ? View.GONE : View.VISIBLE}" />

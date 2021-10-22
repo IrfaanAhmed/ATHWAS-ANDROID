@@ -209,6 +209,7 @@
     <string name="logout_msg">Are you sure you want to logout?</string>
     <string name="name_should_be_min_2_char">Name should be at least 2 characters</string>
     <string name="name_should_be_characters_only">Name should be characters only</string>
+    <string name="name_valid_msg">Only Characters Allowed</string>
     <string name="please_enter_amount">Please enter amount</string>
     <string name="please_enter_otp">Please enter otp</string>
 

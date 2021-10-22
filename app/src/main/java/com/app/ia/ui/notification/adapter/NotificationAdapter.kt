@@ -55,7 +55,7 @@ class NotificationAdapter(private val mViewModel: NotificationViewModel?) : List
                 executePendingBindings()
 
                  deleteLayout.setOnClickListener {
-                     val tivoDialog = IADialog(itemView.context as Activity, "Are you sure you want to delete notification?", false)
+                     val tivoDialog = IADialog(itemView.context as Activity, "", "Are you sure you want to delete notification?", "Yes", "No", false)
                      tivoDialog.setOnItemClickListener(object  : IADialog.OnClickListener {
 
                          override fun onPositiveClick() {

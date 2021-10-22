@@ -59,8 +59,15 @@ class NotificationActivity : BaseActivity<ActivityNotificationBinding, Notificat
         toolbar.ivEditProfileIcon.setImageResource(R.drawable.ic_delete)
 
         toolbar.ivEditProfileIcon.setOnClickListener {
+            if(mViewModel.notificationListData.value != null){
+                if(mViewModel.notificationListData.value!!.size <= 0){
+                    toast("Sorry, there are no notifications in list")
+                    return@setOnClickListener
+                }
+            }
 
-            val tivoDialog = IADialog(this, "Are you sure you want to delete all notification?", false)
+
+            val tivoDialog = IADialog(this, "","Are you sure you want to delete all notification?", "Yes", "No", false)
             tivoDialog.setOnItemClickListener(object  : IADialog.OnClickListener {
 
                 override fun onPositiveClick() {

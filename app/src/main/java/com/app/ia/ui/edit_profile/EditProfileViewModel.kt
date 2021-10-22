@@ -59,7 +59,7 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
                 IADialog(mActivity, mActivity.getString(R.string.name_should_be_min_2_char), true)
             }
             ValidationUtils.isHaveLettersOnly(name) ->{
-                IADialog(mActivity, mActivity.getString(R.string.name_should_be_characters_only), true)
+                IADialog(mActivity, mActivity.getString(R.string.name_valid_msg), true)
             }
             else -> {
                 val requestParams = HashMap<String, String>()
