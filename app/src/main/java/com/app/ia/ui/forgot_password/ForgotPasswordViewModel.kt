@@ -42,21 +42,25 @@ class ForgotPasswordViewModel(private val baseRepository: BaseRepository) : Base
         (baseRepository.callback).hideKeyboard()
         val mobileNumber = mBinding.edtTextMobileNumber.text.toString()
         val flag: Boolean
-
+        mBinding.tilTextMobileNumber.error = null
+        mBinding.tilTextMobileNumber.isErrorEnabled = false
         if (TextUtils.isEmpty(mobileNumber)) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_email_mobile_no), true)
+            //IADialog(mActivity, mActivity.getString(R.string.enter_email_mobile_no), true)
+            mBinding.tilTextMobileNumber.error = mActivity.getString(R.string.enter_email_mobile_no)
             return
         } else {
             flag = if (Pattern.matches("[0-9]+", mobileNumber)) {
                 if (mobileNumber.length < 7 || mobileNumber.length > 15) {
-                    IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
+                    //IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
+                    mBinding.tilTextMobileNumber.error = mActivity.getString(R.string.enter_valid_mobile_no)
                     return
                 } else {
                     true
                 }
             } else {
                 if (!isEmailValid(mobileNumber)) {
-                    IADialog(mActivity, mActivity.getString(R.string.enter_valid_email), true)
+                    //IADialog(mActivity, mActivity.getString(R.string.enter_valid_email), true)
+                    mBinding.tilTextMobileNumber.error = mActivity.getString(R.string.enter_valid_email)
                     return
                 } else {
                     true

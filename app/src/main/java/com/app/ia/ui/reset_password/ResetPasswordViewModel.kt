@@ -53,12 +53,21 @@ class ResetPasswordViewModel(private val baseRepository: BaseRepository) : BaseV
         val otpPin = mBinding.pinView.text.toString()
         val newPassword = mBinding.edtTextNewPassword.text.toString()
         val confirmPassword = mBinding.edtTextConfirmPassword.text.toString()
+
+        mBinding.tilTextNewPassword.error = null
+        mBinding.tilTextConfirmPassword.error = null
+
+        mBinding.tilTextNewPassword.isErrorEnabled = false
+        mBinding.tilTextConfirmPassword.isErrorEnabled = false
+
         if (otpPin.isEmpty() || otpPin.length < 4) {
             IADialog(mActivity, "Please enter 4 digits OTP", true)
         } else if (newPassword.isEmpty()) {
-            IADialog(mActivity, "Please enter new password", true)
+            //IADialog(mActivity, "Please enter new password", true)
+            mBinding.tilTextNewPassword.error =  "Please enter new password"
         } else if (confirmPassword.isEmpty()) {
-            IADialog(mActivity, "Please enter confirm password", true)
+            //IADialog(mActivity, "Please enter confirm password", true)
+            mBinding.tilTextConfirmPassword.error =  "Please enter confirm password"
         } else if (checkPasswordLength(newPassword, confirmPassword)) {
             IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
         } else if (newPassword != confirmPassword) {

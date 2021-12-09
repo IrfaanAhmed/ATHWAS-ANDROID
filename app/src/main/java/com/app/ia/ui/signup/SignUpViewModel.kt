@@ -96,23 +96,40 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         val phone = mBinding.editTextMobile.text.toString().trim()
         val password = mBinding.edtTextPassword.text.toString()
 
+        mBinding.tilTextName.error = null
+        mBinding.tilTextEmail.error = null
+        mBinding.tilTextMobile.error = null
+        mBinding.tilTextPassword.error = null
+
+        mBinding.tilTextName.isErrorEnabled = false
+        mBinding.tilTextEmail.isErrorEnabled = false
+        mBinding.tilTextMobile.isErrorEnabled = false
+        mBinding.tilTextPassword.isErrorEnabled = false
+
         if (name.length < 3 || name.length > 30) {
-            IADialog(mActivity, mActivity.getString(R.string.msg_name_validation_length), true)
+            //IADialog(mActivity, mActivity.getString(R.string.msg_name_validation_length), true)
+            mBinding.tilTextName.error = mActivity.getString(R.string.msg_name_validation_length)
         }
         else if(ValidationUtils.isHaveLettersOnly(name)){
-            IADialog(mActivity, mActivity.getString(R.string.msg_name_validation), true)
+            //IADialog(mActivity, mActivity.getString(R.string.msg_name_validation), true)
+            mBinding.tilTextName.error = mActivity.getString(R.string.msg_name_validation)
         }else if (!ValidationUtils.isValidPhone(phone)) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
+            //IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
+            mBinding.tilTextMobile.error = mActivity.getString(R.string.enter_valid_mobile_no)
         } else if (email.length < 9 || email.length > 320) {
-            IADialog(mActivity, mActivity.getString(R.string.msg_email_validation_length), true)
+            //IADialog(mActivity, mActivity.getString(R.string.msg_email_validation_length), true)
+            mBinding.tilTextEmail.error = mActivity.getString(R.string.msg_email_validation_length)
         }  else if (!ValidationUtils.isValidEmail(email)) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_valid_email), true)
+            //IADialog(mActivity, mActivity.getString(R.string.enter_valid_email), true)
+            mBinding.tilTextEmail.error = mActivity.getString(R.string.enter_valid_email)
         }
         else if(password.contains(" ")){
-            IADialog(mActivity, mActivity.getString(R.string.invalid_password_format), true)
+            //IADialog(mActivity, mActivity.getString(R.string.invalid_password_format), true)
+            mBinding.tilTextPassword.error = mActivity.getString(R.string.invalid_password_format)
         }
         else if (password.length < 6 || password.length > 20) {
-            IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+            //IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+            mBinding.tilTextPassword.error = mActivity.getString(R.string.password_should_be_min_6_char)
         }else if (!mBinding.checkBox.isChecked) {
             IADialog(mActivity, mActivity.getString(R.string.accept_terms_n_condition), true)
         } else {
