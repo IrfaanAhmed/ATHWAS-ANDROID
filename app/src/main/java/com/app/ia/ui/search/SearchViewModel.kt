@@ -34,10 +34,30 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
 
     var isLoading = true
 
+    var businessCategoryId = ""
+    var categoryId = ""
+    var subCategoryId = ""
+
+    companion object{
+        val BUSINESS_CATEGORY_ID = "BUSINESS_CATEGORY_ID"
+        val CATEGORY_ID = "CATEGORY_ID"
+        val SUB_CATEGORY_ID = "SUB_CATEGORY_ID"
+    }
+
     fun setVariable(mBinding: ActivitySearchBinding) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
         title.set(mActivity.getString(R.string.search))
+
+        if(this.mActivity.intent.hasExtra(BUSINESS_CATEGORY_ID)){
+            businessCategoryId = this.mActivity.intent.extras?.getString(BUSINESS_CATEGORY_ID, "").toString()
+        }
+        if(this.mActivity.intent.hasExtra(CATEGORY_ID)){
+            categoryId = this.mActivity.intent.extras?.getString(CATEGORY_ID, "").toString()
+        }
+        if(this.mActivity.intent.hasExtra(SUB_CATEGORY_ID)){
+            subCategoryId = this.mActivity.intent.extras?.getString(SUB_CATEGORY_ID, "").toString()
+        }
     }
 
     fun onClearClick() {
@@ -65,6 +85,9 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         val requestParams = HashMap<String, String>()
         requestParams["page_no"] = currentPage.value!!.toString()
         requestParams["keyword"] = keyword
+        requestParams["business_category_id"] = businessCategoryId
+        requestParams["category_id"] = categoryId
+        requestParams["sub_category_id"] = subCategoryId
         requestParams["filter"] = JsonArray().toString()
         productListingObserver(requestParams)
     }

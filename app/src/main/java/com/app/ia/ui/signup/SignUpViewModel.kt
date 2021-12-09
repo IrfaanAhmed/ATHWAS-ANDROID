@@ -88,29 +88,32 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
     }
 
     fun onUserSignUp() {
+        mBinding.editTextName.setText(mBinding.editTextName.text.toString().trim())
+        mBinding.edtTextEmail.setText(mBinding.edtTextEmail.text.toString().trim())
 
-        val name = mBinding.editTextName.text.toString().trim()
-        val email = mBinding.edtTextEmail.text.toString().trim()
+        val name = mBinding.editTextName.text.toString()
+        val email = mBinding.edtTextEmail.text.toString()
         val phone = mBinding.editTextMobile.text.toString().trim()
-        val password = mBinding.edtTextPassword.text.toString().trim()
+        val password = mBinding.edtTextPassword.text.toString()
 
-        if (name.isEmpty()) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_name), true)
-        } else if (name.length < 2) {
-            IADialog(mActivity, mActivity.getString(R.string.name_should_be_min_2_char), true)
-        } else if (phone.isEmpty()) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_your_mobile_no), true)
-        } else if (!validateNumber(phone)) {
+        if (name.length < 3 || name.length > 30) {
+            IADialog(mActivity, mActivity.getString(R.string.msg_name_validation_length), true)
+        }
+        else if(ValidationUtils.isHaveLettersOnly(name)){
+            IADialog(mActivity, mActivity.getString(R.string.msg_name_validation), true)
+        }else if (!ValidationUtils.isValidPhone(phone)) {
             IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
-        } else if (email.isEmpty()) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_your_email), true)
-        } else if (!email.isValidEmail()) {
+        } else if (email.length < 9 || email.length > 320) {
+            IADialog(mActivity, mActivity.getString(R.string.msg_email_validation_length), true)
+        }  else if (!ValidationUtils.isValidEmail(email)) {
             IADialog(mActivity, mActivity.getString(R.string.enter_valid_email), true)
-        } else if (password.isEmpty()) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_your_password), true)
-        } else if (password.length < 6) {
+        }
+        else if(password.contains(" ")){
+            IADialog(mActivity, mActivity.getString(R.string.invalid_password_format), true)
+        }
+        else if (password.length < 6 || password.length > 20) {
             IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
-        } else if (!mBinding.checkBox.isChecked) {
+        }else if (!mBinding.checkBox.isChecked) {
             IADialog(mActivity, mActivity.getString(R.string.accept_terms_n_condition), true)
         } else {
 

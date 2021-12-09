@@ -41,9 +41,9 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
     //Variable to check product available or not
     val isItemAvailable = MutableLiveData(true)
 
-    private var businessCategoryId = MutableLiveData<String>()
+    var businessCategoryId = MutableLiveData<String>()
     var categoryId = MutableLiveData<String>()
-    private var subCategoryId = MutableLiveData<String>()
+    var subCategoryId = MutableLiveData<String>()
     var brandId = MutableLiveData("")
     var minPrice = MutableLiveData("")
     var maxPrice = MutableLiveData("")
@@ -84,10 +84,33 @@ class ProductListViewModel(private val baseRepository: BaseRepository) : BaseVie
                 subCategoryId.value = constSubCategoryId
                 filterData.categoryId = constCategoryId
                 filterData.subCategoryId = constSubCategoryId
-                setUpObserver()
             }
             3 -> {
                 bannerId.value = intent.getStringExtra("banner_id")!!
+                mBinding.llFilterView.visibility = View.GONE
+            }
+            else -> {
+                mBinding.llFilterView.visibility = View.GONE
+            }
+        }
+        onStart()
+    }
+
+    fun onStart(){
+        currentPage.value = 1
+        isLastPage.value = false
+        productListAll.clear()
+        when (type) {
+            0 -> {
+                mBinding.llFilterView.visibility = View.VISIBLE
+
+                categoryId.value = constCategoryId
+                subCategoryId.value = constSubCategoryId
+                filterData.categoryId = constCategoryId
+                filterData.subCategoryId = constSubCategoryId
+                setUpObserver()
+            }
+            3 -> {
                 mBinding.llFilterView.visibility = View.GONE
                 dealOfTheDayBannerProductObserver(bannerId.value!!)
             }

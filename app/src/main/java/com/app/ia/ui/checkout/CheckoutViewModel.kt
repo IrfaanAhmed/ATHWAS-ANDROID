@@ -84,7 +84,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
         val requestParams = HashMap<String, String>()
         requestParams["page_no"] = "1"
-        requestParams["limit"] = "40"
+        requestParams["limit"] = "400"
         cartListingObserver(requestParams)
 
         mBinding.rewardCheckBox.setOnClickListener {
@@ -262,7 +262,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                             cartListAll.clear()
                             val request = HashMap<String, String>()
                             request["page_no"] = "1"
-                            request["limit"] = "30"
+                            request["limit"] = "400"
                             cartListingObserver(request)
                         }
                     }
@@ -326,6 +326,13 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                             mActivity.toast(it.message)
                         }
                         (mActivity as CheckoutActivity).changeSwipeButtonStatus()
+
+                        isCartChanged = true
+                        cartListAll.clear()
+                        val request = HashMap<String, String>()
+                        request["page_no"] = "1"
+                        request["limit"] = "400"
+                        cartListingObserver(request)
                     }
 
                     Status.LOADING -> {

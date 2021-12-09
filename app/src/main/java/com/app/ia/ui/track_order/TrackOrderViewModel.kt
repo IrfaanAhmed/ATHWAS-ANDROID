@@ -48,6 +48,7 @@ class TrackOrderViewModel(private val baseRepository: BaseRepository) : BaseView
         } else {
             if (orderDetailResponse.value?.driver != null && orderDetailResponse.value?.driver?.size!! > 0 && orderDetailResponse.value?.currentTrackingStatus.equals("In_Transit", true)) {
                 val intent = Intent(getActivityNavigator()!!, TrackOnMapActivity::class.java)
+                intent.putExtra("order_id", "" + orderDetailResponse.value?.Id)
                 intent.putExtra("courier_id", "" + orderDetailResponse.value?.driver!![0].Id)
                 intent.putExtra("rest_lat", orderDetailResponse.value?.deliveryAddress?.addressLocation?.coordinates!![1])
                 intent.putExtra("rest_lng", orderDetailResponse.value?.deliveryAddress?.addressLocation?.coordinates!![0])

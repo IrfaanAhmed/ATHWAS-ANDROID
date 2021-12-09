@@ -46,7 +46,7 @@
     <string name="didn_t_receive_the_otp">Didn\'t receive the OTP?</string>
     <string name="enter_email_mobile_no">Please enter mobile number or email</string>
     <string name="enter_valid_email_mobile_no">Please enter valid mobile number or email</string>
-    <string name="enter_valid_mobile_no">Please enter valid mobile number</string>
+    <string name="enter_valid_mobile_no">Invalid Mobile Number!</string>
     <string name="enter_your_mobile_no">Please enter your mobile number</string>
     <string name="enter_registered_mobile_no">Please enter your registered Mobile Number</string>
     <string name="enter_password">Please enter password</string>
@@ -69,7 +69,8 @@
 
     <string name="enter_name">Please enter your name</string>
     <string name="enter_your_email">Please enter your email</string>
-    <string name="enter_valid_email">Please enter valid email address</string>
+    <string name="msg_email_validation_length">9 to 320 characters allowed!</string>
+    <string name="enter_valid_email">Wrong Email ID format!</string>
     <string name="no_wallet_history_available">No wallet History Available</string>
     <string name="no_orders_available">No Orders Available</string>
     <string name="no_money_request_available">No Money Requests Available</string>
@@ -83,7 +84,8 @@
     <string name="please_enter_new_password">Please enter new password</string>
     <string name="please_enter_confirm_password">Please enter confirm password</string>
     <string name="password_confirm_password_same">Password and confirm password should be same</string>
-    <string name="password_should_be_min_6_char">Password should be at least 6 characters.</string>
+    <string name="password_should_be_min_6_char">Password must be 6 to 20 characters.</string>
+    <string name="invalid_password_format">No spaces allowed in password</string>
     <string name="accept_terms_n_condition">Please accept terms &amp; Condition.</string>
     <string name="confirm_password_should_be_same_as_new_password">Confirm Password should be same as new password.</string>
     <string name="you_can_not_request_yourself">You can\'t request to yourself.</string>
@@ -215,6 +217,8 @@
 
     <string name="otp_sent_on_mobile_or_email">OTP has been sent to your mobile number or email address.Please verify</string>
     <string name="please_enter_name">Please enter name</string>
+    <string name="msg_name_validation_length">3 to 30 characters allowed!</string>
+    <string name="msg_name_validation">Letters allowed only!</string>
     <string name="update">Update</string>
     <string name="search">Search</string>
     <string name="no_data_found">No Data Found</string>
@@ -224,7 +228,7 @@
     <string name="apply_code">Apply Code</string>
     <string name="promo_code_applied">Promo code applied successfully</string>
     <string name="delete">Delete</string>
-    <string name="need_login_msg">You need to login to access this feature</string>
+    <string name="need_login_msg">To proceed, you need to login first</string>
     <string name="continues">Continue</string>
     <string name="apply_filters">Apply Filters</string>
     <string name="clear_filters">Clear Filters</string>

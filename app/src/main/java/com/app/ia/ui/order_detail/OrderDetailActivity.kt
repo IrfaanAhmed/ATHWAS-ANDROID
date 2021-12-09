@@ -1,7 +1,10 @@
 package com.app.ia.ui.order_detail
 
 import android.app.Dialog
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,6 +15,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.ia.BR
 import com.app.ia.IAApplication
 import com.app.ia.R
@@ -86,9 +90,10 @@ class OrderDetailActivity : BaseActivity<ActivityOrderDetailBinding, OrderDetail
                 } else {
                     orderDetailListAdapter?.submitList(it.category)
                 }
+                orderDetailListAdapter?.notifyDataSetChanged()
             }
 
-            if (it?.orderStatus!! == 1 || it.orderStatus == 2) {
+            if (it?.orderStatus!! == 1 || it.orderStatus == 2 || it.orderStatus == 3) {
                 buttonDownloadInvoice.visibility = View.VISIBLE
             } else {
                 buttonDownloadInvoice.visibility = View.GONE
@@ -151,6 +156,11 @@ class OrderDetailActivity : BaseActivity<ActivityOrderDetailBinding, OrderDetail
                 //cancelledReasonDialog(params, isGroceryOrder = false, isReturn = false)
             }
         })
+
+        val localBroadcastReceiver = LocalBroadcastManager.getInstance(this)
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(AppConstants.ACTION_BROADCAST_REFRESH_ON_NOTIFICATION)
+        localBroadcastReceiver.registerReceiver(refreshListener, intentFilter)
     }
 
     private fun setViewModel() {
@@ -160,12 +170,12 @@ class OrderDetailActivity : BaseActivity<ActivityOrderDetailBinding, OrderDetail
 
     override fun onResume() {
         super.onResume()
-        refresh()
         IAApplication.getInstance().setCurrentActivity(this)
     }
 
     override fun onStart() {
         super.onStart()
+        refresh()
         IAApplication.getInstance().setCurrentActivity(this)
     }
 
@@ -225,10 +235,20 @@ class OrderDetailActivity : BaseActivity<ActivityOrderDetailBinding, OrderDetail
         }
     }
 
-    fun refresh() {
-        if (!onReturnClicked) {
-            mViewModel?.orderDetailObserver(mViewModel?.order_id?.value!!)
+    private val refreshListener = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            //CommonUtils.showNotificationCount(toolbar.txtNotificationCount)
+            if (intent!!.getBooleanExtra("refresh", false)) {
+                mViewModel?.orderDetailObserver(mViewModel?.order_id?.value!!)
+            }
         }
+    }
+
+    fun refresh() {
+        mViewModel?.orderDetailObserver(mViewModel?.order_id?.value!!)
+        /*if (!onReturnClicked) {
+            mViewModel?.orderDetailObserver(mViewModel?.order_id?.value!!)
+        }*/
     }
 
     override fun onBackPressed() {

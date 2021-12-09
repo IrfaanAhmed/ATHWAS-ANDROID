@@ -89,36 +89,61 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textViewLogo" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtTextMobileNumber"
-                        android:layout_width="0dp"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilTextMobileNumber"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:background="@drawable/edittext_bg"
-                        android:hint="@string/email_mobile_number"
-                        android:singleLine="true"
-                        android:padding="@dimen/_10sdp"
-                        android:textAlignment="viewStart"
-                        android:textSize="@dimen/_12sdp"
+                        app:boxCornerRadiusTopStart="3dp"
+                        app:boxCornerRadiusTopEnd="3dp"
+                        app:boxCornerRadiusBottomStart="3dp"
+                        app:boxCornerRadiusBottomEnd="3dp"
+                        app:hintEnabled="false"
+                        app:boxStrokeColor="@color/bg_edittext"
+                        app:boxStrokeWidth="1dp"
+                        app:boxStrokeWidthFocused="1dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textViewLoginContinue" />
+                        app:layout_constraintTop_toBottomOf="@+id/textViewLoginContinue" >
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtTextMobileNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:padding="5dp"
+                            android:textSize="@dimen/_12sdp"
+                            android:inputType="textEmailAddress"
+                            android:hint="@string/email_mobile_number"
+                            android:maxLength="100" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtTextPassword"
-                        android:layout_width="0dp"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilTextPassword"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:background="@drawable/edittext_bg"
-                        android:hint="@string/password"
-                        android:inputType="textPassword"
-                        android:singleLine="true"
-                        android:padding="@dimen/_10sdp"
-                        android:textAlignment="viewStart"
-                        android:textSize="@dimen/_12sdp"
+                        app:boxCornerRadiusTopStart="3dp"
+                        app:boxCornerRadiusTopEnd="3dp"
+                        app:boxCornerRadiusBottomStart="3dp"
+                        app:boxCornerRadiusBottomEnd="3dp"
+                        app:hintEnabled="false"
+                        app:boxStrokeColor="@color/bg_edittext"
+                        app:boxStrokeWidth="1dp"
+                        app:boxStrokeWidthFocused="1dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/edtTextMobileNumber" />
+                        app:layout_constraintTop_toBottomOf="@+id/tilTextMobileNumber" >
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtTextPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:padding="5dp"
+                            android:textSize="@dimen/_12sdp"
+                            android:inputType="textPassword"
+                            android:hint="@string/password"
+                            android:maxLength="100" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/textView4"
@@ -130,8 +155,8 @@
                         android:text="@string/forgot_password"
                         android:textColor="@color/theme_color"
                         android:textSize="@dimen/_12sdp"
-                        app:layout_constraintEnd_toEndOf="@+id/edtTextPassword"
-                        app:layout_constraintTop_toBottomOf="@+id/edtTextPassword" />
+                        app:layout_constraintEnd_toEndOf="@+id/tilTextPassword"
+                        app:layout_constraintTop_toBottomOf="@+id/tilTextPassword" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/buttonLogin"
@@ -144,8 +169,8 @@
                         android:textAllCaps="false"
                         android:textSize="@dimen/_13sdp"
                         app:fontFamily="@font/linotte_bold"
-                        app:layout_constraintEnd_toEndOf="@+id/edtTextPassword"
-                        app:layout_constraintStart_toStartOf="@+id/edtTextPassword"
+                        app:layout_constraintEnd_toEndOf="@+id/tilTextPassword"
+                        app:layout_constraintStart_toStartOf="@+id/tilTextPassword"
                         app:layout_constraintTop_toBottomOf="@id/textView4" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

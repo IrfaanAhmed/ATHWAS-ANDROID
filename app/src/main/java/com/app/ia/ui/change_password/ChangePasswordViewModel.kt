@@ -30,13 +30,16 @@ class ChangePasswordViewModel(private val baseRepository: BaseRepository) : Base
         val confirmPassword = mBinding.edtTextConfirmPassword.text.toString()
 
         when {
-            oldPassword.isEmpty() -> {
-                IADialog(mActivity, mActivity.getString(R.string.please_enter_old_password), true)
+            /*oldPassword.length < 6 || oldPassword.length > 20 -> {
+                IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+            }*/
+            newPassword.contains(" ") -> {
+                IADialog(mActivity, mActivity.getString(R.string.invalid_password_format), true)
             }
-            oldPassword.length < 6 -> {
+            newPassword.length < 6 || newPassword.length > 20 -> {
                 IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
             }
-            newPassword.isEmpty() -> {
+            /*newPassword.isEmpty() -> {
                 IADialog(mActivity, mActivity.getString(R.string.please_enter_new_password), true)
             }
             newPassword.length < 6 -> {
@@ -47,7 +50,7 @@ class ChangePasswordViewModel(private val baseRepository: BaseRepository) : Base
             }
             confirmPassword.length < 6 -> {
                 IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
-            }
+            }*/
             confirmPassword != newPassword -> {
                 IADialog(mActivity, mActivity.getString(R.string.confirm_password_should_be_same_as_new_password), true)
             }

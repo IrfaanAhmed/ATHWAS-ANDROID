@@ -47,12 +47,13 @@ class CartListItemAdapter(private val updateListener: CartUpdateListener) : List
                 executePendingBindings()
                 itemView.tvActualPrice.paintFlags = itemView.tvActualPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 var quantity = productItem.quantity
+
                 ivMinus.setOnClickListener {
                     if (quantity == 1) {
 
                     } else {
                         quantity -= 1
-                        itemView.tvQuantity.text = quantity.toString()
+                        //itemView.tvQuantity.text = quantity.toString()
                         updateListener.onUpdate(productItem, quantity)
                     }
                 }
@@ -60,7 +61,7 @@ class CartListItemAdapter(private val updateListener: CartUpdateListener) : List
                 ivPlus.setOnClickListener {
                     if (quantity < productItem.getRemainingQuantity()) {
                         quantity += 1
-                        itemView.tvQuantity.text = quantity.toString()
+                        //itemView.tvQuantity.text = quantity.toString()
                         updateListener.onUpdate(productItem, quantity)
                     } else {
                         IADialog(itemView.context!! as Activity, "You cannot order more than " + productItem.getRemainingQuantity() + " units", true)
@@ -86,6 +87,11 @@ class CartListItemAdapter(private val updateListener: CartUpdateListener) : List
                     textStatus.text = "Out of stock"
                     layoutNotAvailable.visibility = View.VISIBLE
                     layoutQuantity.visibility = View.GONE
+                }
+                else if(productItem.quantity > productItem.availableQuantity){
+                    textStatus.text = "${productItem.availableQuantity} items in stocks"
+                    layoutNotAvailable.visibility = View.VISIBLE
+                    layoutQuantity.visibility = View.VISIBLE
                 }
                 else{
                     textStatus.text = ""

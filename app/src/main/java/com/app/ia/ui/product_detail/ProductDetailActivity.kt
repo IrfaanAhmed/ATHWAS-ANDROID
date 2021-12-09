@@ -23,6 +23,7 @@ import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.ui.my_cart.MyCartActivity
 import com.app.ia.ui.product_detail.adapter.ProductImageAdapter
 import com.app.ia.ui.search.SearchActivity
+import com.app.ia.ui.search.SearchViewModel
 import com.app.ia.utils.*
 import com.kenilt.loopingviewpager.scroller.AutoScroller
 import kotlinx.android.synthetic.main.activity_pdf_preview.view.*
@@ -73,7 +74,11 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding, Product
         }
 
         toolbar.ivSearchIcon.setOnClickListener {
-            startActivity<SearchActivity>()
+            startActivity<SearchActivity>(){
+                putExtra(SearchViewModel.BUSINESS_CATEGORY_ID, mViewModel?.productDetail?.value?.businessCategory?.Id)
+                putExtra(SearchViewModel.CATEGORY_ID, mViewModel?.productDetail?.value?.category?.Id)
+                putExtra(SearchViewModel.SUB_CATEGORY_ID, mViewModel?.productDetail?.value?.subcategory?.Id)
+            }
         }
 
         mViewModel?.productDetail?.observe(this, {
@@ -97,6 +102,11 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding, Product
         })
 
         priceTextView.paintFlags = priceTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mViewModel?.onStart()
     }
 
     override fun onResume() {

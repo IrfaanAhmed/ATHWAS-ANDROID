@@ -100,7 +100,7 @@ object Api {
         return when (environmentType) {
 
             ENVIRONMENT.LOCAL.ordinal -> {
-                "http://192.168.1.177:3050/"
+                "http://192.168.1.78:3050/"
             }
 
             ENVIRONMENT.DEVELOPMENT.ordinal -> {

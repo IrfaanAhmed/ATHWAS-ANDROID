@@ -218,6 +218,7 @@ data class OrderDetailResponse(
         return CommonUtils.convertToDecimal(deliveryFee)
     }
 
+
     data class DeliveryAddress(
         @Expose
         @SerializedName("_id")
@@ -454,7 +455,10 @@ data class OrderDetailResponse(
             val categoryData: CategoryData,
             @Expose
             @SerializedName("SubCategoryData")
-            val subCategoryData: CategoryData) : Serializable {
+            val subCategoryData: CategoryData,
+            @Expose
+            @SerializedName("productInventryData")
+            val inventoryData: InventoryData) : Serializable {
 
             fun getPrice(): String {
                 return CommonUtils.convertToDecimal(price)
@@ -467,6 +471,28 @@ data class OrderDetailResponse(
             fun getDescription(): String {
                 val contentText = SpannableString(description)
                 return Html.fromHtml(Html.toHtml(contentText)).toString()
+            }
+
+            data class InventoryData(@Expose
+                                     @SerializedName("_id")
+                                     val Id: String,
+                                     @Expose
+                                     @SerializedName("inventory_name")
+                                     val inventoryName: String): Serializable{
+                @Expose
+                @SerializedName("review")
+                var reviews = arrayListOf<Review>()
+
+                data class Review(
+                    @Expose
+                    @SerializedName("_id")
+                    val Id: String,
+                    @Expose
+                    @SerializedName("review")
+                    var review: String,
+                    @Expose
+                    @SerializedName("rating")
+                    var rating: Float): Serializable
             }
 
             data class CategoryData(

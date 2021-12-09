@@ -74,6 +74,31 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
         })
     }
 
+    fun validateFields(): Boolean{
+        var isValid = true
+
+        mBinding.tilTextMobileNumber.error = null
+        mBinding.tilTextPassword.error = null
+
+        mBinding.tilTextMobileNumber.isErrorEnabled = false
+        mBinding.tilTextPassword.isErrorEnabled = false
+
+        val mobileNumber = mBinding.edtTextMobileNumber.text.toString()
+        val password = mBinding.edtTextPassword.text.toString()
+
+        if (TextUtils.isEmpty(mobileNumber)) {
+            mBinding.tilTextMobileNumber.error = mActivity.getString(R.string.enter_email_mobile_no)
+            isValid = false
+        }
+
+        if (password.isEmpty()) {
+            mBinding.tilTextPassword.error = mActivity.getString(R.string.enter_your_password)
+            isValid = false
+        }
+
+        return isValid
+    }
+
     fun onLoginClick() {
 
         (baseRepository.callback).hideKeyboard()
@@ -81,34 +106,9 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
         val password = mBinding.edtTextPassword.text.toString()
         val flag: Boolean = true
 
-        if (TextUtils.isEmpty(mobileNumber)) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_email_mobile_no), true)
+        if(!validateFields()){
             return
-        }/* else {
-            flag = if (Pattern.matches("[0-9]+", mobileNumber)) {
-                if (mobileNumber.length < 7 || mobileNumber.length > 15) {
-                    IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
-                    return
-                } else {
-                    true
-                }
-            } else {
-                if (!isEmailValid(mobileNumber)) {
-                    IADialog(mActivity, mActivity.getString(R.string.enter_valid_email), true)
-                    return
-                } else {
-                    true
-                }
-            }
-        }*/
-
-        if (password.isEmpty()) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_your_password), true)
-            return
-        }/* else if (password.length < 6) {
-            IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
-            return
-        }*/
+        }
 
         if (!TextUtils.isEmpty(password) && flag) {
             val requestParams = HashMap<String, String>()

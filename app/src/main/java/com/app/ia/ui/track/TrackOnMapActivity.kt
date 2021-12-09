@@ -1,14 +1,21 @@
 package com.app.ia.ui.track
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import android.util.Log
+import android.view.View
 import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.ia.BR
 import com.app.ia.R
 import com.app.ia.ViewModelFactory
@@ -17,11 +24,9 @@ import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityTrackOnMapBinding
 import com.app.ia.helper.LatLngInterpolator
+import com.app.ia.ui.my_order.MyOrdersFragment
 import com.app.ia.utils.*
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.google.firebase.database.*
 import com.google.maps.android.SphericalUtil.computeHeading
@@ -38,6 +43,10 @@ import okhttp3.Response
 import org.json.JSONObject
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
+import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_track_on_map.content_container
+import kotlinx.android.synthetic.main.toolbar_home.view.*
+import kotlin.math.ln
 
 class TrackOnMapActivity : BaseActivity<ActivityTrackOnMapBinding, TrackOnMapViewModel>(), OnMapReadyCallback {
 
@@ -56,6 +65,7 @@ class TrackOnMapActivity : BaseActivity<ActivityTrackOnMapBinding, TrackOnMapVie
     var latLngBound = LatLngBounds.Builder()
 
     var markerObserver: MutableLiveData<MutableList<LatLng>> = MutableLiveData()
+    var cameraUpdateObserver = MutableLiveData<LatLng>()
     val markerList: MutableList<LatLng> = ArrayList()
 
     override fun getBindingVariable(): Int {
@@ -140,45 +150,23 @@ class TrackOnMapActivity : BaseActivity<ActivityTrackOnMapBinding, TrackOnMapVie
 
                         withContext(Dispatchers.Main){
                             //Log.d("REST RESP", response.body?.string().toString())
+                            try{
+                                val jsonData: String? = response.body?.string()
+                                val Jobject = JSONObject(jsonData)
+                                val points = Jobject.getJSONArray("snappedPoints")
+                                if(points.length() > 0){
+                                    val location = points.getJSONObject(0).getJSONObject("location")
+                                    val lat = location.getDouble("latitude")
+                                    val lng = location.getDouble("longitude")
 
-                            val jsonData: String? = response.body?.string()
-                            val Jobject = JSONObject(jsonData)
-                            val points = Jobject.getJSONArray("snappedPoints")
-                            if(points.length() > 0){
-                                val location = points.getJSONObject(0).getJSONObject("location")
-                                val lat = location.getDouble("latitude")
-                                val lng = location.getDouble("longitude")
 
-                                if (marker == null) {
-                                    markerList.add(LatLng(lat, lng))
-                                    markerObserver.value = markerList
-                                    var heading = 0.0
-                                    if(lastLatLng != null){
-                                        heading = bearingBetweenLocations(lastLatLng!!, LatLng(lat, lng))
-                                        //heading = computeHeading(lastLatLng, LatLng(lat, lng)).toFloat()
-                                    }
-                                    lastLatLng = LatLng(lat, lng)
+                                    updateLocation(lat, lng)
 
-                                    val markerOption = MarkerOptions().position(LatLng(lat, lng)).icon(BitmapDescriptorFactory.fromBitmap(CommonUtils.createCustomMarker(this@TrackOnMapActivity, R.drawable.ic_car_marker))).anchor(0.5F,0.5F).rotation(heading.toFloat())
-                                    //var icon = BitmapDescriptorFactory.fromBitmap(CommonUtils.createCustomMarker(this@TrackOnMapActivity, R.drawable.ic_car_nav))
-                                    //markerOption.rotation = heading
-                                    //marker.setIcon(icon);
-                                    marker = mMap.addMarker(markerOption) //.icon(BitmapDescriptorFactory.fromBitmap(CommonUtils.createCustomMarker(this@TrackOnMapActivity, R.drawable.ic_car_nav))))
-
-                                } else {
-                                    markerList[1] = LatLng(lat, lng)
-                                    markerObserver.value = markerList
-                                    var heading = 0.0
-                                    if(lastLatLng != null){
-                                        heading = bearingBetweenLocations(lastLatLng!!, LatLng(lat, lng))
-                                        //heading = computeHeading(lastLatLng, LatLng(lat, lng)).toFloat()
-                                    }
-                                    lastLatLng = LatLng(lat, lng)
-                                    //rotateMarker(marker!!, heading.toFloat())
-                                    MarkerAnimation.animateMarkerToGB(marker!!, LatLng(lat, lng), LatLngInterpolator.Spherical(), heading.toFloat())
                                 }
-
-
+                            }
+                            catch (e: Exception){
+                                e.printStackTrace()
+                                updateLocation(driverLat, driverLng)
                             }
                         }
                     }
@@ -202,6 +190,59 @@ class TrackOnMapActivity : BaseActivity<ActivityTrackOnMapBinding, TrackOnMapVie
                 AppLogger.w("Failed to read value.", error.toException())
             }
         })
+
+        val localBroadcastReceiver = LocalBroadcastManager.getInstance(this)
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(AppConstants.ACTION_BROADCAST_REFRESH_ON_NOTIFICATION)
+        localBroadcastReceiver.registerReceiver(refreshListener, intentFilter)
+    }
+
+    fun updateLocation(lat: Double, lng: Double){
+        if (marker == null) {
+            markerList.add(LatLng(lat, lng))
+            markerObserver.value = markerList
+            var heading = 0.0
+            if(lastLatLng != null){
+                heading = bearingBetweenLocations(lastLatLng!!, LatLng(lat, lng))
+                //heading = computeHeading(lastLatLng, LatLng(lat, lng)).toFloat()
+            }
+            lastLatLng = LatLng(lat, lng)
+
+            val markerOption = MarkerOptions().position(LatLng(lat, lng)).icon(BitmapDescriptorFactory.fromBitmap(CommonUtils.createCustomMarker(this@TrackOnMapActivity, R.drawable.ic_car_marker))).anchor(0.5F,0.5F).rotation(heading.toFloat())
+            //var icon = BitmapDescriptorFactory.fromBitmap(CommonUtils.createCustomMarker(this@TrackOnMapActivity, R.drawable.ic_car_nav))
+            //markerOption.rotation = heading
+            //marker.setIcon(icon);
+            marker = mMap.addMarker(markerOption) //.icon(BitmapDescriptorFactory.fromBitmap(CommonUtils.createCustomMarker(this@TrackOnMapActivity, R.drawable.ic_car_nav))))
+
+        } else {
+            markerList[1] = LatLng(lat, lng)
+            //markerObserver.value = markerList
+            cameraUpdateObserver.value = markerList[1]
+
+            var heading = 0.0
+            if(lastLatLng != null){
+                heading = bearingBetweenLocations(lastLatLng!!, LatLng(lat, lng))
+                //heading = computeHeading(lastLatLng, LatLng(lat, lng)).toFloat()
+            }
+            lastLatLng = LatLng(lat, lng)
+            //rotateMarker(marker!!, heading.toFloat())
+            MarkerAnimation.animateMarkerToGB(marker!!, LatLng(lat, lng), LatLngInterpolator.Spherical(), heading.toFloat())
+
+            markerList.forEachIndexed { index, latLng ->
+                if(!mMap.projection.visibleRegion.latLngBounds.contains(latLng)){
+                    mBinding?.buttonReCenter?.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private val refreshListener = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            //CommonUtils.showNotificationCount(toolbar.txtNotificationCount)
+            if (intent!!.getBooleanExtra("refresh", false)) {
+                mModel?.orderDetailObserver(this@TrackOnMapActivity.intent.getStringExtra("order_id")!!.toString())
+            }
+        }
     }
 
     var isMarkerRotating = false
@@ -251,7 +292,6 @@ class TrackOnMapActivity : BaseActivity<ActivityTrackOnMapBinding, TrackOnMapVie
 
     var marker: Marker? = null
 
-
     override fun onMapReady(googleMap: GoogleMap?) {
         this.mMap = googleMap!!
         currentLocationManager()
@@ -273,6 +313,31 @@ class TrackOnMapActivity : BaseActivity<ActivityTrackOnMapBinding, TrackOnMapVie
                 mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150))
             }
         })
+
+        cameraUpdateObserver.observe(this, {
+            val camera = CameraUpdateFactory.newLatLng(it)
+            mMap.animateCamera(camera)
+        })
+
+
+
+        /*mMap.setOnCameraMoveListener {
+            Toast.makeText(this, "Moved $count", Toast.LENGTH_SHORT).show()
+            count++
+        }*/
+
+        mMap.setOnCameraIdleListener {
+            markerList.forEachIndexed { index, latLng ->
+                if(!mMap.projection.visibleRegion.latLngBounds.contains(latLng)){
+                    mBinding?.buttonReCenter?.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        mBinding?.buttonReCenter?.setOnClickListener {
+            markerObserver.value = markerList
+            mBinding?.buttonReCenter?.visibility = View.GONE
+        }
     }
 
     override fun onCurrentLocation(latitude: Double, longitude: Double) {

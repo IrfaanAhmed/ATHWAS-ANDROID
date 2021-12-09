@@ -48,6 +48,10 @@ class ProductDetailViewModel(private val baseRepository: BaseRepository) : BaseV
         this.mActivity = getActivityNavigator()!!
         title.set("")
         product_id.value = intent.getStringExtra("product_id")!!
+
+    }
+
+    fun onStart(){
         val requestParams = HashMap<String, String>()
         requestParams["product_id"] = product_id.value!!
         productDetailObserver(requestParams)

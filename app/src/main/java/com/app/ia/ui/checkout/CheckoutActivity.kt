@@ -134,11 +134,35 @@ class CheckoutActivity : BaseActivity<ActivityCheckoutBinding, CheckoutViewModel
                         changeSwipeButtonStatus()
                     } else {
 
+                        mBinding!!.edtTextName.setText(mBinding!!.edtTextName.text.toString().trim())
+
                         val customerName = mBinding!!.edtTextName.text.toString()
                         val customerMobile = mBinding!!.edtTextMobileNumber.text.toString()
 
                         if (customerName.isNotEmpty() || customerMobile.isNotEmpty()) {
-                            if (customerName.isEmpty()) {
+
+                            if (customerName.length < 3 || customerName.length > 30) {
+                                changeSwipeButtonStatus()
+                                IADialog(this@CheckoutActivity, this@CheckoutActivity.getString(R.string.msg_name_validation_length), true)
+                                return
+                            }
+                            else if(ValidationUtils.isHaveLettersOnly(customerName)){
+                                changeSwipeButtonStatus()
+                                IADialog(this@CheckoutActivity, this@CheckoutActivity.getString(R.string.msg_name_validation), true)
+                                return
+                            }
+                            else if (customerMobile.isEmpty()) {
+                                changeSwipeButtonStatus()
+                                IADialog(this@CheckoutActivity, "Please enter customer number.", true)
+                                return
+                            }
+                            else if (!ValidationUtils.isValidPhone(customerMobile)) {
+                                changeSwipeButtonStatus()
+                                IADialog(this@CheckoutActivity, this@CheckoutActivity.getString(R.string.enter_valid_mobile_no), true)
+                                return
+                            }
+
+                            /*if (customerName.isEmpty()) {
                                 changeSwipeButtonStatus()
                                 IADialog(this@CheckoutActivity, "Please enter customer name.", true)
                                 return
@@ -150,7 +174,7 @@ class CheckoutActivity : BaseActivity<ActivityCheckoutBinding, CheckoutViewModel
                                 changeSwipeButtonStatus()
                                 IADialog(this@CheckoutActivity, getString(R.string.enter_valid_mobile_no), true)
                                 return
-                            }
+                            }*/
                         }
 
                         if (mViewModel?.selectedPaymentMethod == "Wallet") {

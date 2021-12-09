@@ -47,7 +47,9 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
         title.set(mActivity.getString(R.string.cart))
+    }
 
+    fun onStart(){
         val requestParams = HashMap<String, String>()
         requestParams["page_no"] = "1"
         requestParams["limit"] = "50"
@@ -64,12 +66,12 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
     }
 
     fun cartListingObserver(requestParams: HashMap<String, String>) {
-
         getCartListing(requestParams).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
+                            cartListAll.clear()
                             cartListAll.addAll(users.data?.docs!!)
                             cartList.value = cartListAll
                             isItemAvailable.value = cartListAll.size > 0
@@ -195,7 +197,31 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         var has = false
         cartList.value?.forEach {
             it.categoryItems?.forEach {
-                if(it.isAvailable == 0 || it.availableQuantity <= 0){
+                if(it.isAvailable == 0){
+                    has = true
+                }
+            }
+        }
+        return has
+    }
+
+    fun isCartHaveOutOfStockProduct() : Boolean{
+        var has = false
+        cartList.value?.forEach {
+            it.categoryItems?.forEach {
+                if(it.availableQuantity <= 0){
+                    has = true
+                }
+            }
+        }
+        return has
+    }
+
+    fun isCartHaveMoreThanStockProduct() : Boolean{
+        var has = false
+        cartList.value?.forEach {
+            it.categoryItems?.forEach {
+                if(it.quantity > it.availableQuantity){
                     has = true
                 }
             }

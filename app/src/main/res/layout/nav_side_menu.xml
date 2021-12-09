@@ -46,7 +46,7 @@
             android:layout_below="@+id/ivProfile"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_8sdp"
-            android:text="@{viewModel.userData.username}"
+            android:text="@{(viewModel.userData.username != ``) ? viewModel.userData.username : `Guest User`}"
             android:textColor="@color/black"
             android:textSize="@dimen/_13sdp"
             app:fontFamily="@font/linotte_semi_bold" />

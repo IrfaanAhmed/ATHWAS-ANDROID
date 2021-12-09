@@ -89,8 +89,13 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
     }
 
     fun onSelectAddressClick() {
-        mActivity.mStartActivityForResult<DeliveryAddressActivity>(AppRequestCode.REQUEST_SELECT_ADDRESS) {
-            putExtra(EXTRA_IS_HOME_SCREEN, true)
+        if (TextUtils.isEmpty(AppPreferencesHelper.getInstance().authToken)) {
+            (mActivity as HomeActivity).loginDialog()
+        }
+        else{
+            mActivity.mStartActivityForResult<DeliveryAddressActivity>(AppRequestCode.REQUEST_SELECT_ADDRESS) {
+                putExtra(EXTRA_IS_HOME_SCREEN, true)
+            }
         }
     }
 
@@ -132,7 +137,8 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
                 }
 
                 2 -> {
-                    (mActivity as HomeActivity).replaceFragment(OffersFragment.newInstance())
+                    (mActivity as HomeActivity).loginDialog()
+                    //(mActivity as HomeActivity).replaceFragment(OffersFragment.newInstance())
                 }
 
                 3 -> {

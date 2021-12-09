@@ -33,11 +33,11 @@ class OrderDetailListAdapter : ListAdapter<OrderDetailResponse.Category, OrderDe
     class OffersListDiffCallback : DiffUtil.ItemCallback<OrderDetailResponse.Category>() {
 
         override fun areItemsTheSame(oldItem: OrderDetailResponse.Category, newItem: OrderDetailResponse.Category): Boolean {
-            return oldItem == newItem
+            return false
         }
 
         override fun areContentsTheSame(oldItem: OrderDetailResponse.Category, newItem: OrderDetailResponse.Category): Boolean {
-            return oldItem == newItem
+            return false
         }
     }
 

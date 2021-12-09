@@ -1,9 +1,13 @@
 package com.app.ia.ui.track_order
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.ia.BR
 import com.app.ia.IAApplication
 import com.app.ia.R
@@ -12,13 +16,14 @@ import com.app.ia.apiclient.RetrofitFactory
 import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityTrackOrderBinding
-import com.app.ia.utils.invisible
-import com.app.ia.utils.redact
-import com.app.ia.utils.setOnApplyWindowInset1
-import com.app.ia.utils.toast
+import com.app.ia.utils.*
 import com.transferwise.sequencelayout.SequenceStep
+import kotlinx.android.synthetic.main.activity_track_on_map.*
 import kotlinx.android.synthetic.main.activity_track_order.*
+import kotlinx.android.synthetic.main.activity_track_order.content_container
+import kotlinx.android.synthetic.main.activity_track_order.toolbar
 import kotlinx.android.synthetic.main.common_header.view.*
+import kotlinx.android.synthetic.main.toolbar_home.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -87,11 +92,24 @@ class TrackOrderActivity : BaseActivity<ActivityTrackOrderBinding, TrackOrderVie
             }
             mViewModel?.orderDetailObserver(intent.getStringExtra("order_id")!!.toString())
         }
+        val localBroadcastReceiver = LocalBroadcastManager.getInstance(this)
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(AppConstants.ACTION_BROADCAST_REFRESH_ON_NOTIFICATION)
+        localBroadcastReceiver.registerReceiver(refreshListener, intentFilter)
     }
 
     private fun setViewModel() {
         val factory = ViewModelFactory(TrackOrderViewModel(BaseRepository(RetrofitFactory.getInstance(), this)))
         mViewModel = ViewModelProvider(this, factory).get(TrackOrderViewModel::class.java)
+    }
+
+    private val refreshListener = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+//            CommonUtils.showNotificationCount(toolbar.txtNotificationCount)
+            if (intent!!.getBooleanExtra("refresh", false)) {
+                refresh()
+            }
+        }
     }
 
     override fun onResume() {
@@ -145,7 +163,7 @@ class TrackOrderActivity : BaseActivity<ActivityTrackOrderBinding, TrackOrderVie
             formatter.timeZone = TimeZone.getTimeZone("UTC")
             val value: Date = formatter.parse(trackTime)!!
             val timeZone = TimeZone.getDefault()
-            val dateFormatter = SimpleDateFormat("dd MMM YYYY, h:mm a", Locale.ENGLISH) //this format changeable
+            val dateFormatter = SimpleDateFormat("dd MMM yyyy, h:mm a", Locale.ENGLISH) //this format changeable
             dateFormatter.timeZone = timeZone
             dateFormatter.format(value)
         } catch (e: Exception) {

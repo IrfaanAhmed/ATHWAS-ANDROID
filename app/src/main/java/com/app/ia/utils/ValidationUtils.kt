@@ -1,6 +1,7 @@
 package com.app.ia.utils
 
 import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
 import java.util.regex.Pattern
 
@@ -8,11 +9,25 @@ import java.util.regex.Pattern
 class ValidationUtils{
     companion object {
         fun isValidEmail(target: CharSequence): Boolean {
-            return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
+            var prefix = false
+            Log.d("Email", "${target.indexOf("@", 0, true)}")
+            if(target.indexOf("@", 0, true) > 2  || target.indexOf("@", 0, true) <= 65){
+                prefix = true
+            }
+
+            if(target.indexOf("%", 0, true) > -1){
+                prefix = false
+            }
+            var postfix = false
+            Log.d("Email", "${target.indexOf("@", 0, true)}")
+            if((target.length - target.indexOf("@", 0, true)) > 4  || (target.length - target.indexOf("@", 0, true)) < 256){
+                postfix = true
+            }
+            return prefix && postfix && Patterns.EMAIL_ADDRESS.matcher(target).matches()
         }
 
         fun isValidPhone(phone: CharSequence): Boolean {
-            return phone.length >= 10 && Patterns.PHONE.matcher(phone).matches()
+            return phone.length == 10 && Patterns.PHONE.matcher(phone).matches()
         }
 
         fun isHaveLettersOnly(target: String): Boolean {

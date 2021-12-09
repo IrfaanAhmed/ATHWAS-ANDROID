@@ -58,7 +58,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding, SignUpViewModel>() {
 
         })
 
-        mActivitySignUpBinding!!.editTextName.filters  = arrayOf(CommonUtils.getLettersEditTextFilter())
+        //mActivitySignUpBinding!!.editTextName.filters  = arrayOf(CommonUtils.getLettersEditTextFilter())
     }
 
     private fun setViewModel() {

@@ -49,14 +49,12 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
     }
 
     fun updateUserName() {
+        mBinding.edtTextName.setText(mBinding.edtTextName.text.toString().trim())
         val name = mBinding.edtTextName.text.toString()
 
         when {
-            name.isEmpty() -> {
-                IADialog(mActivity, mActivity.getString(R.string.please_enter_name), true)
-            }
-            name.length < 2 -> {
-                IADialog(mActivity, mActivity.getString(R.string.name_should_be_min_2_char), true)
+            name.length < 3 || name.length > 30 -> {
+                IADialog(mActivity, mActivity.getString(R.string.msg_name_validation_length), true)
             }
             ValidationUtils.isHaveLettersOnly(name) ->{
                 IADialog(mActivity, mActivity.getString(R.string.name_valid_msg), true)
@@ -74,12 +72,7 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
     fun updateMobileNumber() {
         val mobileNumber = mBinding.edtTextMobile.text.toString()
 
-        if (mobileNumber.isEmpty()) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_your_mobile_no), true)
-        } else if (mobileNumber.length < 7 || mobileNumber.length > 15) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
-        }
-        else if(!ValidationUtils.isValidPhone(mobileNumber)){
+        if(!ValidationUtils.isValidPhone(mobileNumber)){
             IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
         }
         else{
@@ -93,11 +86,12 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
     }
 
     fun updateEmailAddress() {
+        mBinding.edtTextEmail.setText(mBinding.edtTextEmail.text.toString().trim())
         val emailAddress = mBinding.edtTextEmail.text.toString()
 
-        if (emailAddress.isEmpty()) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_your_email), true)
-        } else if (!isEmailValid(emailAddress)) {
+        if (emailAddress.length < 9 || emailAddress.length > 320) {
+            IADialog(mActivity, mActivity.getString(R.string.msg_email_validation_length), true)
+        }  else if (!ValidationUtils.isValidEmail(emailAddress)) {
             IADialog(mActivity, mActivity.getString(R.string.enter_valid_email), true)
         } else {
             oldMobileEmail.value = AppPreferencesHelper.getInstance().email

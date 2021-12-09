@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.edit_profile.EditProfileActivity">
 
@@ -12,7 +13,7 @@
             type="com.app.ia.ui.edit_profile.EditProfileViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -51,8 +52,10 @@
             android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintVertical_bias="1.0">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -80,11 +83,11 @@
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/profileImg"
+                            defaultImage="@{R.drawable.user_place_holder_image}"
+                            imageUrl="@{viewModel.userData.userImageUrl}"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            imageUrl="@{viewModel.userData.userImageUrl}"
-                            defaultImage="@{R.drawable.user_place_holder_image}" />
+                            android:scaleType="centerCrop" />
 
                     </com.github.florent37.shapeofview.shapes.RoundRectView>
 
@@ -120,9 +123,9 @@
                         android:background="@null"
                         android:hint="@string/name"
                         android:inputType="textPersonName"
-                        android:text="@{viewModel.userData.userName}"
                         android:maxLines="1"
                         android:padding="@dimen/_10sdp"
+                        android:text="@{viewModel.userData.userName}"
                         android:textAlignment="viewStart"
                         android:textSize="@dimen/_10sdp" />
 
@@ -131,8 +134,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|end"
                         android:layout_marginEnd="@dimen/_5sdp"
-                        android:text="@string/update"
                         android:onClick="@{() -> viewModel.updateUserName()}"
+                        android:text="@string/update"
                         android:textColor="@color/colorLogout"
                         android:textSize="@dimen/_12sdp"
                         app:fontFamily="@font/linotte_bold" />
@@ -158,11 +161,11 @@
                         android:layout_weight="1"
                         android:background="@null"
                         android:hint="@string/mobile_number"
-                        android:text="@{viewModel.userData.phone}"
                         android:inputType="numberSigned|none"
-                        android:maxLines="1"
                         android:maxLength="10"
+                        android:maxLines="1"
                         android:padding="@dimen/_10sdp"
+                        android:text="@{viewModel.userData.phone}"
                         android:textAlignment="viewStart"
                         android:textSize="@dimen/_10sdp" />
 
@@ -171,9 +174,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|end"
                         android:layout_marginEnd="@dimen/_5sdp"
-                        android:text="@string/update"
                         android:maxLength="50"
                         android:onClick="@{() -> viewModel.updateMobileNumber()}"
+                        android:text="@string/update"
                         android:textColor="@color/colorLogout"
                         android:textSize="@dimen/_12sdp"
                         app:fontFamily="@font/linotte_bold" />
@@ -199,9 +202,9 @@
                         android:background="@null"
                         android:hint="@string/email_address"
                         android:inputType="textEmailAddress"
-                        android:text="@{viewModel.userData.email}"
                         android:maxLines="1"
                         android:padding="@dimen/_10sdp"
+                        android:text="@{viewModel.userData.email}"
                         android:textAlignment="viewStart"
                         android:textSize="@dimen/_10sdp" />
 
@@ -210,8 +213,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|end"
                         android:layout_marginEnd="@dimen/_5sdp"
-                        android:text="@string/update"
                         android:onClick="@{() -> viewModel.updateEmailAddress()}"
+                        android:text="@string/update"
                         android:textColor="@color/colorLogout"
                         android:textSize="@dimen/_12sdp"
                         app:fontFamily="@font/linotte_bold" />
@@ -244,10 +247,10 @@
                     android:layout_below="@+id/llWalletView"
                     android:layout_centerInParent="true"
                     android:layout_gravity="center"
-                    android:visibility="gone"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:background="@drawable/logout_button_bg"
-                    android:text="@string/save" />
+                    android:text="@string/save"
+                    android:visibility="gone" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

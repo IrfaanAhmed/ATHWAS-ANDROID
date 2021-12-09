@@ -24,6 +24,7 @@ import com.app.ia.ui.my_cart.MyCartActivity
 import com.app.ia.ui.product_detail.ProductDetailActivity
 import com.app.ia.ui.product_list.adapter.ProductListAdapter
 import com.app.ia.ui.search.SearchActivity
+import com.app.ia.ui.search.SearchViewModel
 import com.app.ia.utils.*
 import kotlinx.android.synthetic.main.activity_product_list.*
 import kotlinx.android.synthetic.main.common_header.view.*
@@ -70,7 +71,11 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
         }
 
         toolbar.ivSearchIcon.setOnClickListener {
-            startActivity<SearchActivity>()
+            startActivity<SearchActivity>(){
+                putExtra(SearchViewModel.BUSINESS_CATEGORY_ID, mViewModel?.businessCategoryId?.value)
+                putExtra(SearchViewModel.CATEGORY_ID, mViewModel?.categoryId?.value)
+                putExtra(SearchViewModel.SUB_CATEGORY_ID, mViewModel?.subCategoryId?.value)
+            }
         }
 
         mSwipeRefresh.isEnabled = false
@@ -175,6 +180,11 @@ class ProductListActivity : BaseActivity<ActivityProductListBinding, ProductList
                 }
             }
         })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        //mViewModel?.onStart()
     }
 
     override fun onResume() {

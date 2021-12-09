@@ -3,6 +3,7 @@ package com.app.ia.ui.order_detail.adapter
 import android.app.Activity
 import android.graphics.Paint
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,11 +24,11 @@ class OrderDetailListItemAdapter(private val allReturn: Boolean, private val can
     class OffersListDiffCallback : DiffUtil.ItemCallback<OrderDetailResponse.Category.Products>() {
 
         override fun areItemsTheSame(oldItem: OrderDetailResponse.Category.Products, newItem: OrderDetailResponse.Category.Products): Boolean {
-            return oldItem == newItem
+            return false
         }
 
         override fun areContentsTheSame(oldItem: OrderDetailResponse.Category.Products, newItem: OrderDetailResponse.Category.Products): Boolean {
-            return oldItem == newItem
+            return false
         }
     }
 
@@ -84,11 +85,10 @@ class OrderDetailListItemAdapter(private val allReturn: Boolean, private val can
                         }
                     })
                 }
-
-                if (mainOrderStatus == 2) {
+                if(productItem.inventoryData.reviews.isNullOrEmpty() && mainOrderStatus == 2){
                     txtWriteReview.visibility = View.VISIBLE
-                } else {
-                    txtWriteReview.visibility = View.INVISIBLE
+                }else {
+                    txtWriteReview.visibility = View.GONE
                 }
 
                 txtWriteReview.setOnClickListener {

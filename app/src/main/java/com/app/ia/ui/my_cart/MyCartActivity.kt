@@ -85,12 +85,23 @@ class MyCartActivity : BaseActivity<ActivityMyCartBinding, MyCartViewModel>(), C
                 toast("There is no item in the cart")
             }
             else if (mViewModel?.isCartHaveNotAvailableProduct()!!) {
+                toast("Some items are not available, kindly remove them from the cart")
+            }
+            else if (mViewModel?.isCartHaveOutOfStockProduct()!!) {
                 toast("Some items are out of stock, kindly remove them from the cart")
+            }
+            else if (mViewModel?.isCartHaveMoreThanStockProduct()!!) {
+                toast("Some items are more than stock, kindly decrease quantity to available stock")
             } else {
                 mStartActivityForResult<CheckoutActivity>(2009)
             }
 
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mViewModel?.onStart()
     }
 
 
