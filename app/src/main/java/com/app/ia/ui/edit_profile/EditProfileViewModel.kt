@@ -52,12 +52,24 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
         mBinding.edtTextName.setText(mBinding.edtTextName.text.toString().trim())
         val name = mBinding.edtTextName.text.toString()
 
+        mBinding.tilTextName.error = null
+        mBinding.tilTextMobile.error = null
+        mBinding.tilTextEmail.error = null
+
+
+        mBinding.tilTextName.isErrorEnabled = false
+        mBinding.tilTextMobile.isErrorEnabled = false
+        mBinding.tilTextEmail.isErrorEnabled = false
+
+
         when {
             name.length < 3 || name.length > 30 -> {
-                IADialog(mActivity, mActivity.getString(R.string.msg_name_validation_length), true)
+//                IADialog(mActivity, mActivity.getString(R.string.msg_name_validation_length), true)
+                mBinding.tilTextName.error=mActivity.getString(R.string.msg_name_validation_length)
             }
             ValidationUtils.isHaveLettersOnly(name) ->{
-                IADialog(mActivity, mActivity.getString(R.string.name_valid_msg), true)
+//                IADialog(mActivity, mActivity.getString(R.string.name_valid_msg), true)
+                mBinding.tilTextName.error=mActivity.getString(R.string.name_valid_msg)
             }
             else -> {
                 val requestParams = HashMap<String, String>()
@@ -73,7 +85,8 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
         val mobileNumber = mBinding.edtTextMobile.text.toString()
 
         if(!ValidationUtils.isValidPhone(mobileNumber)){
-            IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
+//            IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
+            mBinding.tilTextMobile.error=mActivity.getString(R.string.enter_valid_mobile_no)
         }
         else{
             (mActivity as EditProfileActivity).hideKeyboard()
@@ -90,9 +103,11 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
         val emailAddress = mBinding.edtTextEmail.text.toString()
 
         if (emailAddress.length < 9 || emailAddress.length > 320) {
-            IADialog(mActivity, mActivity.getString(R.string.msg_email_validation_length), true)
+//            IADialog(mActivity, mActivity.getString(R.string.msg_email_validation_length), true)
+            mBinding.tilTextEmail.error=mActivity.getString(R.string.msg_email_validation_length)
         }  else if (!ValidationUtils.isValidEmail(emailAddress)) {
-            IADialog(mActivity, mActivity.getString(R.string.enter_valid_email), true)
+//            IADialog(mActivity, mActivity.getString(R.string.enter_valid_email), true)
+            mBinding.tilTextEmail.error=mActivity.getString(R.string.enter_valid_email)
         } else {
             oldMobileEmail.value = AppPreferencesHelper.getInstance().email
             val requestParams = HashMap<String, String>()

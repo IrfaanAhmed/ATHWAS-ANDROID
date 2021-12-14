@@ -88,4 +88,4 @@ class WriteReviewViewModel(private val baseRepository: BaseRepository) : BaseVie
             }
         })
     }
-}
+}   

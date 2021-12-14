@@ -57,21 +57,26 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
     }
 
     fun addAddress() {
+        val pinCode = mBinding.edtTextPinCode.text.toString()
+        mBinding.tilTextAddress.error = null
+        mBinding.tilTextPinCode.error = null
 
+        mBinding.tilTextAddress.isErrorEnabled = false
+        mBinding.tilTextPinCode.isErrorEnabled = false
         baseRepository.callback.hideKeyboard()
 
         if (mBinding.edtTextAddress.text.toString().isEmpty()) {
-            IADialog(mActivity, "Please enter Floor/Apartment No./House No.", true)
+//            IADialog(mActivity, "Please enter Floor/Apartment No./House No.", true)
+            mBinding.tilTextAddress.error="Please enter Floor/Apartment No./House No."
             return
         }
-
-        val pinCode = mBinding.edtTextPinCode.text.toString()
-
         if (pinCode.isEmpty()) {
-            IADialog(mActivity, "Please enter pin code", true)
+//            IADialog(mActivity, "Please enter pin code", true)
+            mBinding.tilTextPinCode.error="Please enter pin code"
             return
         } else if(pinCode.trim().length < 6 || pinCode.trim().length > 10) {
-            IADialog(mActivity, "Pin code can be from 6 to 10 digits only", true)
+//            IADialog(mActivity, "Pin code can be from 6 to 10 digits only", true)
+            mBinding.tilTextPinCode.error="Pin code can be from 6 to 10 digits only"
             return
         }
 

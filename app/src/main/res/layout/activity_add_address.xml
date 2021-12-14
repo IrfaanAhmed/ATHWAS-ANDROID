@@ -179,41 +179,82 @@
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtTextAddress"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginEnd="@dimen/_8sdp"
-                android:layout_marginBottom="@dimen/_3sdp"
-                android:background="@drawable/edittext_bg"
-                android:hint="@string/floor_apartment_no_house_no"
-                android:imeOptions="actionDone"
-                android:inputType="text"
-                android:paddingStart="@dimen/_5sdp"
-                android:paddingEnd="@dimen/_5sdp"
-                android:singleLine="true"
-                android:textAlignment="viewStart"
-                android:textSize="@dimen/_11sdp" />
+                android:layout_height="wrap_content">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtTextPinCode"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilTextAddress"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    app:boxCornerRadiusBottomEnd="3dp"
+                    app:boxCornerRadiusBottomStart="3dp"
+                    app:boxCornerRadiusTopEnd="3dp"
+                    app:boxCornerRadiusTopStart="3dp"
+                    app:boxStrokeColor="@color/bg_edittext"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="1dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtTextAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:hint="@string/floor_apartment_no_house_no"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:maxLength="35"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textAlignment="viewStart"
+                        android:textSize="@dimen/_11sdp" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_marginTop="@dimen/_3sdp"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:layout_marginEnd="@dimen/_8sdp"
-                android:layout_marginBottom="@dimen/_5sdp"
-                android:background="@drawable/edittext_bg"
-                android:hint="@string/pin_code"
-                android:maxLength="10"
-                android:imeOptions="actionDone"
-                android:inputType="number"
-                android:paddingStart="@dimen/_5sdp"
-                android:paddingEnd="@dimen/_5sdp"
-                android:singleLine="true"
-                android:textAlignment="viewStart"
-                android:textSize="@dimen/_11sdp" />
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilTextPinCode"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    app:boxCornerRadiusBottomEnd="3dp"
+                    app:boxCornerRadiusBottomStart="3dp"
+                    app:boxCornerRadiusTopEnd="3dp"
+                    app:boxCornerRadiusTopStart="3dp"
+                    app:boxStrokeColor="@color/bg_edittext"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="1dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtTextPinCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:padding="5dp"
+                        android:textAlignment="viewStart"
+                        android:textSize="@dimen/_11sdp"
+                        android:hint="@string/pin_code"
+                        android:maxLength="10"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"

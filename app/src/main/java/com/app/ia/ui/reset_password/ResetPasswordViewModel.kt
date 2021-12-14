@@ -3,6 +3,7 @@ package com.app.ia.ui.reset_password
 import android.app.Activity
 import android.content.Intent
 import android.content.IntentFilter
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.app.ia.R
@@ -60,18 +61,26 @@ class ResetPasswordViewModel(private val baseRepository: BaseRepository) : BaseV
         mBinding.tilTextNewPassword.isErrorEnabled = false
         mBinding.tilTextConfirmPassword.isErrorEnabled = false
 
+        mBinding.pinViewError.visibility= View.GONE
+
         if (otpPin.isEmpty() || otpPin.length < 4) {
-            IADialog(mActivity, "Please enter 4 digits OTP", true)
+//            IADialog(mActivity, "Please enter 4 digits OTP", true)
+            mBinding.pinViewError.visibility= View.VISIBLE
         } else if (newPassword.isEmpty()) {
             //IADialog(mActivity, "Please enter new password", true)
             mBinding.tilTextNewPassword.error =  "Please enter new password"
         } else if (confirmPassword.isEmpty()) {
             //IADialog(mActivity, "Please enter confirm password", true)
             mBinding.tilTextConfirmPassword.error =  "Please enter confirm password"
-        } else if (checkPasswordLength(newPassword, confirmPassword)) {
-            IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+        } else if (newPassword.length < 6) {
+            mBinding.edtTextNewPassword.error=mActivity.getString(R.string.password_should_be_min_6_char)
+//            IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+        } else if (confirmPassword.length < 6) {
+            mBinding.edtTextConfirmPassword.error=mActivity.getString(R.string.password_should_be_min_6_char)
+//            IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
         } else if (newPassword != confirmPassword) {
-            IADialog(mActivity, "Password doesn't match", true)
+//            IADialog(mActivity, "Password doesn't match", true)
+            mBinding.edtTextConfirmPassword.error="Password doesn't match"
         } else {
             val requestParams = java.util.HashMap<String, String>()
             requestParams["country_code"] = "+91"

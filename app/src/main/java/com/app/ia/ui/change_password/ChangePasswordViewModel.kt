@@ -29,15 +29,25 @@ class ChangePasswordViewModel(private val baseRepository: BaseRepository) : Base
         val newPassword = mBinding.edtTextNewPassword.text.toString()
         val confirmPassword = mBinding.edtTextConfirmPassword.text.toString()
 
+        mBinding.tilTextOldPassword.error = null
+        mBinding.tilTextNewPassword.error = null
+        mBinding.tilTextConfirmPassword.error = null
+
+        mBinding.tilTextOldPassword.isErrorEnabled = false
+        mBinding.tilTextNewPassword.isErrorEnabled = false
+        mBinding.tilTextConfirmPassword.isErrorEnabled = false
+
         when {
             /*oldPassword.length < 6 || oldPassword.length > 20 -> {
                 IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
             }*/
             newPassword.contains(" ") -> {
-                IADialog(mActivity, mActivity.getString(R.string.invalid_password_format), true)
+//                IADialog(mActivity, mActivity.getString(R.string.invalid_password_format), true)
+                mBinding.tilTextNewPassword.error=mActivity.getString(R.string.invalid_password_format)
             }
             newPassword.length < 6 || newPassword.length > 20 -> {
-                IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+//                IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+                mBinding.tilTextNewPassword.error=mActivity.getString(R.string.password_should_be_min_6_char)
             }
             /*newPassword.isEmpty() -> {
                 IADialog(mActivity, mActivity.getString(R.string.please_enter_new_password), true)
@@ -52,7 +62,8 @@ class ChangePasswordViewModel(private val baseRepository: BaseRepository) : Base
                 IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
             }*/
             confirmPassword != newPassword -> {
-                IADialog(mActivity, mActivity.getString(R.string.confirm_password_should_be_same_as_new_password), true)
+//                IADialog(mActivity, mActivity.getString(R.string.confirm_password_should_be_same_as_new_password), true)
+                mBinding.tilTextConfirmPassword.error=mActivity.getString(R.string.confirm_password_should_be_same_as_new_password)
             }
             else -> {
                 val requestParams = HashMap<String, String>()

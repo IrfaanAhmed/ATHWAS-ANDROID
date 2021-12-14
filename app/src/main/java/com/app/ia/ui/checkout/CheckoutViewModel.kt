@@ -103,7 +103,8 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
         val enteredPromoCode = mBinding.edtTextPromoCode.text.toString()
         if (enteredPromoCode.isEmpty()) {
-            IADialog(mActivity, "Please enter promo code.", true)
+//            IADialog(mActivity, "Please enter promo code.", true)
+            mBinding.edtTextPromoCode.error="Please enter promo code."
         } else {
             val requestParams = HashMap<String, String>()
             requestParams["promo_code"] = enteredPromoCode
