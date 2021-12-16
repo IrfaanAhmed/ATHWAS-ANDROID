@@ -53,13 +53,7 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
         val name = mBinding.edtTextName.text.toString()
 
         mBinding.tilTextName.error = null
-        mBinding.tilTextMobile.error = null
-        mBinding.tilTextEmail.error = null
-
-
         mBinding.tilTextName.isErrorEnabled = false
-        mBinding.tilTextMobile.isErrorEnabled = false
-        mBinding.tilTextEmail.isErrorEnabled = false
 
 
         when {
@@ -83,7 +77,8 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
 
     fun updateMobileNumber() {
         val mobileNumber = mBinding.edtTextMobile.text.toString()
-
+        mBinding.tilTextMobile.error=null
+        mBinding.tilTextMobile.isErrorEnabled=false
         if(!ValidationUtils.isValidPhone(mobileNumber)){
 //            IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
             mBinding.tilTextMobile.error=mActivity.getString(R.string.enter_valid_mobile_no)
@@ -101,7 +96,8 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
     fun updateEmailAddress() {
         mBinding.edtTextEmail.setText(mBinding.edtTextEmail.text.toString().trim())
         val emailAddress = mBinding.edtTextEmail.text.toString()
-
+        mBinding.tilTextEmail.error=null
+        mBinding.tilTextEmail.isErrorEnabled=false
         if (emailAddress.length < 9 || emailAddress.length > 320) {
 //            IADialog(mActivity, mActivity.getString(R.string.msg_email_validation_length), true)
             mBinding.tilTextEmail.error=mActivity.getString(R.string.msg_email_validation_length)
@@ -180,6 +176,12 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             mActivity.toast(users.message)
+                            mBinding.tilTextName.error = null
+                            mBinding.tilTextName.isErrorEnabled = false
+                            mBinding.tilTextMobile.error = null
+                            mBinding.tilTextMobile.isErrorEnabled = false
+                            mBinding.tilTextEmail.error = null
+                            mBinding.tilTextEmail.isErrorEnabled = false
                             if (isVerify) {
                                 mActivity.startActivity<OTPVerifyActivity> {
                                     putExtra("countryCode", users.data?.countryCode)

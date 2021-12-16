@@ -420,6 +420,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
 
                     Status.ERROR -> {
+                        mBinding.edtTextPromoCode.setText("")
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
                             mActivity.toast(it.message)
