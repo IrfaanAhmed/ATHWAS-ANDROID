@@ -6,6 +6,7 @@ import android.content.IntentFilter
 import android.graphics.Typeface
 import android.os.CountDownTimer
 import android.text.method.LinkMovementMethod
+import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData
@@ -71,6 +72,7 @@ class OTPViewModel(private val baseRepository: BaseRepository) : BaseViewModel()
     }
 
     fun onVerifyClick() {
+         mBinding.pinViewError.visibility= View.GONE
         if (mBinding.pinView.text!!.isNotEmpty() && mBinding.pinView.text!!.toString() == otp.value!!) {
 
             val requestParams = HashMap<String, String>()
@@ -82,7 +84,8 @@ class OTPViewModel(private val baseRepository: BaseRepository) : BaseViewModel()
             requestParams["device_type"] = "1" // 1 for android / 2 for ios
             setupObservers(requestParams, true)
         } else {
-            IADialog(mActivity, "Please enter valid OTP.", true)
+            //IADialog(mActivity, "Please enter valid OTP.", true)
+            mBinding.pinViewError.visibility= View.VISIBLE
         }
     }
 

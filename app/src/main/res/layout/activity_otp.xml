@@ -120,6 +120,19 @@
                         app:viewType="rectangle" />
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/pinView_error"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="Please enter valid OTP"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone"
+                        app:fontFamily="@font/linotte_semi_bold"
+                        app:layout_constraintStart_toStartOf="@+id/pinView"
+                        app:layout_constraintTop_toBottomOf="@+id/pinView" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/textViewTimer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
