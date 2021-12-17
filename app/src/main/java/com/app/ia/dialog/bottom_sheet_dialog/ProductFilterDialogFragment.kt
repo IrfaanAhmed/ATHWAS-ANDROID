@@ -194,7 +194,9 @@ class ProductFilterDialogFragment(val businessCategoryId: String, selectedFilter
             spinnerSubCategory.post {
                 try {
                     if (showSubCategorySelectedFirstTime) {
-                        spinnerSubCategory.setSelection(filterData.subCategoryPos)
+                        if(filterData.subCategoryPos < subCategoryList.size) {
+                            spinnerSubCategory.setSelection(filterData.subCategoryPos)
+                        }
                         showSubCategorySelectedFirstTime = false
                     }
                 } catch (e: Exception) {
