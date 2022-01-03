@@ -50,6 +50,68 @@ class ResetPasswordViewModel(private val baseRepository: BaseRepository) : BaseV
     }
 
     fun onResetClick() {
+        val newPassword = mBinding.edtTextNewPassword.text.toString()
+        val confirmPassword = mBinding.edtTextConfirmPassword.text.toString()
+        mBinding.tilTextConfirmPassword.error = null
+        mBinding.tilTextConfirmPassword.isErrorEnabled = false
+        mBinding.tilTextNewPassword.error = null
+        mBinding.tilTextNewPassword.isErrorEnabled = false
+        mBinding.pinViewError.visibility = View.GONE
+
+        var hasOtp = false
+        var hasNewPassword = false
+        var hasConfirmPassword = false
+        var hasMatchPassword = false
+
+        if (mBinding.pinView.text!!.isEmpty()) {
+            mBinding.pinViewError.text = mActivity.getString(R.string.please_enter_otp)
+            mBinding.pinViewError.visibility = View.VISIBLE
+        } else if (mBinding.pinView.text!!.toString() != otp.value!!) {
+            mBinding.pinViewError.text = mActivity.getString(R.string.please_enter_valid_otp)
+            mBinding.pinViewError.visibility = View.VISIBLE
+        } else {
+            hasOtp = true
+        }
+        if (newPassword.isEmpty()) {
+            mBinding.tilTextConfirmPassword.error =
+                mActivity.getString(R.string.please_enter_new_password)
+        } else if (newPassword.length < 6 || newPassword.length > 15) {
+            mBinding.tilTextConfirmPassword.error =
+                mActivity.getString(R.string.new_password_validation_msg)
+        } else {
+            hasNewPassword = true
+        }
+
+
+        if (confirmPassword.isEmpty()) {
+            mBinding.edtTextConfirmPassword.error =
+                mActivity.getString(R.string.enter_conform_password)
+        } else if (confirmPassword.length < 6 || confirmPassword.length > 15) {
+            mBinding.edtTextConfirmPassword.error =
+                mActivity.getString(R.string.confirm_password_validation_msg)
+        } else {
+            hasConfirmPassword = true
+        }
+
+
+        if (confirmPassword != newPassword) {
+            mBinding.edtTextConfirmPassword.error =
+                mActivity.getString(R.string.confirm_new_matched_validation_msg)
+        } else {
+            hasMatchPassword = true
+        }
+        if (hasOtp && hasNewPassword && hasConfirmPassword && hasMatchPassword) {
+            val requestParams = HashMap<String, String>()
+            requestParams["country_code"] = "+${countryCode.value!!}"
+            requestParams["phone"] = mobileNumber.value!!
+            requestParams["otp_number"] = mBinding.pinView.text.toString()
+            requestParams["new_password"] = newPassword
+            setupObservers(requestParams)
+        }
+    }
+
+
+    /* fun onResetClick() {
 
         val otpPin = mBinding.pinView.text.toString()
         val newPassword = mBinding.edtTextNewPassword.text.toString()
@@ -82,14 +144,14 @@ class ResetPasswordViewModel(private val baseRepository: BaseRepository) : BaseV
 //            IADialog(mActivity, "Password doesn't match", true)
             mBinding.edtTextConfirmPassword.error="Password doesn't match"
         } else {
-            val requestParams = java.util.HashMap<String, String>()
+            val requestParams = HashMap<String, String>()
             requestParams["country_code"] = "+91"
             requestParams["phone"] = mobileNumber.value!!
             requestParams["otp_number"] = otpPin
             requestParams["new_password"] = newPassword
             setupObservers(requestParams)
         }
-    }
+    }*/
 
     private fun checkPasswordLength(newPassword: String, confirmPassword: String): Boolean {
         return (newPassword.length < 6 || confirmPassword.length < 6)

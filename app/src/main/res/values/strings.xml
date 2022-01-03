@@ -9,11 +9,18 @@
     <string name="instructions_to_turn_on_location_permission">You need to enable location permission to make the app working. Please go to setting and enable it.</string>
     <string name="unable_fetch_location">Unable to fetch your current location</string>
     <string name="proceed">Proceed</string>
-
+    <string name="please_enter_email_or_mobile_number">Please enter phone number or email</string>
     <string name="choose_image">Choose Image</string>
+    <string name="enter_valid_email_address">Please enter valid email address</string>
     <string name="gallery">Gallery</string>
+    <string name="new_password_validation_msg">New password should be at least between 6 to 15 characters</string>
+    <string name="password_validation_msg">Password should be at least between 6 to 15 characters</string>
+    <string name="confirm_new_matched_validation_msg">Confirm Password should be same as new password</string>
     <string name="camera">Camera</string>
-
+    <string name="confirm_password_validation_msg">Confirm Password should be at least between 6 to 15 characters</string>
+    <string name="enter_conform_password">Enter confirm password</string>
+    <string name="please_enter_valid_otp">Please enter valid OTP.</string>
+    <string name="mobile_number_validation_msg">Mobile number should be at least between 7 to 15 characters</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="yes">YES</string>

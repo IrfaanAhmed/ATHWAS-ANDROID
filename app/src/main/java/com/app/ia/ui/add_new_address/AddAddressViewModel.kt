@@ -60,6 +60,66 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
         val pinCode = mBinding.edtTextPinCode.text.toString()
         mBinding.tilTextAddress.error = null
         mBinding.tilTextPinCode.error = null
+        var addAddress = false
+        var addPinCode = false
+
+        mBinding.tilTextAddress.isErrorEnabled = false
+        mBinding.tilTextPinCode.isErrorEnabled = false
+        baseRepository.callback.hideKeyboard()
+
+        if (mBinding.edtTextAddress.text.toString().isEmpty()) {
+            mBinding.tilTextAddress.error = "Please enter Floor/Apartment No./House No."
+
+        } else {
+            addAddress = true
+
+
+        }
+        if (pinCode.isEmpty()) {
+            mBinding.tilTextPinCode.error = "Please enter pin code"
+
+        } else if (pinCode.trim().length < 6 || pinCode.trim().length > 10) {
+            mBinding.tilTextPinCode.error = "Pin code can be from 6 to 10 digits only"
+
+        } else {
+            addPinCode = true
+        }
+
+        if (addAddress && addPinCode) {
+            isAddressAdded = true
+            val requestJsonObject = HashMap<String, String>()
+            if (mBinding.edtTextAddress.text.toString().isNullOrBlank())
+                requestJsonObject["full_address"] = mBinding.edtTextSelectedAddress.text.toString()
+            else
+                requestJsonObject["full_address"] =
+                    mBinding.edtTextAddress.text.toString() + " " + mBinding.edtTextSelectedAddress.text.toString()
+            requestJsonObject["latitude"] = (mActivity as AddAddressActivity).latitude.toString()
+            requestJsonObject["longitude"] = (mActivity as AddAddressActivity).longitude.toString()
+            when {
+                selectedChipValue.get() == 1 -> requestJsonObject["address_type"] = "Home"
+                selectedChipValue.get() == 2 -> requestJsonObject["address_type"] = "Work"
+                selectedChipValue.get() == 3 -> requestJsonObject["address_type"] = "Other"
+            }
+            requestJsonObject["mobile"] = AppPreferencesHelper.getInstance().phone
+            requestJsonObject["name"] = AppPreferencesHelper.getInstance().userName
+            requestJsonObject["flat"] = ""
+            requestJsonObject["location_name"] = ""
+            requestJsonObject["building"] = ""
+            requestJsonObject["floor"] = ""//mBinding.edtTextAddress.text.toString()
+            requestJsonObject["landmark"] = ""
+            requestJsonObject["way"] = ""
+            requestJsonObject["zip_code"] = mBinding.edtTextPinCode.text.toString()
+            requestJsonObject["default_address"] =
+                if (previousAddedAddress.get()!! > 0) "0" else "1"
+            addAddressObserver(requestJsonObject)
+        }
+    }
+
+
+    /*fun addAddress() {
+        val pinCode = mBinding.edtTextPinCode.text.toString()
+        mBinding.tilTextAddress.error = null
+        mBinding.tilTextPinCode.error = null
 
         mBinding.tilTextAddress.isErrorEnabled = false
         mBinding.tilTextPinCode.isErrorEnabled = false
@@ -104,7 +164,7 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
         requestJsonObject["zip_code"] = mBinding.edtTextPinCode.text.toString()
         requestJsonObject["default_address"] = if(previousAddedAddress.get()!! > 0) "0" else "1"
         addAddressObserver(requestJsonObject)
-    }
+    }*/
 
     fun getAddress(input: String) {
         val params = HashMap<String, String>()
@@ -152,7 +212,11 @@ class AddAddressViewModel(private val baseRepository: BaseRepository) : BaseView
     private fun getAddress(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = RetrofitFactory.getGoogleInstance().getAddressFromInput(requestParams)))
+            emit(
+                Resource.success(
+                    data = RetrofitFactory.getGoogleInstance().getAddressFromInput(requestParams)
+                )
+            )
         } catch (exception: Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }

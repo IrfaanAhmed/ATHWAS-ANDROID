@@ -37,10 +37,10 @@ class ChangePasswordViewModel(private val baseRepository: BaseRepository) : Base
         mBinding.tilTextNewPassword.isErrorEnabled = false
         mBinding.tilTextConfirmPassword.isErrorEnabled = false
 
-        when {
-            /*oldPassword.length < 6 || oldPassword.length > 20 -> {
+       /* when {
+            oldPassword.length < 6 || oldPassword.length > 20 -> {
                 IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
-            }*/
+            }
             newPassword.contains(" ") -> {
 //                IADialog(mActivity, mActivity.getString(R.string.invalid_password_format), true)
                 mBinding.tilTextNewPassword.error=mActivity.getString(R.string.invalid_password_format)
@@ -49,18 +49,18 @@ class ChangePasswordViewModel(private val baseRepository: BaseRepository) : Base
 //                IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
                 mBinding.tilTextNewPassword.error=mActivity.getString(R.string.password_should_be_min_6_char)
             }
-            /*newPassword.isEmpty() -> {
-                IADialog(mActivity, mActivity.getString(R.string.please_enter_new_password), true)
-            }
-            newPassword.length < 6 -> {
-                IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
-            }
-            confirmPassword.isEmpty() -> {
-                IADialog(mActivity, mActivity.getString(R.string.please_enter_confirm_password), true)
-            }
-            confirmPassword.length < 6 -> {
-                IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
-            }*/
+//            newPassword.isEmpty() -> {
+//                IADialog(mActivity, mActivity.getString(R.string.please_enter_new_password), true)
+//            }
+//            newPassword.length < 6 -> {
+//                IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+//            }
+//            confirmPassword.isEmpty() -> {
+//                IADialog(mActivity, mActivity.getString(R.string.please_enter_confirm_password), true)
+//            }
+//            confirmPassword.length < 6 -> {
+//                IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
+//            }
             confirmPassword != newPassword -> {
 //                IADialog(mActivity, mActivity.getString(R.string.confirm_password_should_be_same_as_new_password), true)
                 mBinding.tilTextConfirmPassword.error=mActivity.getString(R.string.confirm_password_should_be_same_as_new_password)
@@ -71,6 +71,54 @@ class ChangePasswordViewModel(private val baseRepository: BaseRepository) : Base
                 requestParams["new_password"] = newPassword
                 changePasswordObserver(requestParams)
             }
+        }*/
+        var oldDone = false
+        var newDone = false
+        var confirmDone = false
+
+        if (oldPassword.isEmpty()) {
+            //  DriverDialog(mActivity, mActivity.getString(R.string.please_enter_old_password), true)
+            mBinding.tilTextOldPassword.error =
+                mActivity.getString(R.string.please_enter_old_password)
+        } else if (oldPassword.length < 6 || oldPassword.length > 15) {
+            mBinding.tilTextOldPassword.error =
+                mActivity.getString(R.string.password_should_be_min_6_char)
+            //DriverDialog(mActivity, mActivity.getString(R.string.old_password_validation_msg), true)
+        }
+        else{
+            oldDone =true
+        }
+        if (newPassword.isEmpty()) {
+            //  DriverDialog(mActivity, mActivity.getString(R.string.please_enter_new_password), true)
+            mBinding.tilTextNewPassword.error =
+                mActivity.getString(R.string.please_enter_new_password)
+        } else if (newPassword.length < 6 || newPassword.length > 15) {
+            mBinding.tilTextNewPassword.error =
+                mActivity.getString(R.string.password_should_be_min_6_char)
+        }else{
+            newDone =true
+        }
+        if (confirmPassword.isEmpty()) {
+            mBinding.tilTextConfirmPassword.error =
+                mActivity.getString(R.string.please_enter_confirm_password)
+        } else if (confirmPassword.length < 6 || confirmPassword.length > 15) {
+            mBinding.tilTextConfirmPassword.error =
+                mActivity.getString(R.string.password_should_be_min_6_char)
+        } else if (confirmPassword != newPassword) {
+            mBinding.tilTextConfirmPassword.error =
+                mActivity.getString(R.string.confirm_password_should_be_same_as_new_password)
+        }else{
+            confirmDone =true
+        }
+
+        if (oldDone &&
+            newDone &&
+            confirmDone
+        ) {
+            val requestParams = HashMap<String, String>()
+            requestParams["old_password"] = oldPassword
+            requestParams["new_password"] = newPassword
+            changePasswordObserver(requestParams)
         }
     }
 

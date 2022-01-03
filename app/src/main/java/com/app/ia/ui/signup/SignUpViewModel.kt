@@ -95,7 +95,10 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         val email = mBinding.edtTextEmail.text.toString()
         val phone = mBinding.editTextMobile.text.toString().trim()
         val password = mBinding.edtTextPassword.text.toString()
-
+        var haveName = false
+        var havePass = false
+        var haveEmail = false
+        var haveMobile = false
         mBinding.tilTextName.error = null
         mBinding.tilTextEmail.error = null
         mBinding.tilTextMobile.error = null
@@ -109,42 +112,62 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         if (name.length < 3 || name.length > 30) {
             //IADialog(mActivity, mActivity.getString(R.string.msg_name_validation_length), true)
             mBinding.tilTextName.error = mActivity.getString(R.string.msg_name_validation_length)
-        }
-        else if(ValidationUtils.isHaveLettersOnly(name)){
+        } else if (ValidationUtils.isHaveLettersOnly(name)) {
             //IADialog(mActivity, mActivity.getString(R.string.msg_name_validation), true)
             mBinding.tilTextName.error = mActivity.getString(R.string.msg_name_validation)
-        }else if (!ValidationUtils.isValidPhone(phone)) {
+        } else {
+            haveName = true
+        }
+        if (!ValidationUtils.isValidPhone(phone)) {
             //IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
             mBinding.tilTextMobile.error = mActivity.getString(R.string.enter_valid_mobile_no)
-        } else if (email.length < 9 || email.length > 320) {
+        } else {
+            haveMobile = true
+        }
+        if (email.length < 9 || email.length > 320) {
             //IADialog(mActivity, mActivity.getString(R.string.msg_email_validation_length), true)
             mBinding.tilTextEmail.error = mActivity.getString(R.string.msg_email_validation_length)
-        }  else if (!ValidationUtils.isValidEmail(email)) {
+        } else if (!ValidationUtils.isValidEmail(email)) {
             //IADialog(mActivity, mActivity.getString(R.string.enter_valid_email), true)
             mBinding.tilTextEmail.error = mActivity.getString(R.string.enter_valid_email)
+        } else {
+            haveEmail = true
         }
-        else if(password.contains(" ")){
+        if (password.contains(" ")) {
             //IADialog(mActivity, mActivity.getString(R.string.invalid_password_format), true)
             mBinding.tilTextPassword.error = mActivity.getString(R.string.invalid_password_format)
-        }
-        else if (password.length < 6 || password.length > 20) {
+        } else if (password.length < 6 || password.length > 20) {
             //IADialog(mActivity, mActivity.getString(R.string.password_should_be_min_6_char), true)
-            mBinding.tilTextPassword.error = mActivity.getString(R.string.password_should_be_min_6_char)
-        }else if (!mBinding.checkBox.isChecked) {
-            IADialog(mActivity, mActivity.getString(R.string.accept_terms_n_condition), true)
+            mBinding.tilTextPassword.error =
+                mActivity.getString(R.string.password_should_be_min_6_char)
         } else {
+            havePass = true
+        }
 
-            val requestParams = HashMap<String, String>()
-            requestParams["username"] = name
-            requestParams["country_code"] = "+91"
-            requestParams["phone"] = phone
-            requestParams["email"] = email
-            requestParams["password"] = password
-            requestParams["message_id"] = messageId
-            requestParams["device_token"] = AppPreferencesHelper.getInstance().deviceToken
-            requestParams["device_type"] = "1"
-            requestParams["device_id"] = androidId
-            setupObservers(requestParams)
+        if (haveName &&
+            havePass &&
+            haveEmail &&
+            haveMobile
+        ) {
+            if (!mBinding.checkBox.isChecked) {
+                IADialog(mActivity, mActivity.getString(R.string.accept_terms_n_condition), true)
+
+            } else {
+                val requestParams = HashMap<String, String>()
+                requestParams["username"] = name
+                requestParams["country_code"] = "+91"
+                requestParams["phone"] = phone
+                requestParams["email"] = email
+                requestParams["password"] = password
+                requestParams["message_id"] = messageId
+                requestParams["device_token"] = AppPreferencesHelper.getInstance().deviceToken
+                requestParams["device_type"] = "1"
+                requestParams["device_id"] = androidId
+                setupObservers(requestParams)
+                //mActivity.toast("SuccessFully")
+            }
+
+
         }
     }
 
@@ -176,9 +199,14 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         baseRepository.callback.hideKeyboard()
         val fontSemiBold: Typeface = ResourcesCompat.getFont(mActivity, R.font.linotte_semi_bold)!!
         val spanly = Spanly()
-        spanly.append(mActivity.getString(R.string.already_have_an_account)).space().append(mActivity.getString(R.string.sign_in), color(mActivity.getColorCompat(R.color.dark_green)), font(fontSemiBold), clickable({
-            mActivity.finish()
-        }))
+        spanly.append(mActivity.getString(R.string.already_have_an_account)).space().append(
+            mActivity.getString(R.string.sign_in),
+            color(mActivity.getColorCompat(R.color.dark_green)),
+            font(fontSemiBold),
+            clickable({
+                mActivity.finish()
+            })
+        )
 
         mBinding.txtViewAlreadyLogin.text = spanly
         mBinding.txtViewAlreadyLogin.movementMethod = LinkMovementMethod.getInstance()

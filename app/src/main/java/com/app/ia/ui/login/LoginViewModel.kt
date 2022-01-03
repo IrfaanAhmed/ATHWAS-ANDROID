@@ -74,7 +74,67 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
         })
     }
 
-    fun validateFields(): Boolean{
+    fun validateFields(): Boolean {
+        var isValid = false
+
+        mBinding.tilTextMobileNumber.error = null
+        mBinding.tilTextPassword.error = null
+        var donePhone = false
+        mBinding.tilTextMobileNumber.isErrorEnabled = false
+        mBinding.tilTextPassword.isErrorEnabled = false
+        val mobileNumber = mBinding.edtTextMobileNumber.text.toString()
+        val password = mBinding.edtTextPassword.text.toString()
+        if (mobileNumber.isEmpty() && password.isEmpty()) {
+            mBinding.tilTextMobileNumber.error =
+                mActivity.getString(R.string.please_enter_email_or_mobile_number)
+            mBinding.tilTextPassword.error = mActivity.getString(R.string.enter_password)
+
+        } else {
+            if (isValidPhoneNumber(mobileNumber)) {
+                if (mobileNumber.length < 7 || mobileNumber.length > 15) {
+                    mBinding.tilTextMobileNumber.error =
+                        mActivity.getString(R.string.mobile_number_validation_msg)
+                }  else {
+                    donePhone = true
+                }
+            } else {
+                if (!CommonUtils.isEmailValid(mobileNumber)) {
+                    mBinding.tilTextMobileNumber.error =
+                        mActivity.getString(R.string.enter_valid_email_address)
+                }else{
+                    donePhone = true
+                }
+            }
+
+            if (password.isEmpty()) {
+                mBinding.tilTextPassword.error = mActivity.getString(R.string.enter_password)
+            } else if (password.length < 6 || password.length > 15) {
+
+                mBinding.tilTextPassword.error =
+                    mActivity.getString(R.string.password_validation_msg)
+            } else {
+                if (donePhone) {
+                    isValid = true
+                }
+            }
+        }
+        /* val mobileNumber = mBinding.edtTextMobileNumber.text.toString()
+         val password = mBinding.edtTextPassword.text.toString()
+
+         if (TextUtils.isEmpty(mobileNumber)) {
+             mBinding.tilTextMobileNumber.error = mActivity.getString(R.string.enter_email_mobile_no)
+             isValid = false
+         }
+
+         if (password.isEmpty()) {
+             mBinding.tilTextPassword.error = mActivity.getString(R.string.enter_your_password)
+             isValid = false
+         }*/
+
+        return isValid
+    }
+
+    /*fun validateFields(): Boolean{
         var isValid = true
 
         mBinding.tilTextMobileNumber.error = null
@@ -97,6 +157,11 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
         }
 
         return isValid
+    }*/
+    private fun isValidPhoneNumber(phoneNumber: CharSequence): Boolean {
+        return if (!TextUtils.isEmpty(phoneNumber)) {
+            Patterns.PHONE.matcher(phoneNumber).matches()
+        } else false
     }
 
     fun onLoginClick() {
@@ -106,7 +171,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
         val password = mBinding.edtTextPassword.text.toString()
         val flag: Boolean = true
 
-        if(!validateFields()){
+        if (!validateFields()) {
             return
         }
 
@@ -139,8 +204,16 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
     private fun requestHint() {
         val hintRequest = HintRequest.Builder().setPhoneNumberIdentifierSupported(true).build()
         val options = CredentialsOptions.Builder().forceEnableSaveDialog().build()
-        val pendingIntent = Credentials.getClient(getActivityNavigator()!!, options).getHintPickerIntent(hintRequest)
-        getActivityNavigator()!!.startIntentSenderForResult(pendingIntent.intentSender, AppRequestCode.PHONE_REQUEST, null, 0, 0, 0)
+        val pendingIntent = Credentials.getClient(getActivityNavigator()!!, options)
+            .getHintPickerIntent(hintRequest)
+        getActivityNavigator()!!.startIntentSenderForResult(
+            pendingIntent.intentSender,
+            AppRequestCode.PHONE_REQUEST,
+            null,
+            0,
+            0,
+            0
+        )
     }
 
     /*private fun isValidPhoneNumber(phoneNumber: CharSequence): Boolean {
@@ -171,9 +244,14 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
         val fontSemiBold: Typeface = ResourcesCompat.getFont(mActivity, R.font.linotte_semi_bold)!!
         val spanly = Spanly()
 
-        spanly.append(mActivity.getString(R.string.don_t_have_an_account_yet)).space().append(mActivity.getString(R.string.sign_up), color(mActivity.getColorCompat(R.color.dark_green)), font(fontSemiBold), clickable({
-            mActivity.startActivity<SignUpActivity>()
-        }))
+        spanly.append(mActivity.getString(R.string.don_t_have_an_account_yet)).space().append(
+            mActivity.getString(R.string.sign_up),
+            color(mActivity.getColorCompat(R.color.dark_green)),
+            font(fontSemiBold),
+            clickable({
+                mActivity.startActivity<SignUpActivity>()
+            })
+        )
 
         mBinding.txtViewSignUp.text = spanly
         mBinding.txtViewSignUp.movementMethod = LinkMovementMethod.getInstance()
@@ -197,7 +275,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
 
                             if (users.data?.isUserVerified == 0) {
                                 val dialog = IADialog(mActivity, "", users.message, true)
-                                dialog.setOnItemClickListener(object: IADialog.OnClickListener{
+                                dialog.setOnItemClickListener(object : IADialog.OnClickListener {
                                     override fun onPositiveClick() {
                                         mActivity.startActivity<OTPActivity> {
                                             putExtra("countryCode", users.data?.countryCode)
@@ -205,6 +283,7 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
                                             putExtra("otp", users.data?.otpNumber)
                                         }
                                     }
+
                                     override fun onNegativeClick() {
 
                                     }
@@ -213,7 +292,8 @@ class LoginViewModel(private val baseRepository: BaseRepository) : BaseViewModel
                             } else {
                                 AppPreferencesHelper.getInstance().userData = users.data!!
                                 mActivity.startActivityWithFinish<HomeActivity> {
-                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    flags =
+                                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 }
                             }
 
