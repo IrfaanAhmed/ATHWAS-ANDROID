@@ -1,5 +1,6 @@
 package com.app.ia.ui.my_cart
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -51,6 +52,7 @@ class MyCartActivity : BaseActivity<ActivityMyCartBinding, MyCartViewModel>(), C
         mBinding?.lifecycleOwner = this
         mViewModel?.setActivityNavigator(this)
         mViewModel?.setVariable(mBinding!!)
+        mViewModel?.cartUpdateListener = this
 
         //mViewModel?.isItemAvailable?.value = false
 
@@ -118,6 +120,13 @@ class MyCartActivity : BaseActivity<ActivityMyCartBinding, MyCartViewModel>(), C
         requestParams["quantity"] = "" + quantity
         requestParams["business_category_id"] = productItem.businessCategory.Id
         mViewModel?.updateCartItemObserver(requestParams)
+    }
+
+    override fun onRefreshCart(productItem: CartListResponse.Docs.CategoryItems, position: Int) {
+        val requestParams = HashMap<String, String>()
+        requestParams["page_no"] = "1"
+        requestParams["limit"] = "50"
+        mViewModel?.cartListingObserver(requestParams, productItem, position)
     }
 
     override fun onDeleteItem(productItem: CartListResponse.Docs.CategoryItems, position: Int) {

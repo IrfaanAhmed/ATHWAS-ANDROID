@@ -10,6 +10,7 @@ import com.app.ia.R
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityMyCartBinding
+import com.app.ia.dialog.IADialog
 import com.app.ia.enums.Status
 import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.model.CartListResponse
@@ -24,6 +25,7 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
 
     lateinit var mActivity: Activity
     lateinit var mBinding: ActivityMyCartBinding
+    lateinit var cartUpdateListener: CartUpdateListener
 
     val isItemAvailable = MutableLiveData(false)
     val isItemNotAvailable = MutableLiveData(false)
@@ -65,7 +67,7 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         }
     }
 
-    fun cartListingObserver(requestParams: HashMap<String, String>) {
+    fun cartListingObserver(requestParams: HashMap<String, String>, productItem: CartListResponse.Docs.CategoryItems? = null, position: Int = 0) {
         getCartListing(requestParams).observe(mBinding.lifecycleOwner!!, {
             it?.let { resource ->
                 when (resource.status) {
@@ -88,6 +90,18 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                                     } else {
                                         totalAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + (item.getPrice().toDouble() * item.quantity)).toDouble()
                                     }
+
+                                    productItem?.let {
+                                        if(it.id == item.id){
+                                            if (position <= item.getRemainingQuantity()) {
+                                                cartUpdateListener.onUpdate(it, position)
+                                            }
+                                            else{
+                                                IADialog(mActivity, "You cannot order more than " + item.getRemainingQuantity() + " units", true)
+                                            }
+
+                                        }
+                                    }
                                 }
                             }
 
@@ -95,6 +109,8 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                             val savedAmount = totalAmountWithoutOffer.value!! - totalAmount.value!!
 
                             totalSavedAmount.value = CommonUtils.convertToDecimal(savedAmount).toDouble()
+
+
                         }
                     }
 

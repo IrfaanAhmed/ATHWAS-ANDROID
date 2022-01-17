@@ -6,4 +6,5 @@ interface CartUpdateListener {
 
     fun onUpdate(productItem: CartListResponse.Docs.CategoryItems, position : Int)
     fun onDeleteItem(productItem: CartListResponse.Docs.CategoryItems, position : Int)
+    fun onRefreshCart(productItem: CartListResponse.Docs.CategoryItems, position : Int)
 }

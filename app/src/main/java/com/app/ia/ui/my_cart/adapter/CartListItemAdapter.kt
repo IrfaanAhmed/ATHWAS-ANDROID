@@ -64,7 +64,9 @@ class CartListItemAdapter(private val updateListener: CartUpdateListener) : List
                         //itemView.tvQuantity.text = quantity.toString()
                         updateListener.onUpdate(productItem, quantity)
                     } else {
-                        IADialog(itemView.context!! as Activity, "You cannot order more than " + productItem.getRemainingQuantity() + " units", true)
+                        quantity += 1
+                        updateListener.onRefreshCart(productItem, quantity)
+                        //IADialog(itemView.context!! as Activity, "You cannot order more than " + productItem.getRemainingQuantity() + " units", true)
                     }
                 }
 
