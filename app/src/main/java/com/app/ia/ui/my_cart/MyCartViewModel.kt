@@ -93,7 +93,10 @@ class MyCartViewModel(private val baseRepository: BaseRepository) : BaseViewMode
 
                                     productItem?.let {
                                         if(it.id == item.id){
-                                            if (position <= item.getRemainingQuantity()) {
+                                            if(item.availableQuantity == 0){
+                                                IADialog(mActivity, "Sorry item is out of stock now", true)
+                                            }
+                                            else if (position <= item.getRemainingQuantity()) {
                                                 cartUpdateListener.onUpdate(it, position)
                                             }
                                             else{
