@@ -3,13 +3,16 @@ package com.app.ia.ui.search
 import android.app.Activity
 import android.content.Intent
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.liveData
 import com.app.ia.R
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivitySearchBinding
 import com.app.ia.enums.Status
+import com.app.ia.model.BaseResponse
 import com.app.ia.model.ProductListingResponse
 import com.app.ia.utils.AppConstants.EXTRA_VOICE_TEXT
 import com.app.ia.utils.Resource
@@ -83,7 +86,8 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
     fun setUpObserver(keyword: String) {
         //productListAll.clear()
         val requestParams = HashMap<String, String>()
-        requestParams["page_no"] = currentPage.value!!.toString()
+        requestParams["page_no"] = "1"//currentPage.value!!.toString()
+        requestParams["limit"] = "100"
         requestParams["keyword"] = keyword
         requestParams["business_category_id"] = businessCategoryId
         requestParams["category_id"] = categoryId
@@ -101,32 +105,39 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         }
     }
 
-    private fun productListingObserver(requestParams: HashMap<String, String>) {
-        isLoading = true
-        getProductListing(requestParams).observe(mBinding.lifecycleOwner!!, {
-            it?.let { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        isLoading = false
-                        resource.data?.let { users ->
-                            isItemAvailable.value = users.data?.docs!!.size > 0
-                            isLastPage.value = (currentPage.value == users.data?.totalPages)
-                            productListAll.addAll(users.data?.docs!!)
-                            productList.value = productListAll
-                        }
-                    }
-
-                    Status.ERROR -> {
-                        isLoading = false
-                        baseRepository.callback.hideProgress()
-                        mActivity.toast(it.message!!)
-                    }
-
-                    Status.LOADING -> {
-                        baseRepository.callback.showProgress()
+    val observer = Observer<Resource<BaseResponse<ProductListingResponse>>> {
+        it?.let { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    isLoading = false
+                    resource.data?.let { users ->
+                        isItemAvailable.value = users.data?.docs!!.size > 0
+                        isLastPage.value = (currentPage.value == users.data?.totalPages)
+                        productListAll.addAll(users.data?.docs!!)
+                        productList.value = productListAll
                     }
                 }
+
+                Status.ERROR -> {
+                    isLoading = false
+                    baseRepository.callback.hideProgress()
+                    mActivity.toast(it.message!!)
+                }
+
+                Status.LOADING -> {
+                    baseRepository.callback.showProgress()
+                }
             }
-        })
+        }
+    }
+
+    var getListing: LiveData<Resource<BaseResponse<ProductListingResponse>>>? = null
+
+    private fun productListingObserver(requestParams: HashMap<String, String>) {
+        isLoading = true
+        getListing?.removeObserver(observer)
+        getListing = getProductListing(requestParams)
+        getListing?.observe(mBinding.lifecycleOwner!!, observer)
+
     }
 }
