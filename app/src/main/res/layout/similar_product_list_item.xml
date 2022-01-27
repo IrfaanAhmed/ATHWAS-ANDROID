@@ -48,10 +48,10 @@
                 android:layout_height="@dimen/_22sdp"
                 android:layout_below="@+id/ivProductImage"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:maxLines="2"
                 android:ellipsize="end"
                 android:fontFamily="@font/linotte_semi_bold"
-                android:text="@{similarProduct.name}"
+                android:maxLines="2"
+                android:text="@{similarProduct.name+` - `+similarProduct.inventoryName}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_10sdp" />
 

@@ -43,6 +43,9 @@ data class SimilarProductListResponse(
         @SerializedName("name")
         val name: String,
         @Expose
+        @SerializedName("inventory_name")
+        val inventoryName: String,
+        @Expose
         @SerializedName("images")
         var images: List<Images>,
         @Expose

@@ -276,10 +276,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/linotte_bold"
-                            app:fontFamily="@font/linotte_bold"
                             android:text="@string/see_all_offers"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_11sdp"
+                            app:fontFamily="@font/linotte_bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -306,11 +306,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            app:fontFamily="@font/linotte_bold"
                             android:fontFamily="@font/linotte_bold"
                             android:text="@string/about_product"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_11sdp"
+                            app:fontFamily="@font/linotte_bold"
                             app:layout_constraintBottom_toTopOf="@+id/tvAboutProductValue"
                             app:layout_constraintStart_toStartOf="parent" />
 
@@ -347,10 +347,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/linotte_bold"
-                            android:textStyle="bold"
                             android:text="@string/similar_product"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_11sdp"
+                            android:textStyle="bold"
                             app:layout_constraintBottom_toTopOf="@+id/recViewSimilarProduct"
                             app:layout_constraintStart_toStartOf="parent" />
 
