@@ -3,12 +3,15 @@ package com.app.ia.ui.home
 import android.app.Activity
 import android.content.Intent
 import android.text.TextUtils
+import android.util.Log
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.app.ia.R
+import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.base.BaseViewModel
 import com.app.ia.databinding.ActivityHomeBinding
@@ -108,7 +111,11 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
     }
 
     fun onNotificationClick() {
-        mActivity.startActivity<NotificationActivity>()
+        if (AppPreferencesHelper.getInstance().authToken.isEmpty()) {
+            (mActivity as HomeActivity).loginDialog()
+        } else {
+            mActivity.startActivity<NotificationActivity>()
+        }
     }
 
     fun onWishListClick() {
@@ -259,7 +266,13 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
                 }
 
                 12 -> {
-                    (mActivity as HomeActivity).logoutDialog()
+                    (mActivity as HomeActivity).logoutDialog(object : BaseActivity.LogoutOkListener{
+                        override fun onOk() {
+                            Log.e("Logout", "Logout Clicked")
+                            val params = HashMap<String, String>()
+                            logoutObserver(params)
+                        }
+                    })
                 }
             }
         }
@@ -276,13 +289,15 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
 
     private fun cartCountObserver() {
 
-        getCartCount().observe(mBinding.lifecycleOwner!!, {
+        getCartCount().observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            AppPreferencesHelper.getInstance().cartItemCount = users.data?.cartCount!!
-                            AppPreferencesHelper.getInstance().notificationCount = users.data?.notificationCount!!
+                            AppPreferencesHelper.getInstance().cartItemCount =
+                                users.data?.cartCount!!
+                            AppPreferencesHelper.getInstance().notificationCount =
+                                users.data?.notificationCount!!
                             CommonUtils.showCartItemCount(mBinding.toolbar.bottom_navigation_notification)
                             CommonUtils.showNotificationCount(mBinding.toolbar.txtNotificationCount)
                         }
@@ -300,6 +315,44 @@ class HomeViewModel(private val baseRepository: BaseRepository) : BaseViewModel(
                     }
                 }
             }
-        })
+        }
+    }
+
+
+
+    fun logout(params: HashMap<String, String>) = liveData(Dispatchers.Main) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = baseRepository.logout(params)))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
+    }
+
+    fun logoutObserver(params: HashMap<String, String>) {
+        logout(params).observe(mBinding.lifecycleOwner!!) {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { users ->
+                            AppPreferencesHelper.getInstance().clearAllPreferences()
+                            val intent = Intent(mActivity, LoginActivity::class.java)
+                            intent.putExtra("isFromOtherScreen", true)
+                            mActivity.startActivityForResult(intent, AppRequestCode.REQUEST_LOGIN)
+                        }
+                    }
+
+                    Status.ERROR -> {
+                        baseRepository.callback.hideProgress()
+                        if (!it.message.isNullOrEmpty()) {
+                        }
+                    }
+
+                    Status.LOADING -> {
+                        baseRepository.callback.showProgress()
+                    }
+                }
+            }
+        }
     }
 }

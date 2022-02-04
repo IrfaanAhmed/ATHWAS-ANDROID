@@ -87,7 +87,7 @@ data class CartListResponse(
             var subcategory: Subcategory,
             @Expose
             @SerializedName("price")
-            private var price: Int,
+            private var price: Double,
             @Expose
             @SerializedName("is_discount")
             val isDiscount: Int,

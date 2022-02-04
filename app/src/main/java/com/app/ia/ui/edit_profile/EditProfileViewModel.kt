@@ -143,7 +143,7 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
         }
 
     private fun setupObservers(partData: Map<String, RequestBody>, file: MultipartBody.Part) {
-        updateProfile(partData, file).observe(mBinding.lifecycleOwner!!, {
+        updateProfile(partData, file).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -166,11 +166,11 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
                     }
                 }
             }
-        })
+        }
     }
 
     private fun setupObservers(isVerify: Boolean, requestParams: HashMap<String, String>) {
-        updateProfile(requestParams).observe(mBinding.lifecycleOwner!!, {
+        updateProfile(requestParams).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -208,6 +208,6 @@ class EditProfileViewModel(private val baseRepository: BaseRepository) : BaseVie
                     }
                 }
             }
-        })
+        }
     }
 }

@@ -43,6 +43,11 @@ android {
     buildFeatures {
         dataBinding = true
     }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/loopingviewpager_release.kotlin_module']
+        }
+    }
 
     android.applicationVariants.all { variant ->
         variant.outputs.all {
@@ -51,9 +56,6 @@ android {
         }
     }
 
-    packagingOptions {
-        exclude 'META-INF/loopingviewpager_release.kotlin_module'
-    }
 }
 
 static def getDate() {

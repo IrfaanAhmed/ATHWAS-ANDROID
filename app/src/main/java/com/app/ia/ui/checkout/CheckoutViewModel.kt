@@ -175,9 +175,9 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
         }
     }
 
-    private fun cartListingObserver(requestParams: HashMap<String, String>) {
+    private fun cartListingObserver(requestParams: HashMap<String, String>, showMsg: Boolean = true) {
 
-        getCartListing(requestParams).observe(mBinding.lifecycleOwner!!, {
+        getCartListing(requestParams).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -193,12 +193,27 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                             for (cartItem in cartListAll) {
                                 totalItems.value = totalItems.value!! + cartItem.categoryItems.size
                                 for (item in cartItem.categoryItems) {
-                                    totalAmountWithoutOfferPrice.value = CommonUtils.convertToDecimal(totalAmountWithoutOfferPrice.value!!.toDouble() + (item.getPrice().toDouble() * item.quantity))
+                                    totalAmountWithoutOfferPrice.value =
+                                        CommonUtils.convertToDecimal(
+                                            totalAmountWithoutOfferPrice.value!!.toDouble() + (item.getPrice()
+                                                .toDouble() * item.quantity)
+                                        )
                                     if (item.isDiscount == 1) {
-                                        totalAmountWithOfferPrice.value = CommonUtils.convertToDecimal(totalAmountWithOfferPrice.value!!.toDouble() + (item.getPrice().toDouble() - item.getOfferPrice().toDouble()) * item.quantity)
-                                        totalAmount.value = CommonUtils.convertToDecimal(totalAmount.value!!.toDouble() + (item.getOfferPrice().toDouble() * item.quantity))
+                                        totalAmountWithOfferPrice.value =
+                                            CommonUtils.convertToDecimal(
+                                                totalAmountWithOfferPrice.value!!.toDouble() + (item.getPrice()
+                                                    .toDouble() - item.getOfferPrice()
+                                                    .toDouble()) * item.quantity
+                                            )
+                                        totalAmount.value = CommonUtils.convertToDecimal(
+                                            totalAmount.value!!.toDouble() + (item.getOfferPrice()
+                                                .toDouble() * item.quantity)
+                                        )
                                     } else {
-                                        totalAmount.value = CommonUtils.convertToDecimal(totalAmount.value!!.toDouble() + (item.getPrice().toDouble() * item.quantity))
+                                        totalAmount.value = CommonUtils.convertToDecimal(
+                                            totalAmount.value!!.toDouble() + (item.getPrice()
+                                                .toDouble() * item.quantity)
+                                        )
                                     }
                                 }
                             }
@@ -221,7 +236,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                                 val addressParams = HashMap<String, String>()
                                 addressParams["delivery_address_id"] = addressId.value!!
                                 addressParams["order_amount"] = totalAmount.value.toString()
-                                getDeliveryFeeObserver(addressParams)
+                                getDeliveryFeeObserver(addressParams, showMsg)
                             }
 
                         }
@@ -239,7 +254,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
                 }
             }
-        })
+        }
     }
 
     private fun deleteCartItem(cart_id: String) = liveData(Dispatchers.Main) {
@@ -253,12 +268,13 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
     fun deleteCartItemObserver(cart_id: String) {
 
-        deleteCartItem(cart_id).observe(mBinding.lifecycleOwner!!, {
+        deleteCartItem(cart_id).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { _ ->
-                            AppPreferencesHelper.getInstance().cartItemCount = it.data?.data?.cartCount!!
+                            AppPreferencesHelper.getInstance().cartItemCount =
+                                it.data?.data?.cartCount!!
                             isCartChanged = true
                             cartListAll.clear()
                             val request = HashMap<String, String>()
@@ -280,7 +296,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
                 }
             }
-        })
+        }
     }
 
     private fun placeOrder(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
@@ -294,7 +310,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
     fun placeOrderObserver(requestParams: HashMap<String, String>) {
 
-        placeOrder(requestParams).observe(mBinding.lifecycleOwner!!, {
+        placeOrder(requestParams).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -306,12 +322,14 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                                 }
                             } else {
                                 val dialog = IADialog(mActivity, "", users.message, true)
-                                dialog.setOnItemClickListener(object: IADialog.OnClickListener{
+                                dialog.setOnItemClickListener(object : IADialog.OnClickListener {
                                     override fun onPositiveClick() {
                                         mActivity.startActivityWithFinish<HomeActivity> {
-                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                            flags =
+                                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                         }
                                     }
+
                                     override fun onNegativeClick() {
 
                                     }
@@ -333,7 +351,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                         val request = HashMap<String, String>()
                         request["page_no"] = "1"
                         request["limit"] = "400"
-                        cartListingObserver(request)
+                        cartListingObserver(request, false)
                     }
 
                     Status.LOADING -> {
@@ -341,7 +359,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
                 }
             }
-        })
+        }
     }
 
     private fun getDeliveryFee(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
@@ -353,24 +371,27 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
         }
     }
 
-    fun getDeliveryFeeObserver(requestParams: HashMap<String, String>) {
+    fun getDeliveryFeeObserver(requestParams: HashMap<String, String>, showMsg: Boolean = true) {
 
-        getDeliveryFee(requestParams).observe(mBinding.lifecycleOwner!!, {
+        getDeliveryFee(requestParams).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             isDeliverableArea.value = true
                             if (users.data?.deliveryFee!!.isNotEmpty()) {
-                                deliveryCharges.value = CommonUtils.convertToDecimal(users.data?.deliveryFee!!)
+                                deliveryCharges.value =
+                                    CommonUtils.convertToDecimal(users.data?.deliveryFee!!)
                             }
                             walletAmount.value = CommonUtils.convertToDecimal(users.data?.wallet!!)
                             warehouseId.value = users.data?.warehouse!!
-                            redeemPoint.value = CommonUtils.convertToDecimal(users.data?.getRedeemPoint()!!)
+                            redeemPoint.value =
+                                CommonUtils.convertToDecimal(users.data?.getRedeemPoint()!!)
                             if (users.data?.vatAmount == "null" || users.data?.vatAmount == null) {
                                 vatAmount.value = "0.00"
                             } else {
-                                vatAmount.value = CommonUtils.convertToDecimal(users.data?.vatAmount)
+                                vatAmount.value =
+                                    CommonUtils.convertToDecimal(users.data?.vatAmount)
                             }
                             AppPreferencesHelper.getInstance().walletAmount = walletAmount.value!!
                             setNetAmount()
@@ -382,7 +403,8 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
                             isDeliverableArea.value = false
-                            mActivity.toast(it.message)
+                            if(showMsg)
+                                mActivity.toast(it.message)
                         }
                     }
 
@@ -391,7 +413,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
                 }
             }
-        })
+        }
     }
 
     /**

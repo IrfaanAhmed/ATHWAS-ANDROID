@@ -75,18 +75,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
 
 
 
-        mHomeViewModel?.businessCategory?.observe(viewLifecycleOwner, {
+        mHomeViewModel?.businessCategory?.observe(viewLifecycleOwner) {
             homeCategoryAdapter.submitList(it)
-        })
+        }
 
         //ViewPager
-        mHomeViewModel?.bannerList?.observe(viewLifecycleOwner, {
+        mHomeViewModel?.bannerList?.observe(viewLifecycleOwner) {
             val bannerPagerAdapter = SlidingImageAdapter(requireContext(), it!!)
             viewPagerBanner.adapter = bannerPagerAdapter
             view_pager_indicator.setViewPager(viewPagerBanner)
             val autoScroller = AutoScroller(viewPagerBanner, lifecycle, 3000)
             autoScroller.isAutoScroll = true
-            bannerPagerAdapter.setOnImageClickListener(object : SlidingImageAdapter.OnImageClickListener {
+            bannerPagerAdapter.setOnImageClickListener(object :
+                SlidingImageAdapter.OnImageClickListener {
                 override fun onImageClick(view: View, image: BannerResponse.Docs) {
                     AppPreferencesHelper.getInstance().setString(AppPreferencesHelper.CATEGORY, "")
                     requireActivity().startActivity<ProductListActivity> {
@@ -96,10 +97,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
                     }
                 }
             })
-        })
+        }
 
         //Deal Of the Day Banner
-        mHomeViewModel?.dealOfTheDayBannerList?.observe(viewLifecycleOwner, {
+        mHomeViewModel?.dealOfTheDayBannerList?.observe(viewLifecycleOwner) {
 
             if (it.size <= 1) {
                 leftArrow.visibility = View.GONE
@@ -111,7 +112,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
             val bannerPagerAdapter = DealOfTheDayBannerAdapter(requireContext(), it!!)
             vpDealOfTheDayBanner.adapter = bannerPagerAdapter
             vpDealOfTheDayBannerIndicator.setViewPager(vpDealOfTheDayBanner)
-            bannerPagerAdapter.setOnImageClickListener(object : DealOfTheDayBannerAdapter.OnImageClickListener {
+            bannerPagerAdapter.setOnImageClickListener(object :
+                DealOfTheDayBannerAdapter.OnImageClickListener {
                 override fun onImageClick(view: View, image: DealOfTheDayBannerResponse.Docs) {
                     /*AppPreferencesHelper.getInstance().setString(AppPreferencesHelper.CATEGORY, "")
                     requireActivity().startActivity<ProductListActivity> {
@@ -127,7 +129,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
                     }
                 }
             })
-        })
+        }
 
         vpDealOfTheDayBanner.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
@@ -172,9 +174,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
         //recyclerViewProduct.addItemDecoration(itemDecoration1)
         recyclerViewProduct.isNestedScrollingEnabled = false
 
-        mHomeViewModel?.popularProductListing?.observe(viewLifecycleOwner, {
+        mHomeViewModel?.popularProductListing?.observe(viewLifecycleOwner) {
             homeProductAdapter.submitList(it)
-        })
+        }
 
         //Discount products
         val homeDiscountProductAdapter = HomeProductAdapter()
@@ -183,9 +185,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeFragViewModel>() {
         //recyclerViewDiscountProduct.addItemDecoration(itemDecoration2)
         recyclerViewDiscountProduct.isNestedScrollingEnabled = false
 
-        mHomeViewModel?.discountedProductListing?.observe(viewLifecycleOwner, {
+        mHomeViewModel?.discountedProductListing?.observe(viewLifecycleOwner) {
             homeDiscountProductAdapter.submitList(it)
-        })
+        }
 
         ivMicIcon.setOnClickListener { startSpeechRecognizer() }
 

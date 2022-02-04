@@ -69,7 +69,7 @@ class MyCartActivity : BaseActivity<ActivityMyCartBinding, MyCartViewModel>(), C
 
         cartAdapter = CartListAdapter(this)
         recViewCart.adapter = cartAdapter
-        mViewModel?.cartList?.observe(this, {
+        mViewModel?.cartList?.observe(this) {
 
             if (it.size <= 0) {
                 cartAdapter?.notifyDataSetChanged()
@@ -80,7 +80,7 @@ class MyCartActivity : BaseActivity<ActivityMyCartBinding, MyCartViewModel>(), C
                     cartAdapter?.notifyDataSetChanged()
                 }
             }
-        })
+        }
 
         buttonCheckout.setOnClickListener {
             if(mViewModel?.cartList?.value?.size!! <= 0){

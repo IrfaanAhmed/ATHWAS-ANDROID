@@ -10,6 +10,7 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.LifecycleOwner
 import com.app.ia.IAApplication
 import com.app.ia.R
 import com.app.ia.callback.GeneralCallback
@@ -166,20 +167,26 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
         CleverDialog(this, getString(R.string.gold_coming_soon_msg), true)
     }*/
 
-    fun logoutDialog() {
+    fun logoutDialog(listener: LogoutOkListener) {
         val activity = this
         val cleverDialog = IADialog(activity, "", getString(R.string.logout_msg), getString(R.string.yes), getString(R.string.no), false)
         cleverDialog.setOnItemClickListener(object : IADialog.OnClickListener {
             override fun onPositiveClick() {
-                AppPreferencesHelper.getInstance().clearAllPreferences()
+                listener.onOk()
+                //viewModel.logoutObserver(activity, baseRepository, HashMap())
+                /*AppPreferencesHelper.getInstance().clearAllPreferences()
                 val intent = Intent(activity, LoginActivity::class.java)
                 intent.putExtra("isFromOtherScreen", true)
-                startActivityForResult(intent, AppRequestCode.REQUEST_LOGIN)
+                startActivityForResult(intent, AppRequestCode.REQUEST_LOGIN)*/
             }
 
             override fun onNegativeClick() {
             }
         })
+    }
+
+    interface LogoutOkListener{
+        fun onOk()
     }
 
     override fun onDestroy() {

@@ -67,7 +67,7 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
     }
 
     fun businessCategoryObserver() {
-        getBusinessCategory().observe(mBinding.lifecycleOwner!!, {
+        getBusinessCategory().observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -88,7 +88,7 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
                 }
             }
-        })
+        }
     }
 
     private fun getBannerListing() = liveData(Dispatchers.Main) {
@@ -101,7 +101,7 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
     }
 
     fun bannerObserver() {
-        getBannerListing().observe(mBinding.lifecycleOwner!!, {
+        getBannerListing().observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -122,7 +122,7 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
                 }
             }
-        })
+        }
     }
 
     private fun getPopularProductListing(params: HashMap<String, String>) = liveData(Dispatchers.Main) {
@@ -135,7 +135,7 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
     }
 
     private fun popularProductObserver(params: HashMap<String, String>) {
-        getPopularProductListing(params).observe(mBinding.lifecycleOwner!!, {
+        getPopularProductListing(params).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -157,7 +157,7 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
                 }
             }
-        })
+        }
     }
 
 
@@ -171,7 +171,7 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
     }
 
     private fun discountedProductObserver(params: HashMap<String, String>) {
-        getDiscountedProductListing(params).observe(mBinding.lifecycleOwner!!, {
+        getDiscountedProductListing(params).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -194,7 +194,7 @@ class HomeFragViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
                 }
             }
-        })
+        }
     }
 
     /****

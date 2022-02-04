@@ -233,4 +233,8 @@ interface ApiService {
     @POST(Api.RSA_URL)
     @FormUrlEncoded
     suspend fun getRSAKey(@FieldMap params: Map<String, String>): Response<okhttp3.ResponseBody>
+
+    @POST(Api.LOGOUT)
+    @FormUrlEncoded
+    suspend fun logout(@FieldMap params: Map<String, String>): Response<BaseResponse<Any>>
 }

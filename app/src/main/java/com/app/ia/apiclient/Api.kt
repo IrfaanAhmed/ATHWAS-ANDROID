@@ -93,6 +93,7 @@ object Api {
     const val DEAL_DAY_BANNER_LISTING = CATEGORY_PATH + "dealofday"
     const val DEAL_DAY_BANNER_DETAIL  = CATEGORY_PATH + "dealofday/{banner_id}"
     const val DOWNLOAD_INVOICE = COMMON_PATH + "order/downloadOrderInvoice"
+    const val LOGOUT = COMMON_PATH + "logout"
 
 
     private fun getBaseUrl(environmentType: Int): String {

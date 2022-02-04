@@ -259,4 +259,8 @@ open class BaseRepository(private val myApi: ApiService, generalCallback: Genera
     suspend fun getCartCount(): BaseResponse<CartCountResponse> {
         return apiRequest { myApi.getCartCount() }
     }
+
+    suspend fun logout(request: Map<String, String>): BaseResponse<Any> {
+        return apiRequest { myApi.logout(request) }
+    }
 }
