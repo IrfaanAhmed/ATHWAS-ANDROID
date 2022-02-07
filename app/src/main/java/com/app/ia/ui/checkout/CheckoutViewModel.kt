@@ -403,8 +403,8 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                         baseRepository.callback.hideProgress()
                         if (!it.message.isNullOrEmpty()) {
                             isDeliverableArea.value = false
-                            if(showMsg)
-                                mActivity.toast(it.message)
+                            /*if(showMsg)
+                                mActivity.toast(it.message)*/
                         }
                     }
 
