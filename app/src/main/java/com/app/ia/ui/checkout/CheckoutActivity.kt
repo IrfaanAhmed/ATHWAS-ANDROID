@@ -88,7 +88,7 @@ class CheckoutActivity : BaseActivity<ActivityCheckoutBinding, CheckoutViewModel
 
         cartAdapter = CheckoutAdapter(this)
         recViewCheckout.adapter = cartAdapter
-        mViewModel?.cartList?.observe(this, {
+        mViewModel?.cartList?.observe(this) {
 
             if (it.size <= 0) {
                 cartAdapter?.notifyDataSetChanged()
@@ -99,7 +99,7 @@ class CheckoutActivity : BaseActivity<ActivityCheckoutBinding, CheckoutViewModel
                     cartAdapter?.notifyDataSetChanged()
                 }
             }
-        })
+        }
 
         val typeface: Typeface = ResourcesCompat.getFont(this, R.font.linotte_regular)!!
         buttonPlaceOrder2.textTypeface = typeface

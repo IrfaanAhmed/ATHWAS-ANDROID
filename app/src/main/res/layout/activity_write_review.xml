@@ -42,7 +42,8 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:paddingStart="@dimen/_8sdp"
             android:paddingTop="16dp"
             android:paddingEnd="@dimen/_8sdp"
@@ -127,25 +128,25 @@
                     android:paddingEnd="10dp"
                     android:textSize="@dimen/_12sdp" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnSubmit"
-                    style="@style/LogoutButton"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/_20sdp"
-                    android:layout_marginTop="16dp"
-                    android:minWidth="@dimen/_130sdp"
-                    android:text="@string/submit"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:onClick="@{()-> viewModel.onSubmitRating()}"
-                    android:textSize="@dimen/_13sdp"
-                    app:fontFamily="@font/linotte_bold" />
-
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSubmit"
+            style="@style/LogoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_20sdp"
+            android:layout_marginTop="16dp"
+            android:minWidth="@dimen/_130sdp"
+            android:text="@string/submit"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:onClick="@{()-> viewModel.onSubmitRating()}"
+            android:textSize="@dimen/_13sdp"
+            app:fontFamily="@font/linotte_bold" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

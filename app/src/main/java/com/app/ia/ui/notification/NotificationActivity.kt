@@ -67,7 +67,7 @@ class NotificationActivity : BaseActivity<ActivityNotificationBinding, Notificat
             }
 
 
-            val tivoDialog = IADialog(this, "","Are you sure you want to delete all notification?", "Yes", "No", false)
+            val tivoDialog = IADialog(this, "","Are you sure you want to delete all notifications?", "Yes", "No", false)
             tivoDialog.setOnItemClickListener(object  : IADialog.OnClickListener {
 
                 override fun onPositiveClick() {

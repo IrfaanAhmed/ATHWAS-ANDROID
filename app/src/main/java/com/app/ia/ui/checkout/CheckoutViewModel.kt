@@ -275,6 +275,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                         resource.data?.let { _ ->
                             AppPreferencesHelper.getInstance().cartItemCount =
                                 it.data?.data?.cartCount!!
+                            onRemovePromoCode()
                             isCartChanged = true
                             cartListAll.clear()
                             val request = HashMap<String, String>()
@@ -474,7 +475,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
     fun generateOrderIdObserver(requestParams: HashMap<String, String>) {
 
-        generateOrderId(requestParams).observe(mBinding.lifecycleOwner!!, {
+        generateOrderId(requestParams).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -488,57 +489,82 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 //                            intent.putExtra(AvenuesParams.ACCESS_CODE, ServiceUtility.chkNull("AVTL07ID25BH87LTHB"))
 //                            intent.putExtra(AvenuesParams.MERCHANT_ID, ServiceUtility.chkNull("376194"))
                             //live
-                            intent.putExtra(AvenuesParams.ACCESS_CODE, ServiceUtility.chkNull("AVTL07ID25BH87LTHB"))
-                            intent.putExtra(AvenuesParams.MERCHANT_ID, ServiceUtility.chkNull("376194"))
+                            intent.putExtra(
+                                AvenuesParams.ACCESS_CODE,
+                                ServiceUtility.chkNull("AVTL07ID25BH87LTHB")
+                            )
+                            intent.putExtra(
+                                AvenuesParams.MERCHANT_ID,
+                                ServiceUtility.chkNull("376194")
+                            )
 
-                            intent.putExtra(AvenuesParams.ORDER_ID, ServiceUtility.chkNull(orderIdForOnlinePayment.value))
+                            intent.putExtra(
+                                AvenuesParams.ORDER_ID,
+                                ServiceUtility.chkNull(orderIdForOnlinePayment.value)
+                            )
                             intent.putExtra(AvenuesParams.CURRENCY, ServiceUtility.chkNull("INR"))
-                            intent.putExtra(AvenuesParams.AMOUNT, ServiceUtility.chkNull(netAmount.value!!.toString()))
-                            intent.putExtra(AvenuesParams.REDIRECT_URL, ServiceUtility.chkNull(Api.REDIRECT_URL))
-                            intent.putExtra(AvenuesParams.CANCEL_URL, ServiceUtility.chkNull(Api.CANCEL_URL))
-                            intent.putExtra(AvenuesParams.RSA_KEY_URL, ServiceUtility.chkNull(Api.RSA_URL))
+                            intent.putExtra(
+                                AvenuesParams.AMOUNT,
+                                ServiceUtility.chkNull(netAmount.value!!.toString())
+                            )
+                            intent.putExtra(
+                                AvenuesParams.REDIRECT_URL,
+                                ServiceUtility.chkNull(Api.REDIRECT_URL)
+                            )
+                            intent.putExtra(
+                                AvenuesParams.CANCEL_URL,
+                                ServiceUtility.chkNull(Api.CANCEL_URL)
+                            )
+                            intent.putExtra(
+                                AvenuesParams.RSA_KEY_URL,
+                                ServiceUtility.chkNull(Api.RSA_URL)
+                            )
                             intent.putExtra(AvenuesParams.PAYMENT_FOR, "Order")
-                            mActivity.startActivityForResult(intent, AppRequestCode.REQUEST_PAYMENT_CODE)
+                            mActivity.startActivityForResult(
+                                intent,
+                                AppRequestCode.REQUEST_PAYMENT_CODE
+                            )
 
-                            val str = "${orderIdForOnlinePayment.value}INR${netAmount.value!!.toString()}AVTL07ID25BH87LTHB376194"
+                            val str =
+                                "${orderIdForOnlinePayment.value}INR${netAmount.value!!.toString()}AVTL07ID25BH87LTHB376194"
                             Log.d("Payment", "Sha512 Str:  $str")
                             val requestHash = getSHA512(str)
                             Log.d("Payment", "Sha512 $requestHash")
 
-                           /* val orderDetails= AvenueOrder()
-                            orderDetails.setOrderId(orderIdForOnlinePayment.value)
-                            orderDetails.setResponseHash(requestHash);
-                            orderDetails.setRsaKeyUrl(ServiceUtility.chkNull(Api.RSA_URL));
-                            orderDetails.setRedirectUrl(ServiceUtility.chkNull(Api.REDIRECT_URL));
-                            orderDetails.setCancelUrl(ServiceUtility.chkNull(Api.CANCEL_URL));
-                            orderDetails.setAccessCode(ServiceUtility.chkNull("AVTL07ID25BH87LTHB"));
-                            orderDetails.setMerchantId(ServiceUtility.chkNull("376194"));
-                            orderDetails.setCurrency(ServiceUtility.chkNull("INR"));
-                            orderDetails.setAmount(ServiceUtility.chkNull(netAmount.value!!.toString()));
-                            orderDetails.setCustomerId(ServiceUtility.chkNull(AppPreferencesHelper.getInstance().userID));
-                            orderDetails.setPaymentType("[creditcard,debitcard,netbanking,wallet,upi]");
-                            orderDetails.setMerchantLogo("login_logo.png");
-                            orderDetails.setBillingName("Manoj");
-                            orderDetails.setBillingAddress("Test");
-                            orderDetails.setBillingCountry("India");
-                            orderDetails.setBillingState("Rajasthan");
-                            orderDetails.setBillingCity("Jaipur");
-                            orderDetails.setBillingZip("302019");
-                            orderDetails.setBillingTel("9549063358");
-                            orderDetails.setBillingEmail(ServiceUtility.chkNull(AppPreferencesHelper.getInstance().email));
-                            orderDetails.setDeliveryName(ServiceUtility.chkNull(AppPreferencesHelper.getInstance().userName));
-                            orderDetails.setDeliveryAddress("Jaipur");
-                            orderDetails.setDeliveryCountry("India");
-                            orderDetails.setDeliveryState("Rajasthan");
-                            orderDetails.setDeliveryCity("Jaipur");
-                            orderDetails.setDeliveryZip("302019");
-                            orderDetails.setDeliveryTel("9549063358");
-                            orderDetails.setMerchant_param1("test"); //total 5 parameters
-                            orderDetails.setMobileNo("9549063358")
-                            orderDetails.setPaymentEnviroment("app_staging")
+                            /* val orderDetails= AvenueOrder()
+                             orderDetails.setOrderId(orderIdForOnlinePayment.value)
+                             orderDetails.setResponseHash(requestHash);
+                             orderDetails.setRsaKeyUrl(ServiceUtility.chkNull(Api.RSA_URL));
+                             orderDetails.setRedirectUrl(ServiceUtility.chkNull(Api.REDIRECT_URL));
+                             orderDetails.setCancelUrl(ServiceUtility.chkNull(Api.CANCEL_URL));
+                             orderDetails.setAccessCode(ServiceUtility.chkNull("AVTL07ID25BH87LTHB"));
+                             orderDetails.setMerchantId(ServiceUtility.chkNull("376194"));
+                             orderDetails.setCurrency(ServiceUtility.chkNull("INR"));
+                             orderDetails.setAmount(ServiceUtility.chkNull(netAmount.value!!.toString()));
+                             orderDetails.setCustomerId(ServiceUtility.chkNull(AppPreferencesHelper.getInstance().userID));
+                             orderDetails.setPaymentType("[creditcard,debitcard,netbanking,wallet,upi]");
+                             orderDetails.setMerchantLogo("login_logo.png");
+                             orderDetails.setBillingName("Manoj");
+                             orderDetails.setBillingAddress("Test");
+                             orderDetails.setBillingCountry("India");
+                             orderDetails.setBillingState("Rajasthan");
+                             orderDetails.setBillingCity("Jaipur");
+                             orderDetails.setBillingZip("302019");
+                             orderDetails.setBillingTel("9549063358");
+                             orderDetails.setBillingEmail(ServiceUtility.chkNull(AppPreferencesHelper.getInstance().email));
+                             orderDetails.setDeliveryName(ServiceUtility.chkNull(AppPreferencesHelper.getInstance().userName));
+                             orderDetails.setDeliveryAddress("Jaipur");
+                             orderDetails.setDeliveryCountry("India");
+                             orderDetails.setDeliveryState("Rajasthan");
+                             orderDetails.setDeliveryCity("Jaipur");
+                             orderDetails.setDeliveryZip("302019");
+                             orderDetails.setDeliveryTel("9549063358");
+                             orderDetails.setMerchant_param1("test"); //total 5 parameters
+                             orderDetails.setMobileNo("9549063358")
+                             orderDetails.setPaymentEnviroment("app_staging")
 
-                            AvenuesApplication.startTransaction(checkoutActivity, orderDetails);
-                            Log.d("Payment", "Init")*/
+                             AvenuesApplication.startTransaction(checkoutActivity, orderDetails);
+                             Log.d("Payment", "Init")*/
 
                             val params = java.util.HashMap<String, String>()
                             params["accessCode"] = ServiceUtility.chkNull("AVTL07ID25BH87LTHB")
@@ -562,7 +588,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
                 }
             }
-        })
+        }
     }
 
     private fun getRSAKey(requestParams: java.util.HashMap<String, String>) = liveData(Dispatchers.Main) {
@@ -576,7 +602,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
     fun getRSAKeyObservers(requestParams: java.util.HashMap<String, String>) {
 
-        getRSAKey(requestParams).observe(mBinding.lifecycleOwner!!, {
+        getRSAKey(requestParams).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -584,12 +610,23 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                             vResponse.value = users.body()!!.string()
                             Log.d("Payment", "KeyResp: ${vResponse.value}")
                             val vEncVal = StringBuffer()
-                            vEncVal.append(ServiceUtility.addToPostParams(AvenuesParams.AMOUNT, ServiceUtility.chkNull(netAmount.value!!.toString())))
-                            vEncVal.append(ServiceUtility.addToPostParams(AvenuesParams.CURRENCY, ServiceUtility.chkNull("INR")))
-                            encVal.value = getSHA512(vResponse.value!!)//RSAUtility.encrypt(vEncVal.substring(0, vEncVal.length - 1), vResponse.value!!)
+                            vEncVal.append(
+                                ServiceUtility.addToPostParams(
+                                    AvenuesParams.AMOUNT,
+                                    ServiceUtility.chkNull(netAmount.value!!.toString())
+                                )
+                            )
+                            vEncVal.append(
+                                ServiceUtility.addToPostParams(
+                                    AvenuesParams.CURRENCY,
+                                    ServiceUtility.chkNull("INR")
+                                )
+                            )
+                            encVal.value =
+                                getSHA512(vResponse.value!!)//RSAUtility.encrypt(vEncVal.substring(0, vEncVal.length - 1), vResponse.value!!)
                             //callPaymentURl()
 
-                            val orderDetails= AvenueOrder()
+                            val orderDetails = AvenueOrder()
                             orderDetails.setOrderId(orderIdForOnlinePayment.value)
                             orderDetails.setResponseHash(encVal.value);
                             orderDetails.setRsaKeyUrl(ServiceUtility.chkNull(Api.RSA_URL));
@@ -634,7 +671,7 @@ class CheckoutViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
                 }
             }
-        })
+        }
     }
 
     fun getSHA512(input:String):String{

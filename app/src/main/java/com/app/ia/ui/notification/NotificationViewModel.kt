@@ -52,7 +52,7 @@ class NotificationViewModel(private val baseRepository: BaseRepository) : BaseVi
 
     fun setupObservers(notification_id: String?, requestParams: HashMap<String, String>?, notificationType: Int, deletedPosition: Int) {
         isLoading = true
-        getNotifications(notification_id, requestParams, notificationType).observe(mBinding.lifecycleOwner!!, {
+        getNotifications(notification_id, requestParams, notificationType).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -83,7 +83,10 @@ class NotificationViewModel(private val baseRepository: BaseRepository) : BaseVi
                                     updatedList?.removeAt(deletedPosition)
                                     notificationListData.value = updatedList!!
                                     mActivity.mNotificationAdapter.notifyItemRemoved(deletedPosition)
-                                    mActivity.mNotificationAdapter.notifyItemRangeChanged(deletedPosition, updatedList?.size!!)
+                                    mActivity.mNotificationAdapter.notifyItemRangeChanged(
+                                        deletedPosition,
+                                        updatedList?.size!!
+                                    )
                                     showHide()
                                 }
 
@@ -108,7 +111,7 @@ class NotificationViewModel(private val baseRepository: BaseRepository) : BaseVi
                     }
                 }
             }
-        })
+        }
     }
 
     private fun showHide() {

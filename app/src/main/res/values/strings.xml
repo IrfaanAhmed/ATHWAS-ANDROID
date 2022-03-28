@@ -192,7 +192,7 @@
     <string name="my_account">My Account</string>
     <string name="notifications">Notifications</string>
     <string name="subscription">Subscription</string>
-    <string name="faq">FAQ</string>
+    <string name="faq">FAQs</string>
     <string name="about_us">About Us</string>
     <string name="contact_us">Contact Us</string>
     <string name="terms_of_use1">Terms Of Use</string>
@@ -245,9 +245,9 @@
     <string name="please_write_your_review_here">Please write your review (Optional)</string>
     <string name="write_a_review">Write a Review</string>
     <string name="pin_code">Pin code</string>
-    <string name="enable_notification">Enable Notification</string>
+    <string name="enable_notification">Enable Notifications</string>
     <string name="download_invoice">Download Invoice</string>
-    <string name="invoice_downloaded_successfully">Invoice Download Successfully.</string>
+    <string name="invoice_downloaded_successfully">Invoice Downloaded Successfully!</string>
     <string name="no_order_invoice_available">No order invoice available.</string>
     <string name="empty_cart">Empty cart?</string>
     <string name="back_to_browse">Back to Browse</string>

@@ -21,6 +21,7 @@ import com.app.ia.databinding.ActivityProductDetailBinding
 import com.app.ia.dialog.IADialog
 import com.app.ia.local.AppPreferencesHelper
 import com.app.ia.ui.my_cart.MyCartActivity
+import com.app.ia.ui.offers.OffersActivity
 import com.app.ia.ui.product_detail.adapter.ProductImageAdapter
 import com.app.ia.ui.search.SearchActivity
 import com.app.ia.ui.search.SearchViewModel
@@ -78,6 +79,14 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding, Product
                 putExtra(SearchViewModel.BUSINESS_CATEGORY_ID, mViewModel?.productDetail?.value?.businessCategory?.Id)
                 putExtra(SearchViewModel.CATEGORY_ID, mViewModel?.productDetail?.value?.category?.Id)
                 putExtra(SearchViewModel.SUB_CATEGORY_ID, mViewModel?.productDetail?.value?.subcategory?.Id)
+            }
+        }
+
+        mBinding?.layoutOffers?.setOnClickListener {
+            if (AppPreferencesHelper.getInstance().authToken.isEmpty()) {
+                loginDialog()
+            } else {
+                mViewModel?.seeAllOffers()
             }
         }
 

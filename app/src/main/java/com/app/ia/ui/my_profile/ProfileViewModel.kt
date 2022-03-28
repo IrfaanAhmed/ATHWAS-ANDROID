@@ -37,7 +37,7 @@ class ProfileViewModel(private val baseRepository: BaseRepository) : BaseViewMod
     fun setVariable(mBinding: ActivityProfileBinding) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
-        title.set(mActivity.getString(R.string.profile))
+        title.set(mActivity.getString(R.string.my_account))
         mBinding.toolbar.ivEditProfileIcon.setOnClickListener { onEditProfileClick() }
         setupObservers()
     }

@@ -69,7 +69,8 @@ data class RedeemPointResponse(
                 formatter.timeZone = TimeZone.getTimeZone("UTC")
                 val value: Date = formatter.parse(createdAt)!!
                 val timeZone = TimeZone.getDefault()
-                val dateFormatter = SimpleDateFormat("dd MMMM yyyy, h:mm a", Locale.ENGLISH) //this format changeable
+                val dateFormatter = SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH) //this format changeable
+                //val dateFormatter = SimpleDateFormat("dd MMMM yyyy, h:mm a", Locale.ENGLISH) //this format changeable
                 dateFormatter.timeZone = timeZone
                 dateFormatter.format(value)
             } catch (e: Exception) {
@@ -90,7 +91,8 @@ data class RedeemPointResponse(
                 formatter.timeZone = TimeZone.getTimeZone("UTC")
                 val value: Date = formatter.parse(expirationDate)!!
                 val timeZone = TimeZone.getDefault()
-                val dateFormatter = SimpleDateFormat("dd MMMM yyyy, h:mm a", Locale.ENGLISH) //this format changeable
+                val dateFormatter = SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH) //this format changeable
+                //val dateFormatter = SimpleDateFormat("dd MMMM yyyy, h:mm a", Locale.ENGLISH) //this format changeable
                 dateFormatter.timeZone = timeZone
                 dateFormatter.format(value)
             } catch (e: Exception) {

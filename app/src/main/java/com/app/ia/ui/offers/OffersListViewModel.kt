@@ -21,6 +21,7 @@ class OffersListViewModel(private val baseRepository: BaseRepository) : BaseView
     lateinit var mBinding: ActivityOfferListBinding
 
     val isItemAvailable = MutableLiveData(true)
+    var isSearchTextEntered = MutableLiveData<Boolean>()
 
     val currentPage = MutableLiveData(1)
     val isLastPage = MutableLiveData(false)
@@ -38,6 +39,11 @@ class OffersListViewModel(private val baseRepository: BaseRepository) : BaseView
         title.set(intent.getStringExtra("offerName"))
         offerType.value = intent.getIntExtra("offerType", 1).toString()
         productId.value = intent.getStringExtra("product_id")
+    }
+
+    fun onClearClick() {
+        isSearchTextEntered.value = false
+        mBinding.edtTextOffers.setText("")
     }
 
     private fun offerList(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {

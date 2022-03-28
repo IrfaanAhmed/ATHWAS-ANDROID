@@ -38,7 +38,7 @@ fun Context?.toast(text: CharSequence, duration: Int = Toast.LENGTH_SHORT) = thi
     //Toast.makeText(it, spannableString, duration).show()
 
     if(it is Activity){
-        Snackbar.make((it as Activity).window.decorView.findViewById(android.R.id.content),
+        Snackbar.make(it.window.decorView.findViewById(android.R.id.content),
             spannableString, Snackbar.LENGTH_SHORT).show()
     }
     else if (it is Fragment){

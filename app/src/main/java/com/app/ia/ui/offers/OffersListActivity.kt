@@ -121,6 +121,7 @@ class OffersListActivity : BaseActivity<ActivityOfferListBinding, OffersListView
             }
 
             override fun afterTextChanged(p0: Editable?) {
+                mOffersViewModel?.isSearchTextEntered!!.value = p0.toString().isNotEmpty()
                 subject.onNext(p0.toString())
             }
         })

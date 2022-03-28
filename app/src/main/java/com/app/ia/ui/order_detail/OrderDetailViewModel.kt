@@ -51,7 +51,7 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
     fun setVariable(mBinding: ActivityOrderDetailBinding, intent: Intent) {
         this.mBinding = mBinding
         this.mActivity = getActivityNavigator()!!
-        title.set("Order Detail")
+        title.set("Order Details")
         order_id.value = intent.getStringExtra("order_id")!!
         //orderDetailObserver(order_id.value!!)
     }
@@ -100,7 +100,7 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
 
     fun orderDetailObserver(requestParams: String) {
 
-        orderDetail(requestParams).observe(mBinding.lifecycleOwner!!, {
+        orderDetail(requestParams).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -114,11 +114,17 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
                             for (cartItem in orderDetailResponse.value!!.category) {
                                 val products = cartItem.products
                                 for (item in products) {
-                                    totalAmount.value = CommonUtils.convertToDecimal(totalAmount.value!! + (item.getPrice().toDouble() * item.quantity)).toDouble()
+                                    totalAmount.value = CommonUtils.convertToDecimal(
+                                        totalAmount.value!! + (item.getPrice()
+                                            .toDouble() * item.quantity)
+                                    ).toDouble()
                                 }
                             }
 
-                            offerAmount.value = CommonUtils.convertToDecimal(/*(totalAmount.value!! - orderDetailResponse.value!!.getTotalAmount().toDouble()) + */orderDetailResponse.value!!.getDiscount().toDouble()).toDouble()
+                            offerAmount.value =
+                                CommonUtils.convertToDecimal(/*(totalAmount.value!! - orderDetailResponse.value!!.getTotalAmount().toDouble()) + */
+                                    orderDetailResponse.value!!.getDiscount().toDouble()
+                                ).toDouble()
 
                             Handler(Looper.myLooper()!!).postDelayed({
                                 (mActivity as OrderDetailActivity).onReturnClicked = false
@@ -138,7 +144,7 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
                     }
                 }
             }
-        })
+        }
     }
 
 
@@ -168,7 +174,7 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
 
     fun cancelReturnOrderObserver(requestParams: HashMap<String, String>, isGroceryOrder: Boolean, isReturn: Boolean) {
 
-        cancelReturnOrder(requestParams, isGroceryOrder, isReturn).observe(mBinding.lifecycleOwner!!, {
+        cancelReturnOrder(requestParams, isGroceryOrder, isReturn).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -189,7 +195,7 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
                     }
                 }
             }
-        })
+        }
     }
 
 
@@ -207,7 +213,7 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
 
     fun downloadInvoiceObserver(requestParams: HashMap<String, String>) {
 
-        downloadInvoice(requestParams).observe(mBinding.lifecycleOwner!!, {
+        downloadInvoice(requestParams).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -230,7 +236,7 @@ class OrderDetailViewModel(private val baseRepository: BaseRepository) : BaseVie
                     }
                 }
             }
-        })
+        }
     }
 
     fun pdfOption() {

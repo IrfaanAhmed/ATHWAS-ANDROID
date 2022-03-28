@@ -42,6 +42,10 @@
         <item name="fontFamily">@font/linotte_regular</item>
     </style>
 
+    <style name="MySwitchCompactStyle">
+        <item name="colorControlActivated">@color/theme_color</item>
+    </style>
+
     <style name="ThemeFullScreen" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

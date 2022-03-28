@@ -1,7 +1,10 @@
 package com.app.ia.ui.change_password
 
 import android.app.Activity
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.app.ia.R
 import com.app.ia.base.BaseRepository
@@ -132,13 +135,14 @@ class ChangePasswordViewModel(private val baseRepository: BaseRepository) : Base
     }
 
     private fun changePasswordObserver(requestParams: HashMap<String, String>) {
-        changePassword(requestParams).observe(mBinding.lifecycleOwner!!, {
+        changePassword(requestParams).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             mActivity.toast(users.message)
-                            mActivity.finish()
+
+                            Handler(Looper.getMainLooper()).postDelayed({onBackPressed()}, 1000)
                         }
                     }
 
@@ -152,7 +156,7 @@ class ChangePasswordViewModel(private val baseRepository: BaseRepository) : Base
                     }
                 }
             }
-        })
+        }
     }
 
 }

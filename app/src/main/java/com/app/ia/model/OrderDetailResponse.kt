@@ -181,15 +181,7 @@ data class OrderDetailResponse(
     }
 
     fun getRedeemPoints(): String {
-        return if (redeemPoints.isNullOrEmpty()) {
-            "0"
-        } else {
-            if (redeemPoints!!.toDouble() > 0) {
-                redeemPoints!!
-            } else {
-                "0"
-            }
-        }
+        return CommonUtils.convertToDecimal(redeemPoints)
     }
 
     fun getNetAmount(): String {

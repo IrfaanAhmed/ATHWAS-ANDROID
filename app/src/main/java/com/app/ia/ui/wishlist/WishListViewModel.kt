@@ -1,6 +1,7 @@
 package com.app.ia.ui.wishlist
 
 import android.app.Activity
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
@@ -55,7 +56,7 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
     private fun productListingObserver(requestParams: HashMap<String, String>) {
 
-        getProductListing(requestParams).observe(mBinding.lifecycleOwner!!, {
+        getProductListing(requestParams).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -76,7 +77,7 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
                 }
             }
-        })
+        }
     }
 
     fun addFavorite(product_id: String, position: Int) {
@@ -97,7 +98,7 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
     private fun addFavoriteObserver(requestParams: HashMap<String, String>, deletedPosition: Int) {
 
-        addFavourite(requestParams).observe(mBinding.lifecycleOwner!!, {
+        addFavourite(requestParams).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -105,8 +106,13 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                             mActivity.toast(users.message)
                             favoriteListAll.removeAt(deletedPosition)
                             favoriteList.value = favoriteListAll
-                            (mActivity as WishListActivity).wishListAdapter?.notifyItemRemoved(deletedPosition)
-                            (mActivity as WishListActivity).wishListAdapter?.notifyItemRangeChanged(deletedPosition, favoriteListAll.size)
+                            (mActivity as WishListActivity).wishListAdapter?.notifyItemRemoved(
+                                deletedPosition
+                            )
+                            (mActivity as WishListActivity).wishListAdapter?.notifyItemRangeChanged(
+                                deletedPosition,
+                                favoriteListAll.size
+                            )
                         }
                     }
 
@@ -120,7 +126,7 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
                 }
             }
-        })
+        }
     }
 
     /**
@@ -137,7 +143,7 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
     fun notifyMeObserver(requestParams: HashMap<String, String>) {
 
-        notifyMe(requestParams).observe(mBinding.lifecycleOwner!!, {
+        notifyMe(requestParams).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -155,7 +161,7 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
                 }
             }
-        })
+        }
     }
 
     private fun addItemToCart(requestParams: HashMap<String, String>) = liveData(Dispatchers.Main) {
@@ -169,18 +175,20 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
 
     fun addItemToCartObserver(requestParams: HashMap<String, String>) {
 
-        addItemToCart(requestParams).observe(mBinding.lifecycleOwner!!, {
+        addItemToCart(requestParams).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
                             mActivity.toast(users.message)
-                            AppPreferencesHelper.getInstance().cartItemCount = users.data?.cartCount!!
+                            AppPreferencesHelper.getInstance().cartItemCount =
+                                users.data?.cartCount!!
                             CommonUtils.showCartItemCount(mBinding.toolbar.bottom_navigation_notification)
                         }
                     }
 
                     Status.ERROR -> {
+                        resource.message?.let { mActivity.toast(it) }
                         baseRepository.callback.hideProgress()
                     }
 
@@ -189,6 +197,6 @@ class WishListViewModel(private val baseRepository: BaseRepository) : BaseViewMo
                     }
                 }
             }
-        })
+        }
     }
 }
