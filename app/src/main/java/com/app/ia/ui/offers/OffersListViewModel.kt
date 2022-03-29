@@ -14,6 +14,10 @@ import com.app.ia.model.OffersResponse
 import com.app.ia.utils.Resource
 import com.app.ia.utils.toast
 import kotlinx.coroutines.Dispatchers
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class OffersListViewModel(private val baseRepository: BaseRepository) : BaseViewModel() {
 
@@ -55,6 +59,7 @@ class OffersListViewModel(private val baseRepository: BaseRepository) : BaseView
         }
     }
 
+
     fun offerListObserver(keyword: String) {
 
         val params = HashMap<String, String>()
@@ -64,14 +69,14 @@ class OffersListViewModel(private val baseRepository: BaseRepository) : BaseView
         params["product_id"] = productId.value!!
 
         var isLoading = true
-        offerList(params).observe(mBinding.lifecycleOwner!!, {
+        offerList(params).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
                         var isLoading = false
                         resource.data?.let { users ->
                             isLastPage.value = (currentPage.value == users.data?.totalPages)
-                            promoCodeList.addAll(users.data?.docs!!)
+                            users.data?.docs?.let { it1 -> promoCodeList.addAll(it1?.filter { Date().time < it.endTimeInMills() }) }
                             promoCodeListData.value = promoCodeList
 
                             if (promoCodeListData.value?.size!! > 0) {
@@ -97,6 +102,6 @@ class OffersListViewModel(private val baseRepository: BaseRepository) : BaseView
                     }
                 }
             }
-        })
+        }
     }
 }

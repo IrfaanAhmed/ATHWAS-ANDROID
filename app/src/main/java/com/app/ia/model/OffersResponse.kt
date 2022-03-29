@@ -1,7 +1,12 @@
 package com.app.ia.model
 
+import com.app.ia.utils.CommonUtils
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 data class OffersResponse(
 
@@ -79,15 +84,76 @@ data class OffersResponse(
         var productId: List<String>,
         @Expose
         @SerializedName("is_active")
-        var isActive: Int)
+        var isActive: Int,) : Serializable{
+            fun endTimeInMills(): Long {
+                return try {
+                    SimpleDateFormat("yyyy-MM-dd", Locale("en")).parse(endDate)!!.time
+                } catch (e: Exception){
+                    e.printStackTrace()
+                    Date().time
+                }
+            }
+        }
+
 
     data class Product(
         @Expose
         @SerializedName("_id")
         val Id: String,
         @Expose
+        @SerializedName("product_id")
+        val productId: String,
+        @Expose
         @SerializedName("inventory_name")
-        val inventoryName: String)
+        val inventoryName: String,
+
+        @Expose
+        @SerializedName("available_quantity")
+        val availableQuantity: Int,
+
+        @Expose
+        @SerializedName("is_discount")
+        val isDiscount: Int,
+
+        @Expose
+        @SerializedName("discount_type")
+        val discountType: Int,
+
+        @Expose
+        @SerializedName("discount_value")
+        val discountValue: String,
+
+        @Expose
+        @SerializedName("price")
+        private val price: String,
+
+        @Expose
+        @SerializedName("offer_price")
+        private val offerPrice: String,
+
+        @Expose
+        @SerializedName("productData")
+        var productData: List<ProductListingResponse.Docs>): Serializable{
+            fun getDiscountPercent(): String {
+                if (isDiscount == 1) {
+                    return if (discountType == 1) {
+                        "$discountValue% Off"
+                    } else {
+                        "₹ $discountValue Off"
+                    }
+                }
+                return ""
+            }
+
+            fun getPrice(): String {
+                return CommonUtils.convertToDecimal(price)
+            }
+
+            fun getOfferPrice(): String {
+                return CommonUtils.convertToDecimal(offerPrice)
+            }
+
+        }
 
     data class Subcategory(
         @Expose
@@ -95,7 +161,7 @@ data class OffersResponse(
         val Id: String,
         @Expose
         @SerializedName("name")
-        val name: String)
+        val name: String): Serializable
 
     data class Category(
         @Expose
@@ -103,7 +169,7 @@ data class OffersResponse(
         val Id: String,
         @Expose
         @SerializedName("name")
-        val name: String)
+        val name: String): Serializable
 
     data class BusinessCategory(
         @Expose
@@ -111,5 +177,5 @@ data class OffersResponse(
         val Id: String,
         @Expose
         @SerializedName("name")
-        val name: String)
+        val name: String): Serializable
 }

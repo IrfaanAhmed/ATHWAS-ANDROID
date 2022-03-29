@@ -3,6 +3,7 @@ package com.app.ia.model
 import com.app.ia.utils.CommonUtils
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class ProductListingResponse(
 
@@ -94,7 +95,7 @@ data class ProductListingResponse(
 
         @Expose
         @SerializedName("is_favourite")
-        var isFavourite: Int) {
+        var isFavourite: Int): Serializable {
 
         data class Subcategory(
             @Expose
@@ -102,7 +103,7 @@ data class ProductListingResponse(
             val Id: String,
             @Expose
             @SerializedName("name")
-            val name: String)
+            val name: String): Serializable
 
         data class Category(
             @Expose
@@ -110,7 +111,7 @@ data class ProductListingResponse(
             val Id: String,
             @Expose
             @SerializedName("name")
-            val name: String)
+            val name: String): Serializable
 
         data class BusinessCategory(
             @Expose
@@ -118,7 +119,7 @@ data class ProductListingResponse(
             val Id: String,
             @Expose
             @SerializedName("name")
-            val name: String)
+            val name: String): Serializable
 
         data class Images(
             @Expose
@@ -129,7 +130,7 @@ data class ProductListingResponse(
             val productImageUrl: String,
             @Expose
             @SerializedName("product_image_thumb_url")
-            val productImageThumbUrl: String)
+            val productImageThumbUrl: String): Serializable
 
         fun getDiscountPercent(): String {
             if (isDiscount == 1) {

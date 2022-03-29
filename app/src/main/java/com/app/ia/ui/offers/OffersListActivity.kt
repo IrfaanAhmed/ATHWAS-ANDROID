@@ -15,6 +15,7 @@ import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivityOfferListBinding
 import com.app.ia.model.OffersResponse
+import com.app.ia.ui.offer_product_list.OfferProductListActivity
 import com.app.ia.ui.offers.adapter.OfferListAdapter
 import com.app.ia.ui.product_detail.ProductDetailActivity
 import com.app.ia.utils.*
@@ -67,6 +68,11 @@ class OffersListActivity : BaseActivity<ActivityOfferListBinding, OffersListView
                 if(intent.getIntExtra("offerType", 1) == 3) {
                     startActivity<ProductDetailActivity> {
                         putExtra("product_id", data.productId[0])
+                    }
+                }
+                else if(intent.getIntExtra("offerType", 1) == 2) {
+                    startActivity<OfferProductListActivity> {
+                        putExtra(OfferProductListActivity.OFFER_DATA, data)
                     }
                 }
             }
