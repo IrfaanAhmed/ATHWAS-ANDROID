@@ -61,7 +61,7 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
     }
 
     private fun setupObservers(requestParams: HashMap<String, String>) {
-        userRegister(requestParams).observe(mBinding.lifecycleOwner!!, {
+        userRegister(requestParams).observe(mBinding.lifecycleOwner!!) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -84,7 +84,7 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
                     }
                 }
             }
-        })
+        }
     }
 
     fun onUserSignUp() {

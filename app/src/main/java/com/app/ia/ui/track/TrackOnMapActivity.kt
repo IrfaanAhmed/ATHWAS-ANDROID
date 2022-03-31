@@ -303,7 +303,7 @@ class TrackOnMapActivity : BaseActivity<ActivityTrackOnMapBinding, TrackOnMapVie
         mMap.addMarker(MarkerOptions().position(storeLocation).icon(BitmapDescriptorFactory.fromBitmap(CommonUtils.createCustomMarker(this, R.drawable.ic_pin))))
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(storeLocation, 16.0f))
 
-        markerObserver.observe(this, {
+        markerObserver.observe(this) {
 
             if (it.size > 0) {
                 for (marker in it) {
@@ -312,13 +312,12 @@ class TrackOnMapActivity : BaseActivity<ActivityTrackOnMapBinding, TrackOnMapVie
                 val bounds: LatLngBounds = latLngBound.build()
                 mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150))
             }
-        })
+        }
 
-        cameraUpdateObserver.observe(this, {
+        cameraUpdateObserver.observe(this) {
             val camera = CameraUpdateFactory.newLatLng(it)
             mMap.animateCamera(camera)
-        })
-
+        }
 
 
         /*mMap.setOnCameraMoveListener {
