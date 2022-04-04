@@ -2,6 +2,7 @@ package com.app.ia.ui.search
 
 import android.app.Activity
 import android.content.Intent
+import android.speech.RecognizerIntent
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +16,7 @@ import com.app.ia.enums.Status
 import com.app.ia.model.BaseResponse
 import com.app.ia.model.ProductListingResponse
 import com.app.ia.utils.AppConstants.EXTRA_VOICE_TEXT
+import com.app.ia.utils.AppRequestCode
 import com.app.ia.utils.Resource
 import com.app.ia.utils.toast
 import com.google.gson.JsonArray
@@ -46,6 +48,8 @@ class SearchViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         val CATEGORY_ID = "CATEGORY_ID"
         val SUB_CATEGORY_ID = "SUB_CATEGORY_ID"
     }
+
+
 
     fun setVariable(mBinding: ActivitySearchBinding) {
         this.mBinding = mBinding

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ import com.app.ia.databinding.ActivityHomeBinding
 import com.app.ia.helper.CardDrawerLayout
 import com.app.ia.model.AddressListResponse
 import com.app.ia.ui.my_order.MyOrdersFragment
+import com.app.ia.ui.notification.NotificationActivity
 import com.app.ia.ui.order_detail.OrderDetailActivity
 import com.app.ia.ui.product_detail.ProductDetailActivity
 import com.app.ia.ui.wallet.WalletFragment
@@ -95,8 +97,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         if (extras != null) {
             if (extras.containsKey(KEY_REDIRECTION)) {
 
+
                 val where = extras.getString(KEY_REDIRECTION, "")
                 val id = extras.getString(KEY_REDIRECTION_ID, "")
+                Log.d("TAG", "onCreate: ${where} ${id}")
                 val postIntent: Intent
                 when (where.trim()) {
 
@@ -120,10 +124,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
 
                     else -> {
                         replaceFragment(HomeFragment.newInstance())
+                        postIntent = Intent(this, NotificationActivity::class.java)
+                        startActivity(postIntent)
                     }
                 }
             }
         } else {
+            Log.d("TAG", "onCreate: null")
             replaceFragment(HomeFragment.newInstance())
         }
 

@@ -1,6 +1,9 @@
 package com.app.ia.ui.search
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -15,9 +18,7 @@ import com.app.ia.base.BaseActivity
 import com.app.ia.base.BaseRepository
 import com.app.ia.databinding.ActivitySearchBinding
 import com.app.ia.ui.search.adapter.SearchAdapter
-import com.app.ia.utils.RecyclerViewPaginator
-import com.app.ia.utils.invisible
-import com.app.ia.utils.setOnApplyWindowInset1
+import com.app.ia.utils.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -53,7 +54,9 @@ class SearchActivity : BaseActivity<ActivitySearchBinding, SearchViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setViewModel()
         super.onCreate(savedInstanceState)
+
         mBinding = getViewDataBinding()
+        mBinding.activity = this
         mBinding?.lifecycleOwner = this
         mViewModel?.setActivityNavigator(this)
         mViewModel?.setVariable(mBinding!!)
@@ -154,5 +157,24 @@ class SearchActivity : BaseActivity<ActivitySearchBinding, SearchViewModel>() {
     private fun setViewModel() {
         val factory = ViewModelFactory(SearchViewModel(BaseRepository(RetrofitFactory.getInstance(), this)))
         mViewModel = ViewModelProvider(this, factory).get(SearchViewModel::class.java)
+    }
+
+     fun startSpeechRecognizer() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.what_are_you_looking_for))
+        startActivityForResult(intent, AppRequestCode.REQUEST_INSTRUCTION_SPEECH_RECOGNIZER)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == AppRequestCode.REQUEST_INSTRUCTION_SPEECH_RECOGNIZER) {
+            if (resultCode == Activity.RESULT_OK) {
+                val results = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                startActivityWithFinish<SearchActivity> {
+                    putExtra(AppConstants.EXTRA_VOICE_TEXT, results!![0])
+                }
+            }
+        }
     }
 }
