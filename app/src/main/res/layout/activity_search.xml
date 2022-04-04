@@ -80,13 +80,14 @@
                     android:paddingEnd="@dimen/_8sdp"
                     android:singleLine="true"
                     android:textSize="@dimen/_12sdp" />
+
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivMicIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_8sdp"
-                    android:onClick="@{() -> activity.startSpeechRecognizer()}"
                     android:layout_marginEnd="5dp"
+                    android:onClick="@{() -> activity.startSpeechRecognizer()}"
+                    android:padding="@dimen/_8sdp"
                     android:src="@drawable/ic_mic" />
 
                 <androidx.appcompat.widget.AppCompatImageView

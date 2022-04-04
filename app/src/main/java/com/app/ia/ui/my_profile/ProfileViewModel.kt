@@ -127,10 +127,12 @@ class ProfileViewModel(private val baseRepository: BaseRepository) : BaseViewMod
                 when (resource.status) {
                     Status.SUCCESS -> {
                         resource.data?.let { users ->
-                            AppPreferencesHelper.getInstance().clearAllPreferences()
+                           /* AppPreferencesHelper.getInstance().clearAllPreferences()
                             val intent = Intent(mActivity, LoginActivity::class.java)
                             intent.putExtra("isFromOtherScreen", true)
-                            mActivity.startActivityForResult(intent, AppRequestCode.REQUEST_LOGIN)
+                            mActivity.startActivity(intent)
+                            mActivity.finishAffinity()*/
+                            //mActivity.startActivityForResult(intent, AppRequestCode.REQUEST_LOGIN)
                         }
                     }
 

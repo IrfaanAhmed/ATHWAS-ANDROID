@@ -194,7 +194,7 @@
         <item name="fontFamily">@font/linotte_regular</item>
     </style>
 
-    <style name="MyAlertDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+    <style name="MyAlertDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="fontFamily">@font/linotte_regular</item>

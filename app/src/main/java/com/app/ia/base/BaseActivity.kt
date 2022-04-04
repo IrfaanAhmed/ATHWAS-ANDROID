@@ -172,7 +172,12 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
         val cleverDialog = IADialog(activity, "", getString(R.string.logout_msg), getString(R.string.yes), getString(R.string.no), false)
         cleverDialog.setOnItemClickListener(object : IADialog.OnClickListener {
             override fun onPositiveClick() {
-                listener.onOk()
+                AppPreferencesHelper.getInstance().clearAllPreferences()
+                val intent = Intent(this@BaseActivity, LoginActivity::class.java)
+                intent.putExtra("isFromOtherScreen", true)
+                startActivity(intent)
+                finishAffinity()
+                //listener.onOk()
                 //viewModel.logoutObserver(activity, baseRepository, HashMap())
                 /*AppPreferencesHelper.getInstance().clearAllPreferences()
                 val intent = Intent(activity, LoginActivity::class.java)
