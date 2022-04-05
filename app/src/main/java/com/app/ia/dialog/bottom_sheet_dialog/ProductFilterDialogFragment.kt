@@ -22,6 +22,7 @@ import com.app.ia.ui.filter.FilterActivity
 import com.app.ia.utils.AppConstants
 import com.app.ia.utils.mStartActivityForResult
 import com.app.ia.utils.toast
+import com.app.ia.utils.toastOnly
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.dialog_product_filter.*
 
@@ -122,7 +123,7 @@ class ProductFilterDialogFragment(val businessCategoryId: String, selectedFilter
         val json: String = AppPreferencesHelper.getInstance().getString(AppPreferencesHelper.CATEGORY)
         if (json.isEmpty()) {
             mViewModel.productCategoryObserver()
-            mViewModel.productCategoryResponse.observe(this, {
+            mViewModel.productCategoryResponse.observe(this) {
                 val categoryList = ArrayList<FilterDataResponse>()
                 categoryList.add(FilterDataResponse("-1", "Category"))
                 for ((catPos, product) in it.withIndex()) {
@@ -133,12 +134,13 @@ class ProductFilterDialogFragment(val businessCategoryId: String, selectedFilter
                         }
                     }
                 }
-                val categoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, categoryList)
+                val categoryAdapter =
+                    CarAdapter(requireContext(), R.layout.custom_spinner, categoryList)
                 spinnerCategory.adapter = categoryAdapter
                 spinnerCategory.post {
                     spinnerCategory.setSelection(filterData.categoryPos)
                 }
-            })
+            }
         } else {
             val obj = Gson().fromJson(json, ProductCategoryResponse::class.java)
 
@@ -178,7 +180,7 @@ class ProductFilterDialogFragment(val businessCategoryId: String, selectedFilter
             }
         }
 
-        mViewModel.productSubcategoryResponse.observe(this, {
+        mViewModel.productSubcategoryResponse.observe(this) {
 
             val subCategoryList = ArrayList<FilterDataResponse>()
             subCategoryList.add(FilterDataResponse("-1", "Sub-Category"))
@@ -188,13 +190,14 @@ class ProductFilterDialogFragment(val businessCategoryId: String, selectedFilter
                     filterData.subCategoryPos = pos + 1
                 }
             }
-            val subCategoryAdapter = CarAdapter(requireContext(), R.layout.custom_spinner, subCategoryList)
+            val subCategoryAdapter =
+                CarAdapter(requireContext(), R.layout.custom_spinner, subCategoryList)
             spinnerSubCategory.adapter = subCategoryAdapter
 
             spinnerSubCategory.post {
                 try {
                     if (showSubCategorySelectedFirstTime) {
-                        if(filterData.subCategoryPos < subCategoryList.size) {
+                        if (filterData.subCategoryPos < subCategoryList.size) {
                             spinnerSubCategory.setSelection(filterData.subCategoryPos)
                         }
                         showSubCategorySelectedFirstTime = false
@@ -203,7 +206,7 @@ class ProductFilterDialogFragment(val businessCategoryId: String, selectedFilter
                     e.printStackTrace()
                 }
             }
-        })
+        }
 
         val subCategoryList = ArrayList<FilterDataResponse>()
         subCategoryList.add(FilterDataResponse("-1", "Sub-Category"))
@@ -247,7 +250,7 @@ class ProductFilterDialogFragment(val businessCategoryId: String, selectedFilter
         }
 
         mViewModel.brandObserver()
-        mViewModel.brandListResponse.observe(this, {
+        mViewModel.brandListResponse.observe(this) {
 
             val brandList = ArrayList<FilterDataResponse>()
             brandList.add(FilterDataResponse("-1", "Brand"))
@@ -259,7 +262,7 @@ class ProductFilterDialogFragment(val businessCategoryId: String, selectedFilter
             spinnerBrand.post {
                 spinnerBrand.setSelection(filterData.brandPos)
             }
-        })
+        }
 
         btnApplyFilter.setOnClickListener {
 
@@ -270,18 +273,31 @@ class ProductFilterDialogFragment(val businessCategoryId: String, selectedFilter
 
             when {
                 filterData.categoryPos == 0 -> {
-                    requireActivity().toast("Please select Category")
+                    requireContext().toastOnly("Please select Category")
                 }
 
                 filterData.subCategoryPos == 0 -> {
-                    requireActivity().toast("Please select Sub Category")
+                    requireActivity().toastOnly("Please select Sub Category")
                 }
+
+                !checkPrice(filterData.minPrice, filterData.maxPrice) ->{
+                    requireActivity().toastOnly("Max. price must be grater then min. price")
+                }
+
 
                 else -> {
                     onClickListener?.onSubmitClick(filterData)
                     dismiss()
                 }
             }
+        }
+    }
+
+    fun checkPrice(min: String, max: String): Boolean{
+        return try{
+            min.toDouble() < max.toDouble()
+        } catch (e: Exception){
+            true
         }
     }
 
