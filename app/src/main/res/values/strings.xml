@@ -262,5 +262,9 @@
     <string name="deliver_at">Deliver at</string>
     <string name="set_as_default">Set as Default</string>
     <string name="default_address">Default</string>
+    <string name="name_cannot_be_empty">Name cannot be empty</string>
+    <string name="phone_cannot_be_empty">Mobile Number cannot be empty</string>
+    <string name="email_cannot_be_empty">Email cannot be empty</string>
+    <string name="password_cannot_be_empty">Password cannot be empty</string>
 
 </resources>

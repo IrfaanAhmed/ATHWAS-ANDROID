@@ -109,7 +109,9 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         mBinding.tilTextMobile.isErrorEnabled = false
         mBinding.tilTextPassword.isErrorEnabled = false
 
-        if (name.length < 3 || name.length > 30) {
+        if(name.isNullOrEmpty()){
+            mBinding.tilTextName.error = mActivity.getString(R.string.name_cannot_be_empty)
+        }else if (name.length < 3 || name.length > 30) {
             //IADialog(mActivity, mActivity.getString(R.string.msg_name_validation_length), true)
             mBinding.tilTextName.error = mActivity.getString(R.string.msg_name_validation_length)
         } else if (ValidationUtils.isHaveLettersOnly(name)) {
@@ -118,13 +120,18 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         } else {
             haveName = true
         }
-        if (!ValidationUtils.isValidPhone(phone)) {
+        if(phone.isNullOrEmpty()){
+            mBinding.tilTextMobile.error = mActivity.getString(R.string.phone_cannot_be_empty)
+        } else if (!ValidationUtils.isValidPhone(phone)) {
             //IADialog(mActivity, mActivity.getString(R.string.enter_valid_mobile_no), true)
             mBinding.tilTextMobile.error = mActivity.getString(R.string.enter_valid_mobile_no)
         } else {
             haveMobile = true
         }
-        if (email.length < 9 || email.length > 320) {
+
+        if(email.isNullOrEmpty()){
+            mBinding.tilTextEmail.error = mActivity.getString(R.string.email_cannot_be_empty)
+        } else if (email.length < 9 || email.length > 320) {
             //IADialog(mActivity, mActivity.getString(R.string.msg_email_validation_length), true)
             mBinding.tilTextEmail.error = mActivity.getString(R.string.msg_email_validation_length)
         } else if (!ValidationUtils.isValidEmail(email)) {
@@ -133,7 +140,10 @@ class SignUpViewModel(private val baseRepository: BaseRepository) : BaseViewMode
         } else {
             haveEmail = true
         }
-        if (password.contains(" ")) {
+
+        if(password.isNullOrEmpty()){
+            mBinding.tilTextPassword.error = mActivity.getString(R.string.password_cannot_be_empty)
+        } else if (password.contains(" ")) {
             //IADialog(mActivity, mActivity.getString(R.string.invalid_password_format), true)
             mBinding.tilTextPassword.error = mActivity.getString(R.string.invalid_password_format)
         } else if (password.length < 6 || password.length > 20) {
