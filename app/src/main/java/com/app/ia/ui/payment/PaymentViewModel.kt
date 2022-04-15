@@ -7,7 +7,6 @@ import android.net.Uri
 import android.net.http.SslError
 import android.util.Log
 import android.webkit.*
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.app.ia.R

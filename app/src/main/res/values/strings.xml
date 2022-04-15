@@ -184,6 +184,7 @@
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="submit">Submit</string>
+    <string name="submit_review">Submit Review</string>
     <string name="favourite_product">Favourite Products</string>
     <string name="done">Done</string>
     <string name="size_value">Size: %s</string>
